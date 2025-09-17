@@ -1,6 +1,7 @@
 import './index.css';
 import LeftSidenav from './LeftSidenav';
 import Dashboard from './Dashboard';
+import Header from './Header';
 
 function Hero() {
   return (
@@ -71,9 +72,17 @@ function Footer() {
 function App() {
   return (
     <div className="min-h-screen bg-cream">
-      <div className="flex" style={{ display: 'flex', alignItems: 'flex-start' }}>
+      <Header />
+
+      <div className="page-row" style={{padding: '24px 0'}}>
         <LeftSidenav />
-        <Dashboard />
+
+        {/* Main column: dashboard */}
+        <div>
+          <Dashboard />
+        </div>
+
+        {/* Right column: stats */}
         <aside className="w-80 p-6 stats-panel">
           <div className="text-primary font-serif text-xl">Challenge Progress</div>
           <div className="mt-4 space-y-4">

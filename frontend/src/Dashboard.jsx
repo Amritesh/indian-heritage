@@ -18,7 +18,6 @@ export default function Dashboard() {
 
   return (
     <>
-      <Header />
       <main className="flex-1">
         <div className="container-custom py-8">
           <div className="flex items-center justify-between">

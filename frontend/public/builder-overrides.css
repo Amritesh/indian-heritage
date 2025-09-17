@@ -37,8 +37,27 @@ header .container-custom {
 
 .left-sidenav li { list-style: none; }
 
+/* Page layout: header full width, content row below */
+.page-row {
+  display: grid;
+  grid-template-columns: 280px 1fr 320px;
+  gap: 24px;
+  align-items: start;
+  padding: 24px 0;
+}
 
-.container-custom { max-width: 1000px; }
+@media (max-width: 1024px) {
+  .page-row { grid-template-columns: 240px 1fr; }
+  .page-row aside.w-80 { display: none; }
+}
+
+@media (max-width: 768px) {
+  .page-row { grid-template-columns: 1fr; }
+  .left-sidenav { display: none; }
+}
+
+
+.container-custom { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
 
 /* subtle paper texture for the whole page */
 body {
