@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+@layer base {
+  body {
+    @apply bg-cream text-primary antialiased;
+      background-image: url('./textures/paper-texture.png');
+    background-repeat: repeat;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-light transition-colors;
+  }
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .card {
+    @apply bg-white rounded-lg shadow-sm;
+  }
+}
+
+@layer utilities {
+  .font-display { font-family: 'DM Serif Display', serif; }
+}
+
+/* Hero decorative element */
+.hero-decor {
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle at 30% 30%, rgba(184,92,0,0.25), transparent 30%), radial-gradient(circle at 70% 70%, rgba(169,123,7,0.12), transparent 30%);
+  border-radius: 50%;
+}
+
+/* Slight adjustment to primary button to match richer tone */
+.btn-primary {
+  background-color: #A97B07;
+}
+.btn-primary:hover {
+  background-color: #b86a00;
+}
+
+/* Left sidebar patterned background */
+.sidebar-pattern {
+  background-image: linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px), linear-gradient(0deg, rgba(0,0,0,0.02) 1px, transparent 1px);
+  background-size: 24px 24px, 24px 24px;
+}
+
+/* Right stats panel */
+.stats-panel {
+  background: linear-gradient(180deg, rgba(0,0,0,0.02), transparent 30%);
+  border-left: 1px dashed rgba(90,80,60,0.12);
+}
+
+.progress-track { @apply bg-gray-200 rounded-full h-3 overflow-hidden }
+.progress-fill { @apply bg-green h-3 }
+
+.nav-active { @apply bg-accent/30 text-primary font-semibold p-2 rounded }
+
+.dashed-sep { border-top: 1px dashed rgba(90,80,60,0.12); margin-top: 1rem; margin-bottom: 1rem }
+
+/* Design tokens used by Builder export */
+:root {
+  --primary: #332502;
+  --primary-light: #A97B07;
+  --accent: #FDB90B;
+  --cream: #FCF9F7;
+  --neutral-500: #7E7C76;
+  --text: #2f2a21;
+}
+
+/* Ensure left sidenav full height and sticky */
+.left-sidenav { width: 280px; }
+.left-sidenav-inner { height: 100vh; position: sticky; top: 0; }
+
+/* Header/content container tweaks */
+.container-custom { max-width: 1000px; }
+
+/* Small responsive fix for the main grid on narrow screens */
+@media (max-width: 768px) {
+  .mt-8.grid { grid-template-columns: 1fr !important; }
+  .left-sidenav { display: none; }
+}
+
