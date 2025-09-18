@@ -2,6 +2,8 @@ import './index.css';
 import LeftSidenav from './LeftSidenav';
 import Dashboard from './Dashboard';
 import Header from './Header';
+import CollectionDetail from './CollectionDetail';
+import { Routes, Route } from 'react-router-dom';
 
 function Hero() {
   return (
@@ -79,7 +81,10 @@ function App() {
 
         {/* Main column: dashboard */}
         <div>
-          <Dashboard />
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/collections/:id" element={<CollectionDetail />} />
+          </Routes>
         </div>
 
         {/* Right column: stats */}
