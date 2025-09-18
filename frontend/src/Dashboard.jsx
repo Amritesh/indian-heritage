@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { Button, IconButton, Tooltip, Input, HStack, Tag, Heading, Text } from '@chakra-ui/react';
+import { CopyIcon, SmallCloseIcon } from '@chakra-ui/icons';
 
 // Dashboard — fetches collections from the backend and shows details
 export default function Dashboard() {
@@ -141,6 +143,18 @@ export default function Dashboard() {
     }
   };
 
+  const badgeColorScheme = (cat) => {
+    switch(cat){
+      case 'Numismatics': return 'yellow';
+      case 'Notaphily': return 'green';
+      case 'Philately': return 'purple';
+      case 'Scripophily': return 'blue';
+      case 'Ephemera': return 'pink';
+      case 'Personal': return 'teal';
+      default: return 'gray';
+    }
+  };
+
   // helper to pick a cover image (first available image in collection or item)
   const coverFor = (c) => {
     if (!c) return null;
@@ -169,34 +183,44 @@ export default function Dashboard() {
             <h1 style={{color: primary}} className="text-3xl font-serif">My Collections</h1>
             <p className="mt-2 text-sm" style={{color: neutral}}>Organize, browse and inspect your collection items.</p>
 
-            <div className="mt-4 flex flex-wrap items-center" style={{color: neutral}}>
+            <HStack wrap="wrap" spacing={3} mt={4} alignItems="center">
               {categories.map(cat => (
-                <button
+                <Button
                   key={cat.name}
+                  size="sm"
+                  variant={activeCategory === cat.name ? 'solid' : 'ghost'}
+                  color={activeCategory === cat.name ? '#fff' : neutral}
                   onClick={() => selectCategory(cat.name)}
-                  className={`mr-3 mb-2 px-3 py-1 rounded-full text-sm transition-all duration-150 ${activeCategory === cat.name ? 'shadow-inner' : 'opacity-90'}`}
-                  style={{
-                    background: activeCategory === cat.name ? primary : 'transparent',
-                    color: activeCategory === cat.name ? '#fff' : neutral,
-                    border: '1px solid rgba(0,0,0,0.06)',
-                  }}
+                  borderWidth={1}
                 >
-                  {cat.name} <span className="ml-1 text-xs" style={{opacity: 0.9}}>({cat.count})</span>
-                </button>
+                  <Text as="span" mr={2}>{cat.name}</Text>
+                  <Tag size="sm" ml={1} variant="subtle">{cat.count}</Tag>
+                </Button>
               ))}
-            </div>
+            </HStack>
           </div>
 
           <div className="w-full md:w-1/3">
             <div className="relative">
-              <input
+              <Input
                 placeholder="Search collections, items, descriptions..."
                 value={query}
                 onChange={(e) => { setQuery(e.target.value); setPage(1); }}
-                className="w-full p-3 rounded-lg shadow-sm border border-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-200"
+                size="md"
+                variant="filled"
+                pr="10"
               />
               {query && (
-                <button onClick={() => setQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">Clear</button>
+                <IconButton
+                  aria-label="Clear search"
+                  icon={<SmallCloseIcon />}
+                  size="sm"
+                  onClick={() => setQuery('')}
+                  position="absolute"
+                  right="8px"
+                  top="50%"
+                  transform="translateY(-50%)"
+                />
               )}
             </div>
           </div>
@@ -225,12 +249,12 @@ export default function Dashboard() {
             return (
               <article key={c.id} className="group" role="button" aria-label={`Open ${c.title}`}>
                 <div
-                  className="relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-250"
-                  style={{minHeight: 320, cursor: 'pointer'}}
+                  className="relative rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-250"
+                  style={{minHeight: 320, cursor: 'pointer', background: '#fff8f0'}}
                   onClick={() => window.history.pushState({}, '', `/collections/${encodeURIComponent(c.id)}`) || window.dispatchEvent(new PopStateEvent('popstate'))}
                 >
                   {/* cover */}
-                  <div className="h-44 w-full overflow-hidden bg-gradient-to-tr from-yellow-50 to-white">
+                  <div className="h-44 w-full overflow-hidden" style={{background: 'linear-gradient(135deg, rgba(253,185,11,0.08), rgba(51,37,2,0.02))'}}>
                     {cover ? (
                       <img
                         src={cover}
@@ -247,55 +271,53 @@ export default function Dashboard() {
                       </div>
                     )}
                     {/* translucent overlay title bottom-left */}
-                    <div className="absolute left-4 bottom-4 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-md text-sm font-semibold" style={{color: primary}}>
+                    <div className="absolute left-4 bottom-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-md text-sm font-semibold" style={{color: primary, boxShadow: '0 4px 12px rgba(0,0,0,0.06)'}}>
                       {c.title}
                     </div>
                   </div>
 
                   <div className="p-4">
-                    <p className="text-xs text-gray-600 line-clamp-3" style={{minHeight: 48}}>{c.description || 'No description'}</p>
+                    <p className="text-sm text-gray-700 leading-relaxed line-clamp-3" style={{minHeight: 56, fontFamily: 'Georgia, serif'}}>{c.description || 'No description'}</p>
 
                     <div className="mt-4 flex items-center justify-between">
                       <div className="flex items-center space-x-3">
                         <div className={`inline-flex items-center justify-center w-9 h-9 rounded-md ${badgeColor(c.category)}`}>
                           <span className="text-xs font-medium">{c.category && c.category[0]}</span>
                         </div>
-                        <div className="text-xs text-gray-500">{c.owner || 'You'}</div>
+                        <div className="text-sm" style={{color: neutral, fontWeight: 500}}>{c.owner || 'You'}</div>
                       </div>
 
                       <div className="flex items-center space-x-2">
-                        <button
+                        <Button
                           onClick={() => openCollection(c.id)}
-                          className="px-3 py-2 rounded-xl text-sm font-medium text-white"
-                          style={{background: primary, boxShadow: '0 8px 24px rgba(51,37,2,0.12)'}}
+                          size="sm"
+                          colorScheme="yellow"
+                          bg={primary}
+                          _hover={{ transform: 'translateY(-1px)', boxShadow: 'lg' }}
+                          style={{ color: '#fff' }}
                         >
                           Open
-                        </button>
-                        <button
-                          onClick={() => { navigator.clipboard?.writeText(window.location.origin + '/collections/' + encodeURIComponent(c.id)); }}
-                          className="px-3 py-2 rounded-xl text-sm font-medium border border-gray-100 text-gray-600 bg-white"
-                          title="Copy link"
-                        >
-                          Share
-                        </button>
+                        </Button>
+
+                        {/* only primary action (Open) — top-right copy icon handles linking */}
                       </div>
                     </div>
                   </div>
 
                   {/* top-right category pill */}
                     <div className="absolute right-4 top-4 flex items-center space-x-2">
-                      <button
-                        onClick={(e) => { e.stopPropagation(); navigator.clipboard?.writeText(window.location.origin + '/collections/' + encodeURIComponent(c.id)); }}
-                        className="p-2 rounded-md text-gray-500 bg-white/70 hover:bg-white"
-                        title="Copy link"
-                      >
-                        🔗
-                      </button>
-                      <div>
-                        <div className={`px-3 py-1 rounded-full text-xs font-semibold ${badgeColor(c.category)}`}>
-                          {c.category}
-                        </div>
-                      </div>
+                      {/* Decorative share icon in top-right (keeps layout clean) */}
+                      <Tooltip label="Copy link" placement="bottom">
+                        <IconButton
+                          onClick={(e) => { e.stopPropagation(); navigator.clipboard?.writeText(window.location.origin + '/collections/' + encodeURIComponent(c.id)); }}
+                          aria-label={`Copy link for ${c.title}`}
+                          size="sm"
+                          icon={<CopyIcon />}
+                        />
+                      </Tooltip>
+                      <Tag size="sm" variant="subtle" colorScheme={badgeColorScheme(c.category)}>
+                        {c.category}
+                      </Tag>
                     </div>
                 </div>
               </article>
@@ -304,18 +326,12 @@ export default function Dashboard() {
         </div>
 
         {/* pagination controls */}
-        {!loading && filtered.length > pageSize && (
-          <div className="mt-6 flex items-center justify-center space-x-3">
-            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="px-3 py-1 rounded border">
-              Prev
-            </button>
-            <div>
-              Page {page} / {totalPages}
-            </div>
-            <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="px-3 py-1 rounded border">
-              Next
-            </button>
-          </div>
+          {!loading && filtered.length > pageSize && (
+          <HStack mt={6} justifyContent="center" spacing={4}>
+            <Button size="sm" variant="outline" onClick={() => setPage(p => Math.max(1, p - 1))} isDisabled={page === 1}>Prev</Button>
+            <Text>Page {page} / {totalPages}</Text>
+            <Button size="sm" variant="outline" onClick={() => setPage(p => Math.min(totalPages, p + 1))} isDisabled={page === totalPages}>Next</Button>
+          </HStack>
         )}
 
         {/* Selected collection details */}
@@ -331,7 +347,7 @@ export default function Dashboard() {
                 </div>
               </div>
               <div>
-                <button className="px-3 py-1 rounded-md border" onClick={() => setSelected(null)}>Close</button>
+                <Button size="sm" variant="outline" onClick={() => setSelected(null)}>Close</Button>
               </div>
             </div>
 
