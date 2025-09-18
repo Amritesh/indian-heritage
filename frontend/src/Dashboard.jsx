@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Button, IconButton, Tooltip, Input, HStack, Tag, Heading, Text } from '@chakra-ui/react';
-import { CopyIcon, SmallCloseIcon } from '@chakra-ui/icons';
+import { Button, Input, HStack, Tag, Heading, Text } from '@chakra-ui/react';
+import CollectionCard from './CollectionCard';
 
 // Dashboard — fetches collections from the backend and shows details
 export default function Dashboard() {
@@ -129,8 +129,8 @@ export default function Dashboard() {
       .finally(() => setLoading(false));
   }
 
+
   // small helpers for UI
-  const initials = (s = '') => (s.split(' ').map(p => p[0]).join('').slice(0,2).toUpperCase() || 'CL');
   const badgeColor = (cat) => {
     switch(cat){
       case 'Numismatics': return 'bg-yellow-100 text-yellow-800';
@@ -211,16 +211,18 @@ export default function Dashboard() {
                 pr="10"
               />
               {query && (
-                <IconButton
+                <Button
                   aria-label="Clear search"
-                  icon={<SmallCloseIcon />}
                   size="sm"
                   onClick={() => setQuery('')}
                   position="absolute"
                   right="8px"
                   top="50%"
                   transform="translateY(-50%)"
-                />
+                  variant="ghost"
+                >
+                  Clear
+                </Button>
               )}
             </div>
           </div>
@@ -228,11 +230,11 @@ export default function Dashboard() {
 
         {/* Grid of flash-style cards (inline responsive grid fallback) */}
         <div
-          className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: '2rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '1.5rem',
             alignItems: 'start',
           }}
         >
@@ -244,85 +246,16 @@ export default function Dashboard() {
             </div>
           )}
 
-          {!loading && pageCollections.map((c) => {
-            const cover = coverFor(c);
-            return (
-              <article key={c.id} className="group" role="button" aria-label={`Open ${c.title}`}>
-                <div
-                  className="relative rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-250"
-                  style={{minHeight: 320, cursor: 'pointer', background: '#fff8f0'}}
-                  onClick={() => window.history.pushState({}, '', `/collections/${encodeURIComponent(c.id)}`) || window.dispatchEvent(new PopStateEvent('popstate'))}
-                >
-                  {/* cover */}
-                  <div className="h-44 w-full overflow-hidden" style={{background: 'linear-gradient(135deg, rgba(253,185,11,0.08), rgba(51,37,2,0.02))'}}>
-                    {cover ? (
-                      <img
-                        src={cover}
-                        alt={c.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = ''; }}
-                      />
-                    ) : (
-                      <div
-                        className="w-full h-full flex items-center justify-center text-5xl font-bold"
-                        style={{color: primary, background: randomPastel(c.id)}}
-                      >
-                        {initials(c.title)}
-                      </div>
-                    )}
-                    {/* translucent overlay title bottom-left */}
-                    <div className="absolute left-4 bottom-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-md text-sm font-semibold" style={{color: primary, boxShadow: '0 4px 12px rgba(0,0,0,0.06)'}}>
-                      {c.title}
-                    </div>
-                  </div>
-
-                  <div className="p-4">
-                    <p className="text-sm text-gray-700 leading-relaxed line-clamp-3" style={{minHeight: 56, fontFamily: 'Georgia, serif'}}>{c.description || 'No description'}</p>
-
-                    <div className="mt-4 flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className={`inline-flex items-center justify-center w-9 h-9 rounded-md ${badgeColor(c.category)}`}>
-                          <span className="text-xs font-medium">{c.category && c.category[0]}</span>
-                        </div>
-                        <div className="text-sm" style={{color: neutral, fontWeight: 500}}>{c.owner || 'You'}</div>
-                      </div>
-
-                      <div className="flex items-center space-x-2">
-                        <Button
-                          onClick={() => openCollection(c.id)}
-                          size="sm"
-                          colorScheme="yellow"
-                          bg={primary}
-                          _hover={{ transform: 'translateY(-1px)', boxShadow: 'lg' }}
-                          style={{ color: '#fff' }}
-                        >
-                          Open
-                        </Button>
-
-                        {/* only primary action (Open) — top-right copy icon handles linking */}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* top-right category pill */}
-                    <div className="absolute right-4 top-4 flex items-center space-x-2">
-                      {/* Decorative share icon in top-right (keeps layout clean) */}
-                      <Tooltip label="Copy link" placement="bottom">
-                        <IconButton
-                          onClick={(e) => { e.stopPropagation(); navigator.clipboard?.writeText(window.location.origin + '/collections/' + encodeURIComponent(c.id)); }}
-                          aria-label={`Copy link for ${c.title}`}
-                          size="sm"
-                          icon={<CopyIcon />}
-                        />
-                      </Tooltip>
-                      <Tag size="sm" variant="subtle" colorScheme={badgeColorScheme(c.category)}>
-                        {c.category}
-                      </Tag>
-                    </div>
-                </div>
-              </article>
-            );
-          })}
+          {!loading && pageCollections.map((c) => (
+            <CollectionCard
+              key={c.id}
+              collection={c}
+              coverFor={coverFor}
+              randomPastel={randomPastel}
+              badgeColor={badgeColor}
+              badgeColorScheme={badgeColorScheme}
+            />
+          ))}
         </div>
 
         {/* pagination controls */}
@@ -354,9 +287,6 @@ export default function Dashboard() {
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {selected.items && selected.items.map((it) => (
                 <div key={it.id} className="p-4 border rounded-lg bg-gray-50 hover:bg-white transition">
-                  <div className="h-28 rounded-md bg-white flex items-center justify-center text-2xl font-semibold" style={{color: primary}}>
-                    {initials(it.title)}
-                  </div>
                   <div className="mt-3 font-semibold">{it.title}</div>
                   <div className="text-sm text-gray-600 mt-1">{it.desc}</div>
                 </div>

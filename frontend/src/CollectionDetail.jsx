@@ -48,7 +48,6 @@ export default function CollectionDetail(){
       <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {(collection.items || []).map(it => (
           <div key={it.id} className="p-4 border rounded-lg bg-gray-50 hover:bg-white transition">
-            <div className="h-28 rounded-md bg-white flex items-center justify-center text-2xl font-semibold text-primary">{(it.title||'').slice(0,2).toUpperCase()}</div>
             <div className="mt-3 font-semibold">{it.title}</div>
             <div className="text-sm text-gray-600 mt-1">{it.desc}</div>
           </div>
