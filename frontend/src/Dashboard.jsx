@@ -21,7 +21,8 @@ export default function Dashboard() {
 
   useEffect(() => {
     setLoading(true);
-    fetch('/api/collections')
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
+    fetch(`${API_BASE_URL}/api/collections`)
       .then((r) => r.json())
       .then((data) => {
         const detectCategory = (c) => {
@@ -116,7 +117,8 @@ export default function Dashboard() {
 
   function openCollection(id) {
     setLoading(true);
-    fetch(`/api/collections/${encodeURIComponent(id)}`)
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
+    fetch(`${API_BASE_URL}/api/collections/${encodeURIComponent(id)}`)
       .then((r) => {
         if (!r.ok) throw new Error('Not found');
         return r.json();

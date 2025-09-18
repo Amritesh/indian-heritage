@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tag } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 // helper to pick a cover image (first available image in collection or item)
 const coverFor = (c) => {
@@ -22,6 +23,7 @@ const randomPastel = (seed = '') => {
 };
 
 export default function CollectionCard({ collection, badgeColor, badgeColorScheme }) {
+  const navigate = useNavigate();
   const primary = '#332502';
   const neutral = '#7E7C76';
 
@@ -32,7 +34,7 @@ export default function CollectionCard({ collection, badgeColor, badgeColorSchem
       <div
         className="relative rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-250"
         style={{minHeight: 200, cursor: 'pointer', background: '#fff8f0'}}
-        onClick={() => window.history.pushState({}, '', `/collections/${encodeURIComponent(collection.id)}`) || window.dispatchEvent(new PopStateEvent('popstate'))}
+        onClick={() => navigate(`/collections/${encodeURIComponent(collection.id)}`)}
       >
         {/* cover */}
         <div className="h-28 w-full overflow-hidden" style={{background: 'linear-gradient(135deg, rgba(253,185,11,0.08), rgba(51,37,2,0.02))'}}>
