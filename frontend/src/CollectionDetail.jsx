@@ -1,12 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
 import ItemCards from './ItemCards';
+import { HStack, Button, Text } from '@chakra-ui/react';
 
 export default function CollectionDetail(){
   const {id} = useParams();
   const navigate = useNavigate();
   const [collection, setCollection] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const pageSize = 6; // You can adjust this value as needed
 
   useEffect(() => {
     if (!id) return;
@@ -48,14 +51,12 @@ export default function CollectionDetail(){
   );
 
   const title = collection.album_title || collection.title;
-  const description = collection.source_pdf ? (
-    <div className="text-sm text-gray-600 mt-2">
-      Source: <a href={collection.source_pdf} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">PDF Document</a>
-    </div>
-  ) : (
+  const description = collection.description ? (
     <div className="text-sm text-gray-600 mt-2">{collection.description}</div>
-  );
+  ) : null;
   const itemsToDisplay = collection.items || [];
+  const totalPages = Math.max(1, Math.ceil(itemsToDisplay.length / pageSize));
+  const pageItems = itemsToDisplay.slice((page - 1) * pageSize, page * pageSize);
 
   return (
     <div className="bg-white rounded-lg p-6 shadow-xl">
@@ -70,8 +71,17 @@ export default function CollectionDetail(){
       </div>
 
       <div className="mt-6">
-        <ItemCards items={itemsToDisplay} />
+        <ItemCards items={pageItems} />
       </div>
+
+      {/* pagination controls */}
+      {!loading && itemsToDisplay.length > pageSize && (
+        <HStack mt={6} justifyContent="center" spacing={4}>
+          <Button size="sm" variant="outline" onClick={() => setPage(p => Math.max(1, p - 1))} isDisabled={page === 1}>Prev</Button>
+          <Text>Page {page} / {totalPages}</Text>
+          <Button size="sm" variant="outline" onClick={() => setPage(p => Math.min(totalPages, p + 1))} isDisabled={page === totalPages}>Next</Button>
+        </HStack>
+      )}
     </div>
   );
 }
