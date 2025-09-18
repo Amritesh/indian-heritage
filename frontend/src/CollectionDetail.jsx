@@ -12,7 +12,7 @@ export default function CollectionDetail(){
     if (!id) return;
     setLoading(true);
     let fetchUrl = '';
-    if (id === 'primitive-money-1') {
+    if (['primitive-money-1', 'early-coinage-1', 'sultanate-coins-1', 'mughals'].includes(id)) {
       fetchUrl = `/api/items/${encodeURIComponent(id)}`;
     } else {
       fetchUrl = `/api/collections/${encodeURIComponent(id)}`;
@@ -24,7 +24,7 @@ export default function CollectionDetail(){
         return r.json();
       })
       .then(data => {
-        if (id === 'primitive-money-1') {
+        if (['primitive-money-1', 'early-coinage-1', 'sultanate-coins-1', 'mughals'].includes(id)) {
           setCollection(data.itemCollection);
         } else {
           setCollection(data.collection);

@@ -58,6 +58,16 @@ export default function ItemCard({ item }) {
             <p className="text-xs text-gray-600 leading-relaxed line-clamp-2 mt-1" style={{fontFamily: 'Georgia, serif'}}>Notes: {item.notes[0]}</p>
           )}
         </div>
+
+        {item.display_labels && item.display_labels.length > 0 && (
+          <div className="absolute bottom-2 left-2 right-2 flex items-center justify-end p-2">
+            {item.display_labels.map((label, index) => (
+              <Tag key={index} size="xs" variant="subtle" colorScheme="orange" className="ml-1">
+                {label}
+              </Tag>
+            ))}
+          </div>
+        )}
       </div>
     </article>
   );

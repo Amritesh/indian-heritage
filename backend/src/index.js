@@ -41,6 +41,8 @@ function readCollections() {
   }
 }
 
+app.use('/data', express.static(path.join(__dirname, '../data')));
+
 app.get('/api/collections', (req, res) => {
   const collections = readCollections();
   res.json({ collections });
@@ -57,14 +59,22 @@ app.get('/api/collections/:id', (req, res) => {
 // New API endpoint for primitive-money-1.json
 app.get('/api/items/:id', (req, res) => {
   const id = req.params.id;
-  if (id === 'primitive-money-1') {
-    const file = path.join(__dirname, '../data/primitive-money-1.json');
+  const itemDataFiles = {
+    'primitive-money-1': 'primitive-money-1.json',
+    'early-coinage-1': 'eaarly-coinage-1.json',
+    'sultanate-coins-1': 'sultanate-coins-1.json',
+    'mughals': 'mughals.json'
+  };
+
+  const filename = itemDataFiles[id];
+  if (filename) {
+    const file = path.join(__dirname, `../data/${filename}`);
     try {
       const raw = fs.readFileSync(file, 'utf8');
       const data = JSON.parse(raw);
       return res.json({ itemCollection: data });
     } catch (err) {
-      console.error('Failed to read primitive-money-1.json', err);
+      console.error(`Failed to read ${filename}`, err);
       return res.status(500).json({ error: 'Failed to load item data' });
     }
   }
