@@ -2,6 +2,102 @@
   "album_title": "Mughals",
   "items": [
     {
+      "id": "jahangir-coin-1",
+      "title": "Jahangir 1st Month Ilahi",
+      "mint": "Patna Mint",
+      "ah_year": 1028,
+      "ad_year": 1618,
+      "image": "/data/mughals-1/jahangir-coins/coin-1.png"
+    },
+    {
+      "id": "jahangir-coin-2",
+      "title": "Jahangir 2nd Month Ilahi",
+      "mint": "Patna Mint",
+      "ah_year": 1027,
+      "ad_year": 1617,
+      "image": "/data/mughals-1/jahangir-coins/coin-2.png"
+    },
+    {
+      "id": "jahangir-coin-3",
+      "title": "Jahangir 3rd Month Ilahi",
+      "mint": "Patna Mint",
+      "ah_year": 1023,
+      "ad_year": 1613,
+      "image": "/data/mughals-1/jahangir-coins/coin-3.png"
+    },
+    {
+      "id": "jahangir-coin-4",
+      "title": "Jahangir 4th Month Ilahi",
+      "mint": "Patna Mint",
+      "ah_year": 1024,
+      "ad_year": 1614,
+      "image": "/data/mughals-1/jahangir-coins/coin-4.png"
+    },
+    {
+      "id": "jahangir-coin-5",
+      "title": "Jahangir 5th Month Ilahi",
+      "mint": "Patna Mint",
+      "ah_year": 1024,
+      "ad_year": 1615,
+      "image": "/data/mughals-1/jahangir-coins/coin-5.png"
+    },
+    {
+      "id": "jahangir-coin-6",
+      "title": "Jahangir 6th Month Ilahi",
+      "mint": "Patna Mint",
+      "ah_year": 1027,
+      "ad_year": 1617,
+      "image": "/data/mughals-1/jahangir-coins/coin-6.png"
+    },
+    {
+      "id": "jahangir-coin-7",
+      "title": "Jahangir 7th Month Ilahi",
+      "mint": "Patna Mint",
+      "ah_year": 1022,
+      "ad_year": 1613,
+      "image": "/data/mughals-1/jahangir-coins/coin-7.png"
+    },
+    {
+      "id": "jahangir-coin-8",
+      "title": "Jahangir 8th Month Ilahi",
+      "mint": "Patna Mint",
+      "ah_year": 1023,
+      "ad_year": 1614,
+      "image": "/data/mughals-1/jahangir-coins/coin-8.png"
+    },
+    {
+      "id": "jahangir-coin-9",
+      "title": "Jahangir 9th Month Ilahi",
+      "mint": "Patna Mint",
+      "ah_year": 1027,
+      "ad_year": 1617,
+      "image": "/data/mughals-1/jahangir-coins/coin-9.png"
+    },
+    {
+      "id": "jahangir-coin-10",
+      "title": "Jahangir 10th Month Ilahi",
+      "mint": "Patna Mint",
+      "ah_year": 1030,
+      "ad_year": 1620,
+      "image": "/data/mughals-1/jahangir-coins/coin-10.png"
+    },
+    {
+      "id": "jahangir-coin-11",
+      "title": "Jahangir 11th Month Ilahi",
+      "mint": "Patna Mint",
+      "ah_year": 1029,
+      "ad_year": 1619,
+      "image": "/data/mughals-1/jahangir-coins/coin-11.png"
+    },
+    {
+      "id": "jahangir-coin-12",
+      "title": "Jahangir 12th Month Ilahi",
+      "mint": "Patna Mint",
+      "ah_year": 1029,
+      "ad_year": 1619,
+      "image": "/data/mughals-1/jahangir-coins/coin-12.png"
+    },
+    {
       "id": "cover",
       "page": 1,
       "title": "Cover — Indian Coins: Mughals (Vol–I)",
