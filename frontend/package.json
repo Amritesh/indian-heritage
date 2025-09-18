@@ -22,8 +22,10 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy-to-docs": "craco build && rm -rf ../docs && mv build ../docs && cp ../docs/index.html ../docs/404.html"
   },
+  "homepage": "https://amritesh.github.io/indian-heritage",
   "proxy": "http://localhost:5000",
   "eslintConfig": {
     "extends": [
