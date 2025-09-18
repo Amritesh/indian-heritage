@@ -54,6 +54,23 @@ app.get('/api/collections/:id', (req, res) => {
   res.json({ collection: found });
 });
 
+// New API endpoint for primitive-money-1.json
+app.get('/api/items/:id', (req, res) => {
+  const id = req.params.id;
+  if (id === 'primitive-money-1') {
+    const file = path.join(__dirname, '../data/primitive-money-1.json');
+    try {
+      const raw = fs.readFileSync(file, 'utf8');
+      const data = JSON.parse(raw);
+      return res.json({ itemCollection: data });
+    } catch (err) {
+      console.error('Failed to read primitive-money-1.json', err);
+      return res.status(500).json({ error: 'Failed to load item data' });
+    }
+  }
+  return res.status(404).json({ error: 'Item collection not found' });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
