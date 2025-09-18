@@ -9,7 +9,7 @@
       "period": null,
       "region": "India (general)",
       "materials": ["Cowry shells", "Lead (filled)"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=6",
+      "image": "/data/primitive-money-1/page-6.png",
       "notes": [
         "Cowries used as legal tender and medium of exchange.",
         "Some shells filled with lead to increase exchange value; lead is soft/dense/cheap and melts at ~327°C.",
@@ -24,7 +24,7 @@
       "period": null,
       "region": "India (general)",
       "materials": ["Lead", "Bronze"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=6",
+      "image": "/data/primitive-money-1/page-6.png",
       "notes": [
         "‘Metal Cowri’ first cast in lead, later in bronze.",
         "Value depended on weight of the cowries."
@@ -38,7 +38,7 @@
       "period": null,
       "region": "India (general)",
       "materials": ["Lead (coin-shaped core)"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=6",
+      "image": "/data/primitive-money-1/page-6.png",
       "notes": ["Lead metal in coin shape fixed inside cowry; shown example weight ~23.20 g."],
       "display_labels": ["Weight 23.20 gm"]
     },
@@ -49,7 +49,7 @@
       "period": null,
       "region": "India (general)",
       "materials": ["Cowry shells"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=6",
+      "image": "/data/primitive-money-1/page-6.png",
       "notes": ["Broken (‘Futi’) cowries stated to have no value in trade."]
     },
     {
@@ -59,7 +59,7 @@
       "period": "c. 5000–1000 BCE (as stated on board)",
       "region": "India (general)",
       "materials": ["Lead"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=8",
+      "image": "/data/primitive-money-1/page-8.png",
       "notes": [
         "Defines money as a medium of exchange; lists many world examples (whale teeth, stones, shells, grain, cattle, metals, tools).",
         "Lead ‘globs/pieces’ used as primitive money."
@@ -72,7 +72,7 @@
       "period": "c. 5000–1000 BCE (as stated on board)",
       "region": "India (general)",
       "materials": ["Lead (beads)"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=10",
+      "image": "/data/primitive-money-1/page-10.png",
       "notes": [
         "Lead beads woven into a belt used for ornamentation and in emergency as money."
       ]
@@ -84,7 +84,7 @@
       "period": null,
       "region": "Ujjain region",
       "materials": ["Terracotta (baked clay)"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=11",
+      "image": "/data/primitive-money-1/page-11.png",
       "notes": [
         "Board segment shows terracotta coin forms attributed to Ujjaini region; also mentions ‘Buddha Topi’ piece."
       ]
@@ -96,7 +96,7 @@
       "period": null,
       "region": "Saurashtra (Gujarat)",
       "materials": ["Various bead forms (metal/stone)"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=11",
+      "image": "/data/primitive-money-1/page-11.png",
       "notes": [
         "Different shapes used as money (selection shown in the middle strip of the board)."
       ]
@@ -108,7 +108,7 @@
       "period": null,
       "region": "Kaushambi (near Allahabad, Uttar Pradesh)",
       "materials": ["Metal", "Stone"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=11",
+      "image": "/data/primitive-money-1/page-11.png",
       "notes": ["Lower strip shows metal and stone pieces classified under Kaushambi (Pali) region."]
     },
     {
@@ -118,7 +118,7 @@
       "period": "c. 5000–1000 BCE (as stated on board header)",
       "region": "India (general)",
       "materials": ["Bronze/mixed metals (small round pieces)"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=12",
+      "image": "/data/primitive-money-1/page-12.png",
       "notes": [
         "Circular coin-like metal pieces, sometimes with engraved/raised symbols."
       ]
@@ -130,7 +130,7 @@
       "period": "c. 5000–1000 BCE (as stated on board header)",
       "region": "India (general)",
       "materials": ["Stone (circular pieces)"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=12",
+      "image": "/data/primitive-money-1/page-12.png",
       "notes": [
         "Circular stone pieces also bear similar engraved/raised symbols."
       ]
@@ -142,7 +142,7 @@
       "period": null,
       "region": "India (general)",
       "materials": ["Bronze and silver mix (beads, small ornaments)"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=12",
+      "image": "/data/primitive-money-1/page-12.png",
       "notes": [
         "Small designer beads from bronze with silver mix used both as jewellery and as money."
       ]
@@ -154,7 +154,7 @@
       "period": "1st–3rd century CE",
       "region": "Ujjain region",
       "materials": ["Terracotta (hard, baked reddish-brown clay)"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=13",
+      "image": "/data/primitive-money-1/page-13.png",
       "notes": ["Board explicitly mentions Ujjain symbol on these terracotta coins."],
       "related": ["ancient-bone-beads-exchange"]
     },
@@ -165,7 +165,7 @@
       "period": "1st–3rd century CE (shown on same board)",
       "region": "India (general)",
       "materials": ["Bone (decorative beads)"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=13",
+      "image": "/data/primitive-money-1/page-13.png",
       "notes": ["Row of multi-coloured bone beads identified as being used for exchange."]
     },
     {
@@ -175,7 +175,7 @@
       "period": "Broadly dated boards; top mentions 2000–200 BCE and context of ‘Avanti Janapad’ (text partly blurred)",
       "region": "Central India (Avanti Janapad / Madhya Pradesh) & Kaushambi region referenced",
       "materials": ["Gold-plated exterior", "Lead/mixed metal core"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=14",
+      "image": "/data/primitive-money-1/page-14.png",
       "notes": [
         "Ornamental ear/neck pieces indicated as both decoration and trade money.",
         "Similar finds reported from Avanti Janapad and Kaushambi (Pali)."
@@ -188,7 +188,7 @@
       "period": "1st century BCE",
       "region": "Maharashtra (Satavahana region), river finds",
       "materials": ["Mixed metal rings (varied sizes)"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=15",
+      "image": "/data/primitive-money-1/page-15.png",
       "notes": [
         "Used as necklace decoration; when required, used for trade.",
         "Board states excavation from deep rivers; associated with Satavahana region."
@@ -201,7 +201,7 @@
       "period": null,
       "region": "South India",
       "materials": ["Gold-plated over metal core"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=16",
+      "image": "/data/primitive-money-1/page-16.png",
       "notes": ["Top-left card row shows a circular ornament piece; card labeled ‘Gold Plated Ornament — South India’."]
     },
     {
@@ -211,7 +211,7 @@
       "period": null,
       "region": "India (general); Saurashtra variants nearby",
       "materials": ["Bronze"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=16",
+      "image": "/data/primitive-money-1/page-16.png",
       "notes": ["Small bronze figurative/abstract pieces meant to be strung/holed; used as money and adornment."]
     },
     {
@@ -221,7 +221,7 @@
       "period": null,
       "region": "South India",
       "materials": ["Gold-plated over metal"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=16",
+      "image": "/data/primitive-money-1/page-16.png",
       "notes": ["Another card with ring-like piece; same label family as previous."]
     },
     {
@@ -231,7 +231,7 @@
       "period": null,
       "region": "Saurashtra (Gujarat)",
       "materials": ["Lead"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=16",
+      "image": "/data/primitive-money-1/page-16.png",
       "notes": ["Human-shaped lead token, card explicitly labels region."]
     },
     {
@@ -241,7 +241,7 @@
       "period": null,
       "region": "Saurashtra (Gujarat)",
       "materials": ["Lead"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=16",
+      "image": "/data/primitive-money-1/page-16.png",
       "notes": ["Non-figurative ornament-shaped lead piece."]
     },
     {
@@ -251,7 +251,7 @@
       "period": null,
       "region": "Saurashtra (Gujarat)",
       "materials": ["Lead"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=16",
+      "image": "/data/primitive-money-1/page-16.png",
       "notes": ["Fish-shaped lead token; explicitly labeled on card."]
     },
     {
@@ -261,7 +261,7 @@
       "period": null,
       "region": "India (general)",
       "materials": ["Bronze"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=16",
+      "image": "/data/primitive-money-1/page-16.png",
       "notes": ["Lower-left card is another assortment of small bronze pieces."]
     },
     {
@@ -271,7 +271,7 @@
       "period": null,
       "region": "India (general)",
       "materials": ["Metal (likely bronze/lead mix; small bar forms)"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=16",
+      "image": "/data/primitive-money-1/page-16.png",
       "notes": ["Card at bottom-right shows curved/bar beads with perforations."]
     },
     {
@@ -281,7 +281,7 @@
       "period": null,
       "region": "India (general)",
       "materials": ["Bronze"],
-      "image": "https://anandheritagegallery.com/wp-content/uploads/2022/09/16-IND-COIN-PRIMIT-MONEY-Vol-I.pdf#page=17",
+      "image": "/data/primitive-money-1/page-17.png",
       "notes": ["Single card shows a spiral ‘snake’ necklace element with a piercing to string; classified as primitive money."]
     }
   ]

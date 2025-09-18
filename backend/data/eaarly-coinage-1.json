@@ -1,0 +1,124 @@
+{
+  "album_title": "Indian Coins — Early Coinage (Vol–I)",
+  "items": [
+    {
+      "id": "punch-marked-coins",
+      "page": 5,
+      "title": "Punch-Marked Coins — Earliest Silver Currency",
+      "period": "6th Century BCE - 2nd Century BCE",
+      "region": "Northern India (Magadha, Gandhara, Avanti)",
+      "materials": ["Silver"],
+      "image": "/data/early-coinage-1/page-5.png",
+      "notes": [
+        "These coins were created by cutting a silver sheet to standard weight and punching it with symbols using separate punches.",
+        "Different regions used specific symbols such as sun, tree-in-railing, bull, elephant, etc.",
+        "Represent the first organized monetary system in India."
+      ],
+      "display_labels": ["Weight standard approx. 3.4 g - 3.6 g"]
+    },
+    {
+      "id": "magadha-series",
+      "page": 6,
+      "title": "Magadha Series Punch-Marked Coins",
+      "period": "5th Century BCE - 3rd Century BCE",
+      "region": "Magadha (modern Bihar)",
+      "materials": ["Silver"],
+      "image": "/data/early-coinage-1/page-6.png",
+      "notes": [
+        "Features symbols unique to the Magadha kingdom.",
+        "Magadha became the dominant state during the time of the Mahajanapadas and Mauryan Empire."
+      ]
+    },
+    {
+      "id": "gandhara-series",
+      "page": 7,
+      "title": "Gandhara Series Punch-Marked Coins",
+      "period": "5th Century BCE - 3rd Century BCE",
+      "region": "Gandhara (modern northwest Pakistan/Afghanistan)",
+      "materials": ["Silver"],
+      "image": "/data/early-coinage-1/page-7.png",
+      "notes": [
+        "Shows distinctive motifs such as the humped bull, elephant, and geometric punches.",
+        "Linked to early trade routes connecting India with Persia and Central Asia."
+      ]
+    },
+    {
+      "id": "mauryan-standardized-coins",
+      "page": 8,
+      "title": "Mauryan Standardized Punch-Marked Coins",
+      "period": "321 BCE - 185 BCE",
+      "region": "Mauryan Empire",
+      "materials": ["Silver"],
+      "image": "/data/early-coinage-1/page-8.png",
+      "notes": [
+        "Under the Mauryan empire, punch-marked coins became fully standardized.",
+        "Official royal symbols were included to ensure authenticity and state authority."
+      ]
+    },
+    {
+      "id": "tribal-janapada-coins",
+      "page": 9,
+      "title": "Tribal Janapada Coins",
+      "period": "600 BCE - 200 BCE",
+      "region": "Various tribal republics",
+      "materials": ["Copper", "Bronze"],
+      "image": "/data/early-coinage-1/page-9.png",
+      "notes": [
+        "Issued by smaller tribal republics or janapadas.",
+        "Designs were less standardized and often depict tribal symbols."
+      ]
+    },
+    {
+      "id": "bent-bar-coins",
+      "page": 10,
+      "title": "Bent-Bar Silver Coins",
+      "period": "3rd Century BCE - 1st Century BCE",
+      "region": "Northwest India (Indo-Greek influence)",
+      "materials": ["Silver"],
+      "image": "/data/early-coinage-1/page-10.png",
+      "notes": [
+        "Long rectangular silver bars bent slightly in the middle.",
+        "Introduced through trade with Greek kingdoms and later localized."
+      ]
+    },
+    {
+      "id": "early-symbolic-copper",
+      "page": 11,
+      "title": "Early Symbolic Copper Coins",
+      "period": "2nd Century BCE - 1st Century BCE",
+      "region": "Western India",
+      "materials": ["Copper"],
+      "image": "/data/early-coinage-1/page-11.png",
+      "notes": [
+        "These coins used symbols like animals and plants to indicate issuing authorities or cities.",
+        "Copper was used for smaller, local transactions."
+      ]
+    },
+    {
+      "id": "greek-indian-coins",
+      "page": 12,
+      "title": "Indo-Greek Coins",
+      "period": "2nd Century BCE - 1st Century BCE",
+      "region": "Northwest India (Bactria, Punjab)",
+      "materials": ["Silver", "Gold"],
+      "image": "/data/early-coinage-1/page-12.png",
+      "notes": [
+        "Feature bilingual inscriptions in Greek and Brahmi scripts.",
+        "Common designs include Greek deities, rulers' portraits, and elephants."
+      ]
+    },
+    {
+      "id": "satavahana-early-copper",
+      "page": 13,
+      "title": "Satavahana Early Copper Coins",
+      "period": "1st Century BCE - 2nd Century CE",
+      "region": "Deccan Region",
+      "materials": ["Copper"],
+      "image": "/data/early-coinage-1/page-13.png",
+      "notes": [
+        "Depicts symbols like the 'Ujjain symbol' and elephants.",
+        "Used for local and regional commerce in southern India."
+      ]
+    }
+  ]
+}

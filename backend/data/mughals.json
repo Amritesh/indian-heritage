@@ -1,0 +1,455 @@
+{
+  "album_title": "Mughals",
+  "items": [
+    {
+      "id": "cover",
+      "page": 1,
+      "title": "Cover — Indian Coins: Mughals (Vol–I)",
+      "period": null,
+      "region": "Mughal Empire (overview)",
+      "materials": [],
+      "image": "/data/mughals-1/page-1.png",
+      "notes": []
+    },
+    {
+      "id": "title-page",
+      "page": 2,
+      "title": "Pre-Independence Indian Coins — Mughal Coinage (Part I)",
+      "period": null,
+      "region": "Pan-India",
+      "materials": [],
+      "image": "/data/mughals-1/page-2.png",
+      "notes": []
+    },
+    {
+      "id": "contents-period-range",
+      "page": 4,
+      "title": "Mughal Coinage: AH/AD span & Part I rulers list",
+      "period": "AH 922–1273 / 1526–1858 AD (Part I subset)",
+      "region": "Mughal Empire",
+      "materials": [],
+      "image": "/data/mughals-1/page-4.png",
+      "notes": [
+        "Index of emperors covered in Part I with AH/AD ranges."
+      ]
+    },
+    {
+      "id": "emperors-table-part-a",
+      "page": 5,
+      "title": "Mughal Emperors — table (Babur to Kam Bakhsh)",
+      "period": "1526–1708 AD (per rows shown)",
+      "region": "Mughal Empire",
+      "materials": [],
+      "image": "/data/mughals-1/page-5.png",
+      "notes": [
+        "Bilingual table of emperors with AH/AD and years ruled."
+      ]
+    },
+    {
+      "id": "emperors-table-part-b",
+      "page": 6,
+      "title": "Mughal Emperors — table (Shah Alam I to Bahadur Shah II)",
+      "period": "1707–1858 AD (per rows shown)",
+      "region": "Mughal Empire",
+      "materials": [],
+      "image": "/data/mughals-1/page-6.png",
+      "notes": [
+        "Includes total years of rule and deposition year; Persian month names legend."
+      ]
+    },
+    {
+      "id": "intro-panel",
+      "page": 8,
+      "title": "Intro: Mughal coins — date, regnal year, mint, calligraphy",
+      "period": null,
+      "region": "Mughal Empire",
+      "materials": ["Silver", "Copper (examples shown)"],
+      "image": "/data/mughals-1/page-8.png",
+      "notes": [
+        "Introductory board emphasizing historical data carried on coins."
+      ]
+    },
+    {
+      "id": "babur",
+      "page": 8,
+      "title": "Babur (Zahir-ud-din Muhammad) — coin examples",
+      "period": "AH 932–937 / 1526–1530 AD",
+      "region": "Early Mughal mints",
+      "materials": ["Copper (examples visible)"],
+      "image": "/data/mughals-1/page-8.png",
+      "notes": [
+        "Two mounted pieces labelled ‘Babar/Babur’ with AH 932–937; early Mughal issues."
+      ]
+    },
+    {
+      "id": "humayun",
+      "page": 9,
+      "title": "Humayun (Nasir-ud-din Muhammad) — types & legends",
+      "period": "AH 937–963 / 1530–1556 AD",
+      "region": "Multiple mints (notes on board)",
+      "materials": ["Silver", "Copper"],
+      "image": "/data/mughals-1/page-9.png",
+      "notes": [
+        "Board text describes Shahada & Rashidun names on obv; mihrab-cartouche rev; tray shows multiple dates/mints."
+      ]
+    },
+    {
+      "id": "akbar-set-1",
+      "page": 10,
+      "title": "Akbar (Jalal-ud-din Muhammad) — early copper",
+      "period": "AH 963–1014 / 1556–1605 AD",
+      "region": "Various mints",
+      "materials": ["Copper"],
+      "image": "/data/mughals-1/page-10.png",
+      "notes": [
+        "Flips annotated with regnal/AH years; one labelled ‘Gobindpur Mint — Double Dam’."
+      ]
+    },
+    {
+      "id": "akbar-set-2",
+      "page": 11,
+      "title": "Akbar — silver denominations and mint variety",
+      "period": "AH 963–1014 / 1556–1605 AD",
+      "region": "Ahmedabad, Agra, etc.",
+      "materials": ["Silver", "Copper"],
+      "image": "/data/mughals-1/page-11.png",
+      "notes": [
+        "Lower rows show clear silver legends; several flips note Ahmedabad/Agra with AH/AD pairs."
+      ]
+    },
+    {
+      "id": "akbar-set-3",
+      "page": 12,
+      "title": "Akbar — additional mints",
+      "period": "AH 963–1014 / 1556–1605 AD",
+      "region": "Hissar Firoza, Jodhp… (Jodhpur), Katak (Regnal), Lahore, Ahmedabad, Ujjain etc.",
+      "materials": ["Silver"],
+      "image": "/data/mughals-1/page-12.png",
+      "notes": [
+        "Flip notes include Katak regnal, Lahore 1004 AH (1596 AD), and other city mints."
+      ]
+    },
+    {
+      "id": "jahangir-zodiac-months",
+      "page": 13,
+      "title": "Jahangir (Nur-ud-din Muhammad) — monthly/Ilahi issues (Patna mint series)",
+      "period": "AH 1014–1037 / 1605–1627 AD",
+      "region": "Patna mint (series shown)",
+      "materials": ["Silver"],
+      "image": "/data/mughals-1/page-13.png",
+      "notes": [
+        "Twelve flips labelled ‘1st month…12th month — Ilahi’; most annotated ‘Patna Mint’ with specific AH/AD."
+      ]
+    },
+    {
+      "id": "jahangir-other-mints",
+      "page": 14,
+      "title": "Jahangir — other mints (Ahmadnagar, Qanauj, Tatta)",
+      "period": "AH 1010s–1020s / 1605–1620s AD (as noted)",
+      "region": "Ahmadnagar, Qanauj, Tatta (and Patna continuation)",
+      "materials": ["Silver"],
+      "image": "/data/mughals-1/page-14.png",
+      "notes": [
+        "Flips show Ahmadnagar ‘Kalima variety’, Qanauj AH 1021 / 1612 AD, Tatta AH 1022 / 1613 AD."
+      ]
+    },
+    {
+      "id": "shah-jahan-i-set-1",
+      "page": 15,
+      "title": "Shah Jahan I — early issues & mint variety",
+      "period": "AH 1037–1068 / 1628–1658 AD",
+      "region": "Patna, Akbarabad (Agra), Surat, Multan, Qandhar etc.",
+      "materials": ["Silver", "Copper"],
+      "image": "/data/mughals-1/page-15.png",
+      "notes": [
+        "Multiple flips cite Patna; others note Akbarabad 1037 AH (1628 AD), Surat, Multan and Qandhar mints."
+      ]
+    },
+    {
+      "id": "shah-jahan-i-set-2",
+      "page": 16,
+      "title": "Shah Jahan I — later issues (incl. Lahore, Daulatabad, Patna)",
+      "period": "AH 1039–1061 / 1629–1650 AD (examples on board)",
+      "region": "Lahore, Daulatabad, Patna",
+      "materials": ["Silver"],
+      "image": "/data/mughals-1/page-16.png",
+      "notes": [
+        "Top row coins annotated Lahore and Daulatabad; bottom row shows small square-flan pieces with AH 1039 (1629 AD)."
+      ]
+    },
+    {
+      "id": "aurangzeb-set-1",
+      "page": 17,
+      "title": "Aurangzeb Alamgir — northern & eastern mints",
+      "period": "AH 1068–1118 / 1658–1707 AD",
+      "region": "Akbarabad, Etawa, Khambayat, Lucknow, Azimabad/Patna",
+      "materials": ["Silver"],
+      "image": "/data/mughals-1/page-17.png",
+      "notes": [
+        "Flips show Akbarabad AH 1081, Etawa AH 1116, Khambayat (H), Lucknow and Patna mints with late-17th-century dates."
+      ]
+    },
+    {
+      "id": "aurangzeb-set-2",
+      "page": 18,
+      "title": "Aurangzeb Alamgir — Deccan & west coast mints",
+      "period": "AH 1107–1114 / 1695–1703 AD (examples)",
+      "region": "Banaras, Bijapur, Golkonda, Janagarh, Lahore, Multan, Mazaffarabad, Surat, Shahjahanabad",
+      "materials": ["Silver"],
+      "image": "/data/mughals-1/page-18.png",
+      "notes": [
+        "Series includes coastal Surat issues (AH 1111/1703 AD) and Deccan mints like Golkonda."
+      ]
+    },
+    {
+      "id": "shah-alam-i",
+      "page": 19,
+      "title": "Shah Alam I (Qutb-ud-din) — mint spread",
+      "period": "AH 1119–1124 / 1707–1712 AD",
+      "region": "Azimabad (Patna), Khujista-bad, Etawa, Surat",
+      "materials": ["Silver"],
+      "image": "/data/mughals-1/page-19.png",
+      "notes": [
+        "Sequential ‘1 Julus, 2 Julus…’ flips for Azimabad; other flips note Khujista-bad and Surat."
+      ]
+    },
+    {
+      "id": "jahandar-shah",
+      "page": 20,
+      "title": "Jahandar Shah — brief reign issues",
+      "period": "AH 1124 / 1712–1713 AD",
+      "region": "Surat, Shahjahanabad",
+      "materials": ["Silver"],
+      "image": "/data/mughals-1/page-20.png",
+      "notes": [
+        "Two mounted pieces: Surat Mint and Shahjahanabad with AH 1124 (1712 AD)."
+      ]
+    },
+    {
+      "id": "farrukhsiyar-set",
+      "page": 21,
+      "title": "Farrukhsiyar — multiple mints",
+      "period": "AH 1124–1131 / 1713–1719 AD",
+      "region": "Azimabad (Patna), Akbarabad (Agra), Arcot, Etawa, Murshidabad, Shahjahanabad, Shahbaz-nagar etc.",
+      "materials": ["Silver"],
+      "image": "/data/mughals-1/page-21.png",
+      "notes": [
+        "Board of nine flips including Arcot and Murshidabad; several marked ‘Julus’ with AH/AD pairs."
+      ]
+    },
+    {
+      "id": "farrukhsiyar-set-2",
+      "page": 22,
+      "title": "Farrukhsiyar — continuation",
+      "period": "AH 1124–1131 / 1713–1719 AD",
+      "region": "As above (extended examples)",
+      "materials": ["Silver"],
+      "image": "/data/mughals-1/page-22.png",
+      "notes": [
+        "Second tray continues same ruler and mint variety."
+      ]
+    },
+    {
+      "id": "rafi-ud-darjat-and-shah-jahan-ii",
+      "page": 23,
+      "title": "Rafi-ud-Darjat & Shah Jahan II — brief issues",
+      "period": "AH 1131 / 1719 AD",
+      "region": "Shahjahanabad, Surat",
+      "materials": ["Silver"],
+      "image": "/data/mughals-1/page-23.png",
+      "notes": [
+        "Left: Rafi-ud-Darjat (Shams-ud-din Muhammad), Shahjahanabad mint; Right: Shah Jahan II (Rafi-ud-Daula), Surat mint."
+      ]
+    },
+    {
+      "id": "context-note-nisar-nazrana",
+      "page": 24,
+      "title": "Context note — Nisar/Nazrana/Jiginasri coins",
+      "period": "Reference text",
+      "region": "Mughal period context",
+      "materials": [],
+      "image": "/data/mughals-1/page-24.png",
+      "notes": [
+        "Hindi note on fractional ‘Nisar’ pieces, large presentation ‘Nazrana’ coins, and very heavy gold pieces in Jahangir’s reign."
+      ]
+    },
+    {
+      "id": "cover",
+      "page": 1,
+      "title": "Cover — Indian Coins: Mughals (Vol–II)",
+      "period": null,
+      "region": "Mughal Empire (overview)",
+      "materials": [],
+      "image": "/data/mughals-2/page-1.png",
+      "notes": []
+    },
+    {
+      "id": "title-page",
+      "page": 2,
+      "title": "Pre-Independence Indian Coins — Mughal Coinage (Part II)",
+      "period": null,
+      "region": "Pan-India",
+      "materials": [],
+      "image": "/data/mughals-2/page-2.png",
+      "notes": []
+    },
+    {
+      "id": "muhammad-shah-set-1",
+      "page": 4,
+      "title": "Muhammad Shah (Rangeela) — early reign",
+      "period": "AH 1131–1161 / 1719–1748 AD",
+      "region": "Delhi, Akbarabad, Murshidabad",
+      "materials": ["Silver"],
+      "image": "/data/mughals-2/page-4.png",
+      "notes": [
+        "Initial year issues of Muhammad Shah, with coins marked 1 Julus, 2 Julus, etc.",
+        "Mint cities like Delhi and Murshidabad visible on flips."
+      ]
+    },
+    {
+      "id": "muhammad-shah-set-2",
+      "page": 5,
+      "title": "Muhammad Shah — mid-reign issues",
+      "period": "AH 1134–1140 / 1721–1727 AD",
+      "region": "Multiple mints",
+      "materials": ["Silver"],
+      "image": "/data/mughals-2/page-5.png",
+      "notes": [
+        "Flips feature coins from Surat, Patna (Azimabad), Shahjahanabad and others."
+      ]
+    },
+    {
+      "id": "muhammad-shah-set-3",
+      "page": 6,
+      "title": "Muhammad Shah — later reign, broader mint network",
+      "period": "AH 1145–1157 / 1732–1744 AD",
+      "region": "Delhi, Bengal, Gujarat, South India",
+      "materials": ["Silver"],
+      "image": "/data/mughals-2/page-6.png",
+      "notes": [
+        "Coins marked from far-reaching provinces including Murshidabad (Bengal) and Arcot (South India)."
+      ]
+    },
+    {
+      "id": "ahmad-shah-bahadur",
+      "page": 7,
+      "title": "Ahmad Shah Bahadur — short reign issues",
+      "period": "AH 1161–1167 / 1748–1754 AD",
+      "region": "Delhi, Murshidabad, Surat, Patna",
+      "materials": ["Silver"],
+      "image": "/data/mughals-2/page-7.png",
+      "notes": [
+        "Flips marked with regnal years 1–6 Julus.",
+        "Known for the decline of Mughal central authority."
+      ]
+    },
+    {
+      "id": "alamgir-ii",
+      "page": 8,
+      "title": "Alamgir II — coins from key mints",
+      "period": "AH 1168–1173 / 1754–1759 AD",
+      "region": "Delhi, Shahjahanabad, Bengal, Gujarat",
+      "materials": ["Silver"],
+      "image": "/data/mughals-2/page-8.png",
+      "notes": [
+        "Various flips marked ‘1 Julus’, ‘2 Julus’ etc. for Alamgir II."
+      ]
+    },
+    {
+      "id": "shah-alam-ii-set-1",
+      "page": 9,
+      "title": "Shah Alam II — early reign issues",
+      "period": "AH 1173–1221 / 1759–1806 AD",
+      "region": "Delhi, Shahjahanabad, Bengal, Gujarat, South India",
+      "materials": ["Silver"],
+      "image": "/data/mughals-2/page-9.png",
+      "notes": [
+        "Flips include coins marked AH 1173 and onwards; key mints like Shahjahanabad, Surat, Murshidabad."
+      ]
+    },
+    {
+      "id": "shah-alam-ii-set-2",
+      "page": 10,
+      "title": "Shah Alam II — mid-reign, provincial issues",
+      "period": "AH 1185–1200 / 1771–1786 AD",
+      "region": "Oudh, Bihar, Gujarat, Punjab",
+      "materials": ["Silver"],
+      "image": "/data/mughals-2/page-10.png",
+      "notes": [
+        "Provinces asserting independence — coins feature local names alongside emperor's name."
+      ]
+    },
+    {
+      "id": "shah-alam-ii-set-3",
+      "page": 11,
+      "title": "Shah Alam II — late reign issues",
+      "period": "AH 1205–1221 / 1791–1806 AD",
+      "region": "Delhi, Bengal, Hyderabad, Gujarat",
+      "materials": ["Silver"],
+      "image": "/data/mughals-2/page-11.png",
+      "notes": [
+        "Coins issued during the era of Maratha dominance and British influence."
+      ]
+    },
+    {
+      "id": "akbar-ii-set-1",
+      "page": 12,
+      "title": "Akbar II — early coins",
+      "period": "AH 1221–1252 / 1806–1837 AD",
+      "region": "Delhi, Bengal, Gujarat, Hyderabad",
+      "materials": ["Silver"],
+      "image": "/data/mughals-2/page-12.png",
+      "notes": [
+        "Early coins with clear Persian legends and regnal year marks."
+      ]
+    },
+    {
+      "id": "akbar-ii-set-2",
+      "page": 13,
+      "title": "Akbar II — continued issues",
+      "period": "AH 1230–1245 / 1815–1830 AD",
+      "region": "Delhi, Bengal, Punjab",
+      "materials": ["Silver"],
+      "image": "/data/mughals-2/page-13.png",
+      "notes": [
+        "Mint marks indicate shifting power to regional Nawabs."
+      ]
+    },
+    {
+      "id": "bahadur-shah-ii",
+      "page": 14,
+      "title": "Bahadur Shah II (Zafar) — final Mughal emperor",
+      "period": "AH 1253–1274 / 1837–1858 AD",
+      "region": "Delhi, Bengal, Awadh",
+      "materials": ["Silver"],
+      "image": "/data/mughals-2/page-14.png",
+      "notes": [
+        "Coins from the twilight of Mughal authority, shortly before the Revolt of 1857."
+      ]
+    },
+    {
+      "id": "special-commemoratives",
+      "page": 15,
+      "title": "Special commemorative & presentation coins",
+      "period": "Mixed periods",
+      "region": "Various",
+      "materials": ["Gold", "Silver"],
+      "image": "/data/mughals-2/page-15.png",
+      "notes": [
+        "Nazrana coins and other large ceremonial pieces with elaborate calligraphy."
+      ]
+    },
+    {
+      "id": "reference-table",
+      "page": 16,
+      "title": "Mint names and Persian terms reference",
+      "period": "Reference",
+      "region": "Mughal coinage glossary",
+      "materials": [],
+      "image": "/data/mughals-2/page-16.png",
+      "notes": [
+        "Glossary of Persian mint names, regnal terms, and coin designations."
+      ]
+    }
+  ]
+}

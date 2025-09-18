@@ -40,28 +40,15 @@
       "items": []
     },
     {
-      "id": "mughals-1-1",
-      "title": "Mughals 1",
-      "assetValue": "404000",
+      "id": "mughals",
+      "title": "Mughals",
+      "assetValue": "674000",
       "category": "Numismatics",
-      "volume": "1",
+      "volume": "1-2",
       "era": "Pre Independence",
       "description": null,
       "time": null,
-      "pages": "21",
-      "image": null,
-      "items": []
-    },
-    {
-      "id": "mughals-2-2",
-      "title": "Mughals 2",
-      "assetValue": "270000",
-      "category": "Numismatics",
-      "volume": "2",
-      "era": "Pre Independence",
-      "description": null,
-      "time": null,
-      "pages": "21",
+      "pages": "42",
       "image": null,
       "items": []
     },
