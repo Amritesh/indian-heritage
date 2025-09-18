@@ -1,0 +1,31 @@
+{
+  "hosting": {
+    "public": "frontend/build",
+    "predeploy": [
+      "cd frontend && npm install && npm run build"
+    ],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/**",
+        "function": "app"
+      },
+      {
+        "source": "/data/**",
+        "function": "app"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "functions": {
+    "source": "backend",
+    "runtime": "nodejs18"
+  }
+}
