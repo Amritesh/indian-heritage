@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Button, Input, HStack, Tag, Heading, Text } from '@chakra-ui/react';
 import CollectionCard from './CollectionCard';
+import { BASE_URL } from './firebase-config';
 
 // Dashboard — fetches collections from the backend and shows details
 export default function Dashboard() {
@@ -21,8 +22,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     setLoading(true);
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
-    fetch(`${API_BASE_URL}/api/collections`)
+    fetch(`${BASE_URL}/api/collections`)
       .then((r) => r.json())
       .then((data) => {
         const detectCategory = (c) => {
@@ -117,8 +117,7 @@ export default function Dashboard() {
 
   function openCollection(id) {
     setLoading(true);
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
-    fetch(`${API_BASE_URL}/api/collections/${encodeURIComponent(id)}`)
+    fetch(`${BASE_URL}/api/collections/${encodeURIComponent(id)}`)
       .then((r) => {
         if (!r.ok) throw new Error('Not found');
         return r.json();
@@ -157,25 +156,6 @@ export default function Dashboard() {
     }
   };
 
-  // helper to pick a cover image (first available image in collection or item)
-  const coverFor = (c) => {
-    if (!c) return null;
-    if (c.coverImage) return c.coverImage;
-    if (c.image) return c.image;
-    if (Array.isArray(c.items) && c.items.length) {
-      const firstWithImage = c.items.find(it => it.image);
-      if (firstWithImage) return firstWithImage.image;
-    }
-    return null;
-  };
-
-  // deterministic pastel color generator based on id
-  const randomPastel = (seed = '') => {
-    let h = 0;
-    for (let i = 0; i < seed.length; i++) h = (h << 5) - h + seed.charCodeAt(i);
-    const hue = Math.abs(h) % 360;
-    return `linear-gradient(135deg, hsl(${hue} 70% 95%), hsl(${(hue + 30) % 360} 60% 90%))`;
-  };
 
   return (
     <main className="flex-1 pb-10">
@@ -252,8 +232,6 @@ export default function Dashboard() {
             <CollectionCard
               key={c.id}
               collection={c}
-              coverFor={coverFor}
-              randomPastel={randomPastel}
               badgeColor={badgeColor}
               badgeColorScheme={badgeColorScheme}
             />

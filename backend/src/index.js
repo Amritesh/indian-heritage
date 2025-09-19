@@ -2,7 +2,15 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+// Initialize Firebase Admin SDK
+// When deployed as a Firebase Function, the Admin SDK automatically picks up credentials.
+// For local emulation, ensure `firebase emulators:start` is run.
+admin.initializeApp({
+  databaseURL: 'https://indian-heritage-gallery-default-rtdb.firebaseio.com/'
+});
 
+const db = admin.database();
 const app = express();
 
 // Middleware
@@ -15,70 +23,53 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Anand Heritage Gallery API' });
 });
 
-// Regenerate collections.json from CSV at startup if available
-try {
-  const importer = require('../scripts/import_collections');
-  if (importer && typeof importer.importCollections === 'function') {
-    importer.importCollections();
-  }
-} catch (err) {
-  console.warn('Could not run importer at startup:', err.message || err);
-}
-
 // Collections API
-const path = require('path');
-const fs = require('fs');
-
-function readCollections() {
-  const file = path.join(__dirname, '../data/collections.json');
+app.get('/api/collections', async (req, res) => {
   try {
-    const raw = fs.readFileSync(file, 'utf8');
-    const data = JSON.parse(raw);
-    return data.collections || [];
-  } catch (err) {
-    console.error('Failed to read collections.json', err);
-    return [];
+    const snapshot = await db.ref('collections').once('value');
+    const collections = snapshot.val();
+    res.json({ collections: collections || [] });
+  } catch (error) {
+    console.error('Error fetching collections:', error);
+    res.status(500).json({ error: 'Failed to fetch collections' });
   }
-}
-
-app.use('/data', express.static(path.join(__dirname, '../data')));
-
-app.get('/api/collections', (req, res) => {
-  const collections = readCollections();
-  res.json({ collections });
 });
 
-app.get('/api/collections/:id', (req, res) => {
-  const collections = readCollections();
-  const id = req.params.id;
-  const found = collections.find(c => c.id === id);
-  if (!found) return res.status(404).json({ error: 'Not found' });
-  res.json({ collection: found });
-});
-
-// New API endpoint for primitive-money-1.json
-app.get('/api/items/:id', (req, res) => {
-  const id = req.params.id;
-  const itemDataFiles = {
-    'primitive-money-1': 'primitive-money-1.json',
-    'early-coinage-1': 'eaarly-coinage-1.json',
-    'sultanate-coins-1': 'sultanate-coins-1.json',
-    'mughals': 'mughals.json'
-  };
-
-  const filename = itemDataFiles[id];
-  if (filename) {
-    const file = path.join(__dirname, `../data/${filename}`);
-    try {
-      const raw = fs.readFileSync(file, 'utf8');
-      const data = JSON.parse(raw);
-      return res.json({ itemCollection: data });
-    } catch (err) {
-      console.error(`Failed to read ${filename}`, err);
-      return res.status(500).json({ error: 'Failed to load item data' });
+app.get('/api/collections/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const snapshot = await db.ref(`collection_details/${id}`).once('value');
+    const collection = snapshot.val();
+    if (!collection) {
+      return res.status(404).json({ error: 'Collection not found' });
     }
+    res.json({ collection });
+  } catch (error) {
+    console.error(`Error fetching collection ${req.params.id}:`, error);
+    res.status(500).json({ error: 'Failed to fetch collection' });
   }
-  return res.status(404).json({ error: 'Item collection not found' });
+});
+
+// API endpoint for item collections
+app.get('/api/items/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const snapshot = await db.ref(`collection_details/${id}`).once('value'); // Assuming item collections are also under collection_details
+    const itemCollection = snapshot.val();
+    if (!itemCollection) {
+      return res.status(404).json({ error: 'Item collection not found' });
+    }
+    // Log the image URLs to inspect their format
+    if (itemCollection.items) {
+      itemCollection.items.forEach(item => {
+        console.log('Original item image URL:', item.image);
+      });
+    }
+    res.json({ itemCollection });
+  } catch (error) {
+    console.error(`Error fetching item collection ${req.params.id}:`, error);
+    res.status(500).json({ error: 'Failed to fetch item collection' });
+  }
 });
 
 // Error handling middleware

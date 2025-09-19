@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tag } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import { getFirebaseStorageUrl } from './utils/imageUtils';
 
 // helper to pick a cover image (first available image in collection or item)
 const coverFor = (c) => {
@@ -27,7 +28,7 @@ export default function CollectionCard({ collection, badgeColor, badgeColorSchem
   const primary = '#332502';
   const neutral = '#7E7C76';
 
-  const cover = coverFor(collection);
+  const cover = getFirebaseStorageUrl(coverFor(collection));
 
   return (
     <article key={collection.id} className="group" role="button" aria-label={`Open ${collection.title}`}>
