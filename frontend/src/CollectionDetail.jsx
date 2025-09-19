@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
 import ItemCards from './ItemCards';
 import { HStack, Button, Text } from '@chakra-ui/react';
+import { BASE_URL } from './firebase-config';
 
 export default function CollectionDetail(){
   const {id} = useParams();
@@ -16,9 +17,9 @@ export default function CollectionDetail(){
     setLoading(true);
     let fetchUrl = '';
     if (['primitive-money-1', 'early-coinage-1', 'sultanate-coins-1', 'mughals'].includes(id)) {
-      fetchUrl = `/api/items/${encodeURIComponent(id)}`;
+      fetchUrl = `${BASE_URL}/api/items/${encodeURIComponent(id)}`;
     } else {
-      fetchUrl = `/api/collections/${encodeURIComponent(id)}`;
+      fetchUrl = `${BASE_URL}/api/collections/${encodeURIComponent(id)}`;
     }
 
     fetch(fetchUrl)

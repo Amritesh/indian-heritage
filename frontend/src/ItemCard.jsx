@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tag } from '@chakra-ui/react';
+import { getFirebaseStorageUrl } from './utils/imageUtils';
 
 // deterministic pastel color generator based on id
 const randomPastel = (seed = '') => {
@@ -19,7 +20,9 @@ export default function ItemCard({ item }) {
     return null; // Don't render anything if item is invalid
   }
 
-  const cover = item.image;
+  const cover = getFirebaseStorageUrl(item.image);
+  console.log('ItemCard - item.image:', item.image);
+  console.log('ItemCard - converted cover URL:', cover);
 
   return (
     <article key={item.id} className="group" role="button" aria-label={`Open ${item.title}`}>
