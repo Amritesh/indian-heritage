@@ -7,8 +7,6 @@
 @layer base {
   body {
     @apply bg-cream text-primary antialiased;
-      background-image: url('./textures/paper-texture.png');
-    background-repeat: repeat;
   }
 }
 

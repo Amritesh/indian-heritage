@@ -61,5 +61,4 @@ header .container-custom {
 
 /* subtle paper texture for the whole page */
 body {
-  background-image: url('%PUBLIC_URL%/textures/paper-texture.png');
 }
