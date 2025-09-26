@@ -23,6 +23,9 @@ const storage = admin.storage();
 const dataDir = path.join(__dirname, '../../temp/data');
 const imagesDir = path.join(__dirname, '../../temp/images'); // Assuming temp/images is at the project root
 
+// Check for a command-line argument to skip image uploads
+const skipImageUpload = process.argv.includes('--no-images');
+
 async function uploadData() {
   try {
     // 1. Upload collections data
@@ -59,43 +62,47 @@ async function uploadData() {
     console.log('All collection details uploaded successfully.');
 
     // 3. Upload images to Firebase Storage (recursively)
-    if (fs.existsSync(imagesDir)) {
-      const bucket = storage.bucket('indian-heritage-gallery-bucket');
-      const filesToUpload = [];
+    if (!skipImageUpload) {
+      if (fs.existsSync(imagesDir)) {
+        const bucket = storage.bucket('indian-heritage-gallery-bucket');
+        const filesToUpload = [];
 
-      // Function to recursively get all image files
-      function getImagesRecursively(directory) {
-        fs.readdirSync(directory, { withFileTypes: true }).forEach(dirent => {
-          const fullPath = path.join(directory, dirent.name);
-          if (dirent.isDirectory()) {
-            getImagesRecursively(fullPath);
-          } else if (/\.(jpg|jpeg|png|gif)$/i.test(dirent.name)) {
-            filesToUpload.push(fullPath);
-          }
-        });
+        // Function to recursively get all image files
+        function getImagesRecursively(directory) {
+          fs.readdirSync(directory, { withFileTypes: true }).forEach(dirent => {
+            const fullPath = path.join(directory, dirent.name);
+            if (dirent.isDirectory()) {
+              getImagesRecursively(fullPath);
+            } else if (/\.(jpg|jpeg|png|gif)$/i.test(dirent.name)) {
+              filesToUpload.push(fullPath);
+            }
+          });
+        }
+
+        getImagesRecursively(imagesDir);
+
+        for (const imageFilePath of filesToUpload) {
+          // Determine the destination path in Firebase Storage
+          // Example: /Users/amritesh/Desktop/code/AHG/temp/images/collectionId/image.png
+          // Should become: images/collectionId/image.png
+          const relativePath = path.relative(imagesDir, imageFilePath);
+          const destination = `images/${relativePath.replace(/\\/g, '/')}`; // Use forward slashes for Firebase Storage paths
+
+          console.log(`Uploading image: ${imageFilePath} to ${destination}...`);
+          await bucket.upload(imageFilePath, {
+            destination: destination,
+            metadata: {
+              contentType: `image/${path.extname(imageFilePath).substring(1)}`,
+            },
+          });
+          console.log(`Image ${imageFilePath} uploaded successfully.`);
+        }
+        console.log('All images uploaded successfully.');
+      } else {
+        console.warn(`Image directory not found: ${imagesDir}. Skipping image upload.`);
       }
-
-      getImagesRecursively(imagesDir);
-
-      for (const imageFilePath of filesToUpload) {
-        // Determine the destination path in Firebase Storage
-        // Example: /Users/amritesh/Desktop/code/AHG/temp/images/collectionId/image.png
-        // Should become: images/collectionId/image.png
-        const relativePath = path.relative(imagesDir, imageFilePath);
-        const destination = `images/${relativePath.replace(/\\/g, '/')}`; // Use forward slashes for Firebase Storage paths
-
-        console.log(`Uploading image: ${imageFilePath} to ${destination}...`);
-        await bucket.upload(imageFilePath, {
-          destination: destination,
-          metadata: {
-            contentType: `image/${path.extname(imageFilePath).substring(1)}`,
-          },
-        });
-        console.log(`Image ${imageFilePath} uploaded successfully.`);
-      }
-      console.log('All images uploaded successfully.');
     } else {
-      console.warn(`Image directory not found: ${imagesDir}. Skipping image upload.`);
+      console.log('Skipping image upload due to --no-images flag.');
     }
 
     console.log('Data and images upload process completed.');
