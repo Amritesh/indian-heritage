@@ -4,3 +4,4 @@ temp
 .firebase/
 firebase-debug.log
 package-lock.json
+builder.config.json
