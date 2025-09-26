@@ -152,7 +152,7 @@ async function loadImageAny({ imageDataUrl, gcsUri, imageUrl }, { timeoutMs = 25
   const meta = await img.metadata();
   if (!meta || !meta.width || !meta.height) throw new Error('Unsupported or corrupt image.');
 
-  // Send full detail to the model; only resize if truly giant
+  // Send high detail to the model; only resize if truly giant
   if (meta.width > maxSide || meta.height > maxSide) {
     img = img.resize({
       width: meta.width >= meta.height ? maxSide : null,
@@ -167,22 +167,22 @@ async function loadImageAny({ imageDataUrl, gcsUri, imageUrl }, { timeoutMs = 25
   return { pngBuffer, width, height, dataUrl: `data:image/png;base64,${pngBuffer.toString('base64')}` };
 }
 
-function clampBBox(bbox, imgW, imgH) {
+function clampBBox(bbox, imgW, imgH, { allowZero = false } = {}) {
   if (!bbox || typeof bbox !== 'object') return null;
   let { x = 0, y = 0, width = 0, height = 0 } = bbox;
   x = Math.floor(x); y = Math.floor(y);
   width = Math.floor(width); height = Math.floor(height);
-  if (width <= 0 || height <= 0) return null;
+  if (!allowZero && (width <= 0 || height <= 0)) return null;
   if (x < 0) { width += x; x = 0; }
   if (y < 0) { height += y; y = 0; }
   if (x + width > imgW) width = imgW - x;
   if (y + height > imgH) height = imgH - y;
-  if (width <= 0 || height <= 0) return null;
+  if (!allowZero && (width <= 0 || height <= 0)) return null;
   return { x, y, width, height };
 }
 
 /* ---------------------------------------
-   OpenAI (LLM-only bboxes + details)
+   OpenAI (LLM-only, Responses API)
 ----------------------------------------*/
 async function getOpenAIInstance() {
   const key = process.env.OPENAI_API_KEY || (functions.config().openai && functions.config().openai.api_key);
@@ -191,10 +191,17 @@ async function getOpenAIInstance() {
 }
 
 /* ---------------------------------------
-   JSON Schema (strict) used in both passes
+   STRICT JSON SCHEMAS
 ----------------------------------------*/
-// IMPORTANT: every object has additionalProperties:false AND a required list.
-const PAGE_ITEMS_SCHEMA = {
+// Every object has additionalProperties:false and explicit required covering all keys.
+
+/**
+ * PAGE_POCKETS_SCHEMA:
+ *  - grid: rows, cols describing page pockets (e.g., 4 cols x 5 rows)
+ *  - items: ONLY occupied pockets (one per physical item)
+ *  - Each item includes (row, col), the pocket's cell_bbox, the item's item_bbox, and details.
+ */
+const PAGE_POCKETS_SCHEMA = {
   type: "object",
   additionalProperties: false,
   properties: {
@@ -207,14 +214,49 @@ const PAGE_ITEMS_SCHEMA = {
       },
       required: ["width", "height"]
     },
+    grid: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        rows: { type: "integer", minimum: 1, maximum: 20 },
+        cols: { type: "integer", minimum: 1, maximum: 20 }
+      },
+      required: ["rows", "cols"]
+    },
     items: {
       type: "array",
-      maxItems: 64, // upper bound; we'll pass a tighter cap at runtime
+      maxItems: 100,
       items: {
         type: "object",
         additionalProperties: false,
         properties: {
           id: { type: "string", minLength: 1 },
+          row: { type: "integer", minimum: 1 },
+          col: { type: "integer", minimum: 1 },
+          cell_bbox: {
+            type: "object",
+            additionalProperties: false,
+            properties: {
+              x: { type: "integer", minimum: 0 },
+              y: { type: "integer", minimum: 0 },
+              width: { type: "integer", minimum: 1 },
+              height: { type: "integer", minimum: 1 },
+              units: { type: "string", enum: ["pixels"] }
+            },
+            required: ["x", "y", "width", "height", "units"]
+          },
+          item_bbox: {
+            type: "object",
+            additionalProperties: false,
+            properties: {
+              x: { type: "integer", minimum: 0 },
+              y: { type: "integer", minimum: 0 },
+              width: { type: "integer", minimum: 1 },
+              height: { type: "integer", minimum: 1 },
+              units: { type: "string", enum: ["pixels"] }
+            },
+            required: ["x", "y", "width", "height", "units"]
+          },
           name: { type: "string" },
           description: { type: "string" },
           metadata: {
@@ -242,61 +284,61 @@ const PAGE_ITEMS_SCHEMA = {
               "condition",
               "notes"
             ]
-          },
-          bbox: {
-            type: "object",
-            additionalProperties: false,
-            properties: {
-              x: { type: "integer", minimum: 0 },
-              y: { type: "integer", minimum: 0 },
-              width: { type: "integer", minimum: 1 },
-              height: { type: "integer", minimum: 1 },
-              units: { type: "string", enum: ["pixels"] }
-            },
-            required: ["x", "y", "width", "height", "units"]
           }
         },
-        required: ["id", "name", "description", "metadata", "bbox"]
+        required: [
+          "id",
+          "row",
+          "col",
+          "cell_bbox",
+          "item_bbox",
+          "name",
+          "description",
+          "metadata"
+        ]
       }
     }
   },
-  required: ["image_dimensions", "items"]
+  required: ["image_dimensions", "grid", "items"]
 };
 
-/**
- * Pass 1: Ask the LLM to return pixel bboxes + details (strict schema).
- */
-async function llmDetectItems(client, pageDataUrl, W, H, {
+/* ---------------------------------------
+   LLM Calls: Detect + Refine Grid
+----------------------------------------*/
+async function llmDetectGrid(client, pageDataUrl, W, H, {
   model = process.env.OPENAI_MODEL || 'gpt-4o',
   temperature = 0.0,
-  maxItems = 48,
+  maxItems = 20,
+  defaultCols = 4,
+  defaultRows = 5
 } = {}) {
 
   const system = `
-You are an expert image cataloguer. The user provides an album page image with multiple items (coins/stamps/etc.).
-Return tight pixel bounding boxes around EACH physical item (not the page background), with brief details.
+You are an expert in cataloging album pages with grid pockets (white holders).
+This page usually has ${defaultCols} columns and ${defaultRows} rows of pockets; some may be EMPTY.
+Your task: detect the grid (rows, cols) and return ONLY OCCUPIED pockets with:
+- (row, col) 1-indexed,
+- the pocket's rectangle (cell_bbox) in INTEGER PIXELS,
+- a tight item rectangle (item_bbox) INSIDE that cell (INTEGER PIXELS),
+- brief item details.
 
 Hard rules:
-- Coordinates MUST be INTEGER PIXELS relative to THIS image: width=${W}, height=${H}.
-- Use { "units":"pixels" } on every bbox.
-- DO NOT assume a regular grid. DO NOT output placeholder or rounded coordinates (e.g., 50/100/250).
-- DO NOT guess uniform widths/heights. Snap to the actual visible edges of the item/holder.
-- EXCLUDE white page margins and loose captions unless they are physically inside/attached to the same holder.
-- Enforce NON-OVERLAP: IoU between two boxes must be ≤ 0.05, unless a merge clearly represents a single item.
+- Coordinates are relative to THIS image: width=${W}, height=${H}.
+- All bboxes must have "units":"pixels".
+- item_bbox must be fully inside its cell_bbox.
+- Rows should be horizontally aligned; columns vertically aligned.
+- Non-overlap across different cell_bbox rectangles except minor borders.
 - Bounds: 0 ≤ x < ${W}, 0 ≤ y < ${H}, x+width ≤ ${W}, y+height ≤ ${H}.
-- Prefer fewer high-confidence boxes to many guesses.
-- IDs must be unique and kebab-case (e.g., "item-01", "coin-top-left").
+- Output at most ${maxItems} occupied pockets.
+- If a pocket is empty, DO NOT include it in items.
+- IDs: kebab-case, unique, e.g., "r1c1", "r2c3-coin".
 `.trim();
 
   const userInstruction = `
-Return strictly valid JSON only (no commentary).
-Provide "image_dimensions" and "items".
-Boxes must reflect real visual edges—not an assumed page layout and not round-number grids.
-Cap items to ${maxItems}.
+Return strictly valid JSON only (no commentary) using the provided schema.
 `.trim();
 
-  const schema = JSON.parse(JSON.stringify(PAGE_ITEMS_SCHEMA));
-  // tighten the array cap at runtime
+  const schema = JSON.parse(JSON.stringify(PAGE_POCKETS_SCHEMA));
   schema.properties.items.maxItems = maxItems;
 
   const resp = await client.responses.create({
@@ -305,7 +347,7 @@ Cap items to ${maxItems}.
     text: {
       format: {
         type: "json_schema",
-        name: "page_items",
+        name: "page_pockets",
         strict: true,
         schema
       }
@@ -323,52 +365,35 @@ Cap items to ${maxItems}.
   });
 
   const text = resp.output_text ?? resp.output?.[0]?.content?.[0]?.text;
-  if (!text) throw new Error('Model returned empty response.');
+  if (!text) throw new Error('Model returned empty response (detect).');
   return JSON.parse(text);
 }
 
-/**
- * Pass 2: Ask the LLM to refine/repair the preliminary boxes (same strict schema).
- */
-async function llmRefineBoxes(client, pageDataUrl, W, H, rawItems, {
+async function llmRefineGrid(client, pageDataUrl, W, H, prelim, {
   model = process.env.OPENAI_MODEL || 'gpt-4o',
   temperature = 0.0,
-  maxItems = 48
+  maxItems = 20
 } = {}) {
 
   const refineSystem = `
-You are refining bounding boxes for an album page image with multiple items.
-Tasks: tighten boxes to actual visible edges; remove duplicates/false positives; merge or split where appropriate.
-Avoid quantized "grid-like" coordinates; prefer visually precise pixel edges even if messy.
-Non-overlap constraint: IoU between distinct items ≤ 0.05 (merge if they represent the same physical item).
+You are refining a detected grid of pockets on an album page.
+Snap columns to consistent x positions and rows to consistent y positions derived from the image.
+Tighten each item_bbox to visible item edges; ensure it is fully inside its cell_bbox.
+Remove any items whose cell appears empty or contains text-only labels without a coin.
+Remove duplicates and overlaps. Keep at most ${maxItems} occupied pockets.
 Bounds: 0 ≤ x < ${W}, 0 ≤ y < ${H}, x+width ≤ ${W}, y+height ≤ ${H}.
 `.trim();
 
   const refineUser = `
-You are given the original page image and a preliminary list of items with bboxes.
-Return a corrected list that:
-- removes false positives,
-- tightens loose boxes,
-- corrects positions/sizes that look like placeholders or neat grids,
-- ensures each box encloses exactly one item,
-- keeps "units":"pixels",
-- and includes at most ${maxItems} items.
-
-Return strictly valid JSON per the same schema as detection.
+You are given the original image and a preliminary JSON.
+Return strictly valid JSON with the SAME schema, corrected to:
+- align all columns/rows,
+- ensure item_bbox is inside cell_bbox,
+- exclude empty cells,
+- and maintain consistent units:"pixels".
 `.trim();
 
-  const prelim = {
-    image_dimensions: { width: W, height: H },
-    items: rawItems.map(it => ({
-      id: it.id,
-      name: it.name || "",
-      description: it.description || "",
-      metadata: it.metadata,
-      bbox: it.bbox
-    }))
-  };
-
-  const schema = JSON.parse(JSON.stringify(PAGE_ITEMS_SCHEMA));
+  const schema = JSON.parse(JSON.stringify(PAGE_POCKETS_SCHEMA));
   schema.properties.items.maxItems = maxItems;
 
   const resp = await client.responses.create({
@@ -377,7 +402,7 @@ Return strictly valid JSON per the same schema as detection.
     text: {
       format: {
         type: "json_schema",
-        name: "page_items",
+        name: "page_pockets",
         strict: true,
         schema
       }
@@ -389,7 +414,7 @@ Return strictly valid JSON per the same schema as detection.
         content: [
           { type: "input_text", text: refineUser },
           { type: "input_image", image_url: pageDataUrl },
-          { type: "input_text", text: "Preliminary items JSON follows:" },
+          { type: "input_text", text: "Preliminary JSON follows:" },
           { type: "input_text", text: JSON.stringify(prelim) }
         ]
       }
@@ -397,37 +422,53 @@ Return strictly valid JSON per the same schema as detection.
   });
 
   const text = resp.output_text ?? resp.output?.[0]?.content?.[0]?.text;
-  if (!text) throw new Error('Refine returned empty response.');
+  if (!text) throw new Error('Model returned empty response (refine).');
   return JSON.parse(text);
 }
 
 /* ---------------------------------------
-   Main processing flow (LLM bboxes only)
+   Main flow
 ----------------------------------------*/
 async function processImageFlow(req, res, openai) {
   try {
     if (req.method !== 'POST') return res.status(405).json({ error: 'Use POST.' });
 
-    const { imageUrl, imageDataUrl, gcsUri, maxItems = 32, downscaleMax = 1400 } = req.body || {};
+    const {
+      imageUrl, imageDataUrl, gcsUri,
+      maxItems = 20,
+      gridCols = 4,   // hint: typical page layout
+      gridRows = 5,   // hint: typical page layout
+      downscaleMax = 1400
+    } = req.body || {};
+
     if (!imageUrl && !imageDataUrl && !gcsUri) {
       return res.status(400).json({ error: 'Provide one of: imageDataUrl | gcsUri | imageUrl' });
     }
 
-    // 1) Load page and get a data URL for the LLM (full-res up to maxSide)
+    // Load page
     const { pngBuffer, width: W, height: H, dataUrl } = await loadImageAny(
       { imageUrl, imageDataUrl, gcsUri },
       { timeoutMs: 25000, maxSide: 4096 }
     );
 
-    // 2) Pass 1: Ask LLM for boxes + details (strict JSON schema)
     const model = process.env.OPENAI_MODEL || 'gpt-4o';
-    const detected = await llmDetectItems(openai, dataUrl, W, H, { model, maxItems, temperature: 0.0 });
 
-    // 3) Pass 2: Refine boxes with the same schema
-    const refined = await llmRefineBoxes(openai, dataUrl, W, H, detected.items || [], { model, maxItems, temperature: 0.0 });
-    const finalItems = Array.isArray(refined.items) && refined.items.length ? refined.items : (detected.items || []);
+    // Pass 1: detect grid + occupied cells
+    const detected = await llmDetectGrid(
+      openai, dataUrl, W, H,
+      { model, temperature: 0.0, maxItems, defaultCols: gridCols, defaultRows: gridRows }
+    );
 
-    // 4) Crop each bbox
+    // Pass 2: refine grid alignment + item boxes
+    const refined = await llmRefineGrid(
+      openai, dataUrl, W, H, detected,
+      { model, temperature: 0.0, maxItems }
+    );
+
+    const itemsIn = Array.isArray(refined.items) && refined.items.length ? refined.items : (detected.items || []);
+    const gridOut = refined.grid || detected.grid || { rows: gridRows, cols: gridCols };
+
+    // Crop each item by item_bbox; fallback to cell_bbox if needed
     const outDir = getOutputDir();
     const items = [];
     const crops = [];
@@ -437,18 +478,23 @@ async function processImageFlow(req, res, openai) {
       (imageUrl && slugify(path.basename(new URL(imageUrl).pathname))) ||
       'page';
 
-    for (const [idx, it] of (finalItems || []).entries()) {
-      const id = slugify(it.id || `item-${idx + 1}`, `item-${idx + 1}`);
-      const clamped = clampBBox(it.bbox, W, H);
-      if (!clamped) {
-        console.warn(`Skip ${id}: invalid bbox`, it.bbox);
+    for (const [idx, it] of itemsIn.entries()) {
+      const safeId = slugify(it.id || `r${it.row}c${it.col}-${idx+1}`, `item-${idx+1}`);
+
+      const clampedCell = clampBBox(it.cell_bbox, W, H);
+      const clampedItem = clampBBox(it.item_bbox, W, H);
+      if (!clampedCell) {
+        console.warn(`Skip ${safeId}: invalid cell_bbox`, it.cell_bbox);
         continue;
       }
+      const useBox = clampedItem && clampedItem.width >= 24 && clampedItem.height >= 24
+        ? clampedItem
+        : clampedCell;
 
       const regionBuf = await sharp(pngBuffer)
-        .extract({ left: clamped.x, top: clamped.y, width: clamped.width, height: clamped.height })
+        .extract({ left: useBox.x, top: useBox.y, width: useBox.width, height: useBox.height })
         .resize({
-          width: Math.min(clamped.width, downscaleMax),
+          width: Math.min(useBox.width, downscaleMax),
           height: null,
           fit: 'inside',
           withoutEnlargement: true
@@ -456,26 +502,30 @@ async function processImageFlow(req, res, openai) {
         .png({ compressionLevel: 9 })
         .toBuffer();
 
-      const outPath = path.join(outDir, `${pageId}-${id}.png`);
+      const outPath = path.join(outDir, `${pageId}-${safeId}.png`);
       await sharp(regionBuf).png({ compressionLevel: 9 }).toFile(outPath);
 
       const item = {
-        id: `${pageId}-${id}`,
-        bbox: { ...clamped, units: 'pixels' },
+        id: `${pageId}-${safeId}`,
+        row: it.row,
+        col: it.col,
+        cell_bbox: { ...clampedCell, units: 'pixels' },
+        item_bbox: clampedItem ? { ...clampedItem, units: 'pixels' } : null,
         image_file: outPath,
         name: it.name || '',
         description: it.description || '',
         metadata: it.metadata || {}
       };
       items.push(item);
-      crops.push({ id: item.id, path: outPath, bbox: clamped });
+      crops.push({ id: item.id, path: outPath, cell_bbox: clampedCell, item_bbox: clampedItem || null });
     }
 
-    // 5) Manifest
+    // Manifest
     const manifest = {
       source_page: { width: W, height: H, image: imageUrl || gcsUri || 'data-url' },
       model_used: model,
       generated_at: new Date().toISOString(),
+      grid: gridOut,
       items
     };
     const manifestPath = path.join(outDir, `${pageId}-manifest.json`);
@@ -483,10 +533,11 @@ async function processImageFlow(req, res, openai) {
 
     return res.status(200).json({
       image_dimensions: { width: W, height: H },
+      grid: gridOut,
       items,
       crops,
       manifest_path: manifestPath,
-      note: 'Two-pass LLM-only detection (detect + refine) with strict JSON schema.'
+      note: 'Two-pass LLM-only (grid-aware). Items correspond to occupied pockets; crops use item_bbox (fallback cell_bbox).'
     });
   } catch (error) {
     console.error('processImage error:', error);
@@ -499,7 +550,7 @@ async function processImageFlow(req, res, openai) {
 }
 
 /* ---------------------------------------
-   Public routes you already had
+   Public routes
 ----------------------------------------*/
 app.get('/', (req, res) => res.json({ message: 'Welcome to Anand Heritage Gallery API' }));
 
@@ -555,7 +606,7 @@ app.post('/api/processImage', async (req, res) => {
 // Export the express app
 exports.app = functions.https.onRequest(app);
 
-// Optional standalone
+// Optional callable HTTP (same behavior)
 exports.processImageWithOpenAI = functions
   .runWith({ timeoutSeconds: 300, memory: '1GB' })
   .https.onRequest(async (req, res) => {
