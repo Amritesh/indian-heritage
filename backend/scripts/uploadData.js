@@ -58,22 +58,40 @@ async function uploadData() {
     }
     console.log('All collection details uploaded successfully.');
 
-    // 3. Upload images to Firebase Storage
+    // 3. Upload images to Firebase Storage (recursively)
     if (fs.existsSync(imagesDir)) {
-      const imageFiles = fs.readdirSync(imagesDir).filter(file => /\.(jpg|jpeg|png|gif)$/i.test(file));
       const bucket = storage.bucket('indian-heritage-gallery-bucket');
+      const filesToUpload = [];
 
-      for (const imageFile of imageFiles) {
-        const imageFilePath = path.join(imagesDir, imageFile);
-        const destination = `images/${imageFile}`; // Path in Firebase Storage
-        console.log(`Uploading image: ${imageFile} to ${destination}...`);
+      // Function to recursively get all image files
+      function getImagesRecursively(directory) {
+        fs.readdirSync(directory, { withFileTypes: true }).forEach(dirent => {
+          const fullPath = path.join(directory, dirent.name);
+          if (dirent.isDirectory()) {
+            getImagesRecursively(fullPath);
+          } else if (/\.(jpg|jpeg|png|gif)$/i.test(dirent.name)) {
+            filesToUpload.push(fullPath);
+          }
+        });
+      }
+
+      getImagesRecursively(imagesDir);
+
+      for (const imageFilePath of filesToUpload) {
+        // Determine the destination path in Firebase Storage
+        // Example: /Users/amritesh/Desktop/code/AHG/temp/images/collectionId/image.png
+        // Should become: images/collectionId/image.png
+        const relativePath = path.relative(imagesDir, imageFilePath);
+        const destination = `images/${relativePath.replace(/\\/g, '/')}`; // Use forward slashes for Firebase Storage paths
+
+        console.log(`Uploading image: ${imageFilePath} to ${destination}...`);
         await bucket.upload(imageFilePath, {
           destination: destination,
           metadata: {
-            contentType: `image/${path.extname(imageFile).substring(1)}`,
+            contentType: `image/${path.extname(imageFilePath).substring(1)}`,
           },
         });
-        console.log(`Image ${imageFile} uploaded successfully.`);
+        console.log(`Image ${imageFilePath} uploaded successfully.`);
       }
       console.log('All images uploaded successfully.');
     } else {
