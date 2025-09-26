@@ -1,10 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from './firebase-config';
 
+const randomPastel = (seed = '') => {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h << 5) - h + seed.charCodeAt(i);
+  const hue = Math.abs(h) % 360;
+  return `linear-gradient(135deg, hsl(${hue} 70% 95%), hsl(${(hue + 30) % 360} 60% 90%))`;
+};
+
 const MyCollections = () => {
-  const [activeTab, setActiveTab] = useState('ALL');
+  const [activeCategory, setActiveCategory] = useState('All'); // Changed from activeTab to activeCategory
   const [collections, setCollections] = useState([]);
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(9); // 3 columns * 3 rows
+  const [selected, setSelected] = useState(null); // For optionally clearing selected collection
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,8 +27,9 @@ const MyCollections = () => {
         const collectionsArray = Object.keys(data.collections || {}).map(key => ({
           id: data.collections[key].id, // Use the 'id' from the API response
           title: data.collections[key].title, // Use 'title' from the API response for display
-          image: data.collections[key].imageUrl || 'https://via.placeholder.com/205x205', // Placeholder if no image
-          category: data.collections[key].category ? data.collections[key].category.toLowerCase() : 'unknown' // Default to 'unknown'
+          image: data.collections[key].imageUrl,
+          hasImage: !!data.collections[key].imageUrl, // New property to indicate if an image exists
+          category: data.collections[key].category || 'Other' // Default to 'Other'
         }));
         setCollections(collectionsArray);
       } catch (error) {
@@ -25,6 +37,41 @@ const MyCollections = () => {
       }
     };
     fetchCollections();
+  }, []);
+
+  const categories = useMemo(() => {
+    const map = { All: 0 };
+    collections.forEach(c => {
+      map.All = (map.All || 0) + 1;
+      const cat = c.category || 'Other';
+      map[cat] = (map[cat] || 0) + 1;
+    });
+    // ensure requested valid categories present in UI order
+    const order = ['All', 'Numismatics', 'Notaphily', 'Scripophily', 'Philately', 'Ephemera', 'Personal'];
+    const extra = Object.keys(map).filter(k => !order.includes(k));
+    return [...order.filter(k => map[k]), ...extra].map(name => ({ name, count: map[name] || 0 }));
+  }, [collections]);
+
+  // filtered + paginated collections (includes search)
+  const filtered = useMemo(() => {
+    const base = activeCategory === 'All' ? collections : collections.filter(c => c.category === activeCategory);
+    if (!query) return base;
+    const q = query.toLowerCase();
+    return base.filter(c =>
+      (c.title || '').toLowerCase().includes(q) ||
+      (c.description || '').toLowerCase().includes(q) ||
+      (c.items || []).some(it => ((it.title || '') + ' ' + (it.desc || '')).toLowerCase().includes(q))
+    );
+  }, [collections, activeCategory, query]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const pageCollections = filtered.slice((page - 1) * pageSize, page * pageSize);
+
+  const selectCategory = useCallback((cat) => {
+    setActiveCategory(cat);
+    setPage(1);
+    // optionally clear selected collection when switching categories
+    setSelected(null);
   }, []);
 
   const challengeProgress = [
@@ -56,9 +103,6 @@ const MyCollections = () => {
     { position: '03 / 27', title: 'Regular Mint Wise Vol 3', hasMedal: true },
     { position: '12 / 64', title: 'Indian Postage Stamps Volume 2', hasMedal: false }
   ];
-
-  const filteredCollections = activeTab === 'ALL' ? collections :
-    collections.filter(c => c.category === activeTab.toLowerCase());
 
   return (
     <div style={{ 
@@ -128,7 +172,7 @@ const MyCollections = () => {
         {/* Search Bar */}
         <div style={{
           display: 'inline-flex',
-          padding: '12px 256px 12px 16px',
+          padding: '12px 16px',
           alignItems: 'center',
           borderRadius: '4px',
           background: '#FFF',
@@ -139,19 +183,24 @@ const MyCollections = () => {
           width: '428px',
           height: '48px'
         }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            color: '#514F4B',
-            fontFamily: 'Alegreya Sans',
-            fontSize: '16px'
-          }}>
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fillRule="evenodd" clipRule="evenodd" d="M8.1189 4.02972C4.75594 4.02972 2.02972 6.75594 2.02972 10.1189C2.02972 13.4819 4.75594 16.2081 8.1189 16.2081C11.4819 16.2081 14.2081 13.4819 14.2081 10.1189C14.2081 6.75594 11.4819 4.02972 8.1189 4.02972Z" fill="#514F4B"/>
-            </svg>
-            Search for collections
-          </div>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px' }}>
+            <path fillRule="evenodd" clipRule="evenodd" d="M8.1189 4.02972C4.75594 4.02972 2.02972 6.75594 2.02972 10.1189C2.02972 13.4819 4.75594 16.2081 8.1189 16.2081C11.4819 16.2081 14.2081 13.4819 14.2081 10.1189C14.2081 6.75594 11.4819 4.02972 8.1189 4.02972Z" fill="#514F4B"/>
+          </svg>
+          <input
+            type="text"
+            placeholder="Search for collections"
+            value={query}
+            onChange={(e) => { setQuery(e.target.value); setPage(1); }}
+            style={{
+              border: 'none',
+              outline: 'none',
+              width: '100%',
+              color: '#514F4B',
+              fontFamily: 'Alegreya Sans',
+              fontSize: '16px',
+              background: 'transparent'
+            }}
+          />
         </div>
       </div>
 
@@ -339,10 +388,10 @@ const MyCollections = () => {
           width: '372px',
           marginBottom: '44px'
         }}>
-          {['ALL', 'COINS', 'STAMPS'].map((tab) => (
+          {categories.map((category) => (
             <div
-              key={tab}
-              onClick={() => setActiveTab(tab)}
+              key={category.name}
+              onClick={() => selectCategory(category.name)}
               style={{
                 display: 'flex',
                 width: '124px',
@@ -352,12 +401,12 @@ const MyCollections = () => {
                 gap: '8px',
                 alignSelf: 'stretch',
                 borderRadius: '2px',
-                borderBottom: activeTab === tab ? '4px solid #B29C44' : 'none',
+                borderBottom: activeCategory === category.name ? '4px solid #B29C44' : 'none',
                 cursor: 'pointer'
               }}
             >
               <div style={{
-                color: activeTab === tab ? '#3B3936' : '#62605B',
+                color: activeCategory === category.name ? '#3B3936' : '#62605B',
                 fontFamily: 'Alegreya Sans',
                 fontSize: '16px',
                 fontWeight: 700,
@@ -365,7 +414,7 @@ const MyCollections = () => {
                 letterSpacing: '0.8px',
                 textTransform: 'uppercase'
               }}>
-                {tab}
+                {category.name} ({category.count})
               </div>
             </div>
           ))}
@@ -380,7 +429,7 @@ const MyCollections = () => {
           gap: '32px 24px',
           flexWrap: 'wrap'
         }}>
-          {filteredCollections.map((collection) => (
+          {pageCollections.map((collection) => (
             <div
               key={collection.id}
               onClick={() => navigate(`/collections/${collection.id}`)}
@@ -399,9 +448,21 @@ const MyCollections = () => {
                 height: '205px',
                 alignSelf: 'stretch',
                 borderRadius: '2px',
-                background: `url(${collection.image}) lightgray 0px -0.559px / 100% 118.539% no-repeat`,
-                boxShadow: '0 4px 10px -2px rgba(51, 19, 0, 0.24)'
-              }} />
+                background: collection.hasImage
+                  ? `url(${collection.image}) lightgray 0px -0.559px / 100% 118.539% no-repeat`
+                  : randomPastel(collection.id), // Use randomPastel if no image
+                boxShadow: '0 4px 10px -2px rgba(51, 19, 0, 0.24)',
+                display: 'flex', // Added for centering text
+                alignItems: 'center', // Added for centering text
+                justifyContent: 'center', // Added for centering text
+                color: '#332502', // Text color for placeholder
+                fontFamily: 'Alegreya Sans', // Font family for placeholder
+                fontSize: '24px', // Font size for placeholder
+                fontWeight: 700, // Font weight for placeholder
+                textAlign: 'center', // Center text
+              }}>
+                {!collection.hasImage && collection.title}
+              </div>
               <div style={{
                 alignSelf: 'stretch',
                 color: '#3B3936',
@@ -416,6 +477,62 @@ const MyCollections = () => {
             </div>
           ))}
         </div>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '16px',
+            marginTop: '44px'
+          }}>
+            <button
+              onClick={() => setPage(prev => Math.max(1, prev - 1))}
+              disabled={page === 1}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '4px',
+                border: '1px solid #B29C44',
+                background: page === 1 ? '#E0E0E0' : '#FCF2D7',
+                color: page === 1 ? '#A0A0A0' : '#3B3936',
+                cursor: page === 1 ? 'not-allowed' : 'pointer',
+                fontFamily: 'Alegreya Sans',
+                fontSize: '14px',
+                fontWeight: 700,
+                textTransform: 'uppercase'
+              }}
+            >
+              Previous
+            </button>
+            <div style={{
+              color: '#3B3936',
+              fontFamily: 'Alegreya Sans',
+              fontSize: '16px',
+              fontWeight: 700
+            }}>
+              Page {page} of {totalPages}
+            </div>
+            <button
+              onClick={() => setPage(prev => Math.min(totalPages, prev + 1))}
+              disabled={page === totalPages}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '4px',
+                border: '1px solid #B29C44',
+                background: page === totalPages ? '#E0E0E0' : '#FCF2D7',
+                color: page === totalPages ? '#A0A0A0' : '#3B3936',
+                cursor: page === totalPages ? 'not-allowed' : 'pointer',
+                fontFamily: 'Alegreya Sans',
+                fontSize: '14px',
+                fontWeight: 700,
+                textTransform: 'uppercase'
+              }}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Right Sidebar */}
