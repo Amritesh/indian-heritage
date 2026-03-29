@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&amp;family=Manrope:wght@400;500;600;700&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#f1edeb",
+              "on-surface": "#1c1b1b",
+              "on-tertiary-fixed-variant": "#5b4137",
+              "surface-variant": "#e5e2e0",
+              "on-secondary-fixed": "#410000",
+              "tertiary-fixed": "#ffdbce",
+              "on-primary-fixed": "#261900",
+              "on-secondary-container": "#650000",
+              "background": "#fdf8f6",
+              "on-primary-fixed-variant": "#5d4201",
+              "surface-container-low": "#f7f3f1",
+              "on-error-container": "#93000a",
+              "error": "#ba1a1a",
+              "primary-fixed": "#ffdea5",
+              "primary-container": "#c5a059",
+              "primary-fixed-dim": "#e9c176",
+              "outline": "#7f7667",
+              "on-tertiary-fixed": "#2b160f",
+              "outline-variant": "#d1c5b4",
+              "tertiary-container": "#c19e92",
+              "surface-bright": "#fdf8f6",
+              "on-secondary-fixed-variant": "#8f0f07",
+              "on-primary-container": "#4e3700",
+              "surface": "#fdf8f6",
+              "secondary-fixed-dim": "#ffb4a8",
+              "secondary": "#b22b1d",
+              "surface-container-highest": "#e5e2e0",
+              "inverse-primary": "#e9c176",
+              "on-surface-variant": "#4e4639",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "surface-tint": "#775a19",
+              "surface-container-lowest": "#ffffff",
+              "inverse-on-surface": "#f4f0ee",
+              "tertiary-fixed-dim": "#e4beb2",
+              "secondary-container": "#fe624e",
+              "secondary-fixed": "#ffdad4",
+              "surface-dim": "#ddd9d7",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#4e352c",
+              "surface-container-high": "#ebe7e5",
+              "tertiary": "#75584d",
+              "on-primary": "#ffffff",
+              "on-background": "#1c1b1b",
+              "on-secondary": "#ffffff",
+              "primary": "#775a19",
+              "inverse-surface": "#31302f"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Manrope"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.grainy-overlay {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuAhIjwIXsrkUaMkd8w7KUyeoayPihftOFYRv52ACyPyb3TzONGNiOzElByVDW2xLPGcTpT4dG5mshtiAjONXlUnnwGuTqfw_Oe58QZ1JtE1cZ30NKQBM4vPXNYxfMRjx7SmULwC-zYoEPNxrKQpg_Wl5CRNxLZltFatcnVSu0YLntnHhhmunfiIKxfvtmjh2AfXPeTDkn17q0q5r1FTnFjpLbW0KEmBD5yQDTXX9HVpbSTGW6sf4TGIreY2QBESKcWOlbF-9uWG7x7c);
+    pointer-events: none
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-body text-on-surface min-h-screen relative overflow-x-hidden">
+<div class="fixed inset-0 grainy-overlay opacity-[0.03] z-[100]"></div>
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 bg-[#fdfcf0] dark:bg-[#121212] shadow-sm dark:shadow-none backdrop-blur-xl flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-4">
+<button class="text-[#775a19] dark:text-[#c5a059] transition-all duration-400 ease-in-out hover:bg-[#775a19]/5 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-serif text-[#775a19] dark:text-[#c5a059] italic text-xl tracking-tight font-semibold">The Digital Curator</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex items-center gap-8">
+<a class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:bg-[#775a19]/5 transition-colors duration-400 px-2 py-1" href="#">Home</a>
+<a class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:bg-[#775a19]/5 transition-colors duration-400 px-2 py-1" href="#">Explore</a>
+<a class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] text-[#775a19] dark:text-[#c5a059] scale-105 px-2 py-1" href="#">Collection</a>
+</nav>
+<button class="text-[#775a19] dark:text-[#c5a059] transition-all duration-400 ease-in-out hover:bg-[#775a19]/5 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-8 md:flex md:gap-8">
+<!-- Sidebar Filters: Archival Drawer Style -->
+<aside class="hidden md:block w-72 shrink-0">
+<div class="sticky top-24 space-y-8">
+<div>
+<h3 class="font-headline text-lg font-semibold text-primary mb-6 border-b border-outline-variant/30 pb-2">Filter Archive</h3>
+<div class="space-y-6">
+<!-- Eras Selector -->
+<section>
+<label class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-3 block">Chronology</label>
+<div class="space-y-2">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="rounded-sm border-outline text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="text-sm font-medium group-hover:text-primary transition-colors">Mughal Dynasty</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="rounded-sm border-outline text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="text-sm font-medium group-hover:text-primary transition-colors">Maratha Empire</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="rounded-sm border-outline text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="text-sm font-medium group-hover:text-primary transition-colors">Gupta Period</span>
+</label>
+</div>
+</section>
+<!-- Material Selector -->
+<section>
+<label class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-3 block">Materiality</label>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-surface-container-high rounded-sm text-xs font-bold font-label uppercase text-on-surface-variant border border-outline-variant/20">Gold</span>
+<span class="px-3 py-1 bg-primary text-on-primary rounded-sm text-xs font-bold font-label uppercase">Silver</span>
+<span class="px-3 py-1 bg-surface-container-high rounded-sm text-xs font-bold font-label uppercase text-on-surface-variant border border-outline-variant/20">Copper</span>
+<span class="px-3 py-1 bg-surface-container-high rounded-sm text-xs font-bold font-label uppercase text-on-surface-variant border border-outline-variant/20">Stone</span>
+</div>
+</section>
+<!-- Mint/Region -->
+<section>
+<label class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-3 block">Regional Authority</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg text-sm font-medium focus:ring-2 focus:ring-primary/20">
+<option>All Mints</option>
+<option>Lahore Mint</option>
+<option>Agra Mint</option>
+<option>Surat Mint</option>
+</select>
+</section>
+<!-- Rarity Slider Simulation -->
+<section>
+<label class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-3 block">Scarcity Index</label>
+<div class="h-1 w-full bg-outline-variant/30 rounded-full relative">
+<div class="absolute left-0 top-0 h-1 w-2/3 bg-primary rounded-full"></div>
+<div class="absolute left-2/3 top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 bg-primary rounded-full border-2 border-background"></div>
+</div>
+<div class="flex justify-between mt-2 text-[10px] font-bold font-label text-on-surface-variant">
+<span>COMMON</span>
+<span>UNIQUE</span>
+</div>
+</section>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-outline-variant/10">
+<p class="text-xs italic text-on-surface-variant leading-relaxed">"The Mughal numismatic system represents the pinnacle of medieval administrative precision."</p>
+<p class="text-[10px] font-bold mt-2 text-primary uppercase">— Curatorial Note #412</p>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1 space-y-8">
+<!-- Breadcrumbs & Header -->
+<nav class="flex flex-col gap-4">
+<div class="flex items-center gap-2 text-[10px] font-bold font-label tracking-widest text-on-surface-variant uppercase">
+<span class="hover:text-primary cursor-pointer transition-colors">Heritage</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="hover:text-primary cursor-pointer transition-colors">Mughal Empire</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="hover:text-primary cursor-pointer transition-colors">Akbar</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary">Silver Rupees</span>
+</div>
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-headline text-4xl font-bold tracking-tight text-on-surface">Silver Rupee Series</h2>
+<p class="text-on-surface-variant mt-2 font-medium">Archival sequence of silver coinage during the Ilahi era.</p>
+</div>
+<button class="flex items-center gap-2 text-primary font-bold font-label text-[10px] uppercase tracking-widest hover:bg-primary/5 px-4 py-2 rounded-lg transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="push_pin">push_pin</span>
+                        Pin Branch
+                    </button>
+</div>
+</nav>
+<!-- Tree Visualization -->
+<div class="space-y-4">
+<!-- Node: Parent (Expanded) -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm">
+<div class="flex items-center p-4 gap-4 border-b border-outline-variant/10">
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="expand_more">expand_more</span>
+<div class="w-12 h-12 bg-surface-dim rounded-lg overflow-hidden shrink-0 shadow-inner">
+<img class="w-full h-full object-cover" data-alt="Macro close-up of a tarnished Mughal silver rupee coin with intricate Arabic calligraphy and decorative borders" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDNcD4JPHnH4PZmaDIsmYj0VIH-8MRmUODcDjWnFwgvqdI79hftXHFR2qyNX72zoA5Q75x-yTbDoh8b2ZHwIeZBJi3rNQjRQtWis44IkpT6psNjP6py8R0Ot72VWyQQc1IKT0MLf0vS0kKAHsR8CZw-hraUSaip_wYThve1mEUg3YKyaVOgDWYgaWlKI3fNXQzUrXCCnA5QM8l0IzL_mkH9DIMnDM93jvVP1h7PvcToyujmM22rQV1MMfygqoQXokgVn0t4Fsvm0--"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<h4 class="font-headline font-semibold text-lg">Lahore Mint Production</h4>
+<span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold font-label uppercase rounded-sm border border-secondary/20">Rare Branch</span>
+</div>
+<div class="flex items-center gap-4 mt-1">
+<span class="text-[10px] font-bold font-label uppercase text-on-surface-variant/70">14 Variants</span>
+<div class="w-24 h-1.5 bg-outline-variant/20 rounded-full">
+<div class="w-[85%] h-full bg-primary rounded-full"></div>
+</div>
+<span class="text-[10px] font-bold font-label uppercase text-primary">85% Complete</span>
+</div>
+</div>
+<button class="p-2 text-on-surface-variant/40 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+</button>
+</div>
+<!-- Children Nodes -->
+<div class="bg-surface-container-lowest/50 pl-12 pr-4 py-2">
+<!-- Sub-node 1 -->
+<div class="flex items-center gap-4 py-4 border-b border-outline-variant/5 last:border-0 group cursor-pointer hover:bg-primary/5 transition-colors px-4 -ml-4 rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant/30 text-lg">subdirectory_arrow_right</span>
+<div class="w-10 h-10 bg-surface-variant rounded-md overflow-hidden shrink-0 grayscale hover:grayscale-0 transition-all duration-500">
+<img class="w-full h-full object-cover" data-alt="Square Mughal coin with elegant Persian script engraved on a silver surface, historical artifact texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCdvcT2lEmI3viPdPRhbyp8yeRu-MPWxP6G6M8NaaTOkpzShkGBKWQDPvwlYVhb2PJLrOhK6gu4kxNLmrWnullG3T3tZN34iomSto9yxJaDoiuRZdOiWwWCH6H-xemocWxCe-WFnzFDX7MxW65wcmAAZC4gWG3m-Na2NmKP_nskzEvB6jwQf2MOg_Q4r0hg-SBiRLZoQMYMXsYjT9LPPam7UArTOhNfRIdY4GWsbpKg_j6AM5RfML50eE5o2DYOMeDOdV0Tziwo5Ah"/>
+</div>
+<div class="flex-1">
+<h5 class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Ilahi Year 37 - Square Type</h5>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="text-[9px] font-bold font-label uppercase text-on-surface-variant bg-surface-variant px-1.5 py-0.5 rounded-sm">Unique</span>
+<span class="text-[9px] font-bold font-label uppercase text-tertiary">Provenance: H. Nelson Wright</span>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] font-bold font-label text-on-surface uppercase">Condition: AU-55</p>
+<p class="text-[10px] font-bold font-label text-secondary uppercase mt-1">Valued: High</p>
+</div>
+</div>
+<!-- Sub-node 2 -->
+<div class="flex items-center gap-4 py-4 border-b border-outline-variant/5 last:border-0 group cursor-pointer hover:bg-primary/5 transition-colors px-4 -ml-4 rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant/30 text-lg">subdirectory_arrow_right</span>
+<div class="w-10 h-10 bg-surface-variant rounded-md overflow-hidden shrink-0 grayscale hover:grayscale-0 transition-all duration-500">
+<img class="w-full h-full object-cover" data-alt="A round silver coin from the Akbar era featuring floral scrolls and elaborate calligraphy, soft museum lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpEbXud-RsYphPztBX27zq6-fxqRPF2BuhVbjBt5zOschnuEK16GFpzoTDucrJlnOQ0XPueutp2vHh6VglWWk2qHJox1F7ulq03tlR3rjCWG3-w_UHNYIrjsB4slh7VfKUDSn1Da9fYBmrmxKwS76X8SkCYGvPhpUOBEWMnblw-0bLy-4vIKSXARs4vMN7tXTKJNqBpXwST-jrlKFlpVHKmgZTxmLAFpt2VBXu2dLCTFGSgNx12U0Pv-MCK-31acfyDYNiE_cKpkny"/>
+</div>
+<div class="flex-1">
+<h5 class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Ilahi Year 42 - Round Floral Borders</h5>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="text-[9px] font-bold font-label uppercase text-on-surface-variant bg-surface-variant px-1.5 py-0.5 rounded-sm">Scarce</span>
+<span class="text-[9px] font-bold font-label uppercase text-on-surface-variant/60">Mint: Lahore</span>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] font-bold font-label text-on-surface uppercase">Condition: XF-40</p>
+<p class="text-[10px] font-bold font-label text-primary uppercase mt-1">Verified</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Node: Parent (Collapsed) -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm opacity-80 hover:opacity-100 transition-opacity">
+<div class="flex items-center p-4 gap-4 cursor-pointer">
+<span class="material-symbols-outlined text-outline transition-transform duration-300" data-icon="chevron_right">chevron_right</span>
+<div class="w-12 h-12 bg-surface-dim rounded-lg overflow-hidden shrink-0 shadow-inner">
+<img class="w-full h-full object-cover grayscale" data-alt="Golden colored copper coin with decorative Arabic inscriptions, resting on a textured parchment background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAw0r9K89GY1d1_D3YXTEny3_eqRRKX6-Zu7KDG8DRlQD9zQ36LIh7N_gjSfV7lo6ZWoZ-hCSJuWhqpcxMkrN0OuaZcRavrsEz55XCPLHA1vpdNTvxdyLzfe6IxD9krnXoNmRGHyvXaWjHomtsl4LXk5F3uOnoghl9Rt16PUJQ5v26WFV17O-u-lUkyjw5cBKCEv0YuDSz27o15Y1OiHLHQwnnTY8hPHR_kL2RUP2SvC1lnbS-hn_ki1Ji_2IaBr3ANIU4ZWuOB6GlZ"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<h4 class="font-headline font-semibold text-lg text-on-surface/70">Agra Mint Production</h4>
+</div>
+<div class="flex items-center gap-4 mt-1">
+<span class="text-[10px] font-bold font-label uppercase text-on-surface-variant/70">8 Variants</span>
+<div class="w-24 h-1.5 bg-outline-variant/20 rounded-full">
+<div class="w-[20%] h-full bg-outline rounded-full"></div>
+</div>
+<span class="text-[10px] font-bold font-label uppercase text-on-surface-variant/60">20% Complete</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="lock">lock</span>
+</div>
+</div>
+<!-- Node: Parent (Collapsed) -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm opacity-80 hover:opacity-100 transition-opacity">
+<div class="flex items-center p-4 gap-4 cursor-pointer">
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+<div class="w-12 h-12 bg-surface-dim rounded-lg overflow-hidden shrink-0 shadow-inner">
+<img class="w-full h-full object-cover grayscale" data-alt="A collection of ancient coins scattered on dark velvet, dimly lit to emphasize their metallic luster and historical weight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpDdMFmFP_3lGII0v_vpEv1xfLSUw5odjXn1iIcmmzK7CmTM6wL_myMtvgkN9l81ZdiHr10u1bgMhqcTCAOfXV16mE2VAUKynHqzqo5z6W7CX72m-v1VkjmDT3PVQqcIeosR-ZylBkkD8n70CPYO5q_Iw2Uzsr6u7XHdR4JApd7BY6YPfIxGZpl9tVPJiMHCK4L9bh2YR8JzQddHAmbQ-2ASvgkXx6uHCzrZ4pLHk7qollEshbVoGBpHMGDoOqKSJ4vYVIyqwsEG8t"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<h4 class="font-headline font-semibold text-lg text-on-surface/70">Surat Mint Production</h4>
+<span class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold font-label uppercase rounded-sm border border-primary/20">Discovery Needed</span>
+</div>
+<div class="flex items-center gap-4 mt-1">
+<span class="text-[10px] font-bold font-label uppercase text-on-surface-variant/70">5 Variants</span>
+<div class="w-24 h-1.5 bg-outline-variant/20 rounded-full">
+<div class="w-[0%] h-full bg-outline rounded-full"></div>
+</div>
+<span class="text-[10px] font-bold font-label uppercase text-on-surface-variant/60">0% Complete</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Meta / Stats Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8 border-t border-outline-variant/20">
+<div class="p-6 bg-surface-container-highest rounded-xl">
+<label class="font-label text-[10px] uppercase tracking-[0.1em] text-on-tertiary-container font-bold block mb-2">Total Value Index</label>
+<p class="font-headline text-2xl font-bold text-primary">High-Rarity Path</p>
+<p class="text-xs text-on-surface-variant mt-2 leading-relaxed">This branch contains 3 of the 5 known unique Lahore mintings under Akbar's reign.</p>
+</div>
+<div class="p-6 bg-surface-container-highest rounded-xl">
+<label class="font-label text-[10px] uppercase tracking-[0.1em] text-on-tertiary-container font-bold block mb-2">Acquisition Timeline</label>
+<div class="flex items-center gap-2 mt-4">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<p class="text-sm font-bold">1992 Acquisition</p>
+</div>
+<p class="text-xs text-on-surface-variant mt-2">Latest addition from the Mumbai Auction #102.</p>
+</div>
+<div class="p-6 bg-primary text-on-primary rounded-xl relative overflow-hidden group">
+<div class="relative z-10">
+<label class="font-label text-[10px] uppercase tracking-[0.1em] text-on-primary/70 font-bold block mb-2">Next Milestone</label>
+<p class="font-headline text-2xl font-bold">Gold Mohurs</p>
+<p class="text-xs text-on-primary/80 mt-2">Complete this silver branch to unlock the Gold Mohur archive.</p>
+</div>
+<span class="material-symbols-outlined absolute -bottom-4 -right-4 text-8xl opacity-10 rotate-12 group-hover:rotate-0 transition-transform duration-700" data-icon="auto_awesome">auto_awesome</span>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar: Mobile Only -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center pt-3 pb-6 px-2 backdrop-blur-2xl bg-[#fdfcf0]/90 dark:bg-[#121212]/90 z-50 rounded-t-xl border-t border-[#775a19]/10 shadow-[0_-4px_20px_rgba(119,90,25,0.06)] md:hidden">
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="home_storage">home_storage</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#775a19] dark:text-[#c5a059] bg-[#775a19]/10 rounded-lg py-1 px-3 transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="book_2">book_2</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Collection</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="military_tech">military_tech</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Challenges</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="workspace_premium">workspace_premium</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Showcase</span>
+</a>
+</nav>
+<!-- Floating Action Button: Search / Add -->
+<div class="fixed bottom-24 right-6 md:bottom-12 md:right-12 z-40">
+<button class="w-14 h-14 bg-secondary text-on-secondary rounded-lg shadow-2xl flex items-center justify-center transition-transform hover:scale-110 active:scale-95">
+<span class="material-symbols-outlined text-3xl" data-icon="search">search</span>
+</button>
+</div>
+</body></html>

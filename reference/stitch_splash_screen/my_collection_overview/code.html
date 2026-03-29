@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Collection | The Digital Curator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#f1edeb",
+              "on-surface": "#1c1b1b",
+              "on-tertiary-fixed-variant": "#5b4137",
+              "surface-variant": "#e5e2e0",
+              "on-secondary-fixed": "#410000",
+              "tertiary-fixed": "#ffdbce",
+              "on-primary-fixed": "#261900",
+              "on-secondary-container": "#650000",
+              "background": "#fdf8f6",
+              "on-primary-fixed-variant": "#5d4201",
+              "surface-container-low": "#f7f3f1",
+              "on-error-container": "#93000a",
+              "error": "#ba1a1a",
+              "primary-fixed": "#ffdea5",
+              "primary-container": "#c5a059",
+              "primary-fixed-dim": "#e9c176",
+              "outline": "#7f7667",
+              "on-tertiary-fixed": "#2b160f",
+              "outline-variant": "#d1c5b4",
+              "tertiary-container": "#c19e92",
+              "surface-bright": "#fdf8f6",
+              "on-secondary-fixed-variant": "#8f0f07",
+              "on-primary-container": "#4e3700",
+              "surface": "#fdf8f6",
+              "secondary-fixed-dim": "#ffb4a8",
+              "secondary": "#b22b1d",
+              "surface-container-highest": "#e5e2e0",
+              "inverse-primary": "#e9c176",
+              "on-surface-variant": "#4e4639",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "surface-tint": "#775a19",
+              "surface-container-lowest": "#ffffff",
+              "inverse-on-surface": "#f4f0ee",
+              "tertiary-fixed-dim": "#e4beb2",
+              "secondary-container": "#fe624e",
+              "secondary-fixed": "#ffdad4",
+              "surface-dim": "#ddd9d7",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#4e352c",
+              "surface-container-high": "#ebe7e5",
+              "tertiary": "#75584d",
+              "on-primary": "#ffffff",
+              "on-background": "#1c1b1b",
+              "on-secondary": "#ffffff",
+              "primary": "#775a19",
+              "inverse-surface": "#31302f"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Manrope"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #fdf8f6;
+            background-image: radial-gradient(#775a1908 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body text-on-surface">
+<!-- TopAppBar -->
+<header class="docked full-width top-0 sticky z-50 bg-[#fdfcf0] dark:bg-[#121212] shadow-sm dark:shadow-none transition-all duration-400">
+<div class="flex justify-between items-center px-6 py-4 w-full backdrop-blur-xl">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#775a19] cursor-pointer">menu</span>
+<h1 class="font-serif text-[#775a19] dark:text-[#c5a059] italic text-xl">The Digital Curator</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8 items-center">
+<span class="font-label text-sm font-medium uppercase tracking-wider text-[#775a19] scale-105 cursor-pointer">Collection</span>
+<span class="font-label text-sm font-medium uppercase tracking-wider text-[#212121] opacity-70 cursor-pointer hover:bg-[#775a19]/5 transition-colors duration-400 px-2 py-1">Explore</span>
+<span class="font-label text-sm font-medium uppercase tracking-wider text-[#212121] opacity-70 cursor-pointer hover:bg-[#775a19]/5 transition-colors duration-400 px-2 py-1">Challenges</span>
+</div>
+<span class="material-symbols-outlined text-[#775a19]">notifications</span>
+</div>
+</div>
+<div class="bg-[#e6e2d3] dark:bg-[#212121] h-[1px] w-full opacity-30"></div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-12 mb-24">
+<!-- Header & Visibility -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+<div>
+<span class="font-label text-xs font-bold uppercase tracking-[0.2em] text-primary mb-2 block">Archive Portfolio</span>
+<h2 class="font-headline text-4xl font-semibold tracking-tight text-on-surface">Indian Heritage Collection</h2>
+<p class="text-on-surface-variant mt-2 max-w-xl">Manage and curate your personal repository of historical artifacts, numismatics, and regional craftwork.</p>
+</div>
+<div class="flex items-center gap-4 bg-surface-container-low p-2 rounded-lg border border-outline-variant/15">
+<div class="flex items-center gap-2 px-3 py-1.5 rounded bg-surface-container-highest shadow-sm">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-wider">Private</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded opacity-40 hover:opacity-100 transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-sm">public</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-wider">Public</span>
+</div>
+</div>
+</div>
+<!-- Stats Dashboard -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
+<div class="bg-surface-container-lowest p-6 border-b-2 border-primary/20 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary">account_balance_wallet</span>
+<span class="font-label text-[10px] font-bold text-outline uppercase tracking-tighter">Total Items</span>
+</div>
+<div class="font-headline text-3xl font-bold">1,284</div>
+<div class="text-[10px] font-label text-secondary mt-1 uppercase font-bold">+12 this month</div>
+</div>
+<div class="bg-surface-container-lowest p-6 border-b-2 border-primary/20 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary">category</span>
+<span class="font-label text-[10px] font-bold text-outline uppercase tracking-tighter">Categories</span>
+</div>
+<div class="font-headline text-3xl font-bold">14</div>
+<div class="text-[10px] font-label text-on-surface-variant mt-1 uppercase font-bold">Across 5 regions</div>
+</div>
+<div class="bg-surface-container-lowest p-6 border-b-2 border-primary/20 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary">verified</span>
+<span class="font-label text-[10px] font-bold text-outline uppercase tracking-tighter">Completion</span>
+</div>
+<div class="font-headline text-3xl font-bold">64%</div>
+<div class="w-full bg-surface-container-high h-1 mt-2">
+<div class="bg-primary h-full w-[64%]"></div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 border-b-2 border-secondary/20 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-secondary">star</span>
+<span class="font-label text-[10px] font-bold text-outline uppercase tracking-tighter">Rare Items</span>
+</div>
+<div class="font-headline text-3xl font-bold text-secondary">42</div>
+<div class="text-[10px] font-label text-secondary mt-1 uppercase font-bold italic">High Valuations</div>
+</div>
+</div>
+<!-- Recently Added Section -->
+<div class="mb-16">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-headline text-xl font-semibold">Recently Cataloged</h3>
+<div class="h-[1px] flex-grow mx-8 bg-outline-variant/30"></div>
+<button class="font-label text-[10px] font-bold uppercase tracking-widest text-primary hover:tracking-[0.2em] transition-all">View Log</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Artifact 1 -->
+<div class="group relative bg-surface-container-high aspect-[4/5] overflow-hidden">
+<img class="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" data-alt="Close-up of a centuries-old intricate gold Indian coin on a dark velvet background with dramatic side lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkRDbOr6Nk2A4SKOr6Q5esT5gWVOdTE8YnKCQmNDJ8vW5QfhagpAR8K3G3RGk6z-A2dV5zzKHzrOSAHh1sTT9MEHas-auwdzPC0aymQ5AH7a1dIoDadLvacdtIA7ZJEcJyGMV0ekZ3VHmWnA-s6-k4RlMN9zQCd_h5YtW6lpXEu-SQKfEzBvyp6CKrsu0awPdtdUSlHTH9Vb4b4SvwT9IuOyhU2X4izQXaH4d9A1LpCuTtLr44u2PzqeD4w6to_k5gZBTkL-LI77H6"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full transform translate-y-2 group-hover:translate-y-0 transition-transform">
+<span class="bg-primary/90 text-on-primary text-[8px] font-label font-bold uppercase px-2 py-0.5 mb-2 inline-block">Mughal Era</span>
+<h4 class="text-white font-headline text-lg">Mohur of Akbar the Great</h4>
+<div class="flex items-center justify-between mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<p class="text-white/70 text-xs font-label uppercase tracking-tighter">Added 2 hours ago</p>
+<span class="material-symbols-outlined text-white text-sm">arrow_forward_ios</span>
+</div>
+</div>
+</div>
+<!-- Artifact 2 -->
+<div class="group relative bg-surface-container-high aspect-[4/5] overflow-hidden">
+<img class="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" data-alt="Intricate Rajasthani miniature painting with fine brushwork showing a royal procession on aged parchment paper" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhmoOYaRyLlCIzW7lQdBkQAbvU2RetsfXLJ8qkGosZbnKXBNd3tP4DLm_CdQacYttC0Xl0OHKZWX06J3CYjupoSP4PDAwyXst6AXBifEcyKFFIvedxZsiTDNd6LdRBbS4SCyUHHa-EqsRVoNLIH3G3AMRRlHPJYFjaopp3EmOOMvisxPJhH_HbzLAmIjO5MXugAnJ2HlJLTe4fbBWWexli4gU00Iw1blIlbIobtwc447RfLIsMf7NK3YAveZvj0zv32GKYZEXzXB0y"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full transform translate-y-2 group-hover:translate-y-0 transition-transform">
+<span class="bg-secondary text-on-secondary text-[8px] font-label font-bold uppercase px-2 py-0.5 mb-2 inline-block">Rare Find</span>
+<h4 class="text-white font-headline text-lg">Mewar School Miniature</h4>
+<div class="flex items-center justify-between mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<p class="text-white/70 text-xs font-label uppercase tracking-tighter">Added Yesterday</p>
+<span class="material-symbols-outlined text-white text-sm">arrow_forward_ios</span>
+</div>
+</div>
+</div>
+<!-- Artifact 3 -->
+<div class="group relative bg-surface-container-high aspect-[4/5] overflow-hidden">
+<img class="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" data-alt="Ancient hand-carved stone sculpture of a deity from a temple in Southern India with weathered textures and moss" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCV2ePoAkDt-q79-5py9HvdLzWZGHM4hhRELsGEid5704u9JB_ofJgv9XIX6MU4L9NDw8IvTJtXWfHq70EOWrjxrXnpcFq_peBEvRiNofWHPcLyedRDcsCIct8uVQcyZhStO7D4z1FqqxvUjCODAhE4tZRwEKB3oN0NXC7y3Iiaq6ZotvvbdUaVTrOBuhhMLIOsYXhhRsTthE39adMFOBG2xWkA8vLyvguHz9rmqDs_s0wovuSQ3jyqUQbbkzHnJSEH_QAvq9MloP-g"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full transform translate-y-2 group-hover:translate-y-0 transition-transform">
+<span class="bg-primary/90 text-on-primary text-[8px] font-label font-bold uppercase px-2 py-0.5 mb-2 inline-block">Chola Dynasty</span>
+<h4 class="text-white font-headline text-lg">Granite Ganesha Fragment</h4>
+<div class="flex items-center justify-between mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<p class="text-white/70 text-xs font-label uppercase tracking-tighter">Added 3 days ago</p>
+<span class="material-symbols-outlined text-white text-sm">arrow_forward_ios</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Collection Management -->
+<div class="bg-surface-container-lowest p-8 border border-outline-variant/15">
+<!-- Navigation & Toggles -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-8 mb-10 pb-8 border-b border-outline-variant/10">
+<nav class="flex overflow-x-auto pb-4 lg:pb-0 gap-8 no-scrollbar">
+<button class="font-label text-xs font-bold uppercase tracking-widest text-primary border-b-2 border-primary pb-2 whitespace-nowrap">All</button>
+<button class="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 hover:opacity-100 transition-opacity whitespace-nowrap">Owned</button>
+<button class="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 hover:opacity-100 transition-opacity whitespace-nowrap">Wishlist</button>
+<button class="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 hover:opacity-100 transition-opacity whitespace-nowrap">Swap</button>
+<button class="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 hover:opacity-100 transition-opacity whitespace-nowrap">Trade</button>
+<button class="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 hover:opacity-100 transition-opacity whitespace-nowrap">Sell</button>
+<button class="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 hover:opacity-100 transition-opacity whitespace-nowrap">Duplicates</button>
+</nav>
+<div class="flex items-center gap-6">
+<div class="flex items-center bg-surface-container p-1 rounded">
+<button class="p-1.5 bg-surface-container-lowest shadow-sm rounded">
+<span class="material-symbols-outlined text-[20px] text-primary">grid_view</span>
+</button>
+<button class="p-1.5 text-on-surface-variant opacity-60">
+<span class="material-symbols-outlined text-[20px]">view_list</span>
+</button>
+<button class="p-1.5 text-on-surface-variant opacity-60">
+<span class="material-symbols-outlined text-[20px]">gallery_thumbnail</span>
+</button>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary text-xs font-label font-bold uppercase tracking-widest">
+<span class="material-symbols-outlined text-sm">add</span>
+                        New Archive
+                    </button>
+</div>
+</div>
+<!-- Archive Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<!-- Archive Card Item -->
+<div class="group border border-transparent hover:border-primary/20 transition-all p-2 bg-surface-container-low/30">
+<div class="aspect-square bg-surface-container-high relative mb-4 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Top down view of a collection of ancient copper coins scattered on a rustic wooden table with soft morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBw16eJGvfM2HEEemnmlxpZpOKI2Obqw1uG0JNz70-vtBDLqrIrSXqKLrxUMh0lyhDUstc9Q2EY0vPG4odoZ2JE_vSk7QungPqSrVReXPaB7N5V6ydJ56joA8Bs7v-ek_dbq1gmFya7k6aJaUIzcymzE7u_7iKCaGCfYABSCrK2jFLgcuBnbxcDrE5M5_jvCLpGnwGmVqwvfTX5NCaGaW2xqFlyIUlMKgsYxsbhN1QL8MJhmu6Y1dVUuB4hSZQYRFYPe8YRGrLYmxBK"/>
+<div class="absolute top-2 right-2">
+<span class="material-symbols-outlined text-sm text-primary bg-white/80 rounded-full p-1">sell</span>
+</div>
+</div>
+<span class="font-label text-[9px] font-bold text-primary uppercase tracking-widest">Coinage • 17th Century</span>
+<h5 class="font-headline font-semibold text-sm mt-1">Maratha Empire Shivrai</h5>
+<div class="flex items-center justify-between mt-3 pt-3 border-t border-outline-variant/10">
+<span class="font-label text-[10px] text-outline italic">Condition: VF</span>
+<span class="material-symbols-outlined text-sm text-on-surface-variant opacity-40 group-hover:opacity-100">more_vert</span>
+</div>
+</div>
+<div class="group border border-transparent hover:border-primary/20 transition-all p-2 bg-surface-container-low/30">
+<div class="aspect-square bg-surface-container-high relative mb-4 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A collection of traditional Indian brass oil lamps or diyas with intricate patterns and aged patina" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCZ5TWhJm2kUUHV4T3NzuOR5pVVPLllcU3Cqz9BPqpXqqfXOnfw_Ei15HafACchBeDiDGutwtz0_rDJw_y42EfH_dbUGvsSgO1k3OVugEzB2R6Olrf9Uc7PbCpCCJA7rDW8kq8cdS2tU8mdmCN_xCC_gq_p5BcInyY5PzUcBxg3IzVsiLHJu0maebF3tFwpGAzBB5cimT8FKfViErd8sX_bRjdOjan-CLa7vKZliI1dsqANNS0wuXe2KiD8-MeM0WJPFkzDMkYt1-V"/>
+<div class="absolute top-2 right-2">
+<span class="material-symbols-outlined text-sm text-secondary bg-white/80 rounded-full p-1" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+</div>
+<span class="font-label text-[9px] font-bold text-primary uppercase tracking-widest">Metalwork • Kerala</span>
+<h5 class="font-headline font-semibold text-sm mt-1">Traditional Nilavilakku</h5>
+<div class="flex items-center justify-between mt-3 pt-3 border-t border-outline-variant/10">
+<span class="font-label text-[10px] text-outline italic">Provenance: Private</span>
+<span class="material-symbols-outlined text-sm text-on-surface-variant opacity-40 group-hover:opacity-100">more_vert</span>
+</div>
+</div>
+<div class="group border border-transparent hover:border-primary/20 transition-all p-2 bg-surface-container-low/30">
+<div class="aspect-square bg-surface-container-high relative mb-4 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Stacked vintage hand-woven Indian textiles and fabrics with complex embroidery and vibrant patterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBz0LaUltIQGDe3HClspGq1mMqGQd1N747WkgUj1KC4wdn9jNeWb_EXlNuTwLP_2u9vXUzz2svkYUctl5AUlExK_m5hYgWeq7-SAD85SEdcf2NFPyfTdAqz1snYX7DONfOOLiPJS0yNJunYnwSkWcQP64cjCWZOGmytQqQ_2LakNWQwPHLye9d2P9fb39j_0m2JzEJYULdwkYMhcJ38AD3pbD5TwStSTRpplRFZmZWJTU-u5cU0FmzDoQBX7wzCgm4mYEOsYoBCKIT2"/>
+<div class="absolute top-2 right-2">
+<span class="material-symbols-outlined text-sm text-primary bg-white/80 rounded-full p-1">swap_horiz</span>
+</div>
+</div>
+<span class="font-label text-[9px] font-bold text-primary uppercase tracking-widest">Textiles • Gujarat</span>
+<h5 class="font-headline font-semibold text-sm mt-1">Patola Silk Fragment</h5>
+<div class="flex items-center justify-between mt-3 pt-3 border-t border-outline-variant/10">
+<span class="font-label text-[10px] text-outline italic">Status: Available</span>
+<span class="material-symbols-outlined text-sm text-on-surface-variant opacity-40 group-hover:opacity-100">more_vert</span>
+</div>
+</div>
+<div class="group border border-transparent hover:border-primary/20 transition-all p-2 bg-surface-container-low/30">
+<div class="aspect-square bg-surface-container-high relative mb-4 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A macro shot of detailed Indian wood carvings on a piece of dark mahogany furniture showing floral motifs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSjmVvr9JSNSgEeeigwe3YmTeXm96TkZh8QLa7cJlaWuZi9YeRXRne86tzQZA2jo3QvUKq9DAdZqmOkulBsbhaWjY50QYY3rMTk2km3ywhMxIjVso6jF_yjRCzeHVelQ5s8xTQzmWI9CAVvveykwHTzaW9khdfP-ZkU6E8sk0NawKYVBcqcOKIO0U2vSXmnvuiFN4o-K_XNrWr5Wr2OA2q2gZIn0rNNrIKT7zbJZWQwaoVwfbsGh9VQHCxkoUNjtZABakU0vcTvLBg"/>
+</div>
+<span class="font-label text-[9px] font-bold text-primary uppercase tracking-widest">Woodwork • Saharanpur</span>
+<h5 class="font-headline font-semibold text-sm mt-1">Carved Rosewood Panel</h5>
+<div class="flex items-center justify-between mt-3 pt-3 border-t border-outline-variant/10">
+<span class="font-label text-[10px] text-outline italic">Condition: Mint</span>
+<span class="material-symbols-outlined text-sm text-on-surface-variant opacity-40 group-hover:opacity-100">more_vert</span>
+</div>
+</div>
+</div>
+<!-- Pagination-esque Curator Control -->
+<div class="mt-12 flex justify-center">
+<button class="flex items-center gap-4 px-12 py-3 border border-outline-variant/20 hover:bg-surface-container-high transition-colors font-label text-xs font-bold uppercase tracking-[0.3em]">
+                    Expand Archive Repository
+                    <span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center pt-3 pb-safe px-2 backdrop-blur-2xl bg-[#fdfcf0]/90 dark:bg-[#121212]/90 z-50 rounded-t-xl border-t border-[#775a19]/10 shadow-[0_-4px_20px_rgba(119,90,25,0.06)] md:hidden">
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300 active:scale-90">
+<span class="material-symbols-outlined">home_storage</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300 active:scale-90">
+<span class="material-symbols-outlined">account_balance</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#775a19] dark:text-[#c5a059] bg-[#775a19]/10 rounded-lg py-1 px-3 transition-transform duration-300 scale-95 active:scale-90">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">book_2</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Collection</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300 active:scale-90">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Challenges</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300 active:scale-90">
+<span class="material-symbols-outlined">workspace_premium</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Showcase</span>
+</div>
+</nav>
+<!-- Navigation Drawer (Desktop Sidebar Hidden Mobile) -->
+<aside class="hidden xl:flex fixed left-0 top-0 h-full w-80 bg-[#fdfcf0] dark:bg-[#121212] border-r border-[#775a19]/10 flex-col p-8 gap-y-6 shadow-2xl z-40">
+<div class="font-serif text-[#775a19] text-2xl border-b border-[#775a19]/20 pb-4 italic">
+            Archives
+        </div>
+<div class="flex flex-col gap-y-2 mt-4">
+<div class="flex items-center gap-4 p-3 bg-[#775a19] text-[#fdfcf0] rounded-md font-['Manrope'] text-sm font-semibold">
+<span class="material-symbols-outlined">book_2</span>
+                My Collection
+            </div>
+<div class="flex items-center gap-4 p-3 text-[#212121] dark:text-[#e6e2d3] hover:bg-[#775a19]/5 transition-all duration-400 font-['Manrope'] text-sm font-semibold hover:pl-2">
+<span class="material-symbols-outlined">search</span>
+                Global Search
+            </div>
+<div class="flex items-center gap-4 p-3 text-[#212121] dark:text-[#e6e2d3] hover:bg-[#775a19]/5 transition-all duration-400 font-['Manrope'] text-sm font-semibold hover:pl-2">
+<span class="material-symbols-outlined">swap_horiz</span>
+                Swap &amp; Trade
+            </div>
+<div class="flex items-center gap-4 p-3 text-[#212121] dark:text-[#e6e2d3] hover:bg-[#775a19]/5 transition-all duration-400 font-['Manrope'] text-sm font-semibold hover:pl-2">
+<span class="material-symbols-outlined">star</span>
+                Wishlist
+            </div>
+<div class="flex items-center gap-4 p-3 text-[#212121] dark:text-[#e6e2d3] hover:bg-[#775a19]/5 transition-all duration-400 font-['Manrope'] text-sm font-semibold hover:pl-2">
+<span class="material-symbols-outlined">person_2</span>
+                Profile Settings
+            </div>
+</div>
+<div class="mt-auto flex items-center gap-4 border-t border-[#775a19]/10 pt-6">
+<div class="w-12 h-12 rounded-full bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of a sophisticated Indian man in his late 50s wearing professional curator attire" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnv2Rvj9dq4aICAPE_JI4kpv8LywPM-77DMdAp5mC6eXrz255tYHpKX-hvNBd8W2WxOnGN7mhZZU9_Zu0bNnns6-gogniHq7vC_SKiPeLdTU2iR7KEuA3Akc1d0JsWQ2GIO2djlC6cHlLvqKgHd6BwcYe_jhiKqZUsfM9Qinqzzkd7g7CyDXl3nLU1-SF8qtksDjdhGjapDVIdbPI3Ub_rHq4_RNmZCqfD3EVSvN_ic1DcPszp7TtwQk7Bj5NXybRADbRxXxrv9xrl"/>
+</div>
+<div>
+<p class="font-headline text-sm font-bold text-[#775a19]">Senior Curator</p>
+<p class="font-label text-[10px] text-outline uppercase tracking-tight">Indian Numismatics Dept.</p>
+<p class="font-label text-[8px] text-outline mt-1 opacity-60">Member since 1947</p>
+</div>
+</div>
+</aside>
+</body></html>

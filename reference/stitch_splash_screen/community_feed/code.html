@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&amp;family=Manrope:wght@400;500;600&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#f1edeb",
+              "on-surface": "#1c1b1b",
+              "on-tertiary-fixed-variant": "#5b4137",
+              "surface-variant": "#e5e2e0",
+              "on-secondary-fixed": "#410000",
+              "tertiary-fixed": "#ffdbce",
+              "on-primary-fixed": "#261900",
+              "on-secondary-container": "#650000",
+              "background": "#fdf8f6",
+              "on-primary-fixed-variant": "#5d4201",
+              "surface-container-low": "#f7f3f1",
+              "on-error-container": "#93000a",
+              "error": "#ba1a1a",
+              "primary-fixed": "#ffdea5",
+              "primary-container": "#c5a059",
+              "primary-fixed-dim": "#e9c176",
+              "outline": "#7f7667",
+              "on-tertiary-fixed": "#2b160f",
+              "outline-variant": "#d1c5b4",
+              "tertiary-container": "#c19e92",
+              "surface-bright": "#fdf8f6",
+              "on-secondary-fixed-variant": "#8f0f07",
+              "on-primary-container": "#4e3700",
+              "surface": "#fdf8f6",
+              "secondary-fixed-dim": "#ffb4a8",
+              "secondary": "#b22b1d",
+              "surface-container-highest": "#e5e2e0",
+              "inverse-primary": "#e9c176",
+              "on-surface-variant": "#4e4639",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "surface-tint": "#775a19",
+              "surface-container-lowest": "#ffffff",
+              "inverse-on-surface": "#f4f0ee",
+              "tertiary-fixed-dim": "#e4beb2",
+              "secondary-container": "#fe624e",
+              "secondary-fixed": "#ffdad4",
+              "surface-dim": "#ddd9d7",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#4e352c",
+              "surface-container-high": "#ebe7e5",
+              "tertiary": "#75584d",
+              "on-primary": "#ffffff",
+              "on-background": "#1c1b1b",
+              "on-secondary": "#ffffff",
+              "primary": "#775a19",
+              "inverse-surface": "#31302f"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Manrope"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr
+    }
+.archival-grain {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDLWdqvIioRnNvEZOW1RUL0xum2lR6vuBIGkx2vW6etj8TiUQ0Zs0cN1RrFPy_P0cqFqcw5_mjDRisXZl6zRJ_4cv3qqi4jkfVpSRNnXMBp7ICIfdpbngAIKyapsFylOAT7iXE4trjaKO0lqLIdkK13RaYMVhU4Udi3gB_9Y49OYXVWLdzKCdNd8Hu4pznPnTR7vLD-cSpIvhO28Y4xjUj7Cpb6148i9i4w9vO0dQgkhHSWW_gv93W1p8LP0w134xmhyCMBqox4pKwe);
+    opacity: 0.03;
+    pointer-events: none
+    }
+.glass-nav {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px)
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body selection:bg-primary/20">
+<div class="fixed inset-0 archival-grain z-[60]"></div>
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 bg-[#fdfcf0]/90 glass-nav shadow-sm dark:bg-[#121212]/90">
+<div class="flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-4">
+<button class="text-[#775a19] dark:text-[#c5a059] p-2 hover:bg-[#775a19]/5 transition-colors duration-400 rounded-lg">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline italic text-xl font-semibold tracking-tight text-[#775a19] dark:text-[#c5a059]">The Digital Curator</h1>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<nav class="flex gap-6">
+<a class="font-label text-sm font-medium uppercase tracking-wider text-[#775a19] scale-105" href="#">Explore</a>
+<a class="font-label text-sm font-medium uppercase tracking-wider text-[#212121] opacity-70 hover:bg-[#775a19]/5 transition-colors duration-400" href="#">Archives</a>
+<a class="font-label text-sm font-medium uppercase tracking-wider text-[#212121] opacity-70 hover:bg-[#775a19]/5 transition-colors duration-400" href="#">Scholars</a>
+</nav>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-[#775a19] p-2 hover:bg-[#775a19]/5 transition-colors duration-400 rounded-lg">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</div>
+<div class="bg-[#e6e2d3] h-[1px] w-full opacity-30"></div>
+</header>
+<main class="max-w-7xl mx-auto px-4 md:px-8 pt-8 pb-24 grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Navigation Drawer Desktop -->
+<aside class="hidden lg:block lg:col-span-3 space-y-6">
+<div class="bg-surface-container-low p-6 rounded-xl border-r border-[#775a19]/10 h-fit sticky top-28">
+<div class="border-b border-[#775a19]/20 pb-4 mb-6">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-surface-dim overflow-hidden ring-2 ring-primary/20">
+<img class="w-full h-full object-cover" data-alt="close-up portrait of an elderly distinguished Indian scholar with a salt and pepper beard wearing a traditional linen shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5Np0lw325YdK1_z9HL9Tn4DpQOkZj9XNNsZEVNEqFxjKwntU-7QHnlKwdfiqc3RWV-A9IWjqmc2PAwPi0Ds7hI6aLDbSd0F7bjNo8aJCrJQI8CpFGMCE4UjuN7OhIJ5LluGrS8wcfgXV2ggBOKPeUQsGhAhYLS2IB0dA6eaImOiBeMoJKgibdydSZHXuzldtpQrUaIgYNlQHBPXvuJUePQTbLSiqOB9EBGjb5zilzXRwVKd7kNAt4ZQcZW8WzKjqnyKH38KBgnWY3"/>
+</div>
+<div>
+<p class="font-headline text-sm font-bold text-on-surface">Senior Curator</p>
+<p class="font-label text-[10px] uppercase tracking-widest text-outline">Numismatics Dept.</p>
+</div>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 p-3 bg-primary text-surface rounded-lg transition-all duration-400" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label text-xs font-bold uppercase tracking-widest">Global Search</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-on-surface hover:bg-primary/5 rounded-lg transition-all duration-400 group" href="#">
+<span class="material-symbols-outlined group-hover:pl-1 transition-all" data-icon="add_circle">add_circle</span>
+<span class="font-label text-xs font-bold uppercase tracking-widest">Quick Add</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-on-surface hover:bg-primary/5 rounded-lg transition-all duration-400 group" href="#">
+<span class="material-symbols-outlined group-hover:pl-1 transition-all" data-icon="swap_horiz">swap_horiz</span>
+<span class="font-label text-xs font-bold uppercase tracking-widest">Swap &amp; Trade</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-on-surface hover:bg-primary/5 rounded-lg transition-all duration-400 group" href="#">
+<span class="material-symbols-outlined group-hover:pl-1 transition-all" data-icon="star">star</span>
+<span class="font-label text-xs font-bold uppercase tracking-widest">Wishlist</span>
+</a>
+</nav>
+<div class="mt-8 pt-6 border-t border-[#775a19]/10">
+<h4 class="font-label text-[10px] uppercase tracking-[0.15em] text-outline mb-4">Curatorial Tags</h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-variant text-on-surface-variant font-label text-[10px] rounded-sm">Mughal Dynasty</span>
+<span class="px-2 py-1 bg-surface-variant text-on-surface-variant font-label text-[10px] rounded-sm">Chola Bronze</span>
+<span class="px-2 py-1 bg-surface-variant text-on-surface-variant font-label text-[10px] rounded-sm">Varanasi Mint</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Center Column: Community Feed -->
+<section class="lg:col-span-6 space-y-10">
+<!-- Feed Filter -->
+<div class="flex items-center justify-between border-b border-[#775a19]/10 pb-4">
+<h2 class="font-headline text-2xl font-bold tracking-tight text-on-surface">Curated Feed</h2>
+<div class="flex gap-4">
+<button class="text-primary font-label text-[10px] font-bold uppercase tracking-widest flex items-center gap-1">
+                        Recent <span class="material-symbols-outlined text-sm" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</div>
+<!-- Feed Item 1: Rare Find -->
+<article class="bg-surface-container-high rounded-xl overflow-hidden shadow-sm border border-outline-variant/15 group">
+<div class="p-6 space-y-4">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container/20 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="account_circle">account_circle</span>
+</div>
+<div>
+<p class="font-body font-bold text-sm text-on-surface">Collector_1857</p>
+<p class="font-label text-[10px] text-outline uppercase tracking-wider italic">Heritage Guardian • 2h ago</p>
+</div>
+</div>
+<span class="bg-secondary/10 text-secondary px-3 py-1 rounded-sm font-label text-[10px] font-bold uppercase tracking-[0.1em]">Rare find today</span>
+</div>
+<h3 class="font-headline text-xl font-semibold leading-snug">Unpublished Silver Tanka from the Bengal Sultanate period</h3>
+<p class="font-body text-sm text-on-surface-variant leading-relaxed">
+                        I stumbled upon this specimen during a survey in Malda. The calligraphy suggests a transition between the Iliyas Shahi and the Eklakhi styles. Would appreciate scholarly input on the reverse inscription.
+                    </p>
+<div class="relative rounded-lg overflow-hidden mt-4 aspect-[16/10]">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="macro close-up of a tarnished silver ancient indian coin with intricate arabic calligraphy and geometric borders on a dark velvet background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDh46nhC2PRpC1pcj2rYGvg_NTj7S0HzBJY2tW6rzUpT_0h3AkJTtONCwrRSxY-KtyWjXpbNl40l_6_AlcdyWRcwEfBYRcPXlQ3TsEmpyXmONjcgSSN4ekh_CaW4Oux-uAdcblBzv7-ld87pNUrWBZyEz2JK-0KV79ujqKIVEy-cKUtD6FnPpHYMzPu8KTt9grFRNaua9JBdxI80kOhZHyx2DdeR8n0GZkE6r3gjzVH7vbesHDuyAZnV2wq-S94ino7Ska9hDv2cbed"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+</div>
+<div class="flex flex-wrap gap-2 pt-2">
+<span class="text-primary font-label text-[10px] font-bold uppercase tracking-widest">#SultanateEra</span>
+<span class="text-primary font-label text-[10px] font-bold uppercase tracking-widest">#SilverTanka</span>
+<span class="text-primary font-label text-[10px] font-bold uppercase tracking-widest">#BengalNumismatics</span>
+</div>
+<div class="flex items-center justify-between pt-6 border-t border-[#775a19]/10">
+<div class="flex gap-6">
+<button class="flex items-center gap-2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="forum">forum</span>
+<span class="font-label text-[10px] font-bold">12 Discussions</span>
+</button>
+<button class="flex items-center gap-2 text-outline hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="workspace_premium">workspace_premium</span>
+<span class="font-label text-[10px] font-bold">Authenticate</span>
+</button>
+</div>
+<button class="text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Feed Item 2: Help Identification -->
+<article class="bg-surface-container-high rounded-xl overflow-hidden shadow-sm border border-outline-variant/15">
+<div class="p-6 space-y-4">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container/20 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="account_circle">account_circle</span>
+</div>
+<div>
+<p class="font-body font-bold text-sm text-on-surface">Kshatriya_Archivist</p>
+<p class="font-label text-[10px] text-outline uppercase tracking-wider italic">New Member • 5h ago</p>
+</div>
+</div>
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-sm font-label text-[10px] font-bold uppercase tracking-[0.1em]">Help with identification</span>
+</div>
+<h3 class="font-headline text-xl font-semibold leading-snug">Bronze figurine discovered in ancestral vault</h3>
+<p class="font-body text-sm text-on-surface-variant leading-relaxed">
+                        This piece has been in my family for generations. The patina is quite thick, but the mudra seems to indicate a Late Gupta period influence. Has anyone seen a similar pedestal design?
+                    </p>
+<div class="grid grid-cols-2 gap-2 mt-4">
+<div class="aspect-square rounded-lg overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="extreme close up of a weathered bronze buddha statue showing greenish patina and intricate carved details on the face" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkyvS1cqJrrRj4LlAWVjnz5K20CKXIAN4zFpEfOTgvD_JJHNnw9HSYtyKSfkkOrTjo3d31OrGgazj2I9qZX_shfWbl8BGICTBJbrrMYHD1VhuSuTauXcRSoTUjMyUlLkDdiUWoMWlzKx_cKFCjhnNmj2VegkK9-eKhbc28zqaWILbwkF-YE3KcXG_pMYPhw3oQmVTjAdg_R2veK5LlTdm48KvvOG3dnpEjYB-ucSl7zwU6GvRNJ5GrekdG30wm-Pee-P_JqROaDWi6"/>
+</div>
+<div class="aspect-square rounded-lg overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="side view of an ancient bronze base showing geometric patterns and Sanskrit characters engraved into the stone-like metal" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXlgbgelyLOdJcoEKmPEUpRPQUbX2rzPXOMaoClLOspKRjamL4DseGfw3tXrl-gNukK85JeyQ4MGai-V4AEKnUD_hjSQJp0n9qJobC0xCmX3EIw6XDNO-lB51lnGT7c-dhlJIMAiWPrUCX6pmlZo5-7ECn99fYoQfN6ZJuemHkDEYbZ0MLvrQPPYNXjV32LQUoO193GEw0-bqdIX1Q_7whEARRWrPtKlXya-8Vas_tZADmyy2uFtTSxFVUc6RdGnt0pHT5-0Ku7AkV"/>
+</div>
+</div>
+<div class="flex items-center justify-between pt-6 border-t border-[#775a19]/10">
+<div class="flex gap-6">
+<button class="flex items-center gap-2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="comment">comment</span>
+<span class="font-label text-[10px] font-bold">8 Responses</span>
+</button>
+</div>
+<span class="font-label text-[10px] text-outline italic">Awaiting Expert Appraisal</span>
+</div>
+</div>
+</article>
+<!-- Feed Item 3: Update -->
+<article class="bg-surface-container-high rounded-xl overflow-hidden shadow-sm border border-outline-variant/15 group">
+<div class="p-6 space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container/20 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="account_circle">account_circle</span>
+</div>
+<div>
+<p class="font-body font-bold text-sm text-on-surface">Varanasi_Chronicles</p>
+<p class="font-label text-[10px] text-outline uppercase tracking-wider italic">Gold Member • Yesterday</p>
+</div>
+</div>
+<h3 class="font-headline text-xl font-semibold leading-snug">New collection update: The Sacred Ghats Manuscripts</h3>
+<p class="font-body text-sm text-on-surface-variant leading-relaxed">
+                        Extremely humbled to announce the acquisition of three 17th-century palm-leaf manuscripts detailing the astronomical charts used by the Kashi pundits. Digital archival process starts Monday.
+                    </p>
+<div class="flex items-center justify-between pt-6 border-t border-[#775a19]/10">
+<div class="flex gap-6">
+<button class="flex items-center gap-2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="thumb_up">thumb_up</span>
+<span class="font-label text-[10px] font-bold">45 Commendations</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+</section>
+<!-- Right Column: Newsroom Sidebar -->
+<aside class="hidden lg:block lg:col-span-3 space-y-8">
+<!-- Newsroom style section -->
+<div class="bg-surface-container-low p-6 rounded-xl border-l border-[#775a19]/10">
+<h4 class="font-headline text-lg font-bold text-on-surface mb-4 pb-2 border-b border-primary/20">The Archive Herald</h4>
+<div class="space-y-6">
+<div class="space-y-2">
+<p class="font-label text-[10px] text-secondary font-bold uppercase tracking-widest">Global Headline</p>
+<a class="font-headline text-sm font-semibold hover:text-primary transition-colors" href="#">Major Chola-era discovery in Tamil Nadu field</a>
+<p class="font-body text-xs text-outline leading-snug">Archaeologists find 500 copper plates dating back to Raja Raja I.</p>
+</div>
+<div class="space-y-2">
+<p class="font-label text-[10px] text-primary font-bold uppercase tracking-widest">Auction Report</p>
+<a class="font-headline text-sm font-semibold hover:text-primary transition-colors" href="#">Aurangzeb Gold Mohur fetches record price</a>
+<p class="font-body text-xs text-outline leading-snug">Bidding concluded at Christie's with a final hammer of $1.2M.</p>
+</div>
+</div>
+</div>
+<!-- Preservation Tips -->
+<div class="bg-primary/5 p-6 rounded-xl border border-primary/10">
+<div class="flex items-center gap-2 text-primary mb-3">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<h4 class="font-label text-xs font-bold uppercase tracking-widest">Curator's Tip</h4>
+</div>
+<p class="font-body text-sm italic text-on-surface-variant">
+                    "When handling silver coins, always use powder-free nitrile gloves. Human skin oils can accelerate oxidation, leading to irreversible loss of detail."
+                </p>
+</div>
+<!-- Active Researchers -->
+<div>
+<h4 class="font-label text-[10px] uppercase tracking-[0.2em] text-outline mb-4 px-2">Top Contributors</h4>
+<div class="space-y-4 px-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="headshot of a young professional indian man in a studio setting with a clean neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCw1_Po5EhE9colUcLWuMYdpzXFfyRnpnqx_5vsyPzgSa2dXB_zvoiGM3lKUiqu5j6TKGdcNS8IWZB53OqOftLs_2-iTrxHWbtq-3y8DeWZmLquFPIPAu2rMJAK1MhpDZutcekvxdvQmPhQjkHXh9b4lCC-bgOkSP0aA0gBDwOI7fvHNPuDWnytmleGGkaAFQ6GgnHaBSotolW9tN1fVIWc3kO4pmQMGqr7_ADaAj5Mf39lNAEiAlm4QESL9an7FrgxszbpBUrXBDzh"/>
+</div>
+<span class="font-body text-xs font-semibold">Dr. S. Mukherjee</span>
+</div>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="portrait of an indian woman with glasses, smiling softly, with a blurred library background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaRBd5VYcEOFKSUEgbwTLJtDcP4w8VFtoypeF4Es7vp9jjQ1r2sg84yI6K5-n07yba1XsrFehLR27Wlw6HYtdJ_ktzwAgzBjsRn87ZiWOfp4y-q-Bk715NXUh5eLAu1494vHhou6uHRUpweokbUuEJPK2XZC3JfKpK7Oh_Ijv5j5W_0sli8GH70YmiYLsRgiuJaGvng-9qdNTawedGPf79ghoXR4oJ3l4rAoLtGnQxuHh3wY7ebZpYNPNfrGfPJQjDkjxnnqorZ2hG"/>
+</div>
+<span class="font-body text-xs font-semibold">Anita_Ray_Archives</span>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</main>
+<!-- FAB for adding post -->
+<button class="fixed bottom-24 right-6 md:bottom-8 md:right-8 w-14 h-14 bg-primary text-surface rounded-xl shadow-2xl flex items-center justify-center hover:scale-105 transition-transform duration-400 z-40">
+<span class="material-symbols-outlined text-3xl" data-icon="edit_note">edit_note</span>
+</button>
+<!-- BottomNavBar Mobile -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center pt-3 pb-6 px-2 bg-[#fdfcf0]/90 glass-nav z-50 rounded-t-xl border-t border-[#775a19]/10 shadow-[0_-4px_20px_rgba(119,90,25,0.06)]">
+<a class="flex flex-col items-center justify-center text-[#212121]/60" href="#">
+<span class="material-symbols-outlined" data-icon="home_storage">home_storage</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-[0.05em]">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#775a19] bg-[#775a19]/10 rounded-lg py-1 px-3" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-[0.05em]">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60" href="#">
+<span class="material-symbols-outlined" data-icon="book_2">book_2</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-[0.05em]">Collection</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60" href="#">
+<span class="material-symbols-outlined" data-icon="military_tech">military_tech</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-[0.05em]">Challenges</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60" href="#">
+<span class="material-symbols-outlined" data-icon="workspace_premium">workspace_premium</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-[0.05em]">Showcase</span>
+</a>
+</nav>
+
+```</body></html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Digital Curator - Leaderboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&amp;family=Manrope:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container": "#f1edeb",
+                        "on-surface": "#1c1b1b",
+                        "on-tertiary-fixed-variant": "#5b4137",
+                        "surface-variant": "#e5e2e0",
+                        "on-secondary-fixed": "#410000",
+                        "tertiary-fixed": "#ffdbce",
+                        "on-primary-fixed": "#261900",
+                        "on-secondary-container": "#650000",
+                        "background": "#fdf8f6",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-container-low": "#f7f3f1",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#ffdea5",
+                        "primary-container": "#c5a059",
+                        "primary-fixed-dim": "#e9c176",
+                        "outline": "#7f7667",
+                        "on-tertiary-fixed": "#2b160f",
+                        "outline-variant": "#d1c5b4",
+                        "tertiary-container": "#c19e92",
+                        "surface-bright": "#fdf8f6",
+                        "on-secondary-fixed-variant": "#8f0f07",
+                        "on-primary-container": "#4e3700",
+                        "surface": "#fdf8f6",
+                        "secondary-fixed-dim": "#ffb4a8",
+                        "secondary": "#b22b1d",
+                        "surface-container-highest": "#e5e2e0",
+                        "inverse-primary": "#e9c176",
+                        "on-surface-variant": "#4e4639",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#775a19",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f4f0ee",
+                        "tertiary-fixed-dim": "#e4beb2",
+                        "secondary-container": "#fe624e",
+                        "secondary-fixed": "#ffdad4",
+                        "surface-dim": "#ddd9d7",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#4e352c",
+                        "surface-container-high": "#ebe7e5",
+                        "tertiary": "#75584d",
+                        "on-primary": "#ffffff",
+                        "on-background": "#1c1b1b",
+                        "on-secondary": "#ffffff",
+                        "primary": "#775a19",
+                        "inverse-surface": "#31302f"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif"],
+                        "body": ["Manrope"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            background-image: radial-gradient(circle at 2px 2px, rgba(119, 90, 25, 0.03) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 bg-[#fdfcf0] dark:bg-[#121212] shadow-sm dark:shadow-none backdrop-blur-xl flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#775a19] dark:text-[#c5a059] cursor-pointer">menu</span>
+<h1 class="font-serif text-[#775a19] dark:text-[#c5a059] italic text-xl">The Digital Curator</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8">
+<a class="font-label text-[10px] font-medium uppercase tracking-wider text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:bg-[#775a19]/5 transition-colors duration-400 px-2 py-1" href="#">Home</a>
+<a class="font-label text-[10px] font-medium uppercase tracking-wider text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:bg-[#775a19]/5 transition-colors duration-400 px-2 py-1" href="#">Explore</a>
+<a class="font-label text-[10px] font-medium uppercase tracking-wider text-[#775a19] dark:text-[#c5a059] scale-105 px-2 py-1" href="#">Challenges</a>
+</nav>
+<span class="material-symbols-outlined text-[#775a19] dark:text-[#c5a059] cursor-pointer">notifications</span>
+</div>
+</header>
+<main class="max-w-6xl mx-auto px-6 py-12 pb-32">
+<!-- Hero Section / Context -->
+<div class="mb-16">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="max-w-2xl">
+<span class="font-label text-xs font-bold uppercase tracking-[0.2em] text-primary mb-4 block">Current Challenge</span>
+<h2 class="font-headline text-4xl md:text-5xl font-semibold tracking-tight text-on-surface mb-6">Imperial Gupta Coinage Discovery</h2>
+<p class="text-on-surface-variant text-lg leading-relaxed">Recognizing the elite contributors who have meticulously documented the "Golden Age" through numismatic excellence and scholarly provenance mapping.</p>
+</div>
+<div class="flex flex-col items-start md:items-end gap-2">
+<div class="flex -space-x-3">
+<img class="w-10 h-10 rounded-full border-2 border-background object-cover" data-alt="close-up portrait of an elderly man with wisdom in his eyes and a subtle smile, studio lighting, professional photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6i_pFNAW8TyzGArHD3pWmhBHdMHqLfDnUUSPJTRMXm6MrJDX6fp30p7owXfOxk5jM4qTsPTub4_l8UMO5GcaWuYv0Fsyo9cjO9q4Nhe813oDbuLfFL8uPfYqlyuequm68ODPW7Srnlt15rctsNX0iP1Hfoi2NKmGjrSIrTsihCLa14M3D33H1gX7KHSBp-VRyu3HOBGSYt1yLsTszasUEoXkiwi1z-Bfp-vDACLAjNisqTX1886VqkhbUdt-Hkfc8XLCrQ4ysOSef"/>
+<img class="w-10 h-10 rounded-full border-2 border-background object-cover" data-alt="portrait of a young indian woman with elegant traditional jewelry, soft natural lighting, warm aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzQgsjVAWrTrhmDjqy6K0qz6K7RpN5im95WeCPRSE_X105JfG-QNuOah7_Xz6SwZ4zmv_3sN5bemQt8ieKTCfdsyiJXuq5MxhkB90yaPP_9CrYEyYv1H4s0A8RH_LF6yhxvGJjyiZdM-pArOOdSX2rJ0B8ey_0b-HQ4Kvh8l_Lg5Obf8QzxkTa7kuhzfkQ37acQYRTsRxeKb_a9oWykHNTNXl0SUybOqQ0P7yf7M6AhsSOikuQXkKyEvHTvKnOVlG4Vtlg2KDmC-zw"/>
+<img class="w-10 h-10 rounded-full border-2 border-background object-cover" data-alt="close-up of a middle-aged man with sharp features and thoughtful expression, warm evening sun light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxfYpVUTHbe4sRwUgT9UKqF_QDzuY6bn9HwEKhGNRnJ9HA-6h24vOoM8c-dHNeWCE2WNV2GFbOvr-IrijgLMLIFPOuHGGIKTeMuOomLWdzzKIWNHVJoC5NiPFAxih2jXIkGVwtRtP641lMeBSC46hznF_AE1GAeIWoUkP9zRzXlVbAwtVRBzJtIZpQ78vDZO9hv_TqnaNqfHF4MPcx8r-ptWnY3WwNDn42K8ZwvAPKm1oZMQNPqVxxAWbZwcz0Xf6ml_FM9LcKT8qW"/>
+<div class="w-10 h-10 rounded-full bg-surface-container-high border-2 border-background flex items-center justify-center text-[10px] font-bold text-primary">+124</div>
+</div>
+<span class="font-label text-[10px] uppercase tracking-wider text-on-surface-variant">Active Curators</span>
+</div>
+</div>
+</div>
+<!-- Leaderboard Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+<!-- Podium / Top 3 -->
+<div class="lg:col-span-12 grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<!-- Rank 2 -->
+<div class="order-2 md:order-1 self-end">
+<div class="bg-surface-container-low p-8 pt-12 relative flex flex-col items-center text-center">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2">
+<img class="w-24 h-24 rounded-full object-cover border-4 border-surface-variant shadow-sm" data-alt="portrait of a professional woman with a serious and scholarly look, high-end studio lighting, soft cream background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCve1Oi33hELpk06OnxDikZIy3qG-4joDtrw-nTix_Ci5IUO_pV2tGrCElHHowKPC6ghqnG9xq7Z-kwtKfa_Ud4zshQlQ6j4S_kp7Zb3xqINL3yCsfOaQUtbWRtOqf1hj81FeqUrxeqCvvQ-Z-CetZhFv3fzzLbSBKYpr7aqwo0db6I1PWXlID-vGwtZCcbkqEvw8lGSD4d7NXfk9vHkg3pXZho6lsAOg79c565mg6RDV1T1S4AuSNkj5unU0TbbfT-LyWubmOARAZI"/>
+<div class="absolute -bottom-2 right-0 bg-outline text-white w-8 h-8 rounded-full flex items-center justify-center font-headline text-sm font-bold">2</div>
+</div>
+<h3 class="font-headline text-xl font-semibold mb-1">Dr. Ananya Iyer</h3>
+<p class="font-label text-[10px] uppercase tracking-widest text-secondary mb-4">Temple Architecture Expert</p>
+<div class="w-full grid grid-cols-3 gap-2 mt-4 pt-6 border-t border-outline-variant/20">
+<div>
+<span class="block font-label text-[10px] text-on-surface-variant">Rare Bonus</span>
+<span class="font-headline text-lg text-primary">14.2k</span>
+</div>
+<div>
+<span class="block font-label text-[10px] text-on-surface-variant">Score</span>
+<span class="font-headline text-lg text-primary">982</span>
+</div>
+<div>
+<span class="block font-label text-[10px] text-on-surface-variant">Completion</span>
+<span class="font-headline text-lg text-primary">94%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Rank 1 -->
+<div class="order-1 md:order-2">
+<div class="bg-surface-container-highest p-10 pt-16 relative flex flex-col items-center text-center shadow-lg transform md:-translate-y-4">
+<div class="absolute -top-12 left-1/2 -translate-x-1/2">
+<div class="relative">
+<img class="w-32 h-32 rounded-full object-cover border-4 border-primary shadow-xl" data-alt="distinguished older gentleman with grey hair and beard, wearing a classic blazer, warm natural lighting, archival library background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOOazT_5CsQO3NpLLXE5DlxVxmGjwyMfCkrOW6t0LZnZPQbpN2pEl5ID--nvDzwTSCtlqyVXnDrvqZNQtxsDFRN-hcXhh0lrn-2uCTiKmKLZDeEfXVSceSChdA5MaMmq9N7IRDQ2CAU-iKabWNC6qZOrlhwv4MjEbEZlqQJG5tVAZmKkXpiBDwf17Vn2n4i6nxoR9Cry1JbojbyYPgc7WP_PkLYShqOXq-mO8ofQQlRrFlxmVXhc-PdjH9R6CguGW2nJDA7ZedMy8S"/>
+<div class="absolute -bottom-2 right-2 bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center font-headline text-lg font-bold">1</div>
+<span class="absolute -top-6 -right-6 material-symbols-outlined text-primary scale-150" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-2">Vikramaditya S.</h3>
+<p class="font-label text-[11px] uppercase tracking-[0.2em] text-primary font-bold mb-6">Senior Numismatic Scholar</p>
+<div class="w-full space-y-4">
+<div class="flex justify-between items-center text-sm border-b border-primary/10 pb-2">
+<span class="text-on-surface-variant">Historical Contribution</span>
+<span class="font-bold text-primary">2,480 pts</span>
+</div>
+<div class="flex justify-between items-center text-sm border-b border-primary/10 pb-2">
+<span class="text-on-surface-variant">Rare Items Authenticated</span>
+<span class="font-bold text-primary">42</span>
+</div>
+<div class="pt-2">
+<div class="w-full bg-surface-variant h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[98%]"></div>
+</div>
+<span class="font-label text-[9px] uppercase tracking-wider mt-2 block text-primary">Challenge Mastered • 98%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Rank 3 -->
+<div class="order-3 self-end">
+<div class="bg-surface-container-low p-8 pt-12 relative flex flex-col items-center text-center">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2">
+<img class="w-24 h-24 rounded-full object-cover border-4 border-surface-variant shadow-sm" data-alt="portrait of a young woman with a creative and focused look, soft shadows, warm natural light, high-end photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXJlNizsAF03HIKoQHoCwtHkEkhG9HWFtiPckq4PT96VYdaCaXwdTN3WggXFN6ZEXS8GcrPqHKuHkqopHRpW7ZhiiWnlAMblXGk_gwfWFKNAwtmmlclQPFSV51XB0BhpRgh8cu0kWlWNPsrKt8tNfZNzU1G7-CtG3XfxV0SbX-EJlOr9giDxNXm86VPu56DwaMqag09cNT8zAP6GMaeeHS5TTP_SX69rVqpF1yGl7j8I2Iiwm0Vb_4L1oVWV8N9sAN8ujhwBFCVick"/>
+<div class="absolute -bottom-2 right-0 bg-[#a67c52] text-white w-8 h-8 rounded-full flex items-center justify-center font-headline text-sm font-bold">3</div>
+</div>
+<h3 class="font-headline text-xl font-semibold mb-1">Meera Kulkarni</h3>
+<p class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mb-4">Epigraphy Researcher</p>
+<div class="w-full grid grid-cols-3 gap-2 mt-4 pt-6 border-t border-outline-variant/20">
+<div>
+<span class="block font-label text-[10px] text-on-surface-variant">Rare Bonus</span>
+<span class="font-headline text-lg text-primary">8.5k</span>
+</div>
+<div>
+<span class="block font-label text-[10px] text-on-surface-variant">Score</span>
+<span class="font-headline text-lg text-primary">844</span>
+</div>
+<div>
+<span class="block font-label text-[10px] text-on-surface-variant">Completion</span>
+<span class="font-headline text-lg text-primary">89%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- List of Honorable Curators -->
+<div class="lg:col-span-8 space-y-4">
+<div class="flex items-center justify-between px-6 mb-6">
+<h4 class="font-headline text-lg font-semibold">Honorable Curators</h4>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant opacity-60">Global Rankings</span>
+</div>
+<!-- Leaderboard Item 4 -->
+<div class="group bg-surface-container-lowest hover:bg-surface-container transition-colors duration-400 p-6 flex items-center gap-6">
+<div class="font-headline text-2xl font-bold text-outline-variant group-hover:text-primary transition-colors w-8">4</div>
+<img class="w-16 h-16 rounded-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="portrait of a focused man in business casual, clean lighting, blurred architectural background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBycmeijrVeZQmguBpvRgE3zwgFaL9wZcEw5U4SdBomlVcV-xcAESpF2aj_tgUkfuc0A5-8EPe7Cr0XYfVYNet8QF1B3jZxRArxJsjQdkk-OYxg5v0Qa8ZZZbWG83lmBrS9Xx8FAwcx5n2_LpAYMrec8rOKrDhRS_XOkbpz3BPVzfOhTcTcx3d0XmmAGPttgj9aP3beBDAKwX-sKy9qpSSLnCWXbcsY3saJL5Tqi4ko5UfFfz6l8ALqVgtaeYxHy7opQYSiUAyJSPP6"/>
+<div class="flex-grow">
+<div class="flex items-center gap-2 mb-1">
+<h5 class="font-headline font-semibold text-lg">Rajesh Malhotra</h5>
+<span class="bg-surface-variant px-2 py-0.5 rounded-sm font-label text-[9px] uppercase tracking-wider text-on-surface-variant">Vedic Historian</span>
+</div>
+<div class="flex gap-4 items-center">
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span class="font-label text-[10px] uppercase tracking-tighter">Verified Curator</span>
+</div>
+<div class="h-3 w-[1px] bg-outline-variant"></div>
+<span class="font-label text-[10px] uppercase tracking-tighter text-on-surface-variant">82% Completion</span>
+</div>
+</div>
+<div class="text-right">
+<div class="font-headline text-xl text-primary">792</div>
+<div class="font-label text-[9px] uppercase tracking-widest opacity-50">Contribution</div>
+</div>
+</div>
+<!-- Leaderboard Item 5 -->
+<div class="group bg-surface-container-lowest hover:bg-surface-container transition-colors duration-400 p-6 flex items-center gap-6">
+<div class="font-headline text-2xl font-bold text-outline-variant group-hover:text-primary transition-colors w-8">5</div>
+<img class="w-16 h-16 rounded-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="professional woman with expressive eyes and modern spectacles, soft neutral lighting, museum gallery background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUCFLyhKKvFz1X_NiHt9-C-xnzrDM3Rtgqvim742uletx4nXIXSmCHwgvgs882WFFV0TucclkpvJsCYy9jJZUGcBOaHPA7B-XiYU1DmqUIv8Lz9zcDMkz6sWjAFxVZii0uFQ4EemWpb1Htw9wUywlFRz64YlfMIsowEn4CVye01-iXXOY6JobKo6mEFZ3Tu_68kh7QtMN3xshPaN0nVwMFKcE7L93lXFILDrYgE15MqduJKdKVd4v_UMty50CBHPEtzwUVKCYRAr9K"/>
+<div class="flex-grow">
+<div class="flex items-center gap-2 mb-1">
+<h5 class="font-headline font-semibold text-lg">Priya Desai</h5>
+<span class="bg-surface-variant px-2 py-0.5 rounded-sm font-label text-[9px] uppercase tracking-wider text-on-surface-variant">Textile Scholar</span>
+</div>
+<div class="flex gap-4 items-center">
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">auto_stories</span>
+<span class="font-label text-[10px] uppercase tracking-tighter">Provenance Expert</span>
+</div>
+<div class="h-3 w-[1px] bg-outline-variant"></div>
+<span class="font-label text-[10px] uppercase tracking-tighter text-on-surface-variant">78% Completion</span>
+</div>
+</div>
+<div class="text-right">
+<div class="font-headline text-xl text-primary">765</div>
+<div class="font-label text-[9px] uppercase tracking-widest opacity-50">Contribution</div>
+</div>
+</div>
+<!-- Leaderboard Item 6 -->
+<div class="group bg-surface-container-lowest hover:bg-surface-container transition-colors duration-400 p-6 flex items-center gap-6 border-l-4 border-primary">
+<div class="font-headline text-2xl font-bold text-primary w-8">6</div>
+<div class="relative">
+<img class="w-16 h-16 rounded-full object-cover" data-alt="portrait of a professional male curator with a warm expression, soft warm rim lighting, elegant dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBosXWVtNhT19sOsZCian6KiKTe1cMV8Z-CQxMNPBL_tA4XOXp-eRuN2f1bkMlxMEehCSrxih-QdMG47SivvOUHcksoOqLxjMNJEKXwMlQUmKms3dbOgqQwoUBOF7ob5P2gVITgxXbkVGU5DOTJAL_DqFYo7TOHMKaBh1oJTXhZ44wMbvtRsMtOKqWCR8OJuC0acU2YMLi8mI9CfAOH2D63kpcJdGPjOdt-L-1kZDqmJYva-3aqnf_4BYDJRamNBWa3iwf12mVcjWoD"/>
+<span class="absolute -top-1 -right-1 w-4 h-4 bg-primary border-2 border-surface-container-lowest rounded-full"></span>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-2 mb-1">
+<h5 class="font-headline font-semibold text-lg">You (Arjun V.)</h5>
+<span class="bg-primary-container px-2 py-0.5 rounded-sm font-label text-[9px] uppercase tracking-wider text-on-primary-container">Junior Curator</span>
+</div>
+<div class="flex gap-4 items-center">
+<span class="font-label text-[10px] uppercase tracking-tighter text-primary font-bold">Next Rank: 35 pts away</span>
+</div>
+</div>
+<div class="text-right">
+<div class="font-headline text-xl text-primary">730</div>
+<div class="font-label text-[9px] uppercase tracking-widest opacity-50">Contribution</div>
+</div>
+</div>
+</div>
+<!-- Stats & Badges Sidebar -->
+<div class="lg:col-span-4 space-y-8">
+<!-- Achievement Panel -->
+<div class="bg-surface-container-high p-8">
+<h4 class="font-label text-[11px] font-bold uppercase tracking-[0.2em] text-primary mb-8">Scholarly Badges</h4>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-background flex items-center justify-center rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div>
+<h6 class="font-headline text-sm font-bold">Museum Patron</h6>
+<p class="text-[11px] text-on-surface-variant leading-tight">Verified artifacts in over 5 state collections.</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-background flex items-center justify-center rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings: 'FILL' 1;">history_edu</span>
+</div>
+<div>
+<h6 class="font-headline text-sm font-bold">Script Decipherer</h6>
+<p class="text-[11px] text-on-surface-variant leading-tight">Mastery over Brahmi and Kharosthi inscriptions.</p>
+</div>
+</div>
+<div class="flex items-center gap-4 opacity-40 grayscale">
+<div class="w-12 h-12 bg-background flex items-center justify-center rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl">castle</span>
+</div>
+<div>
+<h6 class="font-headline text-sm font-bold">Fortress Archivist</h6>
+<p class="text-[11px] text-on-surface-variant leading-tight">Lock this badge by completing the Rajpur series.</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-10 border border-primary text-primary font-label text-[10px] uppercase tracking-widest py-3 hover:bg-primary hover:text-white transition-all duration-400">View All Achievements</button>
+</div>
+<!-- Trust Indicators -->
+<div class="bg-white/40 p-8 border border-outline-variant/30 backdrop-blur-sm">
+<h4 class="font-label text-[11px] font-bold uppercase tracking-[0.2em] text-on-surface-variant mb-6">Verification Protocol</h4>
+<div class="flex items-start gap-4 mb-4">
+<span class="material-symbols-outlined text-primary text-sm">gavel</span>
+<p class="text-[11px] text-on-surface-variant leading-relaxed italic">All rankings are peer-reviewed by the Academic Council of Indian Numismatics to ensure provenance accuracy.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Navigation Shell (BottomNavBar) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center pt-3 pb-8 px-2 bg-[#fdfcf0]/90 dark:bg-[#121212]/90 backdrop-blur-2xl z-50 rounded-t-xl shadow-[0_-4px_20px_rgba(119,90,25,0.06)] border-t border-[#775a19]/10">
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60">
+<span class="material-symbols-outlined">home_storage</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60">
+<span class="material-symbols-outlined">account_balance</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60">
+<span class="material-symbols-outlined">book_2</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Collection</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#775a19] dark:text-[#c5a059] bg-[#775a19]/10 rounded-lg py-1 px-3">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Rank</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60">
+<span class="material-symbols-outlined">workspace_premium</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Showcase</span>
+</div>
+</nav>
+</body></html>

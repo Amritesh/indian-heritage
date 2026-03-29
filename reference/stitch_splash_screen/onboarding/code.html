@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Digital Curator - Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&amp;family=Manrope:wght@400;500;600&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#f1edeb",
+              "on-surface": "#1c1b1b",
+              "on-tertiary-fixed-variant": "#5b4137",
+              "surface-variant": "#e5e2e0",
+              "on-secondary-fixed": "#410000",
+              "tertiary-fixed": "#ffdbce",
+              "on-primary-fixed": "#261900",
+              "on-secondary-container": "#650000",
+              "background": "#fdf8f6",
+              "on-primary-fixed-variant": "#5d4201",
+              "surface-container-low": "#f7f3f1",
+              "on-error-container": "#93000a",
+              "error": "#ba1a1a",
+              "primary-fixed": "#ffdea5",
+              "primary-container": "#c5a059",
+              "primary-fixed-dim": "#e9c176",
+              "outline": "#7f7667",
+              "on-tertiary-fixed": "#2b160f",
+              "outline-variant": "#d1c5b4",
+              "tertiary-container": "#c19e92",
+              "surface-bright": "#fdf8f6",
+              "on-secondary-fixed-variant": "#8f0f07",
+              "on-primary-container": "#4e3700",
+              "surface": "#fdf8f6",
+              "secondary-fixed-dim": "#ffb4a8",
+              "secondary": "#b22b1d",
+              "surface-container-highest": "#e5e2e0",
+              "inverse-primary": "#e9c176",
+              "on-surface-variant": "#4e4639",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "surface-tint": "#775a19",
+              "surface-container-lowest": "#ffffff",
+              "inverse-on-surface": "#f4f0ee",
+              "tertiary-fixed-dim": "#e4beb2",
+              "secondary-container": "#fe624e",
+              "secondary-fixed": "#ffdad4",
+              "surface-dim": "#ddd9d7",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#4e352c",
+              "surface-container-high": "#ebe7e5",
+              "tertiary": "#75584d",
+              "on-primary": "#ffffff",
+              "on-background": "#1c1b1b",
+              "on-secondary": "#ffffff",
+              "primary": "#775a19",
+              "inverse-surface": "#31302f"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Manrope"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24
+    }
+.parchment-texture {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuB33rmhNTjOVLV0OgkuPDFka5ZhzlxbqsLEeKY3-fZzY44uYky8kdz7X83bpIbJ0IpFuGVikSWQB2_82vo_SsCJ-bSjA1N3uLyL6RrB2JMUaraMS4aJykW3VyLEywuCo9Q-Y_VYDZAcZbfaZRazyxS7CJ6pE5UnCiN9fHAhH8HYihaeH0W-ebiMo4GAAhJaiSP9V3poVLpe4epMCMLwacImtdOOZU1T2Dp73tPLU5Cc_cUv2n4fp-AHDU4ngabkvir0_Tec2gltReNr);
+    opacity: 0.03;
+    pointer-events: none
+    }
+.antique-gradient {
+    background: radial-gradient(circle at center, #c5a059 0%, #775a19 100%)
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body min-h-screen relative selection:bg-primary-fixed">
+<!-- Subtle Parchment Texture Overlay -->
+<div class="fixed inset-0 parchment-texture z-0"></div>
+<!-- Top Navigation Anchor -->
+<header class="sticky top-0 z-50 bg-[#fdfcf0]/80 backdrop-blur-xl shadow-sm px-6 py-4 flex justify-between items-center w-full">
+<div class="font-headline text-[#775a19] italic text-xl font-semibold tracking-tight">The Digital Curator</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8 items-center">
+<span class="font-label text-[10px] font-medium uppercase tracking-wider text-primary">Onboarding</span>
+<span class="font-label text-[10px] font-medium uppercase tracking-wider text-on-surface-variant opacity-50">Profile</span>
+<span class="font-label text-[10px] font-medium uppercase tracking-wider text-on-surface-variant opacity-50">Verification</span>
+</div>
+<button class="material-symbols-outlined text-primary">close</button>
+</div>
+</header>
+<main class="relative z-10 max-w-6xl mx-auto px-6 py-12 lg:py-20 flex flex-col items-center">
+<!-- Step Indicator -->
+<div class="w-full max-w-md mb-16">
+<div class="flex justify-between mb-4">
+<span class="font-label text-[10px] font-bold uppercase tracking-[0.1em] text-primary">Scholarly Intake: Step 01</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant">25% Complete</span>
+</div>
+<div class="h-[2px] w-full bg-outline-variant/30 rounded-full overflow-hidden">
+<div class="h-full w-1/4 bg-primary transition-all duration-700"></div>
+</div>
+</div>
+<!-- Section 1: Collection Archetype (Bento Grid Style) -->
+<section class="w-full space-y-12 mb-24">
+<div class="text-center space-y-4 max-w-2xl mx-auto">
+<h1 class="font-headline text-4xl md:text-5xl text-on-surface font-bold tracking-tight">What do you curate?</h1>
+<p class="text-on-surface-variant text-lg font-light italic">Select the artifacts that define your scholarly focus.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+<!-- Coin Card -->
+<div class="group cursor-pointer bg-surface-container-high p-6 flex flex-col items-center justify-center gap-4 transition-all duration-400 hover:bg-surface-container-highest hover:shadow-lg border border-transparent hover:border-primary/20">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">toll</span>
+</div>
+<span class="font-label text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">Coins</span>
+</div>
+<!-- Stamp Card -->
+<div class="group cursor-pointer bg-surface-container-high p-6 flex flex-col items-center justify-center gap-4 transition-all duration-400 hover:bg-surface-container-highest hover:shadow-lg border border-transparent hover:border-primary/20">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">branding_watermark</span>
+</div>
+<span class="font-label text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">Stamps</span>
+</div>
+<!-- Notes Card -->
+<div class="group cursor-pointer bg-surface-container-high p-6 flex flex-col items-center justify-center gap-4 transition-all duration-400 hover:bg-surface-container-highest hover:shadow-lg border border-transparent hover:border-primary/20">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">payments</span>
+</div>
+<span class="font-label text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">Notes</span>
+</div>
+<!-- Postcards Card -->
+<div class="group cursor-pointer bg-surface-container-high p-6 flex flex-col items-center justify-center gap-4 transition-all duration-400 hover:bg-surface-container-highest hover:shadow-lg border border-transparent hover:border-primary/20">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">mail</span>
+</div>
+<span class="font-label text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">Postcards</span>
+</div>
+<!-- Books Card -->
+<div class="group cursor-pointer bg-surface-container-high p-6 flex flex-col items-center justify-center gap-4 transition-all duration-400 hover:bg-surface-container-highest hover:shadow-lg border border-transparent hover:border-primary/20">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">menu_book</span>
+</div>
+<span class="font-label text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">Books</span>
+</div>
+<!-- Mixed Card -->
+<div class="group cursor-pointer bg-surface-container-high p-6 flex flex-col items-center justify-center gap-4 transition-all duration-400 hover:bg-surface-container-highest hover:shadow-lg border border-transparent hover:border-primary/20">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">dashboard</span>
+</div>
+<span class="font-label text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">Mixed</span>
+</div>
+</div>
+</section>
+<!-- Section 2: Experience & Intent (Asymmetric Layout) -->
+<div class="grid lg:grid-cols-12 gap-12 w-full mb-24">
+<!-- Experience Level (Left Column) -->
+<section class="lg:col-span-5 space-y-8">
+<div class="space-y-2">
+<h2 class="font-headline text-2xl font-semibold text-on-surface">Experience Level</h2>
+<p class="text-on-surface-variant text-sm italic">How long have you walked these halls?</p>
+</div>
+<div class="space-y-4">
+<div class="p-5 bg-surface-container-low border-l-2 border-primary/20 hover:border-primary transition-colors cursor-pointer group flex justify-between items-center">
+<div>
+<div class="font-body font-semibold text-on-surface">Beginner</div>
+<div class="text-xs text-on-surface-variant mt-1">Starting my first discovery.</div>
+</div>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity">check_circle</span>
+</div>
+<div class="p-5 bg-surface-container-low border-l-2 border-primary/20 hover:border-primary transition-colors cursor-pointer group flex justify-between items-center">
+<div>
+<div class="font-body font-semibold text-on-surface">Enthusiast</div>
+<div class="text-xs text-on-surface-variant mt-1">Acquiring pieces with purpose.</div>
+</div>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity">check_circle</span>
+</div>
+<div class="p-5 bg-surface-container-low border-l-2 border-primary transition-colors cursor-pointer group flex justify-between items-center ring-1 ring-primary/10">
+<div>
+<div class="font-body font-semibold text-primary">Serious Collector</div>
+<div class="text-xs text-on-surface-variant mt-1">Building a legacy collection.</div>
+</div>
+<span class="material-symbols-outlined text-primary opacity-100">check_circle</span>
+</div>
+<div class="p-5 bg-surface-container-low border-l-2 border-primary/20 hover:border-primary transition-colors cursor-pointer group flex justify-between items-center">
+<div>
+<div class="font-body font-semibold text-on-surface">Dealer / Expert</div>
+<div class="text-xs text-on-surface-variant mt-1">Trading and authenticating history.</div>
+</div>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity">check_circle</span>
+</div>
+</div>
+</section>
+<!-- Goals (Right Column) -->
+<section class="lg:col-span-7 space-y-8">
+<div class="space-y-2">
+<h2 class="font-headline text-2xl font-semibold text-on-surface">Primary Intentions</h2>
+<p class="text-on-surface-variant text-sm italic">What are your archival goals for this sanctuary?</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<div class="p-4 bg-surface-container-highest flex items-center gap-4 group cursor-pointer hover:bg-primary hover:text-on-primary transition-all duration-300">
+<span class="material-symbols-outlined text-xl">inventory_2</span>
+<span class="font-label text-xs uppercase font-bold tracking-widest">Catalog Collection</span>
+</div>
+<div class="p-4 bg-surface-container-highest flex items-center gap-4 group cursor-pointer hover:bg-primary hover:text-on-primary transition-all duration-300">
+<span class="material-symbols-outlined text-xl">history_edu</span>
+<span class="font-label text-xs uppercase font-bold tracking-widest">Learn History</span>
+</div>
+<div class="p-4 bg-surface-container-highest flex items-center gap-4 group cursor-pointer hover:bg-primary hover:text-on-primary transition-all duration-300">
+<span class="material-symbols-outlined text-xl">military_tech</span>
+<span class="font-label text-xs uppercase font-bold tracking-widest">Join Challenges</span>
+</div>
+<div class="p-4 bg-surface-container-highest border border-primary/30 flex items-center gap-4 group cursor-pointer bg-primary-container/10">
+<span class="material-symbols-outlined text-xl text-primary">workspace_premium</span>
+<span class="font-label text-xs uppercase font-bold tracking-widest text-primary">Showcase Items</span>
+</div>
+<div class="p-4 bg-surface-container-highest flex items-center gap-4 group cursor-pointer hover:bg-primary hover:text-on-primary transition-all duration-300">
+<span class="material-symbols-outlined text-xl">swap_horiz</span>
+<span class="font-label text-xs uppercase font-bold tracking-widest">Trade &amp; Swap</span>
+</div>
+<div class="p-4 bg-surface-container-highest flex items-center gap-4 group cursor-pointer hover:bg-primary hover:text-on-primary transition-all duration-300">
+<span class="material-symbols-outlined text-xl">search_insights</span>
+<span class="font-label text-xs uppercase font-bold tracking-widest">Track Rarity</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Section 3: Eras & Themes (Visual Chips) -->
+<section class="w-full space-y-8 mb-32">
+<div class="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-outline-variant/20 pb-6">
+<div class="space-y-2">
+<h2 class="font-headline text-2xl font-semibold text-on-surface">Epochs of Interest</h2>
+<p class="text-on-surface-variant text-sm italic">Select the timeframes and themes that resonate with your pursuit.</p>
+</div>
+<div class="font-label text-[10px] uppercase font-bold text-primary tracking-widest">Multiple Selection Enabled</div>
+</div>
+<div class="flex flex-wrap gap-3">
+<!-- Epoch Chips -->
+<button class="px-5 py-2.5 rounded-sm bg-surface-container-high text-on-surface-variant font-label text-[11px] uppercase font-bold tracking-wider hover:bg-outline-variant/30 transition-colors border border-outline-variant/10">Mauryan Empire</button>
+<button class="px-5 py-2.5 rounded-sm bg-primary text-on-primary font-label text-[11px] uppercase font-bold tracking-wider shadow-md">Mughal Era</button>
+<button class="px-5 py-2.5 rounded-sm bg-surface-container-high text-on-surface-variant font-label text-[11px] uppercase font-bold tracking-wider hover:bg-outline-variant/30 transition-colors border border-outline-variant/10">British Raj</button>
+<button class="px-5 py-2.5 rounded-sm bg-surface-container-high text-on-surface-variant font-label text-[11px] uppercase font-bold tracking-wider hover:bg-outline-variant/30 transition-colors border border-outline-variant/10">Post-Independence</button>
+<button class="px-5 py-2.5 rounded-sm bg-primary text-on-primary font-label text-[11px] uppercase font-bold tracking-wider shadow-md">Maratha Confederacy</button>
+<button class="px-5 py-2.5 rounded-sm bg-surface-container-high text-on-surface-variant font-label text-[11px] uppercase font-bold tracking-wider hover:bg-outline-variant/30 transition-colors border border-outline-variant/10">Gupta Dynasty</button>
+<button class="px-5 py-2.5 rounded-sm bg-surface-container-high text-on-surface-variant font-label text-[11px] uppercase font-bold tracking-wider hover:bg-outline-variant/30 transition-colors border border-outline-variant/10">Princely States</button>
+<button class="px-5 py-2.5 rounded-sm bg-surface-container-high text-on-surface-variant font-label text-[11px] uppercase font-bold tracking-wider hover:bg-outline-variant/30 transition-colors border border-outline-variant/10">Ancient Metallurgy</button>
+<button class="px-5 py-2.5 rounded-sm bg-surface-container-high text-on-surface-variant font-label text-[11px] uppercase font-bold tracking-wider hover:bg-outline-variant/30 transition-colors border border-outline-variant/10">Sacred Symbols</button>
+</div>
+</section>
+<!-- Fixed Footer Navigation -->
+<footer class="fixed bottom-0 left-0 w-full bg-white/60 backdrop-blur-2xl border-t border-primary/5 py-6 px-12 z-50">
+<div class="max-w-6xl mx-auto flex justify-between items-center">
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors group">
+<span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
+<span class="font-label text-[10px] uppercase font-bold tracking-[0.2em]">Previous</span>
+</button>
+<div class="hidden md:flex gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-outline-variant"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-outline-variant"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-outline-variant"></div>
+</div>
+<button class="antique-gradient px-12 py-4 rounded-sm shadow-xl flex items-center gap-3 group">
+<span class="font-label text-[11px] uppercase font-bold tracking-[0.25em] text-white">Proceed to Gallery</span>
+<span class="material-symbols-outlined text-white text-lg group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</footer>
+</main>
+<!-- Background Decoration -->
+<div class="fixed top-20 right-[-10%] opacity-10 pointer-events-none select-none">
+<img class="w-[600px] h-auto rotate-12 grayscale brightness-50" data-alt="large translucent silhouette of an ancient indian gold coin with intricate sanskrit engravings and floral patterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrQEsEkZH30c_s5jskAEhOA63RlOF9YhH15JRiatwxAbzIxMyB2AvK1p31AAcqOwt4d6Uv5FH4ttwt5Zd66jZl4trGWPsdQU_EwN7J1MB-4Jf9Bm9uOEPZK4NWyB0f_1847yXyKW0kZODPPGrB0YbtlZAHufY30T-PclQXoYS1019WlbAaJLj8KSJdhFnQeAZuaprSCuTny4XkLcABloSBT7apJrLBN9Xw5Aar3s5Icbhx6LpTVBF1meQguWkx7SFd32ZaPGAj03nM"/>
+</div>
+<!-- Scroll Indicator Overlay -->
+<div class="fixed bottom-32 right-12 hidden lg:flex flex-col items-center gap-4 opacity-30">
+<span class="font-label text-[9px] uppercase font-bold tracking-widest [writing-mode:vertical-rl]">Scroll to Explore</span>
+<div class="w-[1px] h-16 bg-primary"></div>
+</div>
+</body></html>

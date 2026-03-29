@@ -1,9 +1,13 @@
 {
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
   "hosting": {
-    "public": "frontend/build",
-    "predeploy": [
-      "cd frontend && npm install && npm run build"
-    ],
+    "public": "frontend/dist",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -11,21 +15,9 @@
     ],
     "rewrites": [
       {
-        "source": "/api/**",
-        "function": "app"
-      },
-      {
-        "source": "/data/**",
-        "function": "app"
-      },
-      {
         "source": "**",
         "destination": "/index.html"
       }
     ]
-  },
-  "functions": {
-    "source": "backend",
-    "runtime": "nodejs18"
   }
 }

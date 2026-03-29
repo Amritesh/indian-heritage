@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Digital Curator - Add Heritage Item</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container": "#f1edeb",
+                        "on-surface": "#1c1b1b",
+                        "on-tertiary-fixed-variant": "#5b4137",
+                        "surface-variant": "#e5e2e0",
+                        "on-secondary-fixed": "#410000",
+                        "tertiary-fixed": "#ffdbce",
+                        "on-primary-fixed": "#261900",
+                        "on-secondary-container": "#650000",
+                        "background": "#fdf8f6",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-container-low": "#f7f3f1",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#ffdea5",
+                        "primary-container": "#c5a059",
+                        "primary-fixed-dim": "#e9c176",
+                        "outline": "#7f7667",
+                        "on-tertiary-fixed": "#2b160f",
+                        "outline-variant": "#d1c5b4",
+                        "tertiary-container": "#c19e92",
+                        "surface-bright": "#fdf8f6",
+                        "on-secondary-fixed-variant": "#8f0f07",
+                        "on-primary-container": "#4e3700",
+                        "surface": "#fdf8f6",
+                        "secondary-fixed-dim": "#ffb4a8",
+                        "secondary": "#b22b1d",
+                        "surface-container-highest": "#e5e2e0",
+                        "inverse-primary": "#e9c176",
+                        "on-surface-variant": "#4e4639",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#775a19",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f4f0ee",
+                        "tertiary-fixed-dim": "#e4beb2",
+                        "secondary-container": "#fe624e",
+                        "secondary-fixed": "#ffdad4",
+                        "surface-dim": "#ddd9d7",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#4e352c",
+                        "surface-container-high": "#ebe7e5",
+                        "tertiary": "#75584d",
+                        "on-primary": "#ffffff",
+                        "on-background": "#1c1b1b",
+                        "on-secondary": "#ffffff",
+                        "primary": "#775a19",
+                        "inverse-surface": "#31302f"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif"],
+                        "body": ["Manrope"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.scrolling-grain {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDDZpgWguc1dMMO1VmzbiO4DphjzcmigaYQpW7ZLYT-9s0hsQrKdwKg1_hjncSERRSZtXN7ViiHoiXp8RMBCXo7GRLnBSxSOPKom4zQt8_gKrnwp5szvflZ-LgrIGgoReviEMZuDT1Ro0sL295ItcJw4h_aEa5skn8M7uBmm2UYYWSwfCksjGvystNi6ABt4lFc4m9WbgNFaD6pKk4sSTtW7f6viXEwu2Y0YGnURXBXlgKuVlx5GuhVkT3NoUwxcptIy1EmKbi9TO8t);
+    opacity: 0.03;
+    pointer-events: none
+    }
+.scan-line {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #775a19, transparent);
+    box-shadow: 0 0 15px #775a19;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<div class="fixed inset-0 scrolling-grain z-[100]"></div>
+<!-- TopAppBar -->
+<header class="bg-[#fdfcf0] dark:bg-[#121212] flex justify-between items-center px-6 py-4 w-full backdrop-blur-xl docked full-width top-0 sticky z-50 shadow-sm dark:shadow-none">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#775a19] cursor-pointer">arrow_back</span>
+<h1 class="font-headline font-semibold tracking-tight text-xl text-[#775a19] dark:text-[#c5a059]">Add New Acquisition</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="font-label text-[10px] font-medium uppercase tracking-wider text-[#775a19] bg-[#775a19]/10 px-3 py-1 rounded">Draft Saved</span>
+<span class="material-symbols-outlined text-[#775a19] dark:text-[#c5a059]">notifications</span>
+</div>
+</header>
+<div class="bg-[#e6e2d3] dark:bg-[#212121] h-[1px] w-full opacity-30"></div>
+<main class="max-w-5xl mx-auto px-6 py-12 pb-32">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Left Column: Acquisition Method & Preview -->
+<div class="lg:col-span-7 space-y-8">
+<!-- Step 1: Input Methods -->
+<section>
+<h2 class="font-headline text-2xl font-bold mb-6 flex items-center gap-2">
+<span class="text-secondary">01</span> Capture Artifact
+                    </h2>
+<div class="grid grid-cols-3 gap-4">
+<button class="flex flex-col items-center justify-center p-6 bg-surface-container-high rounded-xl border border-transparent hover:border-primary/30 transition-all group">
+<span class="material-symbols-outlined text-3xl mb-3 text-primary group-hover:scale-110 transition-transform">photo_camera</span>
+<span class="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant">Camera</span>
+</button>
+<button class="flex flex-col items-center justify-center p-6 bg-primary-container/10 rounded-xl border-2 border-primary/40 transition-all group">
+<span class="material-symbols-outlined text-3xl mb-3 text-primary group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">image</span>
+<span class="font-label text-xs font-bold uppercase tracking-widest text-primary">Gallery</span>
+</button>
+<button class="flex flex-col items-center justify-center p-6 bg-surface-container-high rounded-xl border border-transparent hover:border-primary/30 transition-all group">
+<span class="material-symbols-outlined text-3xl mb-3 text-primary group-hover:scale-110 transition-transform">edit_document</span>
+<span class="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant">Manual</span>
+</button>
+</div>
+</section>
+<!-- Step 2: Image Workspace & AI Scan -->
+<section class="relative group">
+<div class="aspect-[4/3] bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm border border-outline-variant/20 relative">
+<img class="w-full h-full object-cover" data-alt="Macro close-up of a weathered 18th-century silver Indian coin on a neutral linen background with soft side lighting highlighting its relief" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHTYRf-s3NxUe1u36n_Xo3Rh15RN0U63_TnC_h5wo2RpvOpe0CMu5jft6m2KRUKr40xVh6GMwcItSBaHQpAq80Fs7UuW5jiXEAuH8z6lf2PuuY6mAqW_Xvzk_FfgZxAgtLEt140Gm84EXWkxHWFYDrMAiJk1G2m3h2aV-VCMckvRCrp5SJ27BaIQJpQiOjC6G4kA-2rKHHvsvKqUQMv1tU88PUK8pli_Rjv3rbLTRPI-eihKPQAjURVJ1tMhEDnDiaOFwbLK-sHTHV"/>
+<!-- AI Scanning Animation Overlay -->
+<div class="absolute inset-0 bg-black/5 flex items-center justify-center">
+<div class="scan-line animate-[bounce_3s_infinite]"></div>
+<div class="absolute top-4 left-4 bg-primary/90 text-on-primary px-3 py-1.5 rounded-full flex items-center gap-2 text-sm font-medium backdrop-blur-md">
+<span class="material-symbols-outlined text-sm animate-pulse">neurology</span>
+                                AI Suggestion Active
+                            </div>
+</div>
+<!-- Workspace Controls -->
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-surface/90 backdrop-blur-xl px-6 py-3 rounded-full border border-primary/20 shadow-xl">
+<button class="flex items-center gap-2 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">crop</span>
+<span class="font-label text-[10px] font-bold uppercase">Crop</span>
+</button>
+<div class="w-px h-4 bg-outline-variant/30"></div>
+<button class="flex items-center gap-2 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">rotate_right</span>
+<span class="font-label text-[10px] font-bold uppercase">Rotate</span>
+</button>
+<div class="w-px h-4 bg-outline-variant/30"></div>
+<button class="flex items-center gap-2 text-secondary hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-lg">replay</span>
+<span class="font-label text-[10px] font-bold uppercase">Retake</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Scholarly Metadata & AI Match -->
+<div class="lg:col-span-5 space-y-8">
+<section>
+<h2 class="font-headline text-2xl font-bold mb-6 flex items-center gap-2">
+<span class="text-secondary">02</span> Scholarly Review
+                    </h2>
+<div class="space-y-6">
+<!-- AI Match Suggestion Card -->
+<div class="bg-primary-fixed/20 p-6 rounded-2xl border border-primary/20 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4">
+<span class="bg-primary text-on-primary text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded">94% Match</span>
+</div>
+<h3 class="font-label text-[10px] font-bold text-primary-container uppercase tracking-widest mb-1">Database Identification</h3>
+<p class="font-headline text-lg font-bold mb-3">Silver Rupee, Mughal Empire</p>
+<div class="flex gap-4 mb-4 text-sm opacity-80">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span> 1707–1712 CE</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">location_on</span> Shahjahanabad Mint</span>
+</div>
+<button class="w-full py-2 bg-primary text-on-primary font-label text-xs font-bold uppercase tracking-widest rounded-lg hover:opacity-90 transition-opacity">Apply All Metadata</button>
+</div>
+<!-- Manual Entry / OCR Corrections -->
+<div class="space-y-4">
+<div>
+<label class="font-label text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2 block">Artifact Title</label>
+<input class="w-full bg-surface-container-low border-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-colors font-body text-base" type="text" value="Mughal Silver Rupee - Shah Alam I"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="font-label text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2 block">Period / Era</label>
+<input class="w-full bg-surface-container-low border-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-colors font-body text-base" type="text" value="Early 18th Century"/>
+</div>
+<div>
+<label class="font-label text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2 block">Region</label>
+<input class="w-full bg-surface-container-low border-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-colors font-body text-base" type="text" value="Delhi Sultanate"/>
+</div>
+</div>
+<div>
+<label class="font-label text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2 block">Curatorial Notes</label>
+<textarea class="w-full bg-surface-container-low border-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-colors font-body text-base resize-none" rows="3">High-grade silver specimen. Inscriptions in Persian script remain legible. Minimal edge wear observed during preliminary scan.</textarea>
+</div>
+</div>
+<!-- Provenance Status -->
+<div class="bg-surface-container-high p-4 rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">verified</span>
+<div>
+<p class="font-label text-[11px] font-bold uppercase tracking-widest text-on-surface">Provenance Verified</p>
+<p class="text-[10px] text-on-surface-variant">Matched with Archive #IND-8821</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">chevron_right</span>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Bottom Action Bar (Contextual) -->
+<div class="fixed bottom-0 left-0 w-full bg-[#fdfcf0]/90 dark:bg-[#121212]/90 backdrop-blur-2xl border-t border-[#775a19]/10 p-6 flex justify-between items-center z-[60]">
+<div class="flex items-center gap-4">
+<button class="px-6 py-3 font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors">Discard</button>
+<button class="px-6 py-3 font-label text-xs font-bold uppercase tracking-widest text-primary border border-primary/30 rounded-lg hover:bg-primary/5 transition-colors">Save as Draft</button>
+</div>
+<button class="bg-[#775a19] text-[#fdfcf0] px-10 py-3 rounded-lg font-label text-xs font-bold uppercase tracking-[0.1em] hover:opacity-90 active:scale-95 transition-all shadow-lg flex items-center gap-3">
+            Publish to Archive
+            <span class="material-symbols-outlined text-sm">history_edu</span>
+</button>
+</div>
+<!-- BottomNavBar (Hidden on desktop as per Shell visibility rules) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center pt-3 pb-safe px-2 backdrop-blur-2xl bg-[#fdfcf0]/90 dark:bg-[#121212]/90 z-50 rounded-t-xl shadow-[0_-4px_20px_rgba(119,90,25,0.06)] border-t border-[#775a19]/10">
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 scale-95 active:scale-90 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined">home_storage</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 scale-95 active:scale-90 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined">account_balance</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#775a19] dark:text-[#c5a059] bg-[#775a19]/10 rounded-lg py-1 px-3 scale-95 active:scale-90 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Add</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 scale-95 active:scale-90 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Challenges</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 scale-95 active:scale-90 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined">workspace_premium</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Showcase</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,14 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /collections/{collectionId} {
+      allow read: if resource.data.enabled == true;
+      allow write: if false;
+    }
+
+    match /items/{itemId} {
+      allow read: if resource.data.published == true;
+      allow write: if false;
+    }
+  }
+}

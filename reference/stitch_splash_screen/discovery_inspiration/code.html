@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Digital Curator - Discovery &amp; Auction Inspiration</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;family=Manrope:wght@400;500;600;700&amp;family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#f1edeb",
+              "on-surface": "#1c1b1b",
+              "on-tertiary-fixed-variant": "#5b4137",
+              "surface-variant": "#e5e2e0",
+              "on-secondary-fixed": "#410000",
+              "tertiary-fixed": "#ffdbce",
+              "on-primary-fixed": "#261900",
+              "on-secondary-container": "#650000",
+              "background": "#fdf8f6",
+              "on-primary-fixed-variant": "#5d4201",
+              "surface-container-low": "#f7f3f1",
+              "on-error-container": "#93000a",
+              "error": "#ba1a1a",
+              "primary-fixed": "#ffdea5",
+              "primary-container": "#c5a059",
+              "primary-fixed-dim": "#e9c176",
+              "outline": "#7f7667",
+              "on-tertiary-fixed": "#2b160f",
+              "outline-variant": "#d1c5b4",
+              "tertiary-container": "#c19e92",
+              "surface-bright": "#fdf8f6",
+              "on-secondary-fixed-variant": "#8f0f07",
+              "on-primary-container": "#4e3700",
+              "surface": "#fdf8f6",
+              "secondary-fixed-dim": "#ffb4a8",
+              "secondary": "#b22b1d",
+              "surface-container-highest": "#e5e2e0",
+              "inverse-primary": "#e9c176",
+              "on-surface-variant": "#4e4639",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "surface-tint": "#775a19",
+              "surface-container-lowest": "#ffffff",
+              "inverse-on-surface": "#f4f0ee",
+              "tertiary-fixed-dim": "#e4beb2",
+              "secondary-container": "#fe624e",
+              "secondary-fixed": "#ffdad4",
+              "surface-dim": "#ddd9d7",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#4e352c",
+              "surface-container-high": "#ebe7e5",
+              "tertiary": "#75584d",
+              "on-primary": "#ffffff",
+              "on-background": "#1c1b1b",
+              "on-secondary": "#ffffff",
+              "primary": "#775a19",
+              "inverse-surface": "#31302f"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Manrope"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        display: inline-block;
+        line-height: 1;
+      }
+      body {
+        background-color: #fdf8f6;
+        background-image: radial-gradient(#775a1908 1px, transparent 1px);
+        background-size: 24px 24px;
+        color: #1c1b1b;
+      }
+      .glass-header {
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+      .archival-shadow {
+        box-shadow: 0 16px 40px -12px rgba(28, 27, 27, 0.06);
+      }
+      .ghost-border {
+        border: 1px solid rgba(209, 197, 180, 0.15);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 w-full bg-[#fdfcf0] dark:bg-[#121212] shadow-sm dark:shadow-none glass-header">
+<div class="flex justify-between items-center px-6 py-4 w-full backdrop-blur-xl">
+<div class="flex items-center gap-4">
+<button class="text-[#775a19] dark:text-[#c5a059] hover:bg-[#775a19]/5 transition-colors duration-400 p-2 rounded-lg">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-serif text-[#775a19] dark:text-[#c5a059] italic text-xl">The Digital Curator</h1>
+</div>
+<div class="flex items-center gap-3">
+<div class="hidden md:flex gap-6 items-center mr-8">
+<span class="font-label text-[10px] font-bold uppercase tracking-[0.05em] text-[#775a19] dark:text-[#c5a059] scale-105 border-b-2 border-[#775a19] pb-1">Explore</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-[0.05em] text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:bg-[#775a19]/5 transition-colors duration-400 px-2 py-1 rounded">Collection</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-[0.05em] text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:bg-[#775a19]/5 transition-colors duration-400 px-2 py-1 rounded">Showcase</span>
+</div>
+<button class="text-[#775a19] dark:text-[#c5a059] hover:bg-[#775a19]/5 transition-colors duration-400 p-2 rounded-lg">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</div>
+<div class="bg-[#e6e2d3] dark:bg-[#212121] h-[1px] w-full opacity-30"></div>
+</header>
+<main class="max-w-7xl mx-auto px-6 pt-12 pb-32">
+<!-- Hero Section: Curated Discovery -->
+<section class="relative mb-20">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
+<div class="lg:col-span-7">
+<span class="font-label text-sm uppercase tracking-widest text-primary mb-4 block">Weekly Masterpiece</span>
+<h2 class="font-headline text-5xl md:text-7xl font-semibold tracking-tight text-on-surface leading-tight mb-8">
+                        The Sovereignty of <br/>
+<span class="italic text-primary">Vijayanagara Gold</span>
+</h2>
+<p class="font-body text-lg text-on-surface-variant max-w-xl leading-relaxed mb-10">
+                        Unearthed from the hallowed grounds of Hampi, this rare 'Varaha' pagoda coin narrates the economic zenith of the 14th-century empire. A testament to artistic precision and imperial wealth.
+                    </p>
+<div class="flex gap-4">
+<button class="bg-primary text-on-primary px-8 py-4 rounded-md font-label uppercase text-xs tracking-widest font-bold flex items-center gap-3 archival-shadow hover:brightness-110 transition-all">
+                            View Provenance
+                            <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<button class="ghost-border px-8 py-4 rounded-md font-label uppercase text-xs tracking-widest font-bold text-primary hover:bg-primary/5 transition-all">
+                            Add to Wishlist
+                        </button>
+</div>
+</div>
+<div class="lg:col-span-5 relative">
+<div class="aspect-[4/5] bg-surface-container-high rounded-lg overflow-hidden archival-shadow group">
+<img class="w-full h-full object-cover grayscale-[20%] group-hover:scale-105 transition-transform duration-700" data-alt="Macro close-up of a gold ancient Indian coin with intricate deity engravings, warm dramatic museum lighting on dark textured background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvMyfqg8V43n3YJ9NNTfe82tvrt7BjCcoEt-0bDdPKhWJYEJkoZOm9vH_Q2AsnGzmlZR0kzjf5gx_X7a-S5HWdQMG-38f67Wni5lbVmG1XSWXWE97oos_mxn7YkyLJC2DoT6oQeY3poJv7VsfekU3Ei1lYT4F9hxQoVAy4FF9KtHWQmZf61wTyTpShhn__heZ2PEU_w7ak8jZXgHnN-OG-gbOKb05eKozwofhIKeTZU2YWegbVC_Wh3aQJMIK5Tg71bGzHhGepxhrT"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+<div class="absolute bottom-6 left-6 right-6 text-white">
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-secondary px-2 py-0.5 rounded-sm font-label text-[10px] tracking-widest uppercase">Verified Heritage</span>
+<span class="font-label text-[10px] tracking-widest uppercase opacity-80">Circa 1336 AD</span>
+</div>
+<p class="font-headline text-xl italic">The Ganda Berunda Sigil</p>
+</div>
+</div>
+<!-- Decorative Element -->
+<div class="absolute -top-6 -right-6 w-32 h-32 border border-primary/20 rounded-full hidden lg:block opacity-50"></div>
+</div>
+</div>
+</section>
+<!-- Market Highlights Bento Grid -->
+<section class="mb-24">
+<div class="flex justify-between items-end mb-10">
+<div>
+<h3 class="font-headline text-3xl font-bold text-on-surface mb-2">Market Highlights</h3>
+<p class="text-on-surface-variant font-body">Global movement of Indian antiquities this month.</p>
+</div>
+<button class="text-primary font-label text-xs uppercase tracking-widest font-bold flex items-center gap-2 group">
+                    View Market Report 
+                    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="trending_up">trending_up</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<!-- Large Feature Card -->
+<div class="md:col-span-2 md:row-span-2 bg-surface-container-low rounded-xl p-8 flex flex-col justify-between ghost-border">
+<div>
+<div class="flex justify-between items-start mb-12">
+<span class="material-symbols-outlined text-4xl text-secondary" data-icon="token">token</span>
+<div class="text-right">
+<p class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">Est. Growth</p>
+<p class="font-headline text-2xl text-on-secondary-fixed-variant font-bold">+18.4%</p>
+</div>
+</div>
+<h4 class="font-headline text-3xl font-semibold mb-4">Chola Bronzes <br/>Defy Estimates</h4>
+<p class="text-on-surface-variant leading-relaxed">Recent Christie's auction results show a 40% surge in demand for authenticated Chola period sculptures from the 11th century.</p>
+</div>
+<div class="mt-12 pt-6 border-t border-outline-variant/30 flex items-center gap-4">
+<img class="w-10 h-10 rounded-full grayscale" data-alt="Professional portrait of a senior art curator with scholarly attire" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-JhrmDFZN6XvLI72k4PIhslg9EUQWZODHFEnm_y1JA6xk2BsZINCPo9A0d24pq5peR8SLpEfFgvE5I-BeP2ZKutadO4PFhRIRRz3tof4hPsg8DKV4F5zeYVzW_A990_n48XHMSPlJt106cjT1W2gTx30iFTodiOgOvb1JlBOS-WVJvvnDKKQpDUCWAcfoG88q7xlyiHgubTwiN6YAWcVTLjG5Bj8ICCLix5xRsKFir13hD0gq4YWW86_7W9REdFm0wsj69hpfSnJi"/>
+<div>
+<p class="font-label text-[10px] uppercase font-bold tracking-tighter">Expert Analysis</p>
+<p class="text-sm font-body font-semibold">Dr. Ananya Iyer, Senior Curator</p>
+</div>
+</div>
+</div>
+<!-- Price Alert Card -->
+<div class="bg-surface-container-highest rounded-xl p-6 ghost-border">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary" data-icon="notifications_active">notifications_active</span>
+<span class="font-label text-[10px] uppercase font-bold tracking-widest">Live Alert</span>
+</div>
+<p class="font-body text-sm font-semibold mb-1">Mughal Miniature Set</p>
+<p class="font-headline text-xl text-primary">₹14.2 Cr</p>
+<p class="text-[10px] font-label text-on-surface-variant mt-4 uppercase">Sold: Sotheby's London</p>
+</div>
+<!-- Rare Discovery -->
+<div class="bg-primary-container/10 rounded-xl p-6 border border-primary/10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary" data-icon="explore">explore</span>
+<span class="font-label text-[10px] uppercase font-bold tracking-widest">Discovery</span>
+</div>
+<p class="font-body text-sm font-semibold mb-1">Gandhara Stucco Head</p>
+<p class="text-xs text-on-surface-variant leading-relaxed">Fragment found in private collection after 40 years of obscurity.</p>
+</div>
+<!-- Data Card -->
+<div class="md:col-span-2 bg-on-surface text-surface rounded-xl p-8 relative overflow-hidden">
+<div class="relative z-10 flex h-full items-center justify-between">
+<div class="max-w-[60%]">
+<h5 class="font-headline text-2xl mb-2">Heritage Index 2024</h5>
+<p class="text-surface-variant text-sm opacity-80">Track the appreciation of your personal heritage collection against global indices.</p>
+</div>
+<button class="bg-surface text-on-surface p-4 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="insert_chart">insert_chart</span>
+</button>
+</div>
+<div class="absolute bottom-0 right-0 opacity-10">
+<span class="material-symbols-outlined text-[160px]" data-icon="analytics">analytics</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Expert Picks / Auction Inspiration -->
+<section class="mb-24">
+<div class="flex items-center gap-4 mb-12">
+<div class="h-[1px] flex-grow bg-outline-variant/30"></div>
+<h3 class="font-headline text-2xl font-bold px-4">Expert Picks for the Week</h3>
+<div class="h-[1px] flex-grow bg-outline-variant/30"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+<!-- Pick 1 -->
+<div class="group cursor-pointer">
+<div class="aspect-[3/4] mb-6 overflow-hidden bg-surface-container relative">
+<img class="w-full h-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0 group-hover:scale-110" data-alt="Intricate Rajasthani miniature painting showing a royal procession with elephants and intricate floral borders" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGMpl_pwIvyRdD1tlV_I0XZh7Dk7TmfQYKSCvv6DrWHVCLXfd4aHLjlze1-ByTB90jJ5mJmJfuuP8WMmfNr23KP2qFOeP59bkqBUr8TGaofN5m431RwVCLKT2DHoU5dSJ2zOX5Mo6pV5517Nm0NGhNa5_mfpcUWao25o7Yg-4lHCJ394YD4i1tvbye1lOisZ-ZbGwNC9hhVgVW-9-zFUZJxEldOFZsr-JeWsJPEDTqTxUtdIqLjQ_KZFae2jEdIXdLvt5qsO7pTSFL"/>
+<div class="absolute top-4 left-4">
+<span class="bg-secondary text-white px-3 py-1 font-label text-[10px] uppercase tracking-widest rounded-sm">High Rarity</span>
+</div>
+</div>
+<h4 class="font-headline text-xl font-bold mb-2 group-hover:text-primary transition-colors">Marwar Procession Manuscript</h4>
+<p class="font-label text-[10px] uppercase tracking-[0.1em] text-on-surface-variant mb-4">Estimate: ₹45,00,000 — ₹60,00,000</p>
+<p class="font-body text-sm text-on-surface-variant line-clamp-2">A vivid representation of the Rajputana courts, featuring natural pigments and gold leaf detailing.</p>
+</div>
+<!-- Pick 2 -->
+<div class="group cursor-pointer">
+<div class="aspect-[3/4] mb-6 overflow-hidden bg-surface-container relative">
+<img class="w-full h-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0 group-hover:scale-110" data-alt="Antique Indian teak wood chest with heavy iron straps and intricate hand-carved floral patterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8l9fazURUI4_it9XbYRUWmTc0JdXyEo6KYv1a15o8IaDHeZOpedyuG2wMv9rc9pc0gIrJTzVtZekI4zxZjuhHKnuq5gJyZmbfid1hfiLMQ633T4tju-Qxt7wSqr_iF5vMQbooAaFNYldl8V8dmOt-KkNOa-1gnxVBBl2_FX37FAjP5WtJ9BJrKGbaxDoKCsafIlYzdU5ogTyJqZxh43l-eKNu1VqltTH9ldo-picVWAJdFtGwls9PA20FxpeztRhRm5x3xXY2Dzfq"/>
+<div class="absolute top-4 left-4">
+<span class="bg-primary text-white px-3 py-1 font-label text-[10px] uppercase tracking-widest rounded-sm">Museum Grade</span>
+</div>
+</div>
+<h4 class="font-headline text-xl font-bold mb-2 group-hover:text-primary transition-colors">Teak &amp; Iron Dowry Chest</h4>
+<p class="font-label text-[10px] uppercase tracking-[0.1em] text-on-surface-variant mb-4">Estimate: ₹1,20,000 — ₹2,00,000</p>
+<p class="font-body text-sm text-on-surface-variant line-clamp-2">19th-century Chettinad craft, notable for its massive iron strapping and hidden compartments.</p>
+</div>
+<!-- Pick 3 -->
+<div class="group cursor-pointer">
+<div class="aspect-[3/4] mb-6 overflow-hidden bg-surface-container relative">
+<img class="w-full h-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0 group-hover:scale-110" data-alt="Close up of a pashmina shawl with traditional kani weaving patterns in muted earth tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBa5pzHBjJIxZodvuGH209705-sYpyVbOXt5OhdCseP5xV7XkafXxGM8DgfoKW3zOxetz1kXsD_OegaJOexXAhl8E5Sar3L58TtYLvkiHzFqvOvIFu0u0cM85VD1GIQBo_qDfxrZ_2RuWJNMdv_RVfkd9zg74xIIcjyoqStrzsATft5pSXxmVD7kq46wLryVPy54iivS-jL7DMKZaWYJ8SCfBDD08lWLx_lrN0amYNM66ePU9C0YlWISLlA3Wi79lYweu2Rt6kd03nR"/>
+<div class="absolute top-4 left-4">
+<span class="bg-on-surface text-surface px-3 py-1 font-label text-[10px] uppercase tracking-widest rounded-sm">Curator's Choice</span>
+</div>
+</div>
+<h4 class="font-headline text-xl font-bold mb-2 group-hover:text-primary transition-colors">Hand-Woven Kani Pashmina</h4>
+<p class="font-label text-[10px] uppercase tracking-[0.1em] text-on-surface-variant mb-4">Estimate: ₹8,00,000 — ₹12,00,000</p>
+<p class="font-body text-sm text-on-surface-variant line-clamp-2">Authentic 18th-century weave from the Kashmir valley, featuring the iconic 'Boteh' motif.</p>
+</div>
+</div>
+</section>
+<!-- Historical Storytelling Snippets -->
+<section class="mb-12">
+<div class="bg-surface-container-low rounded-2xl p-8 md:p-16 flex flex-col md:flex-row gap-12 items-center">
+<div class="md:w-1/3">
+<div class="relative inline-block">
+<div class="absolute inset-0 border-2 border-primary/20 -m-4"></div>
+<img class="w-full h-auto rounded-none relative z-10" data-alt="Black and white archival photograph of an archaeological excavation site in India with people measuring artifacts" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsHMjycgO1nOC7QkSzSVZmQMEqGh8EvK_ElnMr3IQIkyrN1lQ9zLzls_YDI4yO76WzYh01RoJR5t47qHnRDj18xw50_oN73ROPTRfj77pI3PjxIkf2Wszv7Wu9uEPr2URkbIBcCsTZOs_yjW-gidDqc4aR0p5kHWeDZiQ2OFPq3hQhTBn23liNc_f-JwEGoOx0yFoqEeY6kHXlhjhhUFJ7UD20nu1H1Up0S-zfyPeM5MwtUEZQU2r8MlI3kATgMIJKwRjU22YIN7Qn"/>
+</div>
+</div>
+<div class="md:w-2/3">
+<span class="font-label text-xs uppercase tracking-[0.2em] text-secondary font-bold mb-6 block">Legacy Chronicles</span>
+<h3 class="font-headline text-4xl font-bold text-on-surface mb-6 leading-tight">The Lost Art of <br/>Bidriware Inlay</h3>
+<p class="font-body text-on-surface-variant leading-relaxed text-lg mb-8">
+                        Originating in the 14th century under the Bahmani Sultans, Bidriware is a unique metal handicraft from Bidar. The blackened alloy of zinc and copper, inlaid with thin sheets of pure silver, was once considered the ultimate symbol of Deccani nobility. Legend says the soil of Bidar fort, used in the oxidizing process, contains unique chemicals found nowhere else on earth.
+                    </p>
+<button class="flex items-center gap-4 text-primary font-label text-xs uppercase tracking-widest font-bold group">
+                        Discover the full story
+                        <div class="w-12 h-[1px] bg-primary group-hover:w-20 transition-all"></div>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center pt-3 pb-8 px-2 backdrop-blur-2xl bg-[#fdfcf0]/90 dark:bg-[#121212]/90 shadow-[0_-4px_20px_rgba(119,90,25,0.06)] z-50 rounded-t-xl border-t border-[#775a19]/10">
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home_storage">home_storage</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#775a19] dark:text-[#c5a059] bg-[#775a19]/10 rounded-lg py-1 px-3 transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="account_balance">account_balance</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="book_2">book_2</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Collection</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="military_tech">military_tech</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Challenges</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="workspace_premium">workspace_premium</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Showcase</span>
+</a>
+</nav>
+<!-- Floating Action Button - Only for Search/Discovery context -->
+<div class="fixed right-6 bottom-32 z-40">
+<button class="bg-primary text-on-primary w-14 h-14 rounded-full shadow-2xl flex items-center justify-center active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+</div>
+</body></html>

@@ -1,0 +1,20 @@
+export type CollectionRecord = {
+  id: string;
+  slug: string;
+  name: string;
+  displayName: string;
+  description: string;
+  longDescription: string;
+  heroEyebrow: string;
+  culture: string;
+  periodLabel: string;
+  sourceUrl: string;
+  heroImage: string;
+  thumbnailImage: string;
+  itemCount: number;
+  filterableMaterials: string[];
+  sortOrder: number;
+  status: string;
+  enabled: boolean;
+  lastSyncedAt?: string | null;
+};
