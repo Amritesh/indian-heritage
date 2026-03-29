@@ -6,7 +6,7 @@ export function AboutPage() {
       <section className="mb-16 text-center">
         <span className="eyebrow mb-4 block">About the Project</span>
         <h1 className="font-headline text-4xl md:text-5xl font-bold text-on-surface tracking-tight mb-6">
-          The Digital Curator
+          Indian Heritage Gallery
         </h1>
         <p className="max-w-2xl mx-auto text-on-surface-variant text-lg leading-relaxed">
           A museum-grade digital archive preserving Indian heritage numismatics

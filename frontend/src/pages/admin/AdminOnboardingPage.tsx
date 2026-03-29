@@ -1,16 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { createUserProfile } from '@/entities/user/api/userService';
 import { FormField } from '@/shared/ui/FormField';
 
 export function AdminOnboardingPage() {
-  const { firebaseUser, refreshProfile } = useAuth();
+  const { firebaseUser, userProfile, refreshProfile, loading } = useAuth();
   const navigate = useNavigate();
-  const [displayName, setDisplayName] = useState(firebaseUser?.displayName ?? '');
+  const [displayName, setDisplayName] = useState('');
   const [organization, setOrganization] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  // Pre-fill from existing profile if available
+  useEffect(() => {
+    if (userProfile) {
+      setDisplayName(userProfile.displayName || firebaseUser?.displayName || '');
+      setOrganization(userProfile.organization || '');
+    } else if (firebaseUser) {
+      setDisplayName(firebaseUser.displayName || '');
+    }
+  }, [userProfile, firebaseUser]);
+
+  // Redirect if already onboarded
+  useEffect(() => {
+    if (!loading && userProfile?.onboardingCompleted) {
+      navigate('/admin', { replace: true });
+    }
+  }, [loading, userProfile, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +37,7 @@ export function AdminOnboardingPage() {
       return;
     }
 
-    setLoading(true);
+    setSubmitting(true);
     setError('');
     try {
       await createUserProfile(firebaseUser.uid, firebaseUser.email ?? '', {
@@ -32,9 +49,17 @@ export function AdminOnboardingPage() {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create profile');
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <span className="material-symbols-outlined animate-spin text-4xl text-primary">progress_activity</span>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
@@ -90,10 +115,10 @@ export function AdminOnboardingPage() {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={submitting}
             className="btn-primary w-full justify-center disabled:opacity-50"
           >
-            {loading ? (
+            {submitting ? (
               <span className="material-symbols-outlined animate-spin text-lg">progress_activity</span>
             ) : (
               <>

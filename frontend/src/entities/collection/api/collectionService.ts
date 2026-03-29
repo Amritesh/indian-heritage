@@ -9,6 +9,8 @@ import {
 import { CollectionRecord } from '@/entities/collection/model/types';
 import { getFirestoreOrThrow } from '@/shared/services/firestore';
 import { gsUrlToHttps } from '@/shared/lib/formatters';
+import { firestore } from '@/shared/config/firebase';
+import { collectionRegistry } from '@/shared/config/collections';
 
 function mapCollectionSnapshot(data: Record<string, unknown>): CollectionRecord {
   return {
@@ -36,7 +38,35 @@ function mapCollectionSnapshot(data: Record<string, unknown>): CollectionRecord 
   };
 }
 
-export async function getCollections() {
+export async function getCollections(): Promise<CollectionRecord[]> {
+  if (!firestore) {
+    // Fallback to registry if Firebase is not configured
+    return collectionRegistry
+      .filter((entry) => entry.enabled)
+      .map((entry) => ({
+        id: entry.id,
+        slug: entry.slug,
+        name: entry.name,
+        displayName: entry.name,
+        description: entry.description,
+        longDescription: entry.longDescription,
+        heroEyebrow: entry.heroEyebrow,
+        culture: entry.culture,
+        periodLabel: entry.periodLabel,
+        sourceUrl: entry.sourceUrl,
+        heroImage: '',
+        thumbnailImage: '',
+        itemCount: 0,
+        filterableMaterials: [],
+        estimatedWorth: 0,
+        sortOrder: entry.order,
+        status: 'active',
+        enabled: entry.enabled,
+        lastSyncedAt: null,
+      }))
+      .sort((a, b) => a.sortOrder - b.sortOrder);
+  }
+
   const db = getFirestoreOrThrow();
   const collectionRef = collection(db, 'collections');
   const snapshot = await getDocs(query(collectionRef, where('enabled', '==', true)));
@@ -46,7 +76,33 @@ export async function getCollections() {
     .sort((left, right) => left.sortOrder - right.sortOrder);
 }
 
-export async function getCollectionBySlug(slug: string) {
+export async function getCollectionBySlug(slug: string): Promise<CollectionRecord | null> {
+  if (!firestore) {
+    const entry = collectionRegistry.find((e) => e.slug === slug);
+    if (!entry || !entry.enabled) return null;
+    return {
+      id: entry.id,
+      slug: entry.slug,
+      name: entry.name,
+      displayName: entry.name,
+      description: entry.description,
+      longDescription: entry.longDescription,
+      heroEyebrow: entry.heroEyebrow,
+      culture: entry.culture,
+      periodLabel: entry.periodLabel,
+      sourceUrl: entry.sourceUrl,
+      heroImage: '',
+      thumbnailImage: '',
+      itemCount: 0,
+      filterableMaterials: [],
+      estimatedWorth: 0,
+      sortOrder: entry.order,
+      status: 'active',
+      enabled: entry.enabled,
+      lastSyncedAt: null,
+    };
+  }
+
   const db = getFirestoreOrThrow();
 
   // Try direct doc lookup first (slug is used as doc ID)

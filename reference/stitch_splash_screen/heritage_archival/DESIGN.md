@@ -1,8 +1,8 @@
 ```markdown
-# Design System Specification: The Digital Curator
+# Design System Specification: Indian Heritage Gallery
 
 ## 1. Overview & Creative North Star
-This design system is anchored by the Creative North Star of **"The Digital Curator."** Unlike standard mobile applications that prioritize speed and disposability, this system prioritizes *permanence, scholarship, and prestige*. It is a digital sanctuary for Indian heritage, moving away from "app-like" behaviors toward a high-end editorial experience.
+This design system is anchored by the Creative North Star of **"Indian Heritage Gallery."** Unlike standard mobile applications that prioritize speed and disposability, this system prioritizes *permanence, scholarship, and prestige*. It is a digital sanctuary for Indian heritage, moving away from "app-like" behaviors toward a high-end editorial experience.
 
 To break the "template" look common in modern SaaS, this system utilizes **Intentional Asymmetry**. We do not center everything; we use the weight of high-resolution artifacts against generous white space (Parchment) to create a sense of museum-grade breathability. We favor overlapping elements—such as a serif headline partially breaking the boundary of a Sandstone container—to mimic the layered nature of physical archives and historical manuscripts.
 
