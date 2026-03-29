@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&amp;family=Manrope:wght@400;500;600;700&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container": "#f1edeb",
+                        "on-surface": "#1c1b1b",
+                        "on-tertiary-fixed-variant": "#5b4137",
+                        "surface-variant": "#e5e2e0",
+                        "on-secondary-fixed": "#410000",
+                        "tertiary-fixed": "#ffdbce",
+                        "on-primary-fixed": "#261900",
+                        "on-secondary-container": "#650000",
+                        "background": "#fdf8f6",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-container-low": "#f7f3f1",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#ffdea5",
+                        "primary-container": "#c5a059",
+                        "primary-fixed-dim": "#e9c176",
+                        "outline": "#7f7667",
+                        "on-tertiary-fixed": "#2b160f",
+                        "outline-variant": "#d1c5b4",
+                        "tertiary-container": "#c19e92",
+                        "surface-bright": "#fdf8f6",
+                        "on-secondary-fixed-variant": "#8f0f07",
+                        "on-primary-container": "#4e3700",
+                        "surface": "#fdf8f6",
+                        "secondary-fixed-dim": "#ffb4a8",
+                        "secondary": "#b22b1d",
+                        "surface-container-highest": "#e5e2e0",
+                        "inverse-primary": "#e9c176",
+                        "on-surface-variant": "#4e4639",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#775a19",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f4f0ee",
+                        "tertiary-fixed-dim": "#e4beb2",
+                        "secondary-container": "#fe624e",
+                        "secondary-fixed": "#ffdad4",
+                        "surface-dim": "#ddd9d7",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#4e352c",
+                        "surface-container-high": "#ebe7e5",
+                        "tertiary": "#75584d",
+                        "on-primary": "#ffffff",
+                        "on-background": "#1c1b1b",
+                        "on-secondary": "#ffffff",
+                        "primary": "#775a19",
+                        "inverse-surface": "#31302f"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif"],
+                        "body": ["Manrope"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    vertical-align: middle
+    }
+.parchment-texture {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDZMP-xVoOVzO0FN66zfc1G5OS5LUdAzc45tTIndq8HlaQkUklpHhW_e-0Qh96rWKo0haCuEVz_-OWLGSwoPZqs7OKkewg2DnsFj72Bt2uH6ts93nhd58jiQaA4BkWnP-v611_2l0WBAOyQB2gz3vtn7ScWLG4TJjGNTL3uuM4pXUqkyWC4K1j8BIb4vUlQMZPUFhkS0Qj7oL6DtYCiY5-8657RLmcBjF4PN6xsGS_0le4tIQdmHkJAH-wsjlCFmq2TP5mxd4xE-SnL);
+    background-blend-mode: multiply
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body parchment-texture selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Top Navigation Anchor -->
+<header class="sticky top-0 z-50 bg-[#fdfcf0]/80 backdrop-blur-xl shadow-sm dark:bg-[#121212]/80">
+<div class="flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-4">
+<button class="text-[#775a19] dark:text-[#c5a059] p-2 hover:bg-[#775a19]/5 transition-colors duration-400">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline font-semibold tracking-tight italic text-xl text-[#775a19] dark:text-[#c5a059]">The Digital Curator</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex items-center gap-8">
+<a class="font-label text-[10px] font-bold uppercase tracking-wider text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:opacity-100 transition-opacity" href="#">Global Search</a>
+<a class="font-label text-[10px] font-bold uppercase tracking-wider text-[#775a19] dark:text-[#c5a059]" href="#">Challenges</a>
+</nav>
+<button class="text-[#775a19] dark:text-[#c5a059] p-2 hover:bg-[#775a19]/5 transition-colors duration-400">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</div>
+<div class="bg-[#e6e2d3] dark:bg-[#212121] h-[1px] w-full opacity-30"></div>
+</header>
+<main class="max-w-7xl mx-auto px-6 pt-12 pb-32">
+<!-- Hero Narrative Section -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-24">
+<div class="lg:col-span-7">
+<div class="inline-block bg-secondary-container/10 border border-secondary/20 px-3 py-1 rounded-sm mb-6">
+<span class="font-label text-[10px] font-bold uppercase tracking-widest text-secondary">Active Challenge</span>
+</div>
+<h2 class="font-headline text-5xl md:text-6xl font-bold text-on-surface leading-tight mb-8">
+                    The Silk Road <br/>
+<span class="italic font-normal text-primary">Influence</span>
+</h2>
+<p class="text-lg text-on-surface-variant max-w-xl leading-relaxed mb-10">
+                    Trace the footsteps of merchants and monks who traversed the treacherous Karakoram passes. This collection challenge examines how Indo-Hellenic, Kushan, and Sassanid artifacts converged to shape the medieval identity of Northern India.
+                </p>
+<div class="flex flex-wrap gap-4">
+<button class="bg-primary text-on-primary px-8 py-3 font-semibold rounded-md shadow-lg flex items-center gap-2 hover:bg-primary/90 transition-all">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+                        Upload Evidence
+                    </button>
+<button class="border border-outline-variant bg-surface-container-lowest px-8 py-3 font-semibold rounded-md hover:bg-surface-container-high transition-all flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+                        Share Progress
+                    </button>
+</div>
+</div>
+<div class="lg:col-span-5 relative">
+<div class="aspect-[4/5] bg-surface-container-high rounded-lg overflow-hidden shadow-2xl relative transform rotate-1">
+<img alt="Silk Road Artifact" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" data-alt="Close-up of an ancient Buddhist relief sculpture in Gandharan style with intricate stone carving details and soft dramatic shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDubdsKXbwB1alonVoF3MrHivHOcL1z0Nk3c8WUsO82AtF9aD1GP_b0RsBimCuXuMxtRq7ITj5t9z-81P7zHuzTsvS0tBcQOpSlaeRh5VB1Tb6nAFmgMKybvFP5MEA2AX9jBHXZ2GhwZRx8cTwa-rr-qERJZfLk4kR5LaONlgH71KNboV4PxRhda1sf8KblkpB-xHcpnFUfKqk3NjZiQPG-3jIbR48ykbEJgQpvR_j5U-JvEd8rb8oZePz5HYhGtqFepguMy3XxwRoJ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent"></div>
+</div>
+<!-- Floating Decorative Element -->
+<div class="absolute -bottom-6 -left-6 bg-surface-container-lowest p-6 shadow-xl border border-outline-variant/20 max-w-[200px] hidden md:block">
+<span class="font-label text-[10px] text-primary uppercase block mb-2">Provenance</span>
+<p class="font-headline italic text-sm text-on-surface">"Treasures from the Peshawar Valley expedition, 1892."</p>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+<!-- Checklist & Rules (Left Column) -->
+<div class="lg:col-span-2 space-y-12">
+<!-- Required Items Checklist -->
+<div class="bg-surface-container-low p-8 rounded-xl border border-outline-variant/10">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h3 class="font-headline text-2xl font-semibold text-on-surface">Required Artifacts</h3>
+<p class="font-label text-xs text-on-surface-variant uppercase mt-1">3 of 5 Items Collected</p>
+</div>
+<button class="text-primary font-semibold text-sm flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-sm" data-icon="playlist_add">playlist_add</span>
+                            Add missing item
+                        </button>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+<!-- Item 1: Collected -->
+<div class="group cursor-pointer">
+<div class="aspect-square bg-surface-container-highest rounded-lg mb-2 relative overflow-hidden flex items-center justify-center border-2 border-primary/40">
+<img alt="Item" class="w-full h-full object-cover opacity-80" data-alt="Macro photo of a Kushan gold coin featuring a king's silhouette and archaic inscriptions against a neutral parchment background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHGqAzOFSkZd5CM55J6wSl8yU4yHv1IdQDjhb_J_Oyh3r9yv9V0I-KNWAcrNbjMVjR4F4WmA-DJzGmaKuR3MUGPDdADEFG0u5W9kHAK0S910jeLhmpA2lbwooG7GPRDSAw6KMhHjX1SgE3OUdFPG51Tb30MzIQbszJcPI9v8__Z8w1eMF7EvVaDFYB4zjKO0uPsfIjaGidF0cyUPnTCC6M4zsU92AKxVbffpe07U1iaRpVaH9WMWHTNhaovzcpTUsukNKfagQUM2OK"/>
+<div class="absolute top-1 right-1 bg-primary text-on-primary rounded-full p-0.5">
+<span class="material-symbols-outlined text-[14px]" data-icon="check">check</span>
+</div>
+</div>
+<span class="font-label text-[10px] font-bold text-center block uppercase tracking-tighter">Kushan Coinage</span>
+</div>
+<!-- Item 2: Collected -->
+<div class="group cursor-pointer">
+<div class="aspect-square bg-surface-container-highest rounded-lg mb-2 relative overflow-hidden flex items-center justify-center border-2 border-primary/40">
+<img alt="Item" class="w-full h-full object-cover opacity-80" data-alt="Ancient blue lapis lazuli beads with weathered texture resting on a rustic wooden museum tray" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAMGRzseOp3wOg5TtJDd11McSSvOur0pY1QpMy3vEqvkFIhhDK69xw0a0Mo3902T1fk3Igm3IwMjaUXzYTroPOm9u6xTNn0DP2deSagTb-DUHUe9DmubRiRtXqJgTjuNIqCfL__ZIDwHIQ42mUcIW47rA8q2lBRoQxX5lmYd4lZZHAso1u5nSF0Q60lXGWmLrxMszfYPCmEGXJHqyIFDIRgvRI5O1HjwEy4CE6aWQSzA56b2InlCG8Btpxb5z-nibtIHQE_G313ky6"/>
+<div class="absolute top-1 right-1 bg-primary text-on-primary rounded-full p-0.5">
+<span class="material-symbols-outlined text-[14px]" data-icon="check">check</span>
+</div>
+</div>
+<span class="font-label text-[10px] font-bold text-center block uppercase tracking-tighter">Lapis Lazuli</span>
+</div>
+<!-- Item 3: Collected -->
+<div class="group cursor-pointer">
+<div class="aspect-square bg-surface-container-highest rounded-lg mb-2 relative overflow-hidden flex items-center justify-center border-2 border-primary/40">
+<img alt="Item" class="w-full h-full object-cover opacity-80" data-alt="Fragment of ancient silk fabric with faded intricate floral patterns and golden threads on a dark mount" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzLs6tAunxNbJvoWyVb7egCmFumHytFSpp8bnlJ_Fk0MBfV-K3SWeqb45yX7DJwdEQp5mJuMn2jXSU3mMadXAGW1pbF-4QG9zzccVcB-DBNyecKkunTjkULHmh1qJkSu29U6qQAvuGIEBsTkoET8kqLuP0kVA8m48GwEAc7WOVvco636S3fQP9mkB7o9v9MAvaapkJ2cYYtaugNtTFM-i1FDfQb2Jm9bH-z6o5vwCEDZGEOyaPoXAvCK5aTwoojqalV8eSYNdlUKJv"/>
+<div class="absolute top-1 right-1 bg-primary text-on-primary rounded-full p-0.5">
+<span class="material-symbols-outlined text-[14px]" data-icon="check">check</span>
+</div>
+</div>
+<span class="font-label text-[10px] font-bold text-center block uppercase tracking-tighter">Bactrian Silk</span>
+</div>
+<!-- Item 4: Missing -->
+<div class="group cursor-pointer opacity-50 hover:opacity-100 transition-opacity">
+<div class="aspect-square bg-surface-container-highest rounded-lg mb-2 border border-dashed border-outline flex flex-col items-center justify-center">
+<span class="material-symbols-outlined text-outline" data-icon="hourglass_empty">hourglass_empty</span>
+</div>
+<span class="font-label text-[10px] font-bold text-center block uppercase tracking-tighter">Gandhara Stucco</span>
+</div>
+<!-- Item 5: Missing -->
+<div class="group cursor-pointer opacity-50 hover:opacity-100 transition-opacity">
+<div class="aspect-square bg-surface-container-highest rounded-lg mb-2 border border-dashed border-outline flex flex-col items-center justify-center">
+<span class="material-symbols-outlined text-outline" data-icon="add_a_photo">add_a_photo</span>
+</div>
+<span class="font-label text-[10px] font-bold text-center block uppercase tracking-tighter">Sogdian Glass</span>
+</div>
+</div>
+</div>
+<!-- Historical Background Module -->
+<div class="bg-surface-container-highest/40 p-8 rounded-xl border border-outline-variant/10">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-secondary" data-icon="history_edu">history_edu</span>
+<h3 class="font-headline text-2xl font-semibold">Scholarly Commentary</h3>
+</div>
+<div class="prose prose-stone max-w-none">
+<p class="text-on-surface-variant leading-relaxed italic border-l-4 border-secondary/30 pl-6 py-2 mb-6">
+                            "The Silk Road was never a single path, but a network of trade, dialogue, and spiritual exchange. For the Digital Curator, these artifacts are more than objects; they are witnesses to the first era of globalization in the Indian subcontinent."
+                        </p>
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-dim border border-primary/20">
+<img alt="Scholar" data-alt="Professional headshot of an elderly academic with glasses and a thoughtful expression, warm studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfdrTdM8CAOUK31sViZJ4MEwxq8ZDKveuMY-WqnjjlpVqWs50cPH8Ks7C8EC8lzTlL6zOTNB1KpPMp8upmr73gxeVUgGBsd062dQbQlMVWEtkhxpEnNwh9yqFpB4H1P68tcn5Xuk_O-Uj5xkBcfSld4lSP5SiAON9o6_d7cXIZFA89VNwNuzC1sF-n_yI3FXA2F9hS37cLC0hbQVg8xdFXP2fBf0euUJ4XhEdPv7v1Qat2XtiLemdeWxDIlJuI97Hxdib0aYixkPSl"/>
+</div>
+<div>
+<h4 class="font-bold text-sm">Dr. Amitav Varma</h4>
+<p class="font-label text-[10px] uppercase text-on-surface-variant">Senior Curator, Indian Numismatics Dept.</p>
+</div>
+</div>
+<p class="text-on-surface-variant leading-relaxed">
+                            Research suggests that the Kushan Empire acted as the primary bridge between the Han Dynasty and the Roman Empire. Our challenge focuses on the transition from Hellenistic aesthetic ideals to the formalized iconography of early Buddhist art, a transformation best seen in the Gandhara region.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Side Sidebar (Right Column) -->
+<div class="space-y-8">
+<!-- Prize / Recognition -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-primary/10 text-center">
+<h3 class="font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant mb-6">Challenge Reward</h3>
+<div class="relative w-32 h-32 mx-auto mb-6">
+<div class="absolute inset-0 bg-primary/5 rounded-full blur-xl animate-pulse"></div>
+<div class="relative w-full h-full flex items-center justify-center bg-primary text-on-primary rounded-full shadow-inner">
+<span class="material-symbols-outlined text-5xl" data-icon="military_tech" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</div>
+</div>
+<h4 class="font-headline text-xl font-bold mb-2">The Silk Road Medal</h4>
+<p class="text-sm text-on-surface-variant mb-6 px-4">Unlock the "Special Collector" title and priority access to the Gandhara Virtual Exhibition.</p>
+<div class="h-[1px] bg-outline-variant opacity-20 w-full mb-6"></div>
+<div class="flex items-center justify-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-sm" data-icon="workspace_premium">workspace_premium</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-wider">Prestige Item</span>
+</div>
+</div>
+<!-- Leaderboard Preview -->
+<div class="bg-surface-container-low p-8 rounded-xl">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline text-lg font-semibold">Exhibition Hall</h3>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="leaderboard">leaderboard</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 bg-surface-container-lowest rounded-md">
+<div class="flex items-center gap-3">
+<span class="font-headline font-bold text-primary">01</span>
+<span class="text-sm font-semibold">Rajesh_K</span>
+</div>
+<span class="text-xs text-on-surface-variant">5/5 Items</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-lowest/50 rounded-md">
+<div class="flex items-center gap-3">
+<span class="font-headline font-bold text-on-surface-variant">02</span>
+<span class="text-sm font-semibold">Ananya_D</span>
+</div>
+<span class="text-xs text-on-surface-variant">4/5 Items</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-lowest/50 rounded-md">
+<div class="flex items-center gap-3">
+<span class="font-headline font-bold text-on-surface-variant">03</span>
+<span class="text-sm font-semibold">Curator_Max</span>
+</div>
+<span class="text-xs text-on-surface-variant">4/5 Items</span>
+</div>
+</div>
+<button class="w-full mt-6 py-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors border-t border-outline-variant/20 pt-4">
+                        View All Participants
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full bg-[#fdfcf0]/90 dark:bg-[#121212]/90 backdrop-blur-2xl flex justify-around items-center pt-3 pb-6 px-2 z-50 rounded-t-xl border-t border-[#775a19]/10 shadow-[0_-4px_20px_rgba(119,90,25,0.06)] md:hidden">
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home_storage">home_storage</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-[0.05em]">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="account_balance">account_balance</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-[0.05em]">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="book_2">book_2</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-[0.05em]">Collection</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#775a19] dark:text-[#c5a059] bg-[#775a19]/10 rounded-lg py-1 px-3 transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="military_tech">military_tech</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-[0.05em]">Challenges</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="workspace_premium">workspace_premium</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-[0.05em]">Showcase</span>
+</a>
+</nav>
+<!-- Floating Action Button (Only on Mobile for high-context action) -->
+<button class="fixed bottom-24 right-6 md:hidden bg-primary text-on-primary w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="add_a_photo">add_a_photo</span>
+</button>
+</body></html>

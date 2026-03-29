@@ -1,0 +1,78 @@
+import { z } from 'zod';
+
+export const firestoreMediaSchema = z.object({
+  gsUrl: z.string(),
+  storagePath: z.string(),
+  downloadUrl: z.string(),
+  alt: z.string(),
+  caption: z.string().optional(),
+});
+
+export const firestoreItemSchema = z.object({
+  id: z.string(),
+  collectionId: z.string(),
+  collectionSlug: z.string(),
+  collectionName: z.string(),
+  title: z.string(),
+  subtitle: z.string(),
+  period: z.string(),
+  dateText: z.string(),
+  culture: z.string(),
+  location: z.string(),
+  description: z.string(),
+  shortDescription: z.string(),
+  imageUrl: z.string(),
+  imageAlt: z.string(),
+  primaryMedia: firestoreMediaSchema.nullable(),
+  gallery: z.array(firestoreMediaSchema),
+  materials: z.array(z.string()),
+  tags: z.array(z.string()),
+  notes: z.array(z.string()),
+  searchText: z.string(),
+  searchKeywords: z.array(z.string()),
+  metadata: z.object({
+    type: z.string().optional(),
+    denomination: z.string().optional(),
+    rulerOrIssuer: z.string().optional(),
+    mintOrPlace: z.string().optional(),
+    seriesOrCatalog: z.string().optional(),
+    weightEstimate: z.string().optional(),
+    condition: z.string().optional(),
+    estimatedPriceInr: z.string().optional(),
+    confidence: z.string().optional(),
+  }),
+  pageNumber: z.number(),
+  sortTitle: z.string(),
+  published: z.boolean(),
+  sourceUrl: z.string(),
+  sourceRawRef: z.string(),
+  importedAt: z.string(),
+  updatedAt: z.string(),
+});
+
+export const firestoreCollectionSchema = z.object({
+  id: z.string(),
+  slug: z.string(),
+  name: z.string(),
+  displayName: z.string(),
+  description: z.string(),
+  longDescription: z.string(),
+  sourceType: z.literal('cloud-function'),
+  sourceUrl: z.string(),
+  heroImage: z.string(),
+  thumbnailImage: z.string(),
+  itemCount: z.number(),
+  filterableMaterials: z.array(z.string()),
+  status: z.literal('active'),
+  sortOrder: z.number(),
+  heroEyebrow: z.string(),
+  periodLabel: z.string(),
+  culture: z.string(),
+  enabled: z.boolean(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  lastSyncedAt: z.string(),
+});
+
+export type FirestoreCollectionInput = z.infer<typeof firestoreCollectionSchema>;
+export type FirestoreItemInput = z.infer<typeof firestoreItemSchema>;

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Digital Curator - Bulk Ingestion</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&amp;family=Manrope:wght@400;500;600&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container": "#f1edeb",
+            "on-surface": "#1c1b1b",
+            "on-tertiary-fixed-variant": "#5b4137",
+            "surface-variant": "#e5e2e0",
+            "on-secondary-fixed": "#410000",
+            "tertiary-fixed": "#ffdbce",
+            "on-primary-fixed": "#261900",
+            "on-secondary-container": "#650000",
+            "background": "#fdf8f6",
+            "on-primary-fixed-variant": "#5d4201",
+            "surface-container-low": "#f7f3f1",
+            "on-error-container": "#93000a",
+            "error": "#ba1a1a",
+            "primary-fixed": "#ffdea5",
+            "primary-container": "#c5a059",
+            "primary-fixed-dim": "#e9c176",
+            "outline": "#7f7667",
+            "on-tertiary-fixed": "#2b160f",
+            "outline-variant": "#d1c5b4",
+            "tertiary-container": "#c19e92",
+            "surface-bright": "#fdf8f6",
+            "on-secondary-fixed-variant": "#8f0f07",
+            "on-primary-container": "#4e3700",
+            "surface": "#fdf8f6",
+            "secondary-fixed-dim": "#ffb4a8",
+            "secondary": "#b22b1d",
+            "surface-container-highest": "#e5e2e0",
+            "inverse-primary": "#e9c176",
+            "on-surface-variant": "#4e4639",
+            "error-container": "#ffdad6",
+            "on-error": "#ffffff",
+            "surface-tint": "#775a19",
+            "surface-container-lowest": "#ffffff",
+            "inverse-on-surface": "#f4f0ee",
+            "tertiary-fixed-dim": "#e4beb2",
+            "secondary-container": "#fe624e",
+            "secondary-fixed": "#ffdad4",
+            "surface-dim": "#ddd9d7",
+            "on-tertiary": "#ffffff",
+            "on-tertiary-container": "#4e352c",
+            "surface-container-high": "#ebe7e5",
+            "tertiary": "#75584d",
+            "on-primary": "#ffffff",
+            "on-background": "#1c1b1b",
+            "on-secondary": "#ffffff",
+            "primary": "#775a19",
+            "inverse-surface": "#31302f"
+          },
+          fontFamily: {
+            "headline": ["Noto Serif"],
+            "body": ["Manrope"],
+            "label": ["Inter"]
+          },
+          borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+        },
+      },
+    }
+  </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px
+    }
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent
+    }
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #d1c5b4;
+    border-radius: 10px
+    }
+.paper-texture {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuC2IXAVjHNpkvUVLdEwEiqrDNzfQ1Bc5CvKJhcwjIxL_FlSn2HDhrQx4gTO6IKJ6ELMHPIx8SCLoODgtivOj6XZcCm2ArOtHedGArNhgg-1Q0y0ZRK-lAML4tplY6pb61GWTUi8l7HcdQR8Q2m2U2vwQV6__x62lAp-kZt4gaYsp1Xfg3GNCREWCsyGbGIgwPowt0r5PUXsDry_lbLzzWpC_C0SR8zYBLsa9KPOX-JjvO4LKqutSEdNAIIkk8Zx0zRsKaJnIxEXGLfJ);
+    opacity: 0.03
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar Execution -->
+<header class="docked full-width top-0 sticky z-50 bg-[#fdfcf0] dark:bg-[#121212] shadow-sm dark:shadow-none flex justify-between items-center px-6 py-4 w-full backdrop-blur-xl">
+<div class="flex items-center gap-4">
+<button class="text-[#775a19] dark:text-[#c5a059] hover:bg-[#775a19]/5 transition-colors duration-400 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-serif text-[#775a19] dark:text-[#c5a059] italic text-xl Headlines: Noto Serif font-semibold tracking-tight">The Digital Curator</h1>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<nav class="flex gap-6">
+<a class="text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:bg-[#775a19]/5 transition-colors duration-400 font-label text-xs uppercase tracking-wider" href="#">Home</a>
+<a class="text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:bg-[#775a19]/5 transition-colors duration-400 font-label text-xs uppercase tracking-wider" href="#">Explore</a>
+<a class="text-[#775a19] dark:text-[#c5a059] scale-105 font-label text-xs uppercase tracking-wider border-b border-[#775a19]" href="#">Collection</a>
+</nav>
+<div class="h-6 w-[1px] bg-outline-variant opacity-30"></div>
+<button class="text-[#775a19] dark:text-[#c5a059] hover:bg-[#775a19]/5 transition-colors duration-400 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<!-- Separation Line -->
+<div class="bg-[#e6e2d3] dark:bg-[#212121] h-[1px] w-full opacity-30"></div>
+<main class="max-w-7xl mx-auto px-6 py-12">
+<!-- Header Section -->
+<section class="mb-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<span class="font-label text-primary text-xs font-bold uppercase tracking-[0.1em] mb-2 block">Curation Pipeline</span>
+<h2 class="font-headline text-4xl font-bold tracking-tight text-on-surface">Bulk Artifact Ingestion</h2>
+<p class="text-on-surface-variant max-w-xl mt-4 leading-relaxed">Prepare multiple heritage artifacts for archival storage. Ensure provenance and historical accuracy before finalizing the batch.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-2.5 bg-surface-container-high text-on-surface border border-outline-variant/30 hover:bg-surface-variant transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="cloud_upload">cloud_upload</span>
+<span class="font-label text-sm uppercase tracking-wider font-semibold">Select Files</span>
+</button>
+<button class="px-6 py-2.5 bg-primary text-on-primary shadow-lg hover:shadow-primary/20 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="check_circle">check_circle</span>
+<span class="font-label text-sm uppercase tracking-wider font-semibold">Finalize Batch</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Progress & Alerts -->
+<section class="mb-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Progress Bar -->
+<div class="lg:col-span-2 bg-surface-container-low p-6 rounded-lg relative overflow-hidden">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-label text-xs font-bold uppercase tracking-wider text-on-surface-variant">Ingestion Progress</h3>
+<span class="font-label text-xs text-primary font-bold">12 of 18 Artifacts Refined</span>
+</div>
+<div class="h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-2/3"></div>
+</div>
+<div class="flex justify-between mt-3">
+<p class="text-[11px] text-on-surface-variant italic">Metadata refinement in progress...</p>
+<p class="text-[11px] text-on-surface-variant font-medium">Estimated 4 mins remaining</p>
+</div>
+</div>
+<!-- Duplicate Detection Alert -->
+<div class="bg-error-container/30 border-l-4 border-secondary p-6 rounded-r-lg flex gap-4">
+<span class="material-symbols-outlined text-secondary" data-icon="warning">warning</span>
+<div>
+<h3 class="font-headline text-sm font-bold text-on-secondary-container">Duplicate Found</h3>
+<p class="text-xs text-on-secondary-container mt-1 opacity-80 leading-snug">"Chola Coin #104" matches an existing entry in the Southern numismatics vault.</p>
+<button class="mt-3 font-label text-[10px] font-bold uppercase tracking-widest text-secondary underline">View Conflict</button>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+<!-- Batch Action Panel (Left/Sticky) -->
+<aside class="lg:col-span-1 space-y-6">
+<div class="bg-surface-container-high p-6 rounded-lg border border-outline-variant/10">
+<h3 class="font-headline text-lg font-semibold mb-6">Batch Operations</h3>
+<div class="space-y-4">
+<div>
+<label class="font-label text-[10px] uppercase font-bold tracking-widest text-on-surface-variant mb-2 block">Global Category</label>
+<select class="w-full bg-background border-outline-variant/40 rounded-sm text-sm p-2 focus:ring-primary focus:border-primary">
+<option>Ancient Numismatics</option>
+<option>Medieval Textiles</option>
+<option>Mughal Manuscripts</option>
+<option>Colonial Artifacts</option>
+</select>
+</div>
+<div>
+<label class="font-label text-[10px] uppercase font-bold tracking-widest text-on-surface-variant mb-2 block">Global Era/Period</label>
+<select class="w-full bg-background border-outline-variant/40 rounded-sm text-sm p-2 focus:ring-primary focus:border-primary">
+<option>Gupta Empire (320-550 CE)</option>
+<option>Chola Dynasty (848-1279 CE)</option>
+<option>Delhi Sultanate (1206-1526 CE)</option>
+<option>Maratha Empire (1674-1818 CE)</option>
+</select>
+</div>
+<div class="pt-4">
+<button class="w-full py-2 bg-on-surface text-background font-label text-[10px] uppercase font-bold tracking-widest hover:bg-on-surface/90 transition-all">
+                Apply to Selection (12)
+              </button>
+</div>
+</div>
+</div>
+<div class="bg-tertiary-fixed/20 p-6 rounded-lg border border-tertiary-container/20">
+<div class="flex items-center gap-3 mb-4 text-on-tertiary-container">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<h4 class="font-headline text-sm font-bold">Provenance Summary</h4>
+</div>
+<ul class="space-y-3">
+<li class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Total Selected</span>
+<span class="font-bold">18 Items</span>
+</li>
+<li class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Validated</span>
+<span class="font-bold text-primary">12 Items</span>
+</li>
+<li class="flex justify-between text-xs text-secondary">
+<span class="opacity-80">Requires Input</span>
+<span class="font-bold">6 Items</span>
+</li>
+</ul>
+</div>
+</aside>
+<!-- Main Editing Workspace -->
+<div class="lg:col-span-3 space-y-8">
+<!-- Selection Strip -->
+<div class="bg-surface-container-low p-4 rounded-lg overflow-hidden">
+<div class="flex justify-between items-center mb-4 px-2">
+<h3 class="font-label text-xs font-bold uppercase tracking-wider text-on-surface-variant">Selection Strip</h3>
+<button class="text-primary font-label text-[10px] font-bold uppercase tracking-widest">Select All</button>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-4 custom-scrollbar">
+<!-- Selected Image Thumbnails -->
+<div class="flex-shrink-0 w-24 h-24 relative rounded-md overflow-hidden ring-2 ring-primary group cursor-pointer">
+<img alt="Artifact" class="w-full h-full object-cover" data-alt="Close-up of an ancient bronze Indian coin with intricate script and aged patina texture on a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXEpoTc0o_IpMFbTRZS-vm8SLmy0zBSIC4swQt4rnmoRMSs9Akl9D2RrrEnguE_YGMUtfMHyO-wvHTlOxdaWvIfYz7w-JZBrXMp0jrCE7Ax9k-AoVXSgXUAEImoCMpZ5b25d1IDt4HUMjoOzjaBzp7gVDW2FhGcrsgLFrwxm_S3mHcfUDPiy2rJzI7Ku2pNWsNy7X-7_sqDtBXemsYPNgBgYBKbBNWzvKmHUUx114QRkF2wlxaAdPhfuSHK28TrHQMbDbv5L-wspfw"/>
+<div class="absolute inset-0 bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-xl" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<div class="flex-shrink-0 w-24 h-24 relative rounded-md overflow-hidden ring-2 ring-primary group cursor-pointer">
+<img alt="Artifact" class="w-full h-full object-cover" data-alt="Macro photography of a weathered stone sculpture fragment showing detailed carvings of traditional Indian motifs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBr9OBRnjFoJ0lCmFj37f9YJAN8O6UuHsr8nxFsBc5jrxxDS2AsyzFG80jNyRMJZcUou6t_NN-c6N9hXSbLf3Lops0JOrbEcZMbDpMgKh1b7v523T2c0XHEEHvgJrLitsIWeG0WSZnfs_LrLLt5NcEVCSuZANuJnjd7PeushGSAR4ZsIjcjgpRhVLRktUl-xjd34Re6t6tgSzyRFKxPkI-5NqQ4HyY5R-0WNO-6GMnBeCPyLoroDH8JVbSGGVd_v3k1hYCvD8sHc5Rt"/>
+<div class="absolute inset-0 bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-xl" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<div class="flex-shrink-0 w-24 h-24 relative rounded-md overflow-hidden border border-outline-variant/30 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer">
+<img alt="Artifact" class="w-full h-full object-cover" data-alt="High-resolution scan of an ancient Sanskrit manuscript on aged birch bark with black ink lettering" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfsyi_j4y4vLMWVq0Rcmu2rPWVzxLSKjiLFjd4dbb1pC_oREa6n6QHIpeb-rlUyDakFBT5y-7OCdQl-kPTmRHn7MqzN96m9jSfwSb6oEYmwgtG0GSpUhKe4OpGdnEkJnil0bLz9ejNTamT5Orv8deAGry4GdGR-KEEUfVyJqwjcb0dIiZtoBi4f4HaU7EmkISECmqO7bYBKGWrAm_7SJdl7olLV2iGDKZSyAIRhDlhdrXtQrE-BmgONcotF-jfcmj9LZOTLxeQL4Fn"/>
+</div>
+<div class="flex-shrink-0 w-24 h-24 relative rounded-md overflow-hidden ring-2 ring-primary group cursor-pointer">
+<img alt="Artifact" class="w-full h-full object-cover" data-alt="Close-up of a traditional Indian silk weave with golden zari embroidery showing intricate paisley patterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUqCaq66JP92zhMgFbGuOBlpijslY4bQKWAuX-AKD5GzRF1ZsthWvARTDS3unQDrWn6ScNNnAniK0YenlXSJUIykby9hMKS3kwBSWGkmwIQJ5WcBll9jQoH5naFCTpfj39VTlKEOZINpInG2LbHEWxJsxQUPdtMRZZkf1Ro3JccCVBOqBTjxyV5P9FrB3JguqBj1m9qrxNRYGEGNZc2iw11AHXpsNuCbYgipnY5-_EgjoTe-pfjQNOj7sWTSd8h1ooBFB9F7LpFvn3"/>
+<div class="absolute inset-0 bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-xl" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<div class="flex-shrink-0 w-24 h-24 relative rounded-md overflow-hidden border border-outline-variant/30 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer">
+<img alt="Artifact" class="w-full h-full object-cover" data-alt="Aged brass oil lamp from South India with ornate pedestal and traditional diya form" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMx-QXa9XjeR4vIhbJXZuQWio7j7CCahIcFUIeYGM3xtD0BhJnql3MTHCdPsApqd3sOGqBU-7bityMhcySTMfK7JF1xF-sbvSPrzQEVKJz9wpmMVGY_dZEYO2g3A8FFdKX03MbyEeG29P7KZC4UAhlqP3rhyThn-qBXp6zVKhjmQ7uufJdf8vL9YYdde1lqbyDqPb9hv8z_fKUgfRNya1ocGgqKTrjBfKOFMOKbga8xVS9GNEXighZ3LFFG0Onp_-sHHjHfFie2jme"/>
+</div>
+<div class="flex-shrink-0 w-24 h-24 flex items-center justify-center bg-surface-variant border-2 border-dashed border-outline-variant/40 rounded-md cursor-pointer hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="add">add</span>
+</div>
+</div>
+</div>
+<!-- Per-Item Refinement Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Mini Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant/20 rounded-lg p-5 flex gap-5 group hover:shadow-xl hover:shadow-primary/5 transition-all relative">
+<div class="absolute top-2 right-2 flex gap-1">
+<div class="w-2 h-2 rounded-full bg-secondary" title="Needs Attention"></div>
+</div>
+<div class="w-32 h-32 flex-shrink-0 rounded bg-surface-container overflow-hidden">
+<img alt="Artifact" class="w-full h-full object-cover" data-alt="High-resolution scan of an ancient Sanskrit manuscript on aged birch bark with black ink lettering" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJfTxmEI_cYKrd6wLIdHyTlYzqL5kpefYSeBx2B5IMgke5f8qyDQyKUPP7XsWkczC3sg6qy7XR_Yq42wM7XWJLFurTG-1_AqkF8e4t17P3qLGSkWsgDUGOavRX6_08yacO7a6e7M4DVrbACxXGISNExiGBKfDQEkGqr0HDjFEogoTIo3Uj8xd0IWvAat511MiSlc_eeWD_ovsXuIl6h50X7XlpdJXcFaSdOGvLPKgGcpFbZxSn6F9N_L0bzUgj_p4nbJSf1AZlTFkV"/>
+</div>
+<div class="flex-1 space-y-3">
+<div>
+<input class="w-full font-headline text-lg bg-transparent border-none p-0 focus:ring-0 text-on-surface font-semibold" type="text" value="Manuscript_Scan_04"/>
+<p class="font-label text-[10px] text-on-surface-variant/60 uppercase tracking-widest mt-1">Ref: #ARCH-2024-004</p>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface-container-high px-2 py-0.5 rounded-sm text-[10px] font-label font-bold uppercase text-on-surface-variant">Sanskit</span>
+<span class="bg-surface-container-high px-2 py-0.5 rounded-sm text-[10px] font-label font-bold uppercase text-on-surface-variant">Pala Dynasty</span>
+</div>
+<div class="pt-2 flex justify-between items-center">
+<span class="text-[11px] italic text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="error">error</span>
+                  Missing Location
+                </span>
+<button class="text-primary hover:underline font-label text-[11px] font-bold uppercase tracking-wider">Refine</button>
+</div>
+</div>
+</div>
+<!-- Mini Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant/20 rounded-lg p-5 flex gap-5 group hover:shadow-xl hover:shadow-primary/5 transition-all">
+<div class="w-32 h-32 flex-shrink-0 rounded bg-surface-container overflow-hidden">
+<img alt="Artifact" class="w-full h-full object-cover" data-alt="Close-up of an ancient bronze Indian coin with intricate script and aged patina texture on a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBebbczcgc-QO_f2M3K1OzZAlwZfBv5TxqC7Qf-eRq0niFbU6ncDb0rP9gOVyHkGGRLQMWKkxmkh6X4--JtDkERqZPuPeV1bQH-7Vei-RkjeIgUHkc_PQHkq_VmWjqIvCL-ntOwcEtmxaitUXXJYqdYYoNTNmZE8PXz0ghfaJBj1d8CZMagaFVzX29rfTpFzbteL9TlPrkNMhmWNczNgzNjpHlpZQMl51zIlhbgsE3H4oT86JaJFSNNUIvjpijFTBZ-MUi4oQO5IxyX"/>
+</div>
+<div class="flex-1 space-y-3">
+<div>
+<input class="w-full font-headline text-lg bg-transparent border-none p-0 focus:ring-0 text-on-surface font-semibold" type="text" value="Chola Gold Drachma"/>
+<p class="font-label text-[10px] text-on-surface-variant/60 uppercase tracking-widest mt-1">Ref: #COIN-2024-112</p>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface-container-high px-2 py-0.5 rounded-sm text-[10px] font-label font-bold uppercase text-on-surface-variant">Gold</span>
+<span class="bg-surface-container-high px-2 py-0.5 rounded-sm text-[10px] font-label font-bold uppercase text-on-surface-variant">Imperial Chola</span>
+</div>
+<div class="pt-2 flex justify-between items-center">
+<span class="text-[11px] italic text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+                  Verified Ready
+                </span>
+<button class="text-primary hover:underline font-label text-[11px] font-bold uppercase tracking-wider">Edit</button>
+</div>
+</div>
+</div>
+<!-- Mini Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant/20 rounded-lg p-5 flex gap-5 group hover:shadow-xl hover:shadow-primary/5 transition-all">
+<div class="w-32 h-32 flex-shrink-0 rounded bg-surface-container overflow-hidden">
+<img alt="Artifact" class="w-full h-full object-cover" data-alt="Close-up of a traditional Indian silk weave with golden zari embroidery showing intricate paisley patterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQURVaQjod5yMGa6oaTrp7IH4GuhxP23pPQnPum3iPbHFhEawalAG7CeapsjOnD5xmAjLg-mLcrZ5StPabRONgxysfnH0e9Ue5obp056iZcc9p1UURNT3UW0tBSBrRnJG1Tku3JU8AB2wLzKpHxgEASqsPPcu60ZtN4qflX3r7auOGJFY80SZ0hoHs102wAR0dAZpqJNfN1WFLJOsidAtq1zhNyKt9o_5TLRIh14uV0sWYIr6S4QPKfb6qWe3zNHYfyDzQ8iD4G4Gg"/>
+</div>
+<div class="flex-1 space-y-3">
+<div>
+<input class="w-full font-headline text-lg bg-transparent border-none p-0 focus:ring-0 text-on-surface font-semibold" type="text" value="Zari Silk Fragment"/>
+<p class="font-label text-[10px] text-on-surface-variant/60 uppercase tracking-widest mt-1">Ref: #TEXT-2024-882</p>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface-container-high px-2 py-0.5 rounded-sm text-[10px] font-label font-bold uppercase text-on-surface-variant">Textile</span>
+<span class="bg-surface-container-high px-2 py-0.5 rounded-sm text-[10px] font-label font-bold uppercase text-on-surface-variant">Kanchipuram</span>
+</div>
+<div class="pt-2 flex justify-between items-center">
+<span class="text-[11px] italic text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+                  Verified Ready
+                </span>
+<button class="text-primary hover:underline font-label text-[11px] font-bold uppercase tracking-wider">Edit</button>
+</div>
+</div>
+</div>
+<!-- Mini Card 4 (Duplicate Alert Version) -->
+<div class="bg-error-container/5 border border-secondary/20 rounded-lg p-5 flex gap-5 group relative">
+<div class="absolute top-2 right-2">
+<span class="material-symbols-outlined text-secondary" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="w-32 h-32 flex-shrink-0 rounded bg-surface-container overflow-hidden ring-2 ring-secondary/40">
+<img alt="Artifact" class="w-full h-full object-cover" data-alt="Macro photography of a weathered stone sculpture fragment showing detailed carvings of traditional Indian motifs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5nzcCaSc92fEpqgiyX0I-0Rjcz1xLUEf-FyPmE4m43Q16G9Rrewhuli2asnCZzklsV_JC88TPWlmLLmzjz_BhTJnGQobFKqVAwkqwTcS1QtevolvI4O3W93XkkK5E2OZ-dMFhE9etAjtn7FBJhPrqAvSWuSixP-sORax6QWpJ57aHgSvfdXWeUM3C5-wBffTbSzv8dbYUHEuPZupamNj-tY6SPB7P618EqfdKSU9zBBv2gsnQYh4O6gCsySJBLYgXfH3Yndv0HMGJ"/>
+</div>
+<div class="flex-1 space-y-3">
+<div>
+<input class="w-full font-headline text-lg bg-transparent border-none p-0 focus:ring-0 text-on-surface font-semibold" type="text" value="Gandhara Relief"/>
+<p class="font-label text-[10px] text-on-secondary-fixed-variant uppercase tracking-widest mt-1">Potential Duplicate Detected</p>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="bg-secondary-container/10 px-2 py-0.5 rounded-sm text-[10px] font-label font-bold uppercase text-on-secondary-fixed-variant border border-secondary/20">Schist Stone</span>
+</div>
+<div class="pt-2 flex justify-between items-center">
+<button class="text-secondary font-label text-[11px] font-bold uppercase tracking-wider">Resolve Conflict</button>
+<button class="text-on-surface-variant font-label text-[11px] font-bold uppercase tracking-wider">Dismiss</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Execution -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center pt-3 pb-8 px-2 backdrop-blur-2xl bg-[#fdfcf0]/90 dark:bg-[#121212]/90 shadow-[0_-4px_20px_rgba(119,90,25,0.06)] z-50 rounded-t-xl border-t border-[#775a19]/10 md:hidden">
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="home_storage">home_storage</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#775a19] dark:text-[#c5a059] bg-[#775a19]/10 rounded-lg py-1 px-3 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="book_2">book_2</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Collection</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="military_tech">military_tech</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Challenges</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="workspace_premium">workspace_premium</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Showcase</span>
+</a>
+</nav>
+</body></html>

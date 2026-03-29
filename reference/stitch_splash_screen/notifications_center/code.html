@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Digital Curator | Notification Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&amp;family=Manrope:wght@400;500;600&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#f1edeb",
+              "on-surface": "#1c1b1b",
+              "on-tertiary-fixed-variant": "#5b4137",
+              "surface-variant": "#e5e2e0",
+              "on-secondary-fixed": "#410000",
+              "tertiary-fixed": "#ffdbce",
+              "on-primary-fixed": "#261900",
+              "on-secondary-container": "#650000",
+              "background": "#fdf8f6",
+              "on-primary-fixed-variant": "#5d4201",
+              "surface-container-low": "#f7f3f1",
+              "on-error-container": "#93000a",
+              "error": "#ba1a1a",
+              "primary-fixed": "#ffdea5",
+              "primary-container": "#c5a059",
+              "primary-fixed-dim": "#e9c176",
+              "outline": "#7f7667",
+              "on-tertiary-fixed": "#2b160f",
+              "outline-variant": "#d1c5b4",
+              "tertiary-container": "#c19e92",
+              "surface-bright": "#fdf8f6",
+              "on-secondary-fixed-variant": "#8f0f07",
+              "on-primary-container": "#4e3700",
+              "surface": "#fdf8f6",
+              "secondary-fixed-dim": "#ffb4a8",
+              "secondary": "#b22b1d",
+              "surface-container-highest": "#e5e2e0",
+              "inverse-primary": "#e9c176",
+              "on-surface-variant": "#4e4639",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "surface-tint": "#775a19",
+              "surface-container-lowest": "#ffffff",
+              "inverse-on-surface": "#f4f0ee",
+              "tertiary-fixed-dim": "#e4beb2",
+              "secondary-container": "#fe624e",
+              "secondary-fixed": "#ffdad4",
+              "surface-dim": "#ddd9d7",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#4e352c",
+              "surface-container-high": "#ebe7e5",
+              "tertiary": "#75584d",
+              "on-primary": "#ffffff",
+              "on-background": "#1c1b1b",
+              "on-secondary": "#ffffff",
+              "primary": "#775a19",
+              "inverse-surface": "#31302f"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Manrope"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .parchment-texture {
+            background-image: radial-gradient(#775a1905 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed-dim selection:text-on-primary-fixed parchment-texture min-h-screen pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-[#fdfcf0] dark:bg-[#121212] flex justify-between items-center px-6 py-4 w-full backdrop-blur-xl docked full-width top-0 sticky z-50 shadow-sm dark:shadow-none">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#775a19] dark:text-[#c5a059] cursor-pointer" data-icon="menu">menu</span>
+<h1 class="font-serif text-[#775a19] dark:text-[#c5a059] italic text-xl">The Digital Curator</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#775a19] dark:text-[#c5a059] cursor-pointer" data-icon="notifications">notifications</span>
+</div>
+<div class="absolute bottom-0 left-0 bg-[#e6e2d3] dark:bg-[#212121] h-[1px] w-full opacity-30"></div>
+</header>
+<main class="max-w-5xl mx-auto px-6 py-12">
+<!-- Header Section -->
+<section class="mb-12">
+<h2 class="font-headline text-4xl font-semibold tracking-tight text-on-surface mb-2">Curatorial Updates</h2>
+<p class="font-body text-on-surface-variant max-w-2xl">Refined alerts from the archives. Your daily summary of acquisitions, scholarly matches, and community interactions.</p>
+</section>
+<!-- Notification Layout: Bento Style -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Left Column: Wishlist & Rare Finds -->
+<div class="md:col-span-8 space-y-6">
+<!-- Section Label -->
+<div class="flex items-center justify-between border-b border-outline-variant/20 pb-2">
+<span class="font-label text-xs font-bold uppercase tracking-[0.1em] text-primary">Archival Matches</span>
+<button class="font-label text-[10px] uppercase tracking-wider text-outline hover:text-primary transition-colors">Mark all read</button>
+</div>
+<!-- Rare Finds: Saved Search Alerts (Featured Card) -->
+<div class="bg-surface-container-high p-6 rounded-lg border-l-4 border-secondary shadow-sm">
+<div class="flex items-start gap-4">
+<div class="bg-secondary/10 p-3 rounded-full text-secondary">
+<span class="material-symbols-outlined" data-icon="travel_explore">travel_explore</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-headline text-lg font-bold">Rare Acquisition Detected</h3>
+<span class="font-label text-[10px] text-on-secondary-fixed-variant font-bold bg-secondary-fixed px-2 py-0.5 rounded">URGENT MATCH</span>
+</div>
+<p class="text-on-surface-variant text-sm mb-4">A 17th Century Mughal miniature painting matching your 'Deccan Art' search has been cataloged in the public database.</p>
+<div class="flex gap-4">
+<button class="bg-primary text-on-primary px-4 py-2 text-xs font-label uppercase tracking-widest rounded-sm hover:bg-surface-tint transition-colors">Review Provenance</button>
+<button class="text-primary px-4 py-2 text-xs font-label uppercase tracking-widest border border-outline-variant/30 rounded-sm hover:bg-primary/5 transition-colors">Dismiss</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Wishlist Match Card -->
+<div class="bg-surface-container-low p-6 rounded-lg hover:bg-surface-container transition-colors group">
+<div class="flex items-start gap-4">
+<div class="w-16 h-16 rounded overflow-hidden flex-shrink-0 bg-surface-dim">
+<img alt="Indian silver coin" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="extreme close up of a weathered silver ancient indian coin with detailed inscriptions on a dark textured background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkbd127-JzBaOhsW7ePFfuTNnNcNibc0ucy729F7QsmcPtdK-swNQo7h3RK_I7p9LON9z1Gq8GZmbYivgiqN8VRJAkvmeDdml4JpOco2BXl7lDUU0ae4MWiJ0wXR21JAtjtW5hCB9VgkzdhVHec9QUXOawn8UMYqf40ZTjvqZjZrs5Q2RMyYsgVqnaO8sG175jjA1NkxjUqbF4YNq_q6m8AERywEm4tLp9XVrZgsFy3BDWZDnAikIXD8r6zReyg7ibxQAWIMy3VcZ1"/>
+</div>
+<div class="flex-1">
+<h4 class="font-headline text-base font-semibold text-on-surface mb-1">Wishlist Match: Mauryan Silver Punch-Marked Coin</h4>
+<p class="text-on-surface-variant text-sm mb-2">A high-grade specimen has appeared in the Swap &amp; Trade wing. Condition: EF (Extremely Fine).</p>
+<span class="font-label text-[10px] text-outline uppercase tracking-tighter">2 hours ago • Numismatics Dept.</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors cursor-pointer" data-icon="star" data-weight="fill">star</span>
+</div>
+</div>
+<!-- Section Label -->
+<div class="flex items-center border-b border-outline-variant/20 pb-2 pt-4">
+<span class="font-label text-xs font-bold uppercase tracking-[0.1em] text-primary">Community &amp; Showcase</span>
+</div>
+<!-- Showcase Feature -->
+<div class="bg-surface-container-low p-6 rounded-lg hover:bg-surface-container transition-colors border border-transparent hover:border-outline-variant/20">
+<div class="flex items-start gap-4">
+<div class="bg-primary/5 p-3 rounded text-primary">
+<span class="material-symbols-outlined" data-icon="workspace_premium">workspace_premium</span>
+</div>
+<div class="flex-1">
+<h4 class="font-headline text-base font-semibold text-on-surface mb-1">Your 'Textile Treasures' Collection was Featured</h4>
+<p class="text-on-surface-variant text-sm mb-2">Selected for the "Artistry of the Loom" weekly showcase. 42 curators added it to their inspiration board.</p>
+<span class="font-label text-[10px] text-outline uppercase tracking-tighter">Yesterday • Showcase Hub</span>
+</div>
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-surface-dim overflow-hidden">
+<img alt="Avatar" data-alt="close up headshot of a mature man with glasses looking scholarly and professional" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-qz5sVxPX0zpkqUeWv7eJouaXZqREDOcM1Jco4sGT6AlOD_vkhNhGThNeyoYAOvnanhtoNDBuaeIcVzxKfucRtjzv812DFc5Pdi5nNGzl7Qg2NbOq6k8UEXJ73OtiT8Km2oYD52g8BprxCu3IqNXnmxD0HGMysTeskDFLs4gFzYZ41YM5GxwSp4MVBijBNswwMsuOsENjNE9GivkVV9rqTQwCcLpywtEuRRqRsBFRD4YdtICEkwP6F0whfeeHjnU8WruSZjuZq-am"/>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-surface-dim overflow-hidden">
+<img alt="Avatar" data-alt="portrait of a professional woman with a soft smile and natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDayASpH0fq0PU_yjTlPdZ_KLrIH2Xu3vdMP2nrWIGBV76pLxro5cbRrxbi7uCfPyowSyN1TihxZacAstpKqzT71pWW2uhioJqxQzSjkyY9lwhD5OT5eQ6KSlDVkTN2yz_WRQfigxf3qWiDDnyj6ApXRCoB2d9A4tj04RhfzYl_zZbOZJ1-eGua46re0zwjfpnI4cM6HynRrXIMQduz5noFoqNLaa5VpTkzjB8ui5FeJ47Vy4b6DWditeImOs_NnLFrqd5wxxfaNxRk"/>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-primary/20 flex items-center justify-center text-[8px] font-bold">+40</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Challenges & Social Activity -->
+<div class="md:col-span-4 space-y-6">
+<!-- Challenges Card -->
+<div class="bg-surface-container-highest p-6 rounded-lg">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary" data-icon="military_tech">military_tech</span>
+<h3 class="font-label text-sm font-bold uppercase tracking-widest text-on-surface">Active Challenges</h3>
+</div>
+<div class="space-y-4">
+<div class="border-b border-outline-variant/20 pb-4">
+<div class="flex justify-between items-center mb-1">
+<span class="font-headline text-sm font-semibold">Deciphering Scripts</span>
+<span class="text-[10px] text-secondary font-bold">48H LEFT</span>
+</div>
+<p class="text-xs text-on-surface-variant mb-2">Translate 3 Brahmi inscriptions to unlock the 'Epigraphist' rank.</p>
+<div class="w-full bg-surface-dim h-1 rounded-full overflow-hidden">
+<div class="bg-secondary w-2/3 h-full"></div>
+</div>
+</div>
+<div class="pb-2">
+<div class="flex justify-between items-center mb-1">
+<span class="font-headline text-sm font-semibold">Temple Architecture</span>
+<span class="text-[10px] text-outline font-medium">COMPLETED</span>
+</div>
+<p class="text-xs text-on-surface-variant">Badge awarded: 'Gopuram Scholar'</p>
+</div>
+</div>
+</div>
+<!-- Social Activity Feed -->
+<div class="bg-surface-container-low p-6 rounded-lg">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary" data-icon="history_edu">history_edu</span>
+<h3 class="font-label text-sm font-bold uppercase tracking-widest text-on-surface">Curator Logs</h3>
+</div>
+<div class="space-y-4">
+<div class="flex gap-3 items-start">
+<div class="w-2 h-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
+<p class="text-xs leading-relaxed text-on-surface-variant">
+<span class="font-bold text-on-surface">Dr. Mehta</span> commented on your 'Chola Bronze' thesis.
+                                <span class="block mt-1 text-[10px] text-outline uppercase tracking-tighter">14 mins ago</span>
+</p>
+</div>
+<div class="flex gap-3 items-start opacity-70">
+<div class="w-2 h-2 rounded-full bg-outline-variant mt-1.5 flex-shrink-0"></div>
+<p class="text-xs leading-relaxed text-on-surface-variant">
+<span class="font-bold text-on-surface">ArcheoBot</span> finalized the verification of your last 5 entries.
+                                <span class="block mt-1 text-[10px] text-outline uppercase tracking-tighter">5 hours ago</span>
+</p>
+</div>
+<div class="flex gap-3 items-start opacity-70">
+<div class="w-2 h-2 rounded-full bg-outline-variant mt-1.5 flex-shrink-0"></div>
+<p class="text-xs leading-relaxed text-on-surface-variant">
+<span class="font-bold text-on-surface">Heritage Guild</span> invited you to the "Digital Preservation" webinar.
+                                <span class="block mt-1 text-[10px] text-outline uppercase tracking-tighter">Yesterday</span>
+</p>
+</div>
+</div>
+</div>
+<!-- Saved Search Quick Toggle -->
+<div class="bg-primary/5 p-6 rounded-lg border border-primary/10">
+<h3 class="font-label text-[10px] font-bold uppercase tracking-widest text-primary mb-4">Saved Research Strings</h3>
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface px-2 py-1 text-[10px] font-medium border border-outline-variant/30 rounded flex items-center gap-1">
+                            Deccan Art <span class="material-symbols-outlined text-[12px]" data-icon="notifications_active">notifications_active</span>
+</span>
+<span class="bg-surface px-2 py-1 text-[10px] font-medium border border-outline-variant/30 rounded flex items-center gap-1">
+                            Kushan Dynasty <span class="material-symbols-outlined text-[12px]" data-icon="notifications_off">notifications_off</span>
+</span>
+<span class="bg-surface px-2 py-1 text-[10px] font-medium border border-outline-variant/30 rounded flex items-center gap-1">
+                            Terracotta <span class="material-symbols-outlined text-[12px]" data-icon="notifications_active">notifications_active</span>
+</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center pt-3 pb-safe px-2 backdrop-blur-2xl bg-[#fdfcf0]/90 dark:bg-[#121212]/90 z-50 rounded-t-xl border-t border-[#775a19]/10 shadow-[0_-4px_20px_rgba(119,90,25,0.06)] md:hidden">
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="home_storage">home_storage</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="book_2">book_2</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Collection</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="military_tech">military_tech</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Challenges</span>
+</a>
+<!-- Showcase active tab since notifications usually sit here or as global -->
+<a class="flex flex-col items-center justify-center text-[#775a19] dark:text-[#c5a059] bg-[#775a19]/10 rounded-lg py-1 px-3 transition-transform duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="workspace_premium">workspace_premium</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Showcase</span>
+</a>
+</nav>
+<!-- Decorative Corner Element -->
+<div class="fixed bottom-12 right-12 pointer-events-none opacity-5 hidden lg:block">
+<span class="material-symbols-outlined text-[240px] text-primary" data-icon="token">token</span>
+</div>
+</body></html>

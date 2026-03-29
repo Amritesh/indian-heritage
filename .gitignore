@@ -1,7 +1,14 @@
 node_modules
 frontend/build/
+frontend/.env
 temp
 .firebase/
 firebase-debug.log
-package-lock.json
-builder.config.json
+backend/.env
+*.json
+!package.json
+!firebase.json
+!firestore.indexes.json
+!package-lock.json
+!builder.config.json
+!.yarnrc.yml

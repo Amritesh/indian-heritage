@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Digital Curator - Portfolio Insights</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&amp;family=Manrope:wght@400;500;600&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container": "#f1edeb",
+                        "on-surface": "#1c1b1b",
+                        "on-tertiary-fixed-variant": "#5b4137",
+                        "surface-variant": "#e5e2e0",
+                        "on-secondary-fixed": "#410000",
+                        "tertiary-fixed": "#ffdbce",
+                        "on-primary-fixed": "#261900",
+                        "on-secondary-container": "#650000",
+                        "background": "#fdf8f6",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-container-low": "#f7f3f1",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#ffdea5",
+                        "primary-container": "#c5a059",
+                        "primary-fixed-dim": "#e9c176",
+                        "outline": "#7f7667",
+                        "on-tertiary-fixed": "#2b160f",
+                        "outline-variant": "#d1c5b4",
+                        "tertiary-container": "#c19e92",
+                        "surface-bright": "#fdf8f6",
+                        "on-secondary-fixed-variant": "#8f0f07",
+                        "on-primary-container": "#4e3700",
+                        "surface": "#fdf8f6",
+                        "secondary-fixed-dim": "#ffb4a8",
+                        "secondary": "#b22b1d",
+                        "surface-container-highest": "#e5e2e0",
+                        "inverse-primary": "#e9c176",
+                        "on-surface-variant": "#4e4639",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#775a19",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f4f0ee",
+                        "tertiary-fixed-dim": "#e4beb2",
+                        "secondary-container": "#fe624e",
+                        "secondary-fixed": "#ffdad4",
+                        "surface-dim": "#ddd9d7",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#4e352c",
+                        "surface-container-high": "#ebe7e5",
+                        "tertiary": "#75584d",
+                        "on-primary": "#ffffff",
+                        "on-background": "#1c1b1b",
+                        "on-secondary": "#ffffff",
+                        "primary": "#775a19",
+                        "inverse-surface": "#31302f"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif"],
+                        "body": ["Manrope"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.grain-overlay {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCEvbsMGL_kKmtWtQBLDjf4La4r5ffRXVcdbn5k9a6V_b8CE_dVDXcQ--50F2nJamoSM3WTSbjbVgzku6xENfoQp409gnGkrKsyFULXuOYpKP043ms43Rmn4C8I-Jp6bE2ALSgpKbnPz-TNHX6Ubd9GEfrWhyL1FZ9cNs0x7Y5Jxz8otwqGTZZHnD22fUsvQWov-VpMwOP2EgJITMGXgaxGVIGZeUxXVe5SBoxXR1xrCGDvh_jpSQJlkeQJNH4eBouSWRaOhy9LOXd_);
+    opacity: 0.03;
+    pointer-events: none
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<div class="fixed inset-0 grain-overlay z-[60]"></div>
+<!-- TopAppBar Navigation -->
+<nav class="sticky top-0 z-50 bg-[#fdfcf0]/80 backdrop-blur-xl shadow-sm dark:bg-[#121212]/80">
+<div class="flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-4">
+<button class="text-[#775a19] dark:text-[#c5a059] hover:bg-[#775a19]/5 transition-colors duration-400 p-2 rounded-lg">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline font-semibold tracking-tight text-xl italic text-[#775a19] dark:text-[#c5a059]">The Digital Curator</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-8">
+<a class="font-label text-[10px] font-medium uppercase tracking-wider text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:opacity-100" href="#">Home</a>
+<a class="font-label text-[10px] font-medium uppercase tracking-wider text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:opacity-100" href="#">Explore</a>
+<a class="font-label text-[10px] font-medium uppercase tracking-wider text-[#775a19] dark:text-[#c5a059] scale-105" href="#">Collection</a>
+</div>
+<button class="text-[#775a19] dark:text-[#c5a059] hover:bg-[#775a19]/5 transition-colors duration-400 p-2 rounded-lg">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</div>
+<div class="bg-[#e6e2d3] dark:bg-[#212121] h-[1px] w-full opacity-30"></div>
+</nav>
+<main class="max-w-7xl mx-auto px-6 py-12 md:py-16 pb-32">
+<!-- Header Section -->
+<header class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="max-w-2xl">
+<div class="flex items-center gap-2 mb-2">
+<span class="w-8 h-[1px] bg-secondary opacity-40"></span>
+<span class="font-label text-[10px] uppercase tracking-[0.2em] text-secondary font-bold">Scholarly Insights</span>
+</div>
+<h2 class="font-headline text-4xl md:text-5xl font-bold text-on-surface tracking-tight mb-4">Portfolio Analytics</h2>
+<p class="text-on-surface-variant leading-relaxed max-w-lg">
+                    A comprehensive overview of your archival acquisitions, examining the chronological span and valuation of your historical assets.
+                </p>
+</div>
+<!-- Prominent Value Insight -->
+<div class="bg-surface-container-high p-6 rounded-xl border border-outline-variant/15 shadow-sm min-w-[300px] relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4">
+<button class="flex items-center gap-2 group">
+<span class="font-label text-[10px] uppercase font-bold text-primary tracking-tighter opacity-60 group-hover:opacity-100 transition-opacity">Hide Value</span>
+<span class="material-symbols-outlined text-primary text-sm">visibility</span>
+</button>
+</div>
+<div class="mb-4">
+<p class="font-label text-[10px] uppercase tracking-wider text-on-surface-variant font-semibold">Total Estimated Worth</p>
+<div class="flex items-baseline gap-2 mt-1">
+<h3 class="font-headline text-3xl font-bold text-primary">₹ 42,85,200</h3>
+<span class="text-secondary font-semibold text-sm">+12.4%</span>
+</div>
+</div>
+<div class="flex items-center gap-4 pt-4 border-t border-outline-variant/30">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface-container-high bg-surface-dim overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="extreme close up of a rare ancient gold coin with intricate historical markings and aged texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASl1eq1JYMhSRiqX9l5VLIKP2NBLDYaK3QMM1GgB_9WlFNjY_BPvhE8AiuAvjlE7LXlDrltv-kDhs64ETpCFH00RGkMXXMBt8KrK4fG0DmUKkDpCh0UUX55qoozF7UIo233NMxY8fuzt1Gntp14JAw6FuZDoNF4IU-voyofZlhyr6F_ePeGN-kPJpAOn5o0qHRK1qpopyFEjeNl9aWJskfj9kclx8lpYf9-NZEmV7WMdiRY5EYL9fh_AjthcZgoVumjEw-ITCXM0fW"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface-container-high bg-surface-dim overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="ornate hand-carved sandalwood figurine of a deity showing fine craftsmanship and aged patina" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCTw0gF40rH5GTtBnUORb9YTZ1RlI0EI3byNtBkAGSXhHrk9xtVZmtzYXVs1CEkWTu3tL-nMiU9W1qwrgF2DPDK5UMAH_QymOwoT5dI0iml1wdRJj2pmGQm83tHu3mmuZhVrvIwyAPlu-sr4j5VgAviDt_OYPjaaDoK9PVL0j4kPfhXLn3_Fbh_XRnNrL_umiHKCU1fpfq8o-GK9S6FjZZRsuDSmhB9ytRfLcw70WzaPAwIsCmnUXfL5j2Z2M6vC79aO_2uvQeLI0Y"/>
+</div>
+</div>
+<p class="text-[10px] font-label text-on-surface-variant leading-tight">14 High-Value<br/>Artifacts</p>
+</div>
+</div>
+</header>
+<!-- Bento Grid Insights -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Collection Growth (Timeline) -->
+<div class="md:col-span-8 bg-surface-container-low rounded-xl p-8 border border-outline-variant/10">
+<div class="flex justify-between items-center mb-10">
+<h4 class="font-headline text-xl font-semibold">Acquisition Timeline</h4>
+<div class="flex gap-2">
+<button class="px-3 py-1 bg-primary text-on-primary text-[10px] font-label font-bold uppercase rounded-sm">1Y</button>
+<button class="px-3 py-1 bg-surface-variant text-on-surface-variant text-[10px] font-label font-bold uppercase rounded-sm">5Y</button>
+<button class="px-3 py-1 bg-surface-variant text-on-surface-variant text-[10px] font-label font-bold uppercase rounded-sm">MAX</button>
+</div>
+</div>
+<!-- Line Chart Visualization -->
+<div class="h-64 flex items-end justify-between gap-2 relative">
+<!-- Vertical Grid Lines -->
+<div class="absolute inset-0 flex justify-between pointer-events-none opacity-10">
+<div class="h-full w-[1px] bg-on-surface"></div>
+<div class="h-full w-[1px] bg-on-surface"></div>
+<div class="h-full w-[1px] bg-on-surface"></div>
+<div class="h-full w-[1px] bg-on-surface"></div>
+<div class="h-full w-[1px] bg-on-surface"></div>
+<div class="h-full w-[1px] bg-on-surface"></div>
+</div>
+<!-- Chart Bars (Representing trend) -->
+<div class="w-full h-32 bg-primary/10 rounded-t-sm relative group cursor-pointer hover:bg-primary/20 transition-colors">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-surface text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Jan '23: 12 Items</div>
+</div>
+<div class="w-full h-40 bg-primary/15 rounded-t-sm"></div>
+<div class="w-full h-36 bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-48 bg-primary/25 rounded-t-sm"></div>
+<div class="w-full h-56 bg-primary/30 rounded-t-sm"></div>
+<div class="w-full h-44 bg-primary/35 rounded-t-sm"></div>
+<div class="w-full h-60 bg-primary/40 rounded-t-sm"></div>
+<div class="w-full h-52 bg-primary/50 rounded-t-sm relative group cursor-pointer">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-surface text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Aug '23: 28 Items</div>
+</div>
+<div class="w-full h-64 bg-primary rounded-t-sm"></div>
+</div>
+<div class="flex justify-between mt-4 font-label text-[10px] uppercase text-on-surface-variant/60 tracking-widest font-bold">
+<span>Jan</span><span>Mar</span><span>May</span><span>Jul</span><span>Sep</span><span>Nov</span>
+</div>
+</div>
+<!-- Set Completion Progress -->
+<div class="md:col-span-4 bg-surface-container-highest rounded-xl p-8 border border-outline-variant/10 flex flex-col justify-between">
+<div>
+<h4 class="font-headline text-xl font-semibold mb-2">Set Completion</h4>
+<p class="font-label text-[10px] uppercase text-on-surface-variant font-bold tracking-wider mb-6">Mughal Dynasty Series</p>
+<div class="relative w-40 h-40 mx-auto mb-6">
+<!-- Circular Progress Ring -->
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-outline-variant opacity-20" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-secondary" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="440" stroke-dashoffset="110" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-headline text-4xl font-bold">75%</span>
+<span class="font-label text-[8px] uppercase tracking-tighter">Archived</span>
+</div>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<span class="text-xs font-medium">Missing: Gold Mohur (Akbar Era)</span>
+<span class="material-symbols-outlined text-secondary text-sm">priority_high</span>
+</div>
+<button class="w-full py-3 bg-on-surface text-surface text-[10px] font-label font-bold uppercase tracking-widest rounded hover:bg-on-surface/90 transition-colors">
+                        Sourcing Recommendations
+                    </button>
+</div>
+</div>
+<!-- Era Distribution (Asymmetric Grid) -->
+<div class="md:col-span-6 bg-surface-container-low rounded-xl p-8 border border-outline-variant/10">
+<h4 class="font-headline text-xl font-semibold mb-8">Chronological Reach</h4>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between text-[10px] font-label uppercase font-bold mb-2 tracking-widest">
+<span>Ancient (Pre-600 CE)</span>
+<span>42%</span>
+</div>
+<div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[42%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[10px] font-label uppercase font-bold mb-2 tracking-widest">
+<span>Medieval (600 - 1500 CE)</span>
+<span>28%</span>
+</div>
+<div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[28%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[10px] font-label uppercase font-bold mb-2 tracking-widest">
+<span>Modern (1500 - 1947 CE)</span>
+<span>30%</span>
+</div>
+<div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[30%]"></div>
+</div>
+</div>
+</div>
+<div class="mt-10 p-4 bg-primary/5 rounded border border-primary/10">
+<p class="text-xs italic text-on-surface-variant leading-relaxed">
+                        "Your collection shows a significant leaning towards the Ancient period, particularly the Gupta Empire coinage."
+                    </p>
+</div>
+</div>
+<!-- Category Distribution (Visual Mosaic) -->
+<div class="md:col-span-6 grid grid-cols-2 gap-4">
+<div class="bg-[#212121] rounded-xl p-6 text-surface flex flex-col justify-between overflow-hidden relative group">
+<div class="z-10">
+<span class="material-symbols-outlined text-primary-fixed text-3xl mb-4">account_balance_wallet</span>
+<h5 class="font-headline text-lg font-bold">Numismatics</h5>
+<p class="text-[10px] font-label uppercase opacity-60 tracking-widest">642 Specimens</p>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-700">
+<span class="material-symbols-outlined text-9xl">monetization_on</span>
+</div>
+</div>
+<div class="bg-surface-container-high rounded-xl p-6 flex flex-col justify-between border border-outline-variant/20">
+<div>
+<span class="material-symbols-outlined text-secondary text-3xl mb-4">history_edu</span>
+<h5 class="font-headline text-lg font-bold">Manuscripts</h5>
+<p class="text-[10px] font-label uppercase text-on-surface-variant opacity-60 tracking-widest">12 rare folios</p>
+</div>
+<div class="h-1 bg-secondary w-1/3"></div>
+</div>
+<div class="bg-surface-container-high rounded-xl p-6 flex flex-col justify-between border border-outline-variant/20">
+<div>
+<span class="material-symbols-outlined text-primary text-3xl mb-4">theater_comedy</span>
+<h5 class="font-headline text-lg font-bold">Artifacts</h5>
+<p class="text-[10px] font-label uppercase text-on-surface-variant opacity-60 tracking-widest">85 Sculptures</p>
+</div>
+<div class="h-1 bg-primary w-1/4"></div>
+</div>
+<div class="bg-primary/10 rounded-xl p-6 flex flex-col items-center justify-center text-center border border-primary/20 cursor-pointer hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary mb-2">add_circle</span>
+<span class="font-label text-[10px] uppercase font-bold tracking-widest">Add New<br/>Category</span>
+</div>
+</div>
+</div>
+<!-- Scholarly Summary Section -->
+<section class="mt-20 border-t border-outline-variant/30 pt-12">
+<div class="grid md:grid-cols-3 gap-12">
+<div class="col-span-1">
+<h4 class="font-headline text-2xl font-bold mb-4">Curator's Assessment</h4>
+<div class="w-12 h-1 bg-secondary mb-6"></div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-dim overflow-hidden grayscale">
+<img class="w-full h-full object-cover" data-alt="professional portrait of a senior man with a thoughtful expression representing a senior curator or scholar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDj8bLLrFe1Thpd43pOEF6QMM_beZQQjJjlatV4Lar2LODwxV_nOxhxylAlN80OyV5I7UgWu75rmF-ZlOPdJWpblDyGA_Nldy_8GLZ_UsdxUb23eN6JNcIi49cjFNfW1hxd2W7Zh9ldabjREpCExu4bdyTFOssHO4oSZk1ark14_p62xe0rnbWbQ8vTTc1Pb3QJE6NO__X8MxooxNj6aDPfpJIPEXglAhmS7WAQps-HN-FBnvp2tV2leJ6xwrSyie6BYlfRRINw3jhY"/>
+</div>
+<div>
+<p class="font-label text-[10px] font-bold uppercase tracking-wider">Senior Curator</p>
+<p class="text-xs text-on-surface-variant">Indian Numismatics Dept.</p>
+</div>
+</div>
+</div>
+<div class="md:col-span-2 text-on-surface-variant leading-loose space-y-4 font-body">
+<p>
+                        The current trajectory of your heritage portfolio indicates a focused pursuit of pre-colonial economic history. While the <span class="text-on-surface font-semibold">Numismatic collection</span> is exceptionally robust, there remains a significant scholarly gap in the medieval manuscript sector.
+                    </p>
+<p>
+                        Market analytics suggest a rising interest in <span class="italic">Maratha-era brassware</span>, which your current distribution lacks. We recommend a strategic pivot toward these tactile artifacts to ensure a balanced archival footprint. The upcoming <span class="text-secondary font-semibold">Heritage Exchange Auction (Dec '24)</span> presents a key opportunity for these acquisitions.
+                    </p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center pt-3 pb-8 px-2 bg-[#fdfcf0]/90 backdrop-blur-2xl border-t border-[#775a19]/10 shadow-[0_-4px_20px_rgba(119,90,25,0.06)] md:hidden">
+<button class="flex flex-col items-center justify-center text-[#212121]/60 font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">
+<span class="material-symbols-outlined mb-1">home_storage</span>
+            Home
+        </button>
+<button class="flex flex-col items-center justify-center text-[#212121]/60 font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">
+<span class="material-symbols-outlined mb-1">account_balance</span>
+            Explore
+        </button>
+<button class="flex flex-col items-center justify-center text-[#775a19] bg-[#775a19]/10 rounded-lg py-1 px-3 font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">
+<span class="material-symbols-outlined mb-1">book_2</span>
+            Collection
+        </button>
+<button class="flex flex-col items-center justify-center text-[#212121]/60 font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">
+<span class="material-symbols-outlined mb-1">military_tech</span>
+            Challenges
+        </button>
+<button class="flex flex-col items-center justify-center text-[#212121]/60 font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">
+<span class="material-symbols-outlined mb-1">workspace_premium</span>
+            Showcase
+        </button>
+</nav>
+</body></html>

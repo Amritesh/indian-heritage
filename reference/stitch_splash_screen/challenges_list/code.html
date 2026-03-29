@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Digital Curator | Heritage Challenges</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&amp;family=Manrope:wght@400;500;600&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#f1edeb",
+              "on-surface": "#1c1b1b",
+              "on-tertiary-fixed-variant": "#5b4137",
+              "surface-variant": "#e5e2e0",
+              "on-secondary-fixed": "#410000",
+              "tertiary-fixed": "#ffdbce",
+              "on-primary-fixed": "#261900",
+              "on-secondary-container": "#650000",
+              "background": "#fdf8f6",
+              "on-primary-fixed-variant": "#5d4201",
+              "surface-container-low": "#f7f3f1",
+              "on-error-container": "#93000a",
+              "error": "#ba1a1a",
+              "primary-fixed": "#ffdea5",
+              "primary-container": "#c5a059",
+              "primary-fixed-dim": "#e9c176",
+              "outline": "#7f7667",
+              "on-tertiary-fixed": "#2b160f",
+              "outline-variant": "#d1c5b4",
+              "tertiary-container": "#c19e92",
+              "surface-bright": "#fdf8f6",
+              "on-secondary-fixed-variant": "#8f0f07",
+              "on-primary-container": "#4e3700",
+              "surface": "#fdf8f6",
+              "secondary-fixed-dim": "#ffb4a8",
+              "secondary": "#b22b1d",
+              "surface-container-highest": "#e5e2e0",
+              "inverse-primary": "#e9c176",
+              "on-surface-variant": "#4e4639",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "surface-tint": "#775a19",
+              "surface-container-lowest": "#ffffff",
+              "inverse-on-surface": "#f4f0ee",
+              "tertiary-fixed-dim": "#e4beb2",
+              "secondary-container": "#fe624e",
+              "secondary-fixed": "#ffdad4",
+              "surface-dim": "#ddd9d7",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#4e352c",
+              "surface-container-high": "#ebe7e5",
+              "tertiary": "#75584d",
+              "on-primary": "#ffffff",
+              "on-background": "#1c1b1b",
+              "on-secondary": "#ffffff",
+              "primary": "#775a19",
+              "inverse-surface": "#31302f"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Manrope"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .parchment-texture {
+        background-image: radial-gradient(#775a1905 1px, transparent 1px);
+        background-size: 20px 20px;
+      }
+      .glass-header {
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body parchment-texture selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar -->
+<header class="docked full-width top-0 sticky z-50 bg-[#fdfcf0] dark:bg-[#121212] shadow-sm dark:shadow-none glass-header">
+<div class="flex justify-between items-center px-6 py-4 w-full backdrop-blur-xl">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#775a19] dark:text-[#c5a059]" data-icon="menu">menu</span>
+<h1 class="font-headline font-semibold tracking-tight italic text-xl text-[#775a19] dark:text-[#c5a059]">The Digital Curator</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex items-center gap-8">
+<a class="font-label font-medium uppercase tracking-wider text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:bg-[#775a19]/5 transition-colors duration-400 px-2 py-1" href="#">Home</a>
+<a class="font-label font-medium uppercase tracking-wider text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:bg-[#775a19]/5 transition-colors duration-400 px-2 py-1" href="#">Explore</a>
+<a class="font-label font-medium uppercase tracking-wider text-[#775a19] dark:text-[#c5a059] scale-105 border-b-2 border-primary/30" href="#">Challenges</a>
+</nav>
+<span class="material-symbols-outlined text-[#775a19] dark:text-[#c5a059]" data-icon="notifications">notifications</span>
+</div>
+</div>
+<div class="bg-[#e6e2d3] dark:bg-[#212121] h-[1px] w-full opacity-30"></div>
+</header>
+<main class="max-w-7-xl mx-auto px-6 py-12 pb-32">
+<!-- Hero Section: Narrative Intro -->
+<section class="mb-16">
+<div class="max-w-3xl">
+<h2 class="font-headline text-5xl font-bold text-on-surface mb-4 leading-tight">Historical Quests</h2>
+<p class="text-on-surface-variant text-lg leading-relaxed font-body italic border-l-4 border-primary/20 pl-6 py-2">
+                    Embark on scholarly expeditions to authenticate, restore, and document the vanishing echoes of the Indian subcontinent. Your expertise is the bridge between ages.
+                </p>
+</div>
+</section>
+<!-- Search and Filters: Archival Tags -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+<div class="flex flex-wrap gap-3">
+<div class="flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-lg cursor-pointer hover:bg-surface-variant transition-colors group">
+<span class="font-label text-xs font-bold uppercase tracking-wider text-on-surface-variant">Era:</span>
+<span class="font-body text-sm font-semibold text-primary">All Epochs</span>
+<span class="material-symbols-outlined text-sm group-hover:translate-y-0.5 transition-transform" data-icon="expand_more">expand_more</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-lg cursor-pointer hover:bg-surface-variant transition-colors group">
+<span class="font-label text-xs font-bold uppercase tracking-wider text-on-surface-variant">Category:</span>
+<span class="font-body text-sm font-semibold text-primary">Architecture</span>
+<span class="material-symbols-outlined text-sm group-hover:translate-y-0.5 transition-transform" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<div class="relative max-w-sm w-full">
+<input class="w-full bg-surface-container-low border-none focus:ring-1 focus:ring-primary rounded-lg font-body text-sm py-3 pl-10 pr-4 italic" placeholder="Search Archives..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary" data-icon="search">search</span>
+</div>
+</div>
+<!-- Ongoing Challenges: Immersive Cards -->
+<section class="mb-20">
+<div class="flex items-center gap-4 mb-8">
+<h3 class="font-headline text-2xl font-bold tracking-tight">Active Expeditions</h3>
+<div class="h-px flex-grow bg-outline-variant opacity-20"></div>
+<span class="font-label text-xs text-primary font-bold uppercase tracking-[0.2em]">Ongoing</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+<!-- Challenge Card 1 -->
+<article class="group relative bg-surface-container-high rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-outline-variant/10">
+<div class="aspect-[16/9] overflow-hidden">
+<img alt="The Taj Mahal at dawn" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 brightness-90 group-hover:brightness-100" data-alt="cinematic close-up of intricate marble carvings on an ancient Indian temple at sunrise with soft golden light and deep shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEeNhubxW2IZRSjKdHCpamHqW7vJpQ3ZaJqVyCVkqzh1C2Je0hgP7x1z1EUHLBq2-AjWSfgrIjh9YJ6VVImxDk8LEw5peNQh7MzITZMOiq2DeNjHVxwu_anXNA8m0Y88qN2y9So1i7eyGmns9jPm4Y2ZZiCoId1GZd_OA5SudZ7-mM4h1MKhLnJl7ZopFsDf2nO4YWWx-C2RnvPzUSXS9Ww46GQa3h_SgNhD2gq4520mO0El81flvIbEC8j8z_NoFu6adDbP6PBQ_p"/>
+<div class="absolute top-4 right-4 bg-primary text-on-primary px-3 py-1 rounded-sm shadow-lg">
+<span class="font-label text-[10px] font-bold uppercase tracking-widest">Master Level</span>
+</div>
+</div>
+<div class="p-8">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-headline text-2xl font-bold mb-1">Deciphering the Brahmi Script</h4>
+<p class="font-body text-sm text-on-surface-variant">Ashokan Pillars, Magadha Region</p>
+</div>
+<span class="material-symbols-outlined text-secondary" data-icon="military_tech">military_tech</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="schedule">schedule</span>
+<div>
+<p class="font-label text-[10px] uppercase text-on-surface-variant leading-none">Deadline</p>
+<p class="font-body text-sm font-bold">14 Days Remaining</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="groups">groups</span>
+<div>
+<p class="font-label text-[10px] uppercase text-on-surface-variant leading-none">Curators</p>
+<p class="font-body text-sm font-bold">1,204 Joined</p>
+</div>
+</div>
+</div>
+<div class="space-y-2 mb-8">
+<div class="flex justify-between items-end">
+<span class="font-label text-xs font-bold uppercase tracking-wider">Restoration Progress</span>
+<span class="font-body text-sm font-bold text-primary">68%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[68%]"></div>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary py-4 font-label text-sm font-bold uppercase tracking-widest rounded-lg hover:bg-on-primary-container transition-colors shadow-sm">
+                            Continue Quest
+                        </button>
+</div>
+</article>
+<!-- Challenge Card 2 -->
+<article class="group relative bg-surface-container-high rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-outline-variant/10">
+<div class="aspect-[16/9] overflow-hidden">
+<img alt="Ancient stepwell in Rajasthan" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 brightness-90 group-hover:brightness-100" data-alt="dramatic wide angle view of an ancient sandstone stepwell with geometrical patterns and architectural depth in soft afternoon light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCF1ePfB4qqKiIUmBe8UCwKZ17rJDEE_8cxDLFjibf-8mR4ObkhgGjXhzk1GNOkgI8gp8UfzpV6DSF1mHsTNGkSYFpk6zvwn1eE8HwOe78Bj-l9ZexkwKN6cN_cQWT7Ek-CkACnlAnJpoWuWEZlkBlZwjETeOwm8Nbuh5vl0LV8kgcvAEz7ArnbkTH98jVMuGnFcgkb_vR13ZH0PmDe0ucOW2IOrdBNweIgeqah61jDvHLAucUrFbyVeLvIApzpwigiAiQ0No-Dq18u"/>
+<div class="absolute top-4 right-4 bg-tertiary text-on-tertiary px-3 py-1 rounded-sm shadow-lg">
+<span class="font-label text-[10px] font-bold uppercase tracking-widest">Adept Level</span>
+</div>
+</div>
+<div class="p-8">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-headline text-2xl font-bold mb-1">The Stepwells of Gujarat</h4>
+<p class="font-body text-sm text-on-surface-variant">Hydrological Heritage, Solanki Era</p>
+</div>
+<span class="material-symbols-outlined text-secondary" data-icon="military_tech">military_tech</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="schedule">schedule</span>
+<div>
+<p class="font-label text-[10px] uppercase text-on-surface-variant leading-none">Deadline</p>
+<p class="font-body text-sm font-bold">3 Days Remaining</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="groups">groups</span>
+<div>
+<p class="font-label text-[10px] uppercase text-on-surface-variant leading-none">Curators</p>
+<p class="font-body text-sm font-bold">842 Joined</p>
+</div>
+</div>
+</div>
+<div class="space-y-2 mb-8">
+<div class="flex justify-between items-end">
+<span class="font-label text-xs font-bold uppercase tracking-wider">Restoration Progress</span>
+<span class="font-body text-sm font-bold text-primary">32%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[32%]"></div>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary py-4 font-label text-sm font-bold uppercase tracking-widest rounded-lg hover:bg-on-primary-container transition-colors shadow-sm">
+                            Continue Quest
+                        </button>
+</div>
+</article>
+</div>
+</section>
+<!-- Upcoming Challenges: Minimalist Tonal List -->
+<section class="mb-20">
+<div class="flex items-center gap-4 mb-8">
+<h3 class="font-headline text-2xl font-bold tracking-tight">Future Chronicles</h3>
+<div class="h-px flex-grow bg-outline-variant opacity-20"></div>
+<span class="font-label text-xs text-secondary font-bold uppercase tracking-[0.2em]">Upcoming</span>
+</div>
+<div class="space-y-4">
+<div class="flex flex-col md:flex-row items-center gap-6 p-6 bg-surface-container-low rounded-lg border border-outline-variant/10 hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="w-full md:w-32 h-20 rounded bg-surface-dim overflow-hidden flex-shrink-0">
+<img alt="Hampi Ruins" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="atmospheric macro shot of weathered temple ruins in Hampi with moss and ancient textures in soft focus" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmuzxkFIYBHuWGkwiXagJuCBcREK7gAEp6svCvWZG6QQf5ASIeVFkd4R8MCl0JqLP1S41O-ZXUrsQVm4U-JDegwHPjLYCC7R3Q5HgEuYUtqldvpyU0ph0g91--sE2THqPxtrxCCdESDYYa4MZaDTr7g_1EmDSU3BduZal8nUkrQpqtUPyklEbmTk2fLIIfblJGG-L1RbKPMY6epZBP1joJWmwHNW7OOOX-J7ntQ5e3Nf2Tyebt-RmZhJ8NYNu-cOO7II5LdmjsASga"/>
+</div>
+<div class="flex-grow">
+<h5 class="font-headline text-lg font-bold">Vijayanagara Coinage Audit</h5>
+<p class="font-body text-xs text-on-surface-variant">Identification and cataloging of gold varahas from the 14th century.</p>
+</div>
+<div class="flex items-center gap-8 flex-shrink-0">
+<div class="text-center">
+<p class="font-label text-[10px] uppercase text-on-surface-variant">Starting in</p>
+<p class="font-body text-sm font-bold text-secondary">4 Days</p>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="bookmark">bookmark</span>
+</div>
+</div>
+<div class="flex flex-col md:flex-row items-center gap-6 p-6 bg-surface-container-low rounded-lg border border-outline-variant/10 hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="w-full md:w-32 h-20 rounded bg-surface-dim overflow-hidden flex-shrink-0">
+<img alt="Ajanta Caves" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="close-up of ancient buddhist mural painting on a rock wall with faded colors and ethereal atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAb2GXFi3pI9hKLcmJAZaiUnt0OufKwPW7uDvmj0d1TuheMfAhNvThquSaT9Plpy4YA_qOKLvlCZzGcbJytv0RZpU_fe4s9Z5jRiadDmppHoUPbCx0hlruKDlLdB1YPJ2cTzG2QvorP55QX9qfZUF6kzfOjvxHH6bCQKlunnyDEUn_fIf1liIxqPse3IPC7QZswJQYs8JwmhbmKGofAX95lYzS9dVL1WbzKpUjkcYSbNqZC5m-AfYc8L9pPXS9UYOVH4sA6jB4o0swi"/>
+</div>
+<div class="flex-grow">
+<h5 class="font-headline text-lg font-bold">The Ajanta Pigment Study</h5>
+<p class="font-body text-xs text-on-surface-variant">Spectroscopic analysis of vegetal dyes used in Cave 16 murals.</p>
+</div>
+<div class="flex items-center gap-8 flex-shrink-0">
+<div class="text-center">
+<p class="font-label text-[10px] uppercase text-on-surface-variant">Starting in</p>
+<p class="font-body text-sm font-bold text-secondary">9 Days</p>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="bookmark">bookmark</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Past Challenges: Archival Grid -->
+<section>
+<div class="flex items-center gap-4 mb-8">
+<h3 class="font-headline text-2xl font-bold tracking-tight">Completed Archives</h3>
+<div class="h-px flex-grow bg-outline-variant opacity-20"></div>
+<span class="font-label text-xs text-on-surface-variant font-bold uppercase tracking-[0.2em]">Past</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+<div class="group cursor-pointer">
+<div class="aspect-square bg-surface-container-highest rounded-lg mb-3 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
+<img alt="Manuscript" class="w-full h-full object-cover" data-alt="old tattered palm leaf manuscript with ancient sanskrit text and decorative ink drawings" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1M3GGxLE8MDpYIOphbrAOTGNkzJDUeG-Q1oZKKoFmGQG3UNdxapaMDuGBFneu4Bpjpk1gIutGGAy5hB0kn_ltVHhC0omeSxX-0P1-VdB_tjZqw5J65F1XUF6LVmNo8IJGrvtfGwDWueLcHn8EIP3Hz4ugiXSX7H38hTvejwK3WXsUZ7Oog9cdr7ETETM08qbc_3k8CVGux-QfKf_TmK5datdivGqv4vnkz7ULVHfnKq0k5Ulil6gJANDDJm93em8LTcU_iFrvy9J3"/>
+</div>
+<h6 class="font-headline text-sm font-bold group-hover:text-primary transition-colors">Vedic Texts Preservation</h6>
+<p class="font-label text-[10px] uppercase text-on-surface-variant">Completed Dec 2023</p>
+</div>
+<div class="group cursor-pointer">
+<div class="aspect-square bg-surface-container-highest rounded-lg mb-3 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
+<img alt="Temple architecture" class="w-full h-full object-cover" data-alt="close up of ornate stone carving on a south indian temple gopuram showing intricate mythological figures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_xLwP7dd_SXwtyu-ElIrLbajFQIb0ph6BEM_Z2nk-sgMHzERvV7Qzg74kXor-SVw3aNOhQotIQK-4In9F_nY_6Zsp_Xl48XP0PfC7pkrmzngnAG39xWFo7Q76SO7WfXhvLEuq2Qzwfezd_1JwENIeG0tMXE3eIBxnv6BuIuPd0rm6szzQpvgVy-dQea6WXwiiM5b-tHV8fu68FfmR4JlSm8_TuNDmDvtpIERIBl5QSpWfSxz7IzYCJqlDKQAxxUaWTkDZZ6ZUba9c"/>
+</div>
+<h6 class="font-headline text-sm font-bold group-hover:text-primary transition-colors">Chola Temple Mapping</h6>
+<p class="font-label text-[10px] uppercase text-on-surface-variant">Completed Nov 2023</p>
+</div>
+<div class="group cursor-pointer">
+<div class="aspect-square bg-surface-container-highest rounded-lg mb-3 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
+<img alt="Ancient jewelry" class="w-full h-full object-cover" data-alt="ancient gold necklace with ruby inlays and heavy ornamentation lying on a bed of dark velvet" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbBwcAJ3qvHxG3kfkcCZ4bzka4q1PcP-oIRuxszhZlvCP9fftXYqPlU-dO-x90uyhrTyvi6Y5r6YTbQNzIbrgf8HUduSLjbukCUsavfw9601W3m-jPrxPOZ1K3b72ry8RzZXJr17NRWYZPlPHvenpTmR9OXQe_WfAZ2BJ1ewrTM65ovGDql3lqQr29ifA72gHqUYoZiZJ8B211hqHf6N6kEnP5Em7eIogZIdoPWNnlG-Y-S185n3_3IBR-QU7hN2j1MR2OCnUWk9OH"/>
+</div>
+<h6 class="font-headline text-sm font-bold group-hover:text-primary transition-colors">Mughal Jewelry Audit</h6>
+<p class="font-label text-[10px] uppercase text-on-surface-variant">Completed Oct 2023</p>
+</div>
+<div class="group cursor-pointer">
+<div class="aspect-square bg-surface-container-highest rounded-lg mb-3 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
+<img alt="Indigo textile" class="w-full h-full object-cover" data-alt="folded layers of hand-dyed indigo blue fabric with intricate block prints and raw textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkr0HeCxjAhPuNjTM_FpowL7zWrKVYIwS5j0rPhb1ii6-ebIddB5ncgufaR2kNhUsfszhSw_pCr2DOK7LIsvTade9KUAYdbzRoWlbccPWGPakI0FiyyD7rl2mFkieDKHxXkHEskVVqRFlY0YeROjbIgZT-5DYZaYifpP0lSCmZEA86tJkKVDAeUjtDAq7USvedcguLu2QrOxCiZCGk9PgA_2Xq-BbizFIMhXGFzBLdHAyofsDUUC4Oh-AD7yW29B5qxWU0gU27cR3R"/>
+</div>
+<h6 class="font-headline text-sm font-bold group-hover:text-primary transition-colors">Indigo Dye Heritage</h6>
+<p class="font-label text-[10px] uppercase text-on-surface-variant">Completed Sep 2023</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center pt-3 pb-safe px-2 backdrop-blur-2xl bg-[#fdfcf0]/90 dark:bg-[#121212]/90 z-50 rounded-t-xl border-t border-[#775a19]/10 shadow-[0_-4px_20px_rgba(119,90,25,0.06)]">
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] active:scale-90 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="home_storage">home_storage</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] active:scale-90 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#775a19] dark:text-[#c5a059] bg-[#775a19]/10 rounded-lg py-1 px-3 active:scale-90 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="military_tech">military_tech</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Challenges</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] active:scale-90 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="workspace_premium">workspace_premium</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Showcase</span>
+</a>
+</nav>
+</body></html>

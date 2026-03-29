@@ -1,33 +1,73 @@
-# Anand Heritage Gallery
+# Indian Heritage Gallery
 
-A digital platform showcasing India's rich cultural heritage.
+Firebase-first archive frontend for the British and Mughals collections. Runtime reads come from Firestore; the legacy source APIs are used only by the import/sync pipeline.
 
-## Project Structure
+## Local Dev
 
+From the repo root:
+
+```bash
+npm install
+npm run firebase:env
+npm run dev
 ```
-├── frontend/         # React frontend with Tailwind CSS
-├── backend/          # Express.js backend
-└── package.json      # Root package.json for managing both frontend and backend
+
+`npm run firebase:env` writes [`frontend/.env.example`](/Users/amritesh/Desktop/code/AHG/frontend/.env.example)-compatible runtime config into a local `frontend/.env` file using the Firebase project in [`/.firebaserc`](/Users/amritesh/Desktop/code/AHG/.firebaserc). That file is gitignored.
+
+## Import Data
+
+The importer is idempotent and safe to rerun. It upserts stable top-level documents into:
+
+- `collections/{collectionId}`
+- `items/{itemId}`
+
+Run one of:
+
+```bash
+npm run import:collections
+npm run import:british
+npm run import:mughals
 ```
 
-## Getting Started
+The script fetches the source APIs once, validates payloads with zod, normalizes them, writes to Firestore, and stores a debug snapshot under [`backend-support/snapshots`](/Users/amritesh/Desktop/code/AHG/backend-support/snapshots).
 
-1. Install dependencies for both frontend and backend:
-   ```bash
-   npm run install:all
-   ```
+## Deploy
 
-2. Start both frontend and backend development servers:
-   ```bash
-   npm start
-   ```
+From the repo root:
 
-The frontend will be available at http://localhost:3000
-The backend API will be available at http://localhost:5000
+```bash
+npm install
+npm run firebase:env
+npm run build
+firebase deploy
+```
 
-## Available Scripts
+If you prefer the repo-local CLI:
 
-- `npm start` - Start both frontend and backend in development mode
-- `npm run start:frontend` - Start only the frontend
-- `npm run start:backend` - Start only the backend
-- `npm run install:all` - Install dependencies for both frontend and backend
+```bash
+npm run deploy:firebase
+```
+
+Firebase Hosting deploys [`frontend/dist`](/Users/amritesh/Desktop/code/AHG/frontend/dist), rewrites all routes to `index.html` for SPA routing, and also publishes:
+
+- [`firebase.json`](/Users/amritesh/Desktop/code/AHG/firebase.json)
+- [`firestore.rules`](/Users/amritesh/Desktop/code/AHG/firestore.rules)
+- [`firestore.indexes.json`](/Users/amritesh/Desktop/code/AHG/firestore.indexes.json)
+- [`storage.rules`](/Users/amritesh/Desktop/code/AHG/storage.rules)
+
+## Data Model
+
+Top-level `items` are intentional so item lookup, search, and future collections stay generic. Current indexed query patterns cover:
+
+- enabled collections ordered by `sortOrder`
+- published items by `collectionSlug`
+- collection filtering by `materials`
+- title, page, and imported-date sorting
+
+## Verification Checklist
+
+- app loads with Firebase web config from `frontend/.env`
+- `/collections` shows British and Mughals from Firestore
+- `/items/:itemId` renders item details from Firestore
+- importer can be rerun without duplicate corruption because item ids are stable
+- `firebase deploy` publishes hosting, rules, storage rules, and indexes together

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&amp;family=Manrope:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#f1edeb",
+              "on-surface": "#1c1b1b",
+              "on-tertiary-fixed-variant": "#5b4137",
+              "surface-variant": "#e5e2e0",
+              "on-secondary-fixed": "#410000",
+              "tertiary-fixed": "#ffdbce",
+              "on-primary-fixed": "#261900",
+              "on-secondary-container": "#650000",
+              "background": "#fdf8f6",
+              "on-primary-fixed-variant": "#5d4201",
+              "surface-container-low": "#f7f3f1",
+              "on-error-container": "#93000a",
+              "error": "#ba1a1a",
+              "primary-fixed": "#ffdea5",
+              "primary-container": "#c5a059",
+              "primary-fixed-dim": "#e9c176",
+              "outline": "#7f7667",
+              "on-tertiary-fixed": "#2b160f",
+              "outline-variant": "#d1c5b4",
+              "tertiary-container": "#c19e92",
+              "surface-bright": "#fdf8f6",
+              "on-secondary-fixed-variant": "#8f0f07",
+              "on-primary-container": "#4e3700",
+              "surface": "#fdf8f6",
+              "secondary-fixed-dim": "#ffb4a8",
+              "secondary": "#b22b1d",
+              "surface-container-highest": "#e5e2e0",
+              "inverse-primary": "#e9c176",
+              "on-surface-variant": "#4e4639",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "surface-tint": "#775a19",
+              "surface-container-lowest": "#ffffff",
+              "inverse-on-surface": "#f4f0ee",
+              "tertiary-fixed-dim": "#e4beb2",
+              "secondary-container": "#fe624e",
+              "secondary-fixed": "#ffdad4",
+              "surface-dim": "#ddd9d7",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#4e352c",
+              "surface-container-high": "#ebe7e5",
+              "tertiary": "#75584d",
+              "on-primary": "#ffffff",
+              "on-background": "#1c1b1b",
+              "on-secondary": "#ffffff",
+              "primary": "#775a19",
+              "inverse-surface": "#31302f"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Manrope"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        font-family: 'Manrope', sans-serif;
+        background-color: #fdf8f6;
+        background-image: radial-gradient(#775a1908 1px, transparent 0);
+        background-size: 24px 24px;
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .hide-scrollbar::-webkit-scrollbar { display: none; }
+      .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="bg-[#fdfcf0] dark:bg-[#121212] docked full-width top-0 sticky z-50 shadow-sm dark:shadow-none">
+<div class="flex justify-between items-center px-6 py-4 w-full backdrop-blur-xl">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#775a19] dark:text-[#c5a059] cursor-pointer">menu</span>
+<h1 class="font-serif text-[#775a19] dark:text-[#c5a059] italic text-xl Headlines: Noto Serif font-semibold tracking-tight">The Digital Curator</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex items-center gap-8">
+<span class="text-[#775a19] dark:text-[#c5a059] scale-105 font-medium cursor-pointer">Home</span>
+<span class="text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:bg-[#775a19]/5 transition-colors duration-400 font-medium cursor-pointer">Explore</span>
+<span class="text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:bg-[#775a19]/5 transition-colors duration-400 font-medium cursor-pointer">Collection</span>
+</nav>
+<span class="material-symbols-outlined text-[#775a19] dark:text-[#c5a059] cursor-pointer">notifications</span>
+</div>
+</div>
+<div class="bg-[#e6e2d3] dark:bg-[#212121] h-[1px] w-full opacity-30"></div>
+</header>
+<main class="max-w-7xl mx-auto pb-32">
+<!-- Hero Banner: Intentional Asymmetry -->
+<section class="relative mt-8 px-6 overflow-hidden">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-0 items-center bg-surface-container-low rounded-xl overflow-hidden min-h-[450px]">
+<div class="md:col-span-5 p-12 z-10">
+<span class="font-label text-xs font-bold uppercase tracking-[0.2em] text-primary mb-4 block">National Archives Portfolio</span>
+<h2 class="font-headline text-5xl md:text-6xl text-on-surface font-bold leading-tight mb-6">Explore India Through Its Collectibles</h2>
+<p class="font-body text-lg text-on-surface-variant mb-8 max-w-sm">A scholarly sanctuary for the preservation and study of Indian numismatics, philately, and heritage artifacts.</p>
+<button class="bg-primary text-on-primary px-8 py-3 rounded-md font-medium flex items-center gap-2 hover:opacity-90 transition-opacity">
+                        Begin Cataloging <span class="material-symbols-outlined">arrow_right_alt</span>
+</button>
+</div>
+<div class="md:col-span-7 h-full relative min-h-[300px]">
+<img class="absolute inset-0 w-full h-full object-cover" data-alt="atmospheric shot of a high-end museum interior with golden lighting hitting ancient stone sculptures and glass display cases" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB01HNkzhZ3RxeK0wBG85ZBw_5Uknv1IYpO37_9ijasPrvdjyvkR9hbkvhesA2hVG38OnGn-es-nHctRiAkZtmWf7evu4LQ1ywAQ2YdjH1EMr1E4RriL-hfP9ILuS9vQuuvI0-XEqjmF1lvaD4ohWwfv-1m3JLsquYUT2GIywsOuATwzJdYABFXSjHKD0oS7kZspqODsz36RuhSvykVz915b3poBw7k9m5dz6x-zA0O_ONNXLIQesNhOMDK0S7HVBwltf7g_9YyvuMH"/>
+<div class="absolute inset-0 bg-gradient-to-r from-surface-container-low via-transparent to-transparent"></div>
+</div>
+</div>
+</section>
+<!-- Quick Summary & Actions Bento -->
+<section class="px-6 mt-12 grid grid-cols-1 md:grid-cols-4 gap-6">
+<!-- Collection Stats Card -->
+<div class="md:col-span-2 bg-surface-container-high p-8 rounded-xl flex flex-col justify-between">
+<div>
+<h3 class="font-label text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-6">Your Personal Archive</h3>
+<div class="grid grid-cols-3 gap-8">
+<div>
+<span class="block text-3xl font-headline font-bold text-primary">1,284</span>
+<span class="font-label text-[10px] uppercase tracking-widest opacity-60">Total Items</span>
+</div>
+<div>
+<span class="block text-3xl font-headline font-bold text-primary">12</span>
+<span class="font-label text-[10px] uppercase tracking-widest opacity-60">Categories</span>
+</div>
+<div>
+<span class="block text-3xl font-headline font-bold text-secondary">64%</span>
+<span class="font-label text-[10px] uppercase tracking-widest opacity-60">Completion</span>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-8 border-t border-outline-variant/20">
+<div class="flex justify-between items-end mb-2">
+<span class="font-body text-sm font-semibold">Maurya Dynasty Set</span>
+<span class="font-label text-[10px] text-primary">8/12 Items</span>
+</div>
+<div class="h-1 bg-surface-variant w-full rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[66%]"></div>
+</div>
+</div>
+</div>
+<!-- Quick Actions -->
+<div class="bg-surface-container-lowest border border-outline-variant/10 p-6 rounded-xl flex flex-col gap-4">
+<h3 class="font-label text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2">Curatorial Actions</h3>
+<button class="flex items-center gap-4 p-4 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors group">
+<span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded">add_circle</span>
+<div class="text-left">
+<span class="block font-semibold text-sm">Add Item</span>
+<span class="block text-[10px] opacity-60 uppercase tracking-tighter">Single Entry</span>
+</div>
+</button>
+<button class="flex items-center gap-4 p-4 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors group">
+<span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded">unarchive</span>
+<div class="text-left">
+<span class="block font-semibold text-sm">Bulk Upload</span>
+<span class="block text-[10px] opacity-60 uppercase tracking-tighter">CSV / JSON Import</span>
+</div>
+</button>
+<button class="flex items-center gap-4 p-4 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors group">
+<span class="material-symbols-outlined text-secondary bg-secondary/10 p-2 rounded">military_tech</span>
+<div class="text-left">
+<span class="block font-semibold text-sm">Start Challenge</span>
+<span class="block text-[10px] opacity-60 uppercase tracking-tighter">New Era Quest</span>
+</div>
+</button>
+</div>
+<!-- Smart Recommendation Card -->
+<div class="bg-secondary p-8 rounded-xl text-on-secondary flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-4xl mb-4">lightbulb</span>
+<h3 class="font-headline text-xl font-bold leading-tight">Complete your Mughal Silver Tanka set</h3>
+<p class="text-sm opacity-80 mt-4">Three specific variations of the Akbar-era coinage are currently available for trade in the exchange.</p>
+</div>
+<button class="mt-6 border border-on-secondary/30 py-2 px-4 rounded font-label text-[10px] uppercase tracking-widest hover:bg-on-secondary hover:text-secondary transition-colors">
+                    View Recommendation
+                </button>
+</div>
+</section>
+<!-- Continue Cataloging: Layered Cards -->
+<section class="px-6 mt-16">
+<div class="flex justify-between items-end mb-8">
+<h3 class="font-headline text-3xl font-bold">Continue Cataloging</h3>
+<a class="text-primary font-label text-xs font-bold uppercase tracking-widest hover:underline" href="#">View Drafts (4)</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Item 1 -->
+<div class="group relative bg-surface-container-lowest rounded-xl p-4 transition-all hover:shadow-xl hover:shadow-primary/5">
+<div class="aspect-[4/3] rounded-lg overflow-hidden mb-4 relative bg-surface-dim">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" data-alt="macro close-up of a weathered ancient silver coin with intricate calligraphy and geometric patterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmS8YEuwLwN2-pQ1eRYj5dT_nuTk2S0eSCSO281XatvNGPm8mNn0SvRPvsz7o-R8z1BiSJUAfVl5fNde648ne0hj6EftMeAWLmubsiYk5maT6rd-t0a4BTuRnaC7fr8PJ8n03-5fp0hiyczbaccGucKIFjz9luy1Qj80UrXhp61d26ScIVEHhJwIE5afxJSsSZrsHZZb6MuwpfGoftIFEs-ArAkWmrsnnRHZzd7XDlbEhX25oCJ__23kea8s-cMw3FwxEVqyI1yD6S"/>
+<div class="absolute top-3 right-3 bg-secondary/90 text-on-secondary px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-sm">Pending Detail</div>
+</div>
+<span class="font-label text-[10px] text-secondary font-bold uppercase tracking-widest">Ancient Numismatics</span>
+<h4 class="font-headline text-lg font-bold mt-1">Punch-Marked Karshapana</h4>
+<p class="text-sm text-on-surface-variant mt-2 line-clamp-2 italic">Unidentified symbols on reverse. Possible Mauryan origin from Taxila mint...</p>
+<div class="mt-4 flex items-center justify-between">
+<span class="text-[10px] font-label uppercase text-outline">Modified 2h ago</span>
+<span class="material-symbols-outlined text-primary group-hover:translate-x-1 transition-transform">edit_square</span>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="group relative bg-surface-container-lowest rounded-xl p-4 transition-all hover:shadow-xl hover:shadow-primary/5">
+<div class="aspect-[4/3] rounded-lg overflow-hidden mb-4 relative bg-surface-dim">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" data-alt="vintage postage stamp with an illustration of an elephant and ornate border designs in faded sepia tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZELaeJUWQX8negkWXYvc_sCrgcPlm1MuudteGl5rntgkXD76bc7El1Wjy0t_FifWFHns3fGR7jc6WordeVvDyNp6shic95Qydt8-0Ucm15fRkcgzehrKIuTFCbwAD-p3OboMMX0V8_QUPbpe2nmfILXMS4YHElkZer2kM3xwv6ekNWfopF4rTyiFuWVQx6vJJfHTQAJ4vpQiFwY2a6at-NZ0JOYSepIkXolhIjB5em6ZbJzHIKu3qvPRycQy50BL2GaKTfZwDDeBi"/>
+<div class="absolute top-3 right-3 bg-primary/90 text-on-primary px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-sm">No Photo</div>
+</div>
+<span class="font-label text-[10px] text-primary font-bold uppercase tracking-widest">British India Philately</span>
+<h4 class="font-headline text-lg font-bold mt-1">1911 First Aerial Post</h4>
+<p class="text-sm text-on-surface-variant mt-2 line-clamp-2 italic">Rare cancellation mark missing. Requires scanning of the cover back...</p>
+<div class="mt-4 flex items-center justify-between">
+<span class="text-[10px] font-label uppercase text-outline">Modified 5h ago</span>
+<span class="material-symbols-outlined text-primary group-hover:translate-x-1 transition-transform">edit_square</span>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="group relative bg-surface-container-lowest rounded-xl p-4 transition-all hover:shadow-xl hover:shadow-primary/5">
+<div class="aspect-[4/3] rounded-lg overflow-hidden mb-4 relative bg-surface-dim">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" data-alt="macro photo of a high-denomination historical banknote with intricate guilloche patterns and watermark visible" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvT5fjoEgPpm7ihk5Ba2xqNh2qzI5YLdf9CqXlhaaQuIXCa5mZtnCx0hTukAsnQUKH35ct1T2EonrvwXikr7XGceLtzGq_QUOPJ-_TGIOUKWyuHyYbJ4_5Jf1qFNXn75Ddcqc7j1xk6eNSjU2hanmffbOeputA3z0eWFkf4OuN5QscqG2tZ7xswdkS4pH6pOgIj1yp3qc6Qrag5tivvwz9tN2HOLVo8wtRbaOyMzZTEO-jjbk1WzPjBs-CsCU4EKhHFh6rbALUc-eb"/>
+<div class="absolute top-3 right-3 bg-secondary/90 text-on-secondary px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-sm">Incomplete</div>
+</div>
+<span class="font-label text-[10px] text-secondary font-bold uppercase tracking-widest">Paper Currencies</span>
+<h4 class="font-headline text-lg font-bold mt-1">10 Rupees George VI</h4>
+<p class="text-sm text-on-surface-variant mt-2 line-clamp-2 italic">Missing serial number range. Condition grading: Very Fine (VF)...</p>
+<div class="mt-4 flex items-center justify-between">
+<span class="text-[10px] font-label uppercase text-outline">Modified Yesterday</span>
+<span class="material-symbols-outlined text-primary group-hover:translate-x-1 transition-transform">edit_square</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Categories & Eras: Tonal Shifts -->
+<section class="mt-20 bg-surface-container py-16 px-6">
+<div class="max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+<div>
+<span class="font-label text-xs font-bold uppercase tracking-[0.2em] text-primary mb-2 block">Curation Taxonomy</span>
+<h3 class="font-headline text-4xl font-bold">Browse by Category</h3>
+</div>
+<div class="flex gap-4">
+<div class="bg-surface-container-lowest p-2 rounded-full cursor-pointer hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</div>
+<div class="bg-surface-container-lowest p-2 rounded-full cursor-pointer hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-5 gap-6">
+<div class="bg-surface-container-lowest aspect-square p-8 rounded-xl flex flex-col items-center justify-center text-center group cursor-pointer hover:-translate-y-2 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-4xl text-primary mb-4">monetization_on</span>
+<span class="font-headline text-lg font-bold">Coins</span>
+<span class="font-label text-[10px] uppercase tracking-tighter opacity-60">452 Items</span>
+</div>
+<div class="bg-surface-container-lowest aspect-square p-8 rounded-xl flex flex-col items-center justify-center text-center group cursor-pointer hover:-translate-y-2 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-4xl text-primary mb-4">mail</span>
+<span class="font-headline text-lg font-bold">Stamps</span>
+<span class="font-label text-[10px] uppercase tracking-tighter opacity-60">812 Items</span>
+</div>
+<div class="bg-surface-container-lowest aspect-square p-8 rounded-xl flex flex-col items-center justify-center text-center group cursor-pointer hover:-translate-y-2 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-4xl text-primary mb-4">payments</span>
+<span class="font-headline text-lg font-bold">Notes</span>
+<span class="font-label text-[10px] uppercase tracking-tighter opacity-60">124 Items</span>
+</div>
+<div class="bg-surface-container-lowest aspect-square p-8 rounded-xl flex flex-col items-center justify-center text-center group cursor-pointer hover:-translate-y-2 transition-transform shadow-sm border-2 border-primary/20">
+<span class="material-symbols-outlined text-4xl text-primary mb-4">history_edu</span>
+<span class="font-headline text-lg font-bold">Manuscripts</span>
+<span class="font-label text-[10px] uppercase tracking-tighter opacity-60">18 Items</span>
+</div>
+<div class="bg-surface-container-lowest aspect-square p-8 rounded-xl flex flex-col items-center justify-center text-center group cursor-pointer hover:-translate-y-2 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-4xl text-primary mb-4">stat_3</span>
+<span class="font-headline text-lg font-bold">Artifacts</span>
+<span class="font-label text-[10px] uppercase tracking-tighter opacity-60">31 Items</span>
+</div>
+</div>
+<!-- Eras Horizontal Scroll -->
+<div class="mt-20">
+<h4 class="font-label text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-6">Historical Chronology</h4>
+<div class="flex gap-6 overflow-x-auto hide-scrollbar pb-8 snap-x">
+<div class="min-w-[280px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/10 snap-start hover:border-primary/40 transition-colors cursor-pointer group">
+<span class="font-label text-[10px] text-primary mb-4 block tracking-widest">300 BCE - 185 BCE</span>
+<h5 class="font-headline text-2xl font-bold mb-4">Maurya Empire</h5>
+<p class="text-sm text-on-surface-variant italic mb-6">The golden age of punch-marked silver and early stone architecture.</p>
+<span class="text-xs font-bold text-primary group-hover:underline">Explore Era</span>
+</div>
+<div class="min-w-[280px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/10 snap-start hover:border-primary/40 transition-colors cursor-pointer group">
+<span class="font-label text-[10px] text-primary mb-4 block tracking-widest">320 CE - 550 CE</span>
+<h5 class="font-headline text-2xl font-bold mb-4">Gupta Dynasty</h5>
+<p class="text-sm text-on-surface-variant italic mb-6">Classical gold dinars featuring the king as hunter and musician.</p>
+<span class="text-xs font-bold text-primary group-hover:underline">Explore Era</span>
+</div>
+<div class="min-w-[280px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/10 snap-start hover:border-primary/40 transition-colors cursor-pointer group">
+<span class="font-label text-[10px] text-primary mb-4 block tracking-widest">1526 CE - 1857 CE</span>
+<h5 class="font-headline text-2xl font-bold mb-4">Mughal Era</h5>
+<p class="text-sm text-on-surface-variant italic mb-6">Intricate calligraphic tankas and astronomical zodiac coinage.</p>
+<span class="text-xs font-bold text-primary group-hover:underline">Explore Era</span>
+</div>
+<div class="min-w-[280px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/10 snap-start hover:border-primary/40 transition-colors cursor-pointer group">
+<span class="font-label text-[10px] text-primary mb-4 block tracking-widest">1858 CE - 1947 CE</span>
+<h5 class="font-headline text-2xl font-bold mb-4">British Raj</h5>
+<p class="text-sm text-on-surface-variant italic mb-6">Imperial portraits and the transition to modern paper currency.</p>
+<span class="text-xs font-bold text-primary group-hover:underline">Explore Era</span>
+</div>
+<div class="min-w-[280px] bg-surface-container-low p-8 rounded-xl border border-outline-variant/10 snap-start hover:border-primary/40 transition-colors cursor-pointer group">
+<span class="font-label text-[10px] text-primary mb-4 block tracking-widest">1947 CE - Present</span>
+<h5 class="font-headline text-2xl font-bold mb-4">Republic of India</h5>
+<p class="text-sm text-on-surface-variant italic mb-6">Sovereign design language and commemorative issues.</p>
+<span class="text-xs font-bold text-primary group-hover:underline">Explore Era</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Museum Picks: Community Showcase -->
+<section class="px-6 mt-20">
+<div class="flex flex-col items-center text-center mb-12">
+<span class="material-symbols-outlined text-secondary text-5xl mb-4" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<h3 class="font-headline text-4xl font-bold">Museum Picks</h3>
+<p class="text-on-surface-variant mt-2 max-w-lg italic">Exceptional artifacts from our community curators, selected for historical significance and preservation quality.</p>
+</div>
+<div class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+<div class="break-inside-avoid bg-surface-container-low rounded-xl overflow-hidden p-6 hover:shadow-lg transition-shadow">
+<img class="w-full rounded-lg mb-4" data-alt="dramatic lighting on an ancient Indian stone seal with a bull engraving and Indus script symbols" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2nMcFY2qK3eNtxW8x-M5oUTgS-7HbJoqHgiaLtnI-k0gk6AwEAObtDKjYXszjk1TvDLHN_B1k-tV_RPhPImXN5GW1usit6GXprN8CwLvB4N0qKjeG8J3vuC-qbcEvzONOBqSmJ5ckdRxuo1oKUkzE5ycmj-H1EFa4W2Xrle2KTi9IBeHtG7SmfNXgJBde4GGh6x8qN0DbMTc_YnbBuUiwiQpSSkN8XYTek5vS540LMMys8en2Q0Agd4CpZ2SuOXAvN2Em9YPXWeEW"/>
+<h4 class="font-headline text-xl font-bold">Harappan Unicorn Seal</h4>
+<p class="text-xs text-primary font-bold uppercase tracking-widest mt-2 mb-4">Collector: Vikram_A192</p>
+<p class="text-sm opacity-80 leading-relaxed">"An incredible example of steatite carving from the Lothal site. The script remains one of history's greatest puzzles."</p>
+</div>
+<div class="break-inside-avoid bg-surface-container-low rounded-xl overflow-hidden p-6 hover:shadow-lg transition-shadow">
+<img class="w-full rounded-lg mb-4" data-alt="highly detailed miniature painting of a Mughal court scene with vibrant pigments and gold leaf accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZCGqWyNzRHnhVTDp0HdeTZylaWfaRH-t7KyVG9m2JkIb0KpA09zZvJ-3ooS3JGt3EZFgHrib0P2t1GBa29eTBYvHNDhv9mfX_XgQCCsmF90zVIIiBM3S6ecAALbyv9de0zOOEbVRnotTiHsd-FGdGtdMjapoEWL10bDisSCmJqoZBMx0pRDTaMQBnemTnlJPpzbDVdGl39WnvTyAlyFcubvj8tSpI14odKoWk73p4cfPnWRCXNbiVtJxUWxO4yV6173000D-Isj2v"/>
+<h4 class="font-headline text-xl font-bold">Pahari Miniature Painting</h4>
+<p class="text-xs text-primary font-bold uppercase tracking-widest mt-2 mb-4">Collector: Meera_K</p>
+<p class="text-sm opacity-80 leading-relaxed">"Guler school masterpiece depicting the Ragamala series. The preservation of the natural pigments is extraordinary."</p>
+</div>
+<div class="break-inside-avoid bg-surface-container-low rounded-xl overflow-hidden p-6 hover:shadow-lg transition-shadow">
+<img class="w-full rounded-lg mb-4" data-alt="ornate vintage wooden box with brass inlays used for keeping spices or jewelry, reflecting traditional Indian craft" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtqOOcAEu6Y9Hs2Dio7B3k-YzMGyh7hmFJj6EQ2cnm6ktAprU1iAvMRDRBWHyNfA2izmRJt4i3tXB47l7bas6AnbFIBez7jMANFOFszRFpcQvPusUGVMKHaDQ-rovy2GFjQyuigECHRjhoZEd63CPwgbZuNNO8vxDK_tCbOHX2YAAypgQjNvddny90QlEkdkGNuSymtueSKKTo15X72tnN86eTILXwOPRHIinKsFGC5FeKRlYVlD_lmLogLr_Omv7jHHRX5RrRAMk1"/>
+<h4 class="font-headline text-xl font-bold">Royal Sandalwood Casket</h4>
+<p class="text-xs text-primary font-bold uppercase tracking-widest mt-2 mb-4">Collector: Heritage_Vault</p>
+<p class="text-sm opacity-80 leading-relaxed">"Mysore craft at its peak. This 19th-century piece still retains a faint aroma of the sacred wood."</p>
+</div>
+</div>
+</section>
+<!-- Challenges Carousel -->
+<section class="px-6 mt-24 mb-12">
+<h3 class="font-headline text-3xl font-bold mb-8">Active Challenges</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-primary text-on-primary p-8 rounded-xl flex items-center gap-6 relative overflow-hidden group">
+<div class="relative z-10 flex-1">
+<span class="font-label text-[10px] uppercase tracking-[0.2em] opacity-80 mb-2 block">Monthly Quest</span>
+<h4 class="font-headline text-2xl font-bold mb-2">The Princely States Circuit</h4>
+<p class="text-sm opacity-90 mb-6">Catalog at least one coin from 5 different Princely States of India to earn the 'State Sovereign' badge.</p>
+<div class="flex items-center gap-4">
+<button class="bg-on-primary text-primary px-6 py-2 rounded-md font-bold text-xs uppercase tracking-widest">Join Challenge</button>
+<span class="text-xs font-bold">1,240 Participants</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[120px] absolute -right-4 -bottom-4 opacity-10 group-hover:rotate-12 transition-transform duration-700">military_tech</span>
+</div>
+<div class="bg-surface-container-highest p-8 rounded-xl flex items-center gap-6 relative overflow-hidden border border-primary/10">
+<div class="relative z-10 flex-1">
+<span class="font-label text-[10px] uppercase tracking-[0.2em] text-primary mb-2 block">Curation Sprint</span>
+<h4 class="font-headline text-2xl font-bold mb-2">Metadata Mastery</h4>
+<p class="text-sm text-on-surface-variant mb-6">Add detailed provenance notes to 10 items in your collection. High-quality descriptions only.</p>
+<div class="flex items-center gap-4">
+<div class="flex-1 h-2 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-1/2"></div>
+</div>
+<span class="text-xs font-bold text-secondary">5/10 Complete</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar: Mobile Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center pt-3 pb-safe px-2 backdrop-blur-2xl bg-[#fdfcf0]/90 dark:bg-[#121212]/90 z-50 rounded-t-xl border-t border-[#775a19]/10 shadow-[0_-4px_20px_rgba(119,90,25,0.06)]">
+<div class="flex flex-col items-center justify-center text-[#775a19] dark:text-[#c5a059] bg-[#775a19]/10 rounded-lg py-1 px-3">
+<span class="material-symbols-outlined">home_storage</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300">
+<span class="material-symbols-outlined">account_balance</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300">
+<span class="material-symbols-outlined">book_2</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Collection</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Challenges</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-transform duration-300">
+<span class="material-symbols-outlined">workspace_premium</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Showcase</span>
+</div>
+</nav>
+<!-- Floating Action Button: Contextual -->
+<div class="fixed bottom-24 md:bottom-12 right-6 z-40">
+<button class="bg-primary text-on-primary w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 group">
+<span class="material-symbols-outlined text-3xl">add</span>
+<div class="absolute right-full mr-4 bg-on-surface text-surface px-4 py-2 rounded text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none uppercase tracking-widest">Add New Item</div>
+</button>
+</div>
+</body></html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Digital Curator - Settings &amp; Trust</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&amp;family=Manrope:wght@400;500;600&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#f1edeb",
+              "on-surface": "#1c1b1b",
+              "on-tertiary-fixed-variant": "#5b4137",
+              "surface-variant": "#e5e2e0",
+              "on-secondary-fixed": "#410000",
+              "tertiary-fixed": "#ffdbce",
+              "on-primary-fixed": "#261900",
+              "on-secondary-container": "#650000",
+              "background": "#fdf8f6",
+              "on-primary-fixed-variant": "#5d4201",
+              "surface-container-low": "#f7f3f1",
+              "on-error-container": "#93000a",
+              "error": "#ba1a1a",
+              "primary-fixed": "#ffdea5",
+              "primary-container": "#c5a059",
+              "primary-fixed-dim": "#e9c176",
+              "outline": "#7f7667",
+              "on-tertiary-fixed": "#2b160f",
+              "outline-variant": "#d1c5b4",
+              "tertiary-container": "#c19e92",
+              "surface-bright": "#fdf8f6",
+              "on-secondary-fixed-variant": "#8f0f07",
+              "on-primary-container": "#4e3700",
+              "surface": "#fdf8f6",
+              "secondary-fixed-dim": "#ffb4a8",
+              "secondary": "#b22b1d",
+              "surface-container-highest": "#e5e2e0",
+              "inverse-primary": "#e9c176",
+              "on-surface-variant": "#4e4639",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "surface-tint": "#775a19",
+              "surface-container-lowest": "#ffffff",
+              "inverse-on-surface": "#f4f0ee",
+              "tertiary-fixed-dim": "#e4beb2",
+              "secondary-container": "#fe624e",
+              "secondary-fixed": "#ffdad4",
+              "surface-dim": "#ddd9d7",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#4e352c",
+              "surface-container-high": "#ebe7e5",
+              "tertiary": "#75584d",
+              "on-primary": "#ffffff",
+              "on-background": "#1c1b1b",
+              "on-secondary": "#ffffff",
+              "primary": "#775a19",
+              "inverse-surface": "#31302f"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Manrope"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.grain-overlay {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDwclcgdUfIxvbDskSBbZ9z0MsBvk9zYLJ548kjBRafuyCohRDFWxh56R_rlYtpyf-tuIzsJrNM-o8Id76B5auFsJ3wB8iI8yqIJmKmfrberl1y5KH047n9OrpKuV3IxwILnxgT1QFMnfEokheiKtIit7Ezze_qZ-mtV-MF_3F3Ushe2p4EYyyW0WAT0o2ANJCuTkCR5zALTAE8A_dlljNX3fiFYHoxzqPvtlBDDYnGhDAwJml7uk6z06hXNXcobTK_yucUT012da_L);
+    opacity: 0.03;
+    pointer-events: none
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed">
+<div class="fixed inset-0 grain-overlay z-[60]"></div>
+<!-- TopAppBar -->
+<header class="bg-[#fdfcf0] dark:bg-[#121212] sticky top-0 z-50 shadow-sm dark:shadow-none">
+<div class="flex justify-between items-center px-6 py-4 w-full backdrop-blur-xl">
+<div class="flex items-center gap-4">
+<button class="text-[#775a19] dark:text-[#c5a059] p-2 hover:bg-[#775a19]/5 transition-colors duration-400">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-serif text-[#775a19] dark:text-[#c5a059] italic text-xl Headlines: Noto Serif font-semibold tracking-tight">The Digital Curator</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-[#775a19] dark:text-[#c5a059] p-2 hover:bg-[#775a19]/5 transition-colors duration-400">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</div>
+<div class="bg-[#e6e2d3] dark:bg-[#212121] h-[1px] w-full opacity-30"></div>
+</header>
+<main class="max-w-5xl mx-auto px-6 py-12 md:pb-32">
+<!-- Page Header -->
+<div class="mb-12">
+<p class="font-label text-xs uppercase tracking-[0.2em] text-primary mb-2">Curatorial Control Center</p>
+<h2 class="font-headline text-4xl md:text-5xl font-bold text-on-surface tracking-tight">Settings &amp; Security</h2>
+<div class="mt-4 h-1 w-24 bg-secondary"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Left Column: Primary Settings -->
+<div class="md:col-span-8 space-y-8">
+<!-- Data & Archival Section -->
+<section class="bg-surface-container-low p-8 rounded-lg relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 -mr-16 -mt-16 rounded-full blur-3xl group-hover:bg-primary/10 transition-all duration-700"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary" data-icon="database">database</span>
+<h3 class="font-headline text-xl font-semibold">Data &amp; Archival Export</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-surface-container-highest p-5 rounded border border-outline-variant/15 flex flex-col justify-between">
+<div>
+<h4 class="font-bold text-sm text-on-surface uppercase tracking-wider mb-2">Auto-Sync &amp; Backup</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed mb-4">Secure your collection lineage to the encrypted cloud vault.</p>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-xs font-label text-primary font-bold">ACTIVE</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+<div class="bg-surface-container-highest p-5 rounded border border-outline-variant/15 flex flex-col justify-between">
+<div>
+<h4 class="font-bold text-sm text-on-surface uppercase tracking-wider mb-2">Export Collection</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed mb-4">Download your scholarly records in museum-standard formats.</p>
+</div>
+<div class="flex gap-2">
+<button class="bg-primary text-on-primary px-3 py-1.5 text-xs font-bold rounded shadow-sm hover:brightness-110 transition-all">CSV</button>
+<button class="bg-primary text-on-primary px-3 py-1.5 text-xs font-bold rounded shadow-sm hover:brightness-110 transition-all">PDF REPORT</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Privacy & Profile -->
+<section class="bg-surface-container-low p-8 rounded-lg">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary" data-icon="shield_person">shield_person</span>
+<h3 class="font-headline text-xl font-semibold">Privacy &amp; Profile Controls</h3>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between py-4 border-b border-outline-variant/10">
+<div>
+<h4 class="font-semibold text-on-surface">Curator Visibility</h4>
+<p class="text-sm text-on-surface-variant">Allow other scholars to view your public collection showcases.</p>
+</div>
+<span class="material-symbols-outlined text-outline cursor-pointer" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="flex items-center justify-between py-4 border-b border-outline-variant/10">
+<div>
+<h4 class="font-semibold text-on-surface">Anonymized Research</h4>
+<p class="text-sm text-on-surface-variant">Contribute anonymized metadata to the National Heritage Database.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between py-4">
+<div>
+<h4 class="font-semibold text-on-surface">Language &amp; Localization</h4>
+<p class="text-sm text-on-surface-variant">Current: English (UK) - Scholarly Standard</p>
+</div>
+<button class="text-primary font-bold text-xs uppercase tracking-widest px-4 py-2 border border-outline-variant/30 hover:bg-primary/5 rounded">Change</button>
+</div>
+</div>
+</section>
+<!-- Help & Heritage Guidelines -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-surface-container-high p-6 rounded-lg border-l-4 border-primary">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="menu_book">menu_book</span>
+<h4 class="font-headline text-lg font-bold mb-2">Heritage Guidelines</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed mb-4">Learn about the ethical collection and preservation of Indian artifacts.</p>
+<a class="text-primary text-xs font-bold uppercase tracking-widest flex items-center gap-1 group" href="#">
+                            Read Handbook
+                            <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<div class="bg-surface-container-high p-6 rounded-lg border-l-4 border-secondary">
+<span class="material-symbols-outlined text-secondary mb-4" data-icon="gavel">gavel</span>
+<h4 class="font-headline text-lg font-bold mb-2">Terms of Curatorship</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed mb-4">Legal framework for digital ownership and archival rights.</p>
+<a class="text-secondary text-xs font-bold uppercase tracking-widest flex items-center gap-1 group" href="#">
+                            Legal Docs
+                            <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</section>
+</div>
+<!-- Right Column: Trust & Integrity -->
+<div class="md:col-span-4 space-y-6">
+<!-- Trust Score Card -->
+<div class="bg-primary text-on-primary p-8 rounded-lg shadow-lg relative overflow-hidden">
+<div class="absolute bottom-0 right-0 opacity-10">
+<span class="material-symbols-outlined text-9xl" data-icon="verified_user">verified_user</span>
+</div>
+<h3 class="font-label text-[10px] uppercase tracking-[0.2em] mb-4 opacity-80">Trust Integrity Level</h3>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="text-5xl font-headline font-bold">98</span>
+<span class="text-xl font-headline opacity-60">/100</span>
+</div>
+<p class="text-sm font-medium leading-relaxed mb-6">Your profile is currently rated as 'Highly Credible' in the numismatic community.</p>
+<div class="w-full bg-on-primary/20 h-1.5 rounded-full overflow-hidden">
+<div class="bg-on-primary h-full w-[98%]"></div>
+</div>
+</div>
+<!-- Fraud Reporting -->
+<div class="bg-error-container p-6 rounded-lg border border-error/10">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary" data-icon="report">report</span>
+<h4 class="font-headline font-bold text-on-secondary-container">Report Discrepancy</h4>
+</div>
+<p class="text-sm text-on-secondary-container leading-relaxed mb-6">Encountered a counterfeit listing or suspicious activity? Help us protect Indian Heritage.</p>
+<button class="w-full bg-secondary text-on-secondary py-3 text-sm font-bold uppercase tracking-[0.1em] rounded shadow hover:bg-on-secondary-fixed-variant transition-colors">
+                        Initiate Report
+                    </button>
+</div>
+<!-- Verified Curator Badge -->
+<div class="bg-surface-container-highest p-6 rounded-lg border border-outline-variant/15 text-center">
+<img alt="Verified Curator Seal" class="w-24 h-24 mx-auto mb-4 object-contain rounded-full" data-alt="a highly detailed gold museum seal featuring an ancient Indian lion emblem engraved on aged ivory paper" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6FtLNXd7pDANOF7G_fDMY348TeZYrLNelU4bAKXFgaoUlfw-zV2QKoOeKMeGg0Qie35Fc8Q3qnmEVX74wlAuAjGKyrZiOXhyM_Xg9mUCSRpt4-aTdovo6QXHbOdvDQCEHA0gsFiflmpRdBPsaNA629BmgH91bI1jAO9J-L4T2DWtMoIWIJapp50ofuzOzQ5bksKN6_fRXfS43qlW7rKr_cbnRf4A0pO5mOPadrMs2KsOW8MgFHkcx6kMZnTO9Y_uHMm-HDSfMgP1C"/>
+<h4 class="font-headline font-bold text-on-surface">Senior Curator Status</h4>
+<p class="text-[10px] font-label uppercase tracking-widest text-outline mt-1">ID: ARCH-1947-IN</p>
+<div class="mt-4 flex justify-center">
+<span class="bg-surface-container text-primary text-[10px] font-bold uppercase py-1 px-3 rounded-sm border border-primary/20">Identity Verified</span>
+</div>
+</div>
+<!-- Notification Preferences -->
+<div class="bg-surface-container-low p-6 rounded-lg">
+<h4 class="font-bold text-sm text-on-surface uppercase tracking-wider mb-4">Quick Alerts</h4>
+<div class="space-y-3">
+<div class="flex items-center justify-between text-sm">
+<span class="text-on-surface-variant">New Challenges</span>
+<span class="material-symbols-outlined text-primary text-xl" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<span class="text-on-surface-variant">Security Alerts</span>
+<span class="material-symbols-outlined text-primary text-xl" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<span class="text-on-surface-variant">Price Fluctuations</span>
+<span class="material-symbols-outlined text-outline/30 text-xl" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- NavigationDrawer (Contextual Mobile Shell - Visible on larger screens for demo) -->
+<div class="hidden lg:fixed lg:left-0 lg:top-[73px] lg:h-[calc(100vh-73px)] lg:flex lg:flex-col bg-[#fdfcf0] dark:bg-[#121212] w-80 border-r border-[#775a19]/10 p-8 gap-y-6 z-40">
+<div class="border-b border-[#775a19]/20 pb-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-container-highest rounded-full overflow-hidden border border-primary/20">
+<img alt="Curator Profile" data-alt="close-up portrait of an elderly distinguished indian scholar in formal attire with museum lighting and a warm scholarly atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7usojjQJbN52uFHyyRAlVQgDpW17Es-h0PcnV2yQPMIOU6izHywxDJqN-r1xE39MpLjkK1A9X9tPYxUy6vArhn9uGVevlF9vFLT24pqzZfcLQw9R__rqqcMkTvWZ8VGsTymrmS04YskGomK9rUA6-ro-c4xr5832mZm3ib-YJuUgxJphXAGyEWAr80vbdzB3q34Kj29XlZd278m1Amhcpm7_vRrdJApTrmb2R6jr9vHjG2b_Rod_Da6wp-gTVPfE72QIOgFsMlvb4"/>
+</div>
+<div>
+<h4 class="font-headline font-semibold text-[#212121] dark:text-[#e6e2d3] text-sm leading-tight">Senior Curator</h4>
+<p class="text-[10px] font-label uppercase text-primary">Indian Numismatics Dept.</p>
+</div>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<div class="flex items-center gap-3 py-3 px-4 text-[#212121] dark:text-[#e6e2d3] hover:bg-[#775a19]/5 hover:pl-2 transition-all duration-400 cursor-pointer rounded-md">
+<span class="material-symbols-outlined text-primary" data-icon="search">search</span>
+<span class="font-body text-sm font-semibold">Global Search</span>
+</div>
+<div class="flex items-center gap-3 py-3 px-4 text-[#212121] dark:text-[#e6e2d3] hover:bg-[#775a19]/5 hover:pl-2 transition-all duration-400 cursor-pointer rounded-md">
+<span class="material-symbols-outlined text-primary" data-icon="add_circle">add_circle</span>
+<span class="font-body text-sm font-semibold">Quick Add</span>
+</div>
+<div class="flex items-center gap-3 py-3 px-4 bg-[#775a19] text-[#fdfcf0] rounded-md transition-all duration-400 scale-105 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="person_2" data-weight="fill" style="font-variation-settings: 'FILL' 1;">person_2</span>
+<span class="font-body text-sm font-semibold">Profile Settings</span>
+</div>
+<div class="flex items-center gap-3 py-3 px-4 text-[#212121] dark:text-[#e6e2d3] hover:bg-[#775a19]/5 hover:pl-2 transition-all duration-400 cursor-pointer rounded-md">
+<span class="material-symbols-outlined text-primary" data-icon="swap_horiz">swap_horiz</span>
+<span class="font-body text-sm font-semibold">Swap &amp; Trade</span>
+</div>
+<div class="flex items-center gap-3 py-3 px-4 text-[#212121] dark:text-[#e6e2d3] hover:bg-[#775a19]/5 hover:pl-2 transition-all duration-400 cursor-pointer rounded-md">
+<span class="material-symbols-outlined text-primary" data-icon="star">star</span>
+<span class="font-body text-sm font-semibold">Wishlist</span>
+</div>
+</nav>
+<div class="mt-auto pt-8 border-t border-[#775a19]/10">
+<p class="text-[10px] font-label uppercase tracking-widest text-outline">Member since 1947</p>
+</div>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center pt-3 pb-6 px-2 backdrop-blur-2xl bg-[#fdfcf0]/90 dark:bg-[#121212]/90 z-50 rounded-t-xl border-t border-[#775a19]/10 shadow-[0_-4px_20px_rgba(119,90,25,0.06)]">
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 transition-transform duration-300 active:scale-90">
+<span class="material-symbols-outlined" data-icon="home_storage">home_storage</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 transition-transform duration-300 active:scale-90">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 transition-transform duration-300 active:scale-90">
+<span class="material-symbols-outlined" data-icon="book_2">book_2</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Collection</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 transition-transform duration-300 active:scale-90">
+<span class="material-symbols-outlined" data-icon="military_tech">military_tech</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Challenges</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#775a19] dark:text-[#c5a059] bg-[#775a19]/10 rounded-lg py-1 px-3 transition-transform duration-300 active:scale-90">
+<span class="material-symbols-outlined" data-icon="workspace_premium" data-weight="fill" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em]">Showcase</span>
+</div>
+</nav>
+</body></html>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Digital Curator | Explore Heritage</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&amp;family=Manrope:wght@400;500;600&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#f1edeb",
+              "on-surface": "#1c1b1b",
+              "on-tertiary-fixed-variant": "#5b4137",
+              "surface-variant": "#e5e2e0",
+              "on-secondary-fixed": "#410000",
+              "tertiary-fixed": "#ffdbce",
+              "on-primary-fixed": "#261900",
+              "on-secondary-container": "#650000",
+              "background": "#fdf8f6",
+              "on-primary-fixed-variant": "#5d4201",
+              "surface-container-low": "#f7f3f1",
+              "on-error-container": "#93000a",
+              "error": "#ba1a1a",
+              "primary-fixed": "#ffdea5",
+              "primary-container": "#c5a059",
+              "primary-fixed-dim": "#e9c176",
+              "outline": "#7f7667",
+              "on-tertiary-fixed": "#2b160f",
+              "outline-variant": "#d1c5b4",
+              "tertiary-container": "#c19e92",
+              "surface-bright": "#fdf8f6",
+              "on-secondary-fixed-variant": "#8f0f07",
+              "on-primary-container": "#4e3700",
+              "surface": "#fdf8f6",
+              "secondary-fixed-dim": "#ffb4a8",
+              "secondary": "#b22b1d",
+              "surface-container-highest": "#e5e2e0",
+              "inverse-primary": "#e9c176",
+              "on-surface-variant": "#4e4639",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "surface-tint": "#775a19",
+              "surface-container-lowest": "#ffffff",
+              "inverse-on-surface": "#f4f0ee",
+              "tertiary-fixed-dim": "#e4beb2",
+              "secondary-container": "#fe624e",
+              "secondary-fixed": "#ffdad4",
+              "surface-dim": "#ddd9d7",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#4e352c",
+              "surface-container-high": "#ebe7e5",
+              "tertiary": "#75584d",
+              "on-primary": "#ffffff",
+              "on-background": "#1c1b1b",
+              "on-secondary": "#ffffff",
+              "primary": "#775a19",
+              "inverse-surface": "#31302f"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Manrope"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .parchment-texture {
+            background-image: radial-gradient(#775a1905 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1c5b4;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body parchment-texture selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar Navigation -->
+<header class="sticky top-0 z-50 bg-[#fdfcf0]/80 backdrop-blur-xl shadow-sm dark:bg-[#121212]/80">
+<div class="flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-4">
+<button class="text-[#775a19] dark:text-[#c5a059] hover:bg-[#775a19]/5 p-2 rounded-full transition-colors duration-400">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-serif text-[#775a19] dark:text-[#c5a059] italic text-xl tracking-tight">The Digital Curator</h1>
+</div>
+<div class="hidden md:flex gap-8 items-center">
+<nav class="flex gap-6 text-sm font-label font-medium uppercase tracking-wider">
+<a class="text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:opacity-100 transition-opacity" href="#">Home</a>
+<a class="text-[#775a19] dark:text-[#c5a059] scale-105 border-b-2 border-[#775a19]/30 pb-1" href="#">Explore</a>
+<a class="text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:opacity-100 transition-opacity" href="#">Collection</a>
+<a class="text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:opacity-100 transition-opacity" href="#">Challenges</a>
+</nav>
+<div class="h-6 w-[1px] bg-[#775a19]/20"></div>
+<button class="text-[#775a19] dark:text-[#c5a059] hover:bg-[#775a19]/5 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</div>
+<div class="bg-[#e6e2d3] dark:bg-[#212121] h-[1px] w-full opacity-30"></div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-10 md:py-16">
+<!-- Hero Search Section -->
+<section class="relative mb-16 text-center">
+<h2 class="font-headline text-4xl md:text-6xl font-semibold mb-6 text-on-surface tracking-tight">
+                Trace the <span class="italic text-primary">Ancestry</span> of History
+            </h2>
+<p class="max-w-2xl mx-auto text-on-surface-variant font-body mb-10 text-lg leading-relaxed">
+                Discover artifacts across eras, dynasties, and regions through our curated archival lens.
+            </p>
+<div class="max-w-3xl mx-auto relative group">
+<div class="absolute inset-y-0 left-6 flex items-center pointer-events-none text-primary">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</div>
+<input class="w-full pl-16 pr-6 py-5 bg-surface-container-lowest border-none rounded-xl shadow-lg ring-1 ring-outline-variant/20 focus:ring-primary/40 transition-all text-on-surface placeholder:text-outline-variant font-body text-lg" placeholder="Search by Era, Ruler, or Mint..." type="text"/>
+<div class="absolute inset-y-0 right-4 flex items-center gap-2">
+<span class="hidden md:inline text-xs font-label text-outline uppercase tracking-widest mr-2">Cmd + K</span>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label text-sm font-semibold hover:shadow-md transition-all">
+                        Search
+                    </button>
+</div>
+</div>
+</section>
+<!-- View Controls & Breadcrumbs -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+<nav class="flex items-center gap-3 text-xs font-label uppercase tracking-widest text-outline">
+<span class="hover:text-primary cursor-pointer transition-colors">Catalog</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span class="hover:text-primary cursor-pointer transition-colors">Ancient India</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-secondary font-bold">Gupta Empire</span>
+</nav>
+<div class="flex bg-surface-container-low p-1 rounded-xl shadow-inner border border-outline-variant/10">
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-label font-bold uppercase transition-all hover:text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="account_tree">account_tree</span>
+                    Tree
+                </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-label font-bold uppercase transition-all hover:text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="timeline">timeline</span>
+                    Timeline
+                </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-label font-bold uppercase bg-surface-container-lowest text-primary shadow-sm border border-outline-variant/10">
+<span class="material-symbols-outlined text-sm" data-icon="grid_view">grid_view</span>
+                    Grid
+                </button>
+</div>
+</div>
+<!-- Category Grid (Bento) -->
+<div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6 mb-20">
+<!-- Featured Card -->
+<div class="md:col-span-2 lg:col-span-3 row-span-2 relative group overflow-hidden rounded-xl bg-surface-container-high border border-outline-variant/20 shadow-sm">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
+<img alt="Artifact" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Detailed close-up of a weathered ancient Indian stone sculpture fragment featuring intricate floral carvings and divine motifs under warm museum lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAT9zk6Flev2z3Ga2MB7BGVFYPYE5JG8Yp5MtHDUNi8B9Qb8ZwkdYPNq-iZ0d6uDUiI0_eXNdcWUEtG60I8VIC0lxiCzJ91WwVDccs4pgv7Wwiq10LLvyKWpFuZvlAkaCtN49VrnBk6SIAT2IFBWqXj18Ig3hXHlPrF3I1ahAHHq5SgJebR95b0jbnV3J4CrYYmNZ02Sgo03CKOQVyTtF9zpwLXq6cN06IV-hZXcLYzNDc0nzM4CwEyXWHnE8rOZEusIUb6DkpHKpVD"/>
+<div class="absolute bottom-0 left-0 p-8 z-20">
+<span class="inline-block bg-secondary px-3 py-1 rounded-sm text-[10px] font-label font-bold text-white uppercase tracking-widest mb-4">Golden Era</span>
+<h3 class="font-headline text-3xl text-white mb-3">Gupta Dynasty</h3>
+<p class="text-white/80 font-body text-sm max-w-sm">The pinnacle of classical Indian art and architecture, characterized by elegance and mathematical precision.</p>
+</div>
+</div>
+<!-- Smaller Category Cards -->
+<div class="md:col-span-2 lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/15 hover:shadow-md transition-shadow group cursor-pointer">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-lg bg-primary-container/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="monetization_on">monetization_on</span>
+</div>
+<span class="text-[10px] font-label font-bold text-outline uppercase tracking-widest">3,240 Items</span>
+</div>
+<h4 class="font-headline text-xl mb-1 text-on-surface">Numismatics</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">Silver &amp; Gold coinage from across regional mints.</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/15 hover:shadow-md transition-shadow group cursor-pointer">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-lg bg-secondary-container/20 flex items-center justify-center text-secondary group-hover:bg-secondary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="castle">castle</span>
+</div>
+<span class="text-[10px] font-label font-bold text-outline uppercase tracking-widest">1,120 Sites</span>
+</div>
+<h4 class="font-headline text-xl mb-1 text-on-surface">Monuments</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">Structural marvels and rock-cut heritage sites.</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/15 hover:shadow-md transition-shadow group cursor-pointer">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-lg bg-tertiary-container/20 flex items-center justify-center text-tertiary group-hover:bg-tertiary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+</div>
+<span class="text-[10px] font-label font-bold text-outline uppercase tracking-widest">840 Texts</span>
+</div>
+<h4 class="font-headline text-xl mb-1 text-on-surface">Manuscripts</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">Ancient palm leaf and birch bark inscriptions.</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/15 hover:shadow-md transition-shadow group cursor-pointer">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-lg bg-outline/10 flex items-center justify-center text-outline group-hover:bg-outline group-hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="palette">palette</span>
+</div>
+<span class="text-[10px] font-label font-bold text-outline uppercase tracking-widest">560 Works</span>
+</div>
+<h4 class="font-headline text-xl mb-1 text-on-surface">Paintings</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">Miniatures, frescoes, and contemporary folk art.</p>
+</div>
+</div>
+</div>
+<!-- Archival Divider -->
+<div class="flex items-center gap-8 mb-16 opacity-40">
+<div class="h-[1px] flex-grow bg-primary/30"></div>
+<div class="flex gap-2 text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-lg" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-sm" data-icon="star" data-weight="fill">star</span>
+</div>
+<div class="h-[1px] flex-grow bg-primary/30"></div>
+</div>
+<!-- Section: Discovery by Attributes -->
+<section class="mb-20">
+<div class="flex justify-between items-end mb-10">
+<div>
+<h2 class="font-headline text-3xl text-on-surface mb-2">Curatorial Filter</h2>
+<p class="text-on-surface-variant font-body">Browse by specific archival classification</p>
+</div>
+<button class="text-primary text-sm font-label font-bold uppercase hover:underline decoration-primary/30 underline-offset-8">See All Collections</button>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+<div class="flex flex-col items-center gap-4 group cursor-pointer">
+<div class="w-full aspect-square rounded-full bg-surface-container-low border-4 border-surface-container-lowest shadow-sm flex items-center justify-center group-hover:border-primary/20 transition-all overflow-hidden relative">
+<img alt="Category" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity" data-alt="Close-up of a bronze Chola Nataraja statue detail with soft lighting and professional museum presentation" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwrBhI25YkxBJLUez9ScSwTMOpywRXdpuVU2SVK6mlmIHYPmV0Ay-5qI2cxlTLuGNAlC2ytAKmnGbXO6sqybVe1k4hiAsRlZ_HxHIFkES2D1W5IuumtV7a1Qo9q4qXEzUyIR7hQHZMlM6mlvgJ_zyosCaSH6iqW6OX97Jw8-KrLvDWqDqYYulGB0AqC_PHhEZNSYoVRUvuQRqbhIXjjSKAjc7n3Z5CUNf0viN7GKyAleoK6zMAYZrRskf18bFwYYcNwGqlRceAOmSR"/>
+<span class="material-symbols-outlined relative z-10 text-primary group-hover:text-white" data-icon="category">category</span>
+</div>
+<span class="font-label text-[10px] font-bold uppercase tracking-widest text-outline group-hover:text-primary">Era</span>
+</div>
+<div class="flex flex-col items-center gap-4 group cursor-pointer">
+<div class="w-full aspect-square rounded-full bg-surface-container-low border-4 border-surface-container-lowest shadow-sm flex items-center justify-center group-hover:border-primary/20 transition-all overflow-hidden relative">
+<img alt="Category" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity" data-alt="Intricate marble carvings of the Taj Mahal focusing on floral inlays and historical architectural details" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC7eUpNB3JSBWggbGhBucUhiPXhONlhUGJNNumuvqqjKQxcbpj_9Fv1B_1VOwDVfPrW9HtZp7d3wHgIdseGtLoh0_IGLcBRMVBi9l_RgG2xuznRq25L-QtKTiNzXZEu80FRJRMI_Gr_PtTcGymXPnKwemKMhmgDcFR8bXo6mbdxqn-8gQqMHdc6yu-10RGILlbH3mK1-7uOEA8SlTaHLVsXXJ4VdS08ianMGLbZxX6HK9XpaNQZ4Wtf8fTqyrLbm5conAjlke4Xd6z"/>
+<span class="material-symbols-outlined relative z-10 text-primary group-hover:text-white" data-icon="history">history</span>
+</div>
+<span class="font-label text-[10px] font-bold uppercase tracking-widest text-outline group-hover:text-primary">Dynasty</span>
+</div>
+<div class="flex flex-col items-center gap-4 group cursor-pointer">
+<div class="w-full aspect-square rounded-full bg-surface-container-low border-4 border-surface-container-lowest shadow-sm flex items-center justify-center group-hover:border-primary/20 transition-all overflow-hidden relative">
+<img alt="Category" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity" data-alt="Lush green landscape of Hampi ruins with boulders and ancient stone structures under a clear sky" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDd9Uzd2gC1NTfRcFjwmsGXQPel2GF6E_q0kUG3lFR63WavFsYyatcuhXdq0rI_k0LKRm_WN7mfTMWiEmwnKPjrCGhYHF-8-CbD-sZGi5siuNC4mGow93F7EWRF95tRqUTQsOWw5EmgWsEbRArSqxUGxRLw5H7YSZlP_q2qO6d5z0dzbbHUhR4au3Jy4ilGJtoznQLI-u0TveOluYns1pk7pvz0iUtNOv9cmiXXPjWcnH1Yxd9X4yAePFa6uQnTMyTUF6_FT14qHrNd"/>
+<span class="material-symbols-outlined relative z-10 text-primary group-hover:text-white" data-icon="map">map</span>
+</div>
+<span class="font-label text-[10px] font-bold uppercase tracking-widest text-outline group-hover:text-primary">Region</span>
+</div>
+<div class="flex flex-col items-center gap-4 group cursor-pointer">
+<div class="w-full aspect-square rounded-full bg-surface-container-low border-4 border-surface-container-lowest shadow-sm flex items-center justify-center group-hover:border-primary/20 transition-all overflow-hidden relative">
+<img alt="Category" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity" data-alt="Aerial view of the Taj Mahal highlighting its symmetrical beauty and historical significance" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYiCxNBD1uhDitIQ-u8GuGZbBpZd1ZNvMTyO6lTZOvd8NHb0iyfI7KuVkgzWb3t5-TQlR8HImS01gw7IlflQ7JhjuAb8YNdUpUCMKG9tb4Mx22FPtZM3QfT5WJwF0iY6b_aLy7JtiPwjP59LHBGSn1cm4P25u7A0EjmyGkBr4waOnmuhCNqNiJ0hPi-R9D2Yof4VzxBUVoXzifmt7z-6KCtRkQtYI--h5LmxzWZxUcY_wmFFCZfFromXHEcp3xxlutet7xgNBqHJqB"/>
+<span class="material-symbols-outlined relative z-10 text-primary group-hover:text-white" data-icon="person">person</span>
+</div>
+<span class="font-label text-[10px] font-bold uppercase tracking-widest text-outline group-hover:text-primary">Ruler</span>
+</div>
+<div class="flex flex-col items-center gap-4 group cursor-pointer">
+<div class="w-full aspect-square rounded-full bg-surface-container-low border-4 border-surface-container-lowest shadow-sm flex items-center justify-center group-hover:border-primary/20 transition-all overflow-hidden relative">
+<img alt="Category" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity" data-alt="Macro photo of an ancient Indian gold coin showing intricate portrait and inscription details" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsCoiLvWP9yII5N_7KfM09EjOfPAm3_DZZjrS5TgkOHqYOmD3VwFz1zO_uYohcix2et-dZA6FCg2MUMpLPlrS2LUxTai9S7wtY8_qgceiwD1e7rXjEDmaloQMTRECP7E79Iee_SLNL6fy0_g-RDBnHetYaFVo8Ly4aQGTkKLXRBWymg6_cmuUsumJCYFgXRg0_N7Coi9S7g-bh73l3Lg8TZGxO9BTRgRS9ePLFNeW-ZN2fi8la-oIClylPQ7j-zapC1oGKjUWKMUin"/>
+<span class="material-symbols-outlined relative z-10 text-primary group-hover:text-white" data-icon="savings">savings</span>
+</div>
+<span class="font-label text-[10px] font-bold uppercase tracking-widest text-outline group-hover:text-primary">Mint</span>
+</div>
+<div class="flex flex-col items-center gap-4 group cursor-pointer">
+<div class="w-full aspect-square rounded-full bg-surface-container-low border-4 border-surface-container-lowest shadow-sm flex items-center justify-center group-hover:border-primary/20 transition-all overflow-hidden relative">
+<img alt="Category" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity" data-alt="Traditional Indian calendar or astrological chart on aged parchment with intricate hand-drawn symbols" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC44kVTY_7Mon6B5wq19bjHiqcKB1lQonkkgyMEq1192T6Xn14Zi5sl4p8jp3XPKmt31ueA86gShUhGIyhbUzICaZcSwhFAxPUwe_73V89s9u9ySJCpnqkt5xgjvezl106BN1oZehVQ1CLSidN2b4d9NZ8o-TwcLhhL8yd6cbfe1fTt1F0d_fsWA0lVh5oTohx0tDBsYm5-OWX_tC1HdTjVNtTVY0E2CYjlhaFxe34K6pxvTnZVnoptZg4K7PAp4X6VERhQnNXoU3Gp"/>
+<span class="material-symbols-outlined relative z-10 text-primary group-hover:text-white" data-icon="calendar_month">calendar_month</span>
+</div>
+<span class="font-label text-[10px] font-bold uppercase tracking-widest text-outline group-hover:text-primary">Year</span>
+</div>
+<div class="flex flex-col items-center gap-4 group cursor-pointer">
+<div class="w-full aspect-square rounded-full bg-surface-container-low border-4 border-surface-container-lowest shadow-sm flex items-center justify-center group-hover:border-primary/20 transition-all overflow-hidden relative">
+<img alt="Category" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity" data-alt="Close-up of traditional Indian textile pattern with vibrant colors and geometric heritage motifs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBU_4gCE2Z-0YHiJebzse5vbVAeD1-IPJsHlueTOlSI_hKkbPEGW-CXsvjRbZiqhEn13F-WXBJ2epsh2rod0DBfRwTXpWUFxJ6o6k4XyvovMUQWsRRGECAyVjahBdZqkNhl1BpnN8eJAbwiN_HCHYKz2lxxeL4OP6NecWL6LMKiZSnOJIerNgz6f1xjwn2UUi9fkhM0vTtie1f14qmvs5cofTmSR5TauwE7p5mJmFWlkdG59egVUvxrxlEd3d6d5lYdsZNSoyyMev9"/>
+<span class="material-symbols-outlined relative z-10 text-primary group-hover:text-white" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<span class="font-label text-[10px] font-bold uppercase tracking-widest text-outline group-hover:text-primary">Theme</span>
+</div>
+<div class="flex flex-col items-center gap-4 group cursor-pointer">
+<div class="w-full aspect-square rounded-full bg-surface-container-low border-4 border-surface-container-lowest shadow-sm flex items-center justify-center group-hover:border-primary/20 transition-all overflow-hidden relative">
+<div class="absolute inset-0 bg-primary/5"></div>
+<span class="material-symbols-outlined relative z-10 text-primary" data-icon="more_horiz">more_horiz</span>
+</div>
+<span class="font-label text-[10px] font-bold uppercase tracking-widest text-outline group-hover:text-primary">More</span>
+</div>
+</div>
+</section>
+<!-- Educational Snippet Overlay -->
+<section class="mb-20 bg-surface-container p-10 md:p-14 rounded-2xl relative overflow-hidden flex flex-col md:flex-row gap-12 items-center">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32"></div>
+<div class="relative z-10 w-full md:w-1/3">
+<img alt="Education" class="w-full aspect-[4/5] object-cover rounded-xl shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500" data-alt="Exquisite gold jewelry from the Mughal era featuring rubies and emeralds, displayed against a dark velvet background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLSHT8P_vRnyGYNknZiS9KW6smhmbIGaVjUYZlCenKGE-Kfgnthdnkig78RzBb98rWHrFRMXeORHzUeTJd8nUpKOIQ0jiNH4j0vc_-QPFupZlcvl9DaY0QiU3wYjGdkue7_2im5awiGXfE0mysLW5BDRMsL8fU1DI5gx1B2VUcTxBaUCXyYypNMe7FBpcrXbw49naVf1Svp8Vk8b8MYMZwOeNiQfioYfmxjxEYLV8toYV2Th-fgdexulgrUgxbY9l0-pCAtV57Z__N"/>
+</div>
+<div class="relative z-10 flex-1">
+<span class="text-secondary font-label font-bold text-xs uppercase tracking-[0.2em] mb-4 block">Archive Insight #42</span>
+<h3 class="font-headline text-3xl mb-6 text-on-surface">The Silk Road Influence</h3>
+<p class="font-body text-on-surface-variant leading-relaxed mb-8 text-lg">
+                    By the 1st Century CE, the Kushan Empire controlled the crucial crossroads between China and the Roman Empire. This fusion created the 'Gandhara Style', where Greco-Roman techniques met Indian Buddhist iconography—a hallmark of early heritage.
+                </p>
+<div class="flex items-center gap-6">
+<button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-label font-semibold text-sm hover:shadow-lg transition-all">Read Provenance</button>
+<button class="text-on-surface-variant text-sm font-label font-bold uppercase flex items-center gap-2 hover:text-primary">
+<span class="material-symbols-outlined text-lg" data-icon="collections_bookmark">collections_bookmark</span>
+                        Bookmark
+                    </button>
+</div>
+</div>
+</section>
+<!-- Artifact Cards: Grid View -->
+<section class="mb-20">
+<h2 class="font-headline text-2xl mb-10 text-on-surface flex items-center gap-4">
+                Latest Acquisitions
+                <span class="h-[1px] flex-grow bg-outline-variant/30"></span>
+</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+<!-- Card 1 -->
+<div class="group cursor-pointer">
+<div class="relative overflow-hidden rounded-xl aspect-square mb-6 bg-surface-container-high shadow-sm">
+<img alt="Coin" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Close-up of a silver coin from the Chandragupta II era showing a king slaying a lion with remarkable detail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDh2g8MTQphwQxjO__NdxYxUKQcfjUHYfvplVzu5kRioq5GUBksAmgmpy08Lr6eHUSoIiQ7pWkL2cTuF3m3f_nUl1Xst_dDtJyZo6J1wWK9yQiG6BzEBk-EPLNFN4DYWj6U_iZDeJVb8l4TR7dExQsMIMMuItup0aYYQTzxSX9Us4x3yCJ_GeNPul2Zau_1_AimRXmIqnm1MuzGz2F-1ukA5Hj5CtQ0_SD0bXH9-XgSYif6liF_lFBXNZyFdtBsShYdv6a-_QJLnliK"/>
+<div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-sm text-[10px] font-label font-bold tracking-widest text-primary uppercase">Authenticated</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center text-[10px] font-label text-outline uppercase tracking-wider">
+<span>Central Mint, Pataliputra</span>
+<span>380 CE</span>
+</div>
+<h4 class="font-headline text-xl text-on-surface group-hover:text-primary transition-colors">Lion-Slayer Gold Dinar</h4>
+<p class="text-sm text-on-surface-variant line-clamp-2">Chandragupta II Vikramaditya issuing a rare variation of the lion hunting scene.</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group cursor-pointer">
+<div class="relative overflow-hidden rounded-xl aspect-square mb-6 bg-surface-container-high shadow-sm">
+<img alt="Sculpture" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Exquisitely detailed bronze statue of a Hindu goddess in a graceful pose, showcasing South Indian Chola craftsmanship" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzeSEUHQ1PHltqHzdFnq5G3afYW3TxKnAllWZC0PMq3FZFbAMd3F6xT9jur3X8jnEfIMgdB9hDe6ZZtB84Y_pmBFWF3xIhaUxddUtODhipGlU7WcmxscJAZtkuYik5dngmUS5uxJ7vLSM6rhN2N68wcl5FXPX5rj9i6nhM8Yq8esZBfrgVqigItIBmpHSLYYVGJ7GgH-ih4PeG37KWBeghXdDdZMot9tEE68l9r-yNxk1eRrjWRJkC0u7tD-s0q1V8qo9Q2BuQEj7b"/>
+<div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-sm text-[10px] font-label font-bold tracking-widest text-primary uppercase">Top Tier</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center text-[10px] font-label text-outline uppercase tracking-wider">
+<span>Tanjore Region</span>
+<span>10th Century</span>
+</div>
+<h4 class="font-headline text-xl text-on-surface group-hover:text-primary transition-colors">Standing Parvati Bronze</h4>
+<p class="text-sm text-on-surface-variant line-clamp-2">A masterwork of Chola metallurgy, reflecting the high classicism of the period.</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group cursor-pointer">
+<div class="relative overflow-hidden rounded-xl aspect-square mb-6 bg-surface-container-high shadow-sm">
+<img alt="Manuscript" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Beautifully illustrated Persian-influenced miniature painting with rich lapis lazuli blues and gold leaf details" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbydD1cW_xhUsVdp1Ulz3D4iUHaozAi46BWq17eOMrN_34hzyXegbh35FySyV0FlSLr_h_Hap6wJFQcX3CS4yli8Jdke_4Iu-KChFHPZzEF7mq35ryPtNPLJOlA2CO7KFUrb5Hbs7Q2TYjeKbcUcO427QTDCciYJyCtq3UENVrT5sg9qmZJLdnv96AmZw7xfwm6g9zYNcOmUpONV0f-3Bg7Ztaw_ZfzYNs2cd4rpqKM3p8_90sInokf2nOT_Y334IZ-JseTfHbDOye"/>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center text-[10px] font-label text-outline uppercase tracking-wider">
+<span>Delhi Sultanate</span>
+<span>1520 CE</span>
+</div>
+<h4 class="font-headline text-xl text-on-surface group-hover:text-primary transition-colors">Illuminated Firman</h4>
+<p class="text-sm text-on-surface-variant line-clamp-2">Royal decree featuring complex calligraphic scripts and floral borders.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center pt-3 pb-8 px-2 bg-[#fdfcf0]/90 backdrop-blur-2xl shadow-[0_-4px_20px_rgba(119,90,25,0.06)] z-50 rounded-t-xl md:hidden">
+<a class="flex flex-col items-center justify-center text-[#212121]/60" href="#">
+<span class="material-symbols-outlined" data-icon="home_storage">home_storage</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#775a19] bg-[#775a19]/10 rounded-lg py-1 px-3" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60" href="#">
+<span class="material-symbols-outlined" data-icon="book_2">book_2</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Collection</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60" href="#">
+<span class="material-symbols-outlined" data-icon="military_tech">military_tech</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Challenges</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#212121]/60" href="#">
+<span class="material-symbols-outlined" data-icon="workspace_premium">workspace_premium</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Showcase</span>
+</a>
+</nav>
+<!-- Floating Action Button - Supressed as per rules for Explore screen context -->
+<footer class="bg-surface-container-low border-t border-outline-variant/10 py-16 px-6">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="col-span-1 md:col-span-1">
+<h3 class="font-serif italic text-2xl text-primary mb-6">The Digital Curator</h3>
+<p class="text-sm text-on-surface-variant font-body mb-6 leading-relaxed">Preserving the numismatic and historical wealth of the Indian subcontinent for future generations of scholars and enthusiasts.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-outline hover:text-primary cursor-pointer" data-icon="public">public</span>
+<span class="material-symbols-outlined text-outline hover:text-primary cursor-pointer" data-icon="mail">mail</span>
+</div>
+</div>
+<div>
+<h4 class="font-label text-xs font-bold uppercase tracking-widest text-on-surface mb-6">Explore</h4>
+<ul class="space-y-3 text-sm text-on-surface-variant font-body">
+<li class="hover:text-primary cursor-pointer">Ancient Kingdoms</li>
+<li class="hover:text-primary cursor-pointer">Colonial Record</li>
+<li class="hover:text-primary cursor-pointer">Dynastic Maps</li>
+<li class="hover:text-primary cursor-pointer">Artillery &amp; Arms</li>
+</ul>
+</div>
+<div>
+<h4 class="font-label text-xs font-bold uppercase tracking-widest text-on-surface mb-6">Archival Services</h4>
+<ul class="space-y-3 text-sm text-on-surface-variant font-body">
+<li class="hover:text-primary cursor-pointer">Authentication</li>
+<li class="hover:text-primary cursor-pointer">Provenance Tracking</li>
+<li class="hover:text-primary cursor-pointer">Lending Library</li>
+<li class="hover:text-primary cursor-pointer">Curatorial Grants</li>
+</ul>
+</div>
+<div>
+<h4 class="font-label text-xs font-bold uppercase tracking-widest text-on-surface mb-6">Newsletter</h4>
+<p class="text-xs text-on-surface-variant mb-4">Scholarly updates delivered to your inbox.</p>
+<div class="flex">
+<input class="bg-surface-container-lowest border-none px-4 py-2 text-xs w-full focus:ring-1 focus:ring-primary rounded-l-md" placeholder="Email Address" type="email"/>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-r-md text-xs font-bold uppercase">Join</button>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-16 pt-8 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-[10px] font-label text-outline uppercase tracking-widest">© 1947–2024 The Digital Curator. All Rights Reserved.</p>
+<div class="flex gap-8 text-[10px] font-label text-outline uppercase tracking-widest">
+<a class="hover:text-primary" href="#">Privacy Policy</a>
+<a class="hover:text-primary" href="#">Terms of Service</a>
+<a class="hover:text-primary" href="#">Archival Ethics</a>
+</div>
+</div>
+</footer>
+</body></html>

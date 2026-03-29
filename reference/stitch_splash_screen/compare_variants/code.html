@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Variant Analysis | The Digital Curator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&amp;family=Manrope:wght@400;500;600&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container": "#f1edeb",
+                        "on-surface": "#1c1b1b",
+                        "on-tertiary-fixed-variant": "#5b4137",
+                        "surface-variant": "#e5e2e0",
+                        "on-secondary-fixed": "#410000",
+                        "tertiary-fixed": "#ffdbce",
+                        "on-primary-fixed": "#261900",
+                        "on-secondary-container": "#650000",
+                        "background": "#fdf8f6",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-container-low": "#f7f3f1",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#ffdea5",
+                        "primary-container": "#c5a059",
+                        "primary-fixed-dim": "#e9c176",
+                        "outline": "#7f7667",
+                        "on-tertiary-fixed": "#2b160f",
+                        "outline-variant": "#d1c5b4",
+                        "tertiary-container": "#c19e92",
+                        "surface-bright": "#fdf8f6",
+                        "on-secondary-fixed-variant": "#8f0f07",
+                        "on-primary-container": "#4e3700",
+                        "surface": "#fdf8f6",
+                        "secondary-fixed-dim": "#ffb4a8",
+                        "secondary": "#b22b1d",
+                        "surface-container-highest": "#e5e2e0",
+                        "inverse-primary": "#e9c176",
+                        "on-surface-variant": "#4e4639",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#775a19",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f4f0ee",
+                        "tertiary-fixed-dim": "#e4beb2",
+                        "secondary-container": "#fe624e",
+                        "secondary-fixed": "#ffdad4",
+                        "surface-dim": "#ddd9d7",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#4e352c",
+                        "surface-container-high": "#ebe7e5",
+                        "tertiary": "#75584d",
+                        "on-primary": "#ffffff",
+                        "on-background": "#1c1b1b",
+                        "on-secondary": "#ffffff",
+                        "primary": "#775a19",
+                        "inverse-surface": "#31302f"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif"],
+                        "body": ["Manrope"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.parchment-grain {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDANhB-maya5UkD_7fz2-lIEnS0yLkKq9YzfOlrxcI_TjgPwCWT1PjHDUi1_rgRI5Mw2_iu8d6ntN79q_czuTG58qJVdRIySeEH5BPADmAB0zgoYobLYCmmRAPQPkfalaNnA507vVxgFDjH0KC7F64gVec9HITBqof6mBBwtS42OW576yoP15Hj5RvkqGdwh57a38ok1M7_dTlRgvUT9BIO2LR4Vx22wtthOaZjVAp3bE8GHpSh2kp-C2Jsr7qqtN-jLufthiv1tp40);
+    opacity: 0.03;
+    pointer-events: none
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<div class="fixed inset-0 parchment-grain z-[100]"></div>
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 bg-[#fdfcf0] dark:bg-[#121212] shadow-sm dark:shadow-none backdrop-blur-xl flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-4">
+<button class="text-[#775a19] dark:text-[#c5a059] hover:bg-[#775a19]/5 transition-colors duration-400 p-2 rounded-lg">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-serif text-[#775a19] dark:text-[#c5a059] italic text-xl">The Digital Curator</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex items-center gap-8">
+<span class="font-label text-sm font-medium uppercase tracking-wider text-[#775a19] dark:text-[#c5a059] scale-105 cursor-default">Collection</span>
+<span class="font-label text-sm font-medium uppercase tracking-wider text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:bg-[#775a19]/5 transition-colors duration-400 px-2 py-1 cursor-pointer">Archive</span>
+<span class="font-label text-sm font-medium uppercase tracking-wider text-[#212121] dark:text-[#e6e2d3] opacity-70 hover:bg-[#775a19]/5 transition-colors duration-400 px-2 py-1 cursor-pointer">Exhibits</span>
+</nav>
+<button class="text-[#775a19] dark:text-[#c5a059] hover:bg-[#775a19]/5 transition-colors duration-400 p-2 rounded-lg">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+<div class="absolute bottom-0 left-0 bg-[#e6e2d3] dark:bg-[#212121] h-[1px] w-full opacity-30"></div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-12 pb-32">
+<!-- Section Header -->
+<div class="mb-12">
+<div class="flex items-center gap-2 mb-2">
+<span class="font-label text-[10px] font-bold uppercase tracking-[0.15em] text-primary">Comparative Numismatics</span>
+<div class="h-px w-12 bg-outline-variant/30"></div>
+</div>
+<h2 class="font-headline text-4xl font-semibold tracking-tight text-on-surface">Variant Analysis</h2>
+<p class="mt-4 text-on-surface-variant max-w-2xl leading-relaxed">
+                Examining subtle discrepancies between contemporary mintages. This scholarly comparison focuses on the structural and artistic variances of the <span class="italic">Kushan Empire</span> gold dinars.
+            </p>
+</div>
+<!-- Comparison Table Shell -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Comparison Sidebar (Criteria) -->
+<div class="lg:col-span-3 space-y-px mt-[460px] hidden lg:block">
+<div class="h-[80px] flex items-center border-b border-outline-variant/15">
+<span class="font-label text-xs font-bold uppercase tracking-wider text-outline">Comparison Metadata</span>
+</div>
+<div class="py-6 border-b border-outline-variant/15">
+<span class="font-body text-sm font-semibold block text-on-surface">Mintage Year</span>
+</div>
+<div class="py-6 border-b border-outline-variant/15">
+<span class="font-body text-sm font-semibold block text-on-surface">Mint Location</span>
+</div>
+<div class="py-6 border-b border-outline-variant/15">
+<span class="font-body text-sm font-semibold block text-on-surface">Engraving Style</span>
+</div>
+<div class="py-6 border-b border-outline-variant/15">
+<span class="font-body text-sm font-semibold block text-on-surface">Rarity Index</span>
+</div>
+<div class="py-6 border-b border-outline-variant/15">
+<span class="font-body text-sm font-semibold block text-on-surface">Condition Grade</span>
+</div>
+<div class="py-6">
+<span class="font-body text-sm font-semibold block text-on-surface">Auction Estimates</span>
+</div>
+</div>
+<!-- Main Comparison Area -->
+<div class="lg:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Variant Card 1 -->
+<div class="bg-surface-container-low rounded-lg p-1">
+<div class="bg-surface-container-lowest rounded-md p-6 shadow-sm">
+<!-- Artifact Visual -->
+<div class="relative aspect-square bg-surface-container mb-8 rounded-lg overflow-hidden group">
+<img alt="Kushan Gold Dinar Type A" class="w-full h-full object-contain p-8 mix-blend-multiply opacity-90 transition-transform duration-700 group-hover:scale-105" data-alt="Close up of a highly detailed ancient Indian gold coin with embossed royal figure, soft warm museum lighting on textured background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxA4d50veXQGXChUcrvAxL2jb8tw8TQnP9W-ew6o0ee4fwQFwcfncVg4_Sk0a2Cm-8GlgZW3XQEWG0LcfteXj7Aop2CYz2wNTZIsJvs_TP0KBA3KgQnB-9WDQwAuk2RuWrpC2lMc7zgN88R0o3WQUvRCtnsUrGx4-MJHgUb7KF4GtDmgphwtizgIYwFAiLiGNxGp-VWS8-eaOZbCjdh0X37dSWcyJLZKGdaXAm-ceBnskeWrtSIh-9QEZURRu9jgEbnZmCpRo9DW9x"/>
+<div class="absolute top-4 left-4 bg-primary/10 border border-primary/20 px-3 py-1 rounded-sm">
+<span class="font-label text-[10px] font-bold text-primary tracking-widest uppercase">Variant A</span>
+</div>
+<!-- Analysis Overlay Marker -->
+<div class="absolute top-[40%] right-[30%] w-6 h-6 border-2 border-secondary rounded-full flex items-center justify-center animate-pulse">
+<div class="w-1 h-1 bg-secondary rounded-full"></div>
+</div>
+</div>
+<h3 class="font-headline text-xl mb-1 text-on-surface">Standard Vima Kadphises</h3>
+<p class="font-body text-xs text-on-surface-variant italic mb-8">Kushan Empire, c. 113–127 CE</p>
+<!-- Row Data -->
+<div class="space-y-6">
+<div class="py-6 border-t border-outline-variant/15 lg:border-t-0">
+<span class="lg:hidden font-label text-[10px] text-outline block mb-1 uppercase tracking-tighter">Year</span>
+<span class="font-body text-sm text-on-surface">115 CE (Approx)</span>
+</div>
+<div class="py-6 border-t border-outline-variant/15">
+<span class="lg:hidden font-label text-[10px] text-outline block mb-1 uppercase tracking-tighter">Mint</span>
+<span class="font-body text-sm text-on-surface">Taxila Central Mint</span>
+</div>
+<div class="py-6 border-t border-outline-variant/15">
+<span class="lg:hidden font-label text-[10px] text-outline block mb-1 uppercase tracking-tighter">Engraving</span>
+<span class="font-body text-sm text-on-surface leading-relaxed">High relief, classical Hellenistic influences in the drapery.</span>
+</div>
+<div class="py-6 border-t border-outline-variant/15">
+<span class="lg:hidden font-label text-[10px] text-outline block mb-1 uppercase tracking-tighter">Rarity</span>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" data-icon="star">star</span>
+<span class="font-label text-[10px] ml-2 font-bold uppercase">Scarce</span>
+</div>
+</div>
+<div class="py-6 border-t border-outline-variant/15">
+<span class="lg:hidden font-label text-[10px] text-outline block mb-1 uppercase tracking-tighter">Condition</span>
+<span class="bg-surface-variant px-3 py-1 rounded-sm font-label text-[10px] font-bold text-on-surface-variant uppercase">Extremely Fine</span>
+</div>
+<div class="py-6 border-t border-outline-variant/15">
+<span class="lg:hidden font-label text-[10px] text-outline block mb-1 uppercase tracking-tighter">Est. Value</span>
+<span class="font-headline text-lg text-primary">₹4,20,000</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Variant Card 2 -->
+<div class="bg-surface-container-high rounded-lg p-1 relative">
+<div class="absolute -top-3 -right-3 z-10">
+<span class="bg-secondary text-on-secondary px-4 py-1 font-label text-[10px] font-bold tracking-widest uppercase shadow-lg">High Interest</span>
+</div>
+<div class="bg-surface-container-lowest rounded-md p-6 shadow-sm">
+<!-- Artifact Visual -->
+<div class="relative aspect-square bg-surface-container mb-8 rounded-lg overflow-hidden group">
+<img alt="Kushan Gold Dinar Type B" class="w-full h-full object-contain p-8 mix-blend-multiply opacity-90 transition-transform duration-700 group-hover:scale-105" data-alt="Ancient golden currency coin with ornate script and portrait, dramatic top-down lighting showing surface micro-textures and wear" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5Cf_18dp6DY4sGV9gB9zirkw3u9RZWu5OVP1kuTmmyxkyHtbL_15OtnCLpOOTxjgT41NRHThICQcCXFnZVQWQKPi2W2y5lJyS3W-jaje-Ji12Oj9D8MKkfmC1DK192bEItbeoDBlzg6A5_WPbYML6GrqhgMAYn1BtcVOHVXRZhcDnOweIkw4gMt_ZfvWvdCw6nbgraXPbngbK-nbAwcEOjOOx13FOWjhqp5N6YDbaMEUm8NzEu8-oGC8QqjDK3LrbCeSfBfNikaui"/>
+<div class="absolute top-4 left-4 bg-secondary/10 border border-secondary/20 px-3 py-1 rounded-sm">
+<span class="font-label text-[10px] font-bold text-secondary tracking-widest uppercase">Variant B</span>
+</div>
+<!-- Analysis Overlay Marker -->
+<div class="absolute top-[42%] right-[28%] w-8 h-8 border-2 border-secondary rounded-full flex items-center justify-center">
+<div class="w-1.5 h-1.5 bg-secondary rounded-full"></div>
+</div>
+<div class="absolute bottom-4 left-4 right-4 bg-on-surface/80 backdrop-blur-md p-2 rounded text-center">
+<span class="text-[10px] font-label text-white uppercase tracking-wider">Note: Abnormal Trident Tip</span>
+</div>
+</div>
+<h3 class="font-headline text-xl mb-1 text-on-surface">The 'Trident' Variety</h3>
+<p class="font-body text-xs text-on-surface-variant italic mb-8">Kushan Empire, c. 113–127 CE</p>
+<!-- Row Data -->
+<div class="space-y-6">
+<div class="py-6 border-t border-outline-variant/15 lg:border-t-0">
+<span class="lg:hidden font-label text-[10px] text-outline block mb-1 uppercase tracking-tighter">Year</span>
+<span class="font-body text-sm text-on-surface">120 CE (Late Mintage)</span>
+</div>
+<div class="py-6 border-t border-outline-variant/15">
+<span class="lg:hidden font-label text-[10px] text-outline block mb-1 uppercase tracking-tighter">Mint</span>
+<span class="font-body text-sm text-on-surface">Balkh Regional Mint</span>
+</div>
+<div class="py-6 border-t border-outline-variant/15">
+<span class="font-body text-sm text-secondary font-semibold leading-relaxed">Distinctive 'broken' trident engraving; coarser facial features.</span>
+</div>
+<div class="py-6 border-t border-outline-variant/15">
+<span class="lg:hidden font-label text-[10px] text-outline block mb-1 uppercase tracking-tighter">Rarity</span>
+<div class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label text-[10px] ml-2 font-bold uppercase">Extremely Rare</span>
+</div>
+</div>
+<div class="py-6 border-t border-outline-variant/15">
+<span class="lg:hidden font-label text-[10px] text-outline block mb-1 uppercase tracking-tighter">Condition</span>
+<span class="bg-secondary-container/20 px-3 py-1 rounded-sm font-label text-[10px] font-bold text-secondary uppercase">About Uncirculated</span>
+</div>
+<div class="py-6 border-t border-outline-variant/15">
+<span class="lg:hidden font-label text-[10px] text-outline block mb-1 uppercase tracking-tighter">Est. Value</span>
+<span class="font-headline text-lg text-secondary">₹12,80,000</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Analytical Deep Dive / Bento Section -->
+<div class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="md:col-span-2 bg-surface-container rounded-xl p-8 flex flex-col justify-between border border-outline-variant/10">
+<div>
+<span class="font-label text-[10px] font-bold text-primary tracking-widest uppercase mb-4 block">Micro-Analysis</span>
+<h4 class="font-headline text-2xl mb-4">Engraving Anomalies</h4>
+<p class="text-on-surface-variant leading-relaxed max-w-xl">
+                        A side-by-side microscopic comparison reveals that Variant B utilizes a different die set, likely localized to the Northern frontiers. The relief is 0.4mm shallower, resulting in the characteristic 'smooth' appearance of the obverse portrait.
+                    </p>
+</div>
+<div class="mt-8 flex gap-4">
+<button class="bg-primary text-on-primary px-6 py-2 rounded-md font-label text-xs font-bold uppercase tracking-widest transition-transform duration-400 active:scale-95 shadow-lg">Download Report</button>
+<button class="border border-outline-variant text-on-surface px-6 py-2 rounded-md font-label text-xs font-bold uppercase tracking-widest hover:bg-surface-variant transition-colors">Compare Others</button>
+</div>
+</div>
+<div class="bg-primary-container p-8 rounded-xl flex flex-col justify-center items-center text-center relative overflow-hidden group">
+<div class="absolute inset-0 bg-primary opacity-5 group-hover:opacity-10 transition-opacity"></div>
+<span class="material-symbols-outlined text-4xl mb-4 text-on-primary-container" data-icon="workspace_premium">workspace_premium</span>
+<h4 class="font-headline text-xl text-on-primary-container mb-2">Authenticated</h4>
+<p class="font-body text-xs text-on-primary-container/80 uppercase tracking-widest">Seal of Digital Curator Heritage Council</p>
+<div class="mt-6 p-4 border border-on-primary-container/20 rounded-lg">
+<span class="font-label text-xs text-on-primary-container font-bold">ID: #KUSH-492-VAR-B</span>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center pt-3 pb-6 px-2 backdrop-blur-2xl bg-[#fdfcf0]/90 dark:bg-[#121212]/90 z-50 rounded-t-xl border-t border-[#775a19]/10 shadow-[0_-4px_20px_rgba(119,90,25,0.06)]">
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] cursor-pointer transition-transform duration-300 active:scale-90">
+<span class="material-symbols-outlined" data-icon="home_storage">home_storage</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] cursor-pointer transition-transform duration-300 active:scale-90">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#775a19] dark:text-[#c5a059] bg-[#775a19]/10 rounded-lg py-1 px-3 transition-transform duration-300">
+<span class="material-symbols-outlined" data-icon="book_2">book_2</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Collection</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] cursor-pointer transition-transform duration-300 active:scale-90">
+<span class="material-symbols-outlined" data-icon="military_tech">military_tech</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Challenges</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#212121]/60 dark:text-[#e6e2d3]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] cursor-pointer transition-transform duration-300 active:scale-90">
+<span class="material-symbols-outlined" data-icon="workspace_premium">workspace_premium</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-[0.05em] mt-1">Showcase</span>
+</div>
+</nav>
+</body></html>

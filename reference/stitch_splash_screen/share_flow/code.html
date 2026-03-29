@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Digital Curator - Share Flow</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&amp;family=Manrope:wght@400;500;600&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container": "#f1edeb",
+                        "on-surface": "#1c1b1b",
+                        "on-tertiary-fixed-variant": "#5b4137",
+                        "surface-variant": "#e5e2e0",
+                        "on-secondary-fixed": "#410000",
+                        "tertiary-fixed": "#ffdbce",
+                        "on-primary-fixed": "#261900",
+                        "on-secondary-container": "#650000",
+                        "background": "#fdf8f6",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-container-low": "#f7f3f1",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#ffdea5",
+                        "primary-container": "#c5a059",
+                        "primary-fixed-dim": "#e9c176",
+                        "outline": "#7f7667",
+                        "on-tertiary-fixed": "#2b160f",
+                        "outline-variant": "#d1c5b4",
+                        "tertiary-container": "#c19e92",
+                        "surface-bright": "#fdf8f6",
+                        "on-secondary-fixed-variant": "#8f0f07",
+                        "on-primary-container": "#4e3700",
+                        "surface": "#fdf8f6",
+                        "secondary-fixed-dim": "#ffb4a8",
+                        "secondary": "#b22b1d",
+                        "surface-container-highest": "#e5e2e0",
+                        "inverse-primary": "#e9c176",
+                        "on-surface-variant": "#4e4639",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#775a19",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f4f0ee",
+                        "tertiary-fixed-dim": "#e4beb2",
+                        "secondary-container": "#fe624e",
+                        "secondary-fixed": "#ffdad4",
+                        "surface-dim": "#ddd9d7",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#4e352c",
+                        "surface-container-high": "#ebe7e5",
+                        "tertiary": "#75584d",
+                        "on-primary": "#ffffff",
+                        "on-background": "#1c1b1b",
+                        "on-secondary": "#ffffff",
+                        "primary": "#775a19",
+                        "inverse-surface": "#31302f"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif"],
+                        "body": ["Manrope"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.grainy-overlay {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuAbzUhM4ptYt0Ej0Ixal_fLQ6VywUNRigoVdhhYji0UQQQOTixjr_ehPwSikNgoyDrImq8i-YQKW2ZbHpSD_hrXPwUeIL-Z-tuMO5nSjvKgIpXoxTl9UndJnfdrRBcypnfjKPbyN90JaFNKhBH2VD9YLp076SvxeKh3BAdmLyZIam3L9DNg0JCCXFG1X0EyQlywD2b4YxNUTqPxU4KtAGpzIeL3OhYbYDePmlaC2OHg_1E-qsYfnXF3u4Xvhp3h7hECPZWcddIL8nkz);
+    opacity: 0.03;
+    pointer-events: none
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body min-h-screen selection:bg-primary-fixed selection:text-on-primary-fixed">
+<div class="fixed inset-0 grainy-overlay z-[100]"></div>
+<!-- TopAppBar -->
+<header class="bg-[#fdfcf0] dark:bg-[#121212] flex justify-between items-center px-6 py-4 w-full backdrop-blur-xl docked full-width top-0 sticky z-50 shadow-sm dark:shadow-none">
+<div class="flex items-center gap-4">
+<button class="text-[#775a19] dark:text-[#c5a059] hover:bg-[#775a19]/5 transition-colors duration-400 p-2 rounded-lg">
+<span class="material-symbols-outlined">close</span>
+</button>
+<h1 class="font-headline font-semibold tracking-tight text-[#775a19] dark:text-[#c5a059] italic text-xl">The Digital Curator</h1>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-label font-medium uppercase tracking-wider text-[#212121] dark:text-[#e6e2d3] opacity-70 text-xs hidden md:block">Exporting Artifact</span>
+<span class="material-symbols-outlined text-[#775a19] dark:text-[#c5a059]">ios_share</span>
+</div>
+</header>
+<div class="bg-[#e6e2d3] dark:bg-[#212121] h-[1px] w-full opacity-30"></div>
+<main class="max-w-7xl mx-auto px-6 py-12 md:py-16 grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Left Column: Sharing Templates Preview -->
+<section class="lg:col-span-8 space-y-12">
+<div class="space-y-2">
+<h2 class="font-headline text-3xl md:text-4xl text-on-surface font-bold tracking-tight">Souvenir Selection</h2>
+<p class="text-on-surface-variant font-body text-lg max-w-2xl">Select a scholarly template to share your discovery. Each export is rendered on digital parchment with archival-grade metadata.</p>
+</div>
+<!-- Templates Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Template 1: Single Item (Archival Label Look) -->
+<div class="group relative space-y-4">
+<div class="aspect-[3/4] bg-surface-container-high rounded-xl p-8 flex flex-col justify-between shadow-sm border border-outline-variant/10 relative overflow-hidden transition-all duration-400 hover:shadow-xl hover:-translate-y-1">
+<div class="absolute top-0 right-0 p-4">
+<span class="font-label text-[10px] tracking-[0.1em] opacity-40 uppercase">Reg No. IND-882-M</span>
+</div>
+<div class="space-y-6">
+<div class="aspect-square bg-surface-dim rounded shadow-inner overflow-hidden flex items-center justify-center p-4">
+<img class="w-full h-full object-contain filter grayscale-[0.2] contrast-[1.1]" data-alt="Macro photography of an ancient gold Kushan coin with intricate portraiture against a dark velvet background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWA9jtRjavxjWOF2nmm3LxX2gtqoy7NcP5LhBlqkDnUAY0-7pCa_TjQzaHLY7ENouxJazxFIatMPQjrzIuPKJt1Op1waHhb3ByhygmLt_VtApKABOBSqweGZeAJSGZJ1PJjOqiuzvshyy-rjEkoFRljHz6H_ozA7lw_QTajtQADQYIN2EkGORpygv1pRLSiHNcWclf8Izzm8Y4xlHyhMEkLT_m2k6PydH8wbCM6MtUNWxZFstO2ITMc8LucVxpOOfu9pIQMQzz603P"/>
+</div>
+<div class="space-y-2">
+<h3 class="font-headline text-xl text-on-surface">Kushan Gold Dinar</h3>
+<p class="font-label text-[10px] uppercase tracking-widest text-primary border-b border-primary/20 pb-2 w-fit">Circa 127–150 CE</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-4">
+<div class="space-y-1">
+<span class="font-label text-[9px] uppercase tracking-tighter opacity-50">Origin</span>
+<p class="text-xs font-semibold">Gandhara Region</p>
+</div>
+<div class="space-y-1">
+<span class="font-label text-[9px] uppercase tracking-tighter opacity-50">Curator</span>
+<p class="text-xs font-semibold">Senior Curator #1947</p>
+</div>
+</div>
+<!-- Selected Indicator -->
+<div class="absolute inset-0 border-4 border-primary opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none rounded-xl"></div>
+</div>
+<div class="flex items-center justify-between px-2">
+<span class="font-label text-xs uppercase font-bold tracking-widest">Archival Label</span>
+<div class="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
+<div class="w-2 h-2 bg-primary rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Template 2: Gallery Preview (The Bento) -->
+<div class="group relative space-y-4">
+<div class="aspect-[3/4] bg-surface-container-highest rounded-xl p-6 shadow-sm border border-outline-variant/10 transition-all duration-400 hover:shadow-xl hover:-translate-y-1">
+<div class="h-full grid grid-cols-2 grid-rows-4 gap-3">
+<div class="row-span-2 col-span-2 bg-surface-dim rounded overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Wide angle view of the Taj Mahal at dawn with soft pink sky and reflecting pool" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC9_i_tf6KFkDChVR85_o_EJ3rInIyWLtZV3JPahgTugA82rwCYT8TzXSRXCVIY4cJHzDLZErrLqCUbO75_XzjWJvsESWwTZ-_yAl-m4DYFwLmL-dsR_CKVfZNeJpOscYD3BARS7JXC2by_XfZkX25fw8STbjSBpSqQ0mPy0o4cPE0A6zOGQB1zDC4iPzXhqPmJ5ZyJcgxF4L785zJi66T_fkQaS9pl_6tlHttamMyHjqxQwpZ6qGHJflZ9m0lo4o584W7AGDI1CbQ"/>
+</div>
+<div class="row-span-2 col-span-1 bg-surface-dim rounded overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Intricate detail of Jaipur's Hawa Mahal architecture with symmetrical windows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-DffMquKBj5xsa5KtRUQPTnpsX8GYZgpU78wSzQaDHKkXSEDW87NtO708E7d4X10vrCrX4y2AKxcSpkbiwGPYLywVMTd0VnNYDhZb5-i_EaLnW3khSRfEGawtYzcZnu9rEv1JXbIEQvweoBCXWdszw49DcDaclFokM1MHRz36tAgx-ueN-B_2CLP7ZInZNsCyngw1-vbSBWUy9iZClxVv8UohP_i0mH72F2SURxqKyz53Cj0vN26mJRllzqyR_ni6YnKkxrGxWJ_f"/>
+</div>
+<div class="row-span-1 col-span-1 bg-primary text-on-primary p-4 rounded flex flex-col justify-center">
+<span class="font-headline text-2xl font-bold">12</span>
+<span class="font-label text-[8px] uppercase tracking-widest">Artifacts</span>
+</div>
+<div class="row-span-1 col-span-1 bg-surface-container-lowest rounded p-4 flex flex-col justify-center border border-outline-variant/20">
+<span class="material-symbols-outlined text-secondary text-lg">verified_user</span>
+<span class="font-label text-[8px] uppercase tracking-widest mt-1">Verified</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between px-2">
+<span class="font-label text-xs uppercase font-bold tracking-widest opacity-50">Collection Mosaic</span>
+<div class="w-4 h-4 rounded-full border-2 border-outline-variant"></div>
+</div>
+</div>
+<!-- Template 3: Challenge Progress (Certificate Style) -->
+<div class="md:col-span-2 group relative space-y-4">
+<div class="aspect-[21/9] bg-surface-container-lowest border-2 border-primary/20 rounded-xl p-10 flex items-center shadow-sm relative overflow-hidden transition-all duration-400 hover:shadow-xl">
+<!-- Watermark -->
+<div class="absolute -right-20 -bottom-20 opacity-5 pointer-events-none">
+<span class="material-symbols-outlined text-[300px]" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div class="relative z-10 w-full flex flex-col md:flex-row items-center justify-between gap-8">
+<div class="space-y-4 flex-1">
+<span class="font-label text-xs font-bold text-secondary uppercase tracking-[0.2em]">Official Commendation</span>
+<h3 class="font-headline text-3xl text-on-surface italic">Master of Numismatics</h3>
+<p class="font-body text-sm text-on-surface-variant max-w-md">Awarded for the meticulous documentation of 50+ Maurya and Gupta period coinage within the Digital Curator ecosystem.</p>
+</div>
+<div class="w-px h-24 bg-outline-variant/30 hidden md:block"></div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-24 h-24 rounded-full border-4 border-primary/10 p-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-5xl text-primary" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</div>
+<span class="font-label text-[10px] uppercase font-bold tracking-widest">Seal of Authenticity</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between px-2">
+<span class="font-label text-xs uppercase font-bold tracking-widest opacity-50">Provenance Certificate</span>
+<div class="w-4 h-4 rounded-full border-2 border-outline-variant"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column: Controls & Actions -->
+<aside class="lg:col-span-4 space-y-8">
+<div class="bg-surface-container-low rounded-xl p-8 space-y-10 border border-outline-variant/10 shadow-sm sticky top-28">
+<!-- Metadata Toggles -->
+<div class="space-y-6">
+<h4 class="font-label text-xs font-bold uppercase tracking-[0.15em] text-on-surface-variant">Scholarly Preferences</h4>
+<div class="space-y-4">
+<label class="flex items-center justify-between group cursor-pointer">
+<span class="font-body text-sm font-medium">Include Historical Valuation</span>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-outline-variant rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</div>
+</label>
+<label class="flex items-center justify-between group cursor-pointer">
+<span class="font-body text-sm font-medium">Display Curator Credentials</span>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-outline-variant rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</div>
+</label>
+<label class="flex items-center justify-between group cursor-pointer">
+<span class="font-body text-sm font-medium">Show QR Provenance Link</span>
+<div class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-outline-variant rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</div>
+</label>
+</div>
+</div>
+<!-- Export Options -->
+<div class="space-y-6">
+<h4 class="font-label text-xs font-bold uppercase tracking-[0.15em] text-on-surface-variant">Delivery Format</h4>
+<div class="grid grid-cols-1 gap-3">
+<button class="flex items-center gap-4 p-4 bg-surface-container-lowest border border-outline-variant/30 rounded-lg text-left hover:border-primary/50 transition-all group">
+<div class="w-10 h-10 bg-primary-container/20 rounded-md flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">image</span>
+</div>
+<div>
+<p class="font-body text-sm font-bold">High-Res Image</p>
+<p class="font-label text-[10px] uppercase opacity-50">PNG • 300 DPI • Social Ready</p>
+</div>
+</button>
+<button class="flex items-center gap-4 p-4 bg-surface-container-lowest border border-outline-variant/30 rounded-lg text-left hover:border-primary/50 transition-all group">
+<div class="w-10 h-10 bg-secondary-container/10 rounded-md flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div>
+<p class="font-body text-sm font-bold">PDF Certificate</p>
+<p class="font-label text-[10px] uppercase opacity-50">Printable • Archival Grade</p>
+</div>
+</button>
+<button class="flex items-center gap-4 p-4 bg-surface-container-lowest border border-outline-variant/30 rounded-lg text-left hover:border-primary/50 transition-all group">
+<div class="w-10 h-10 bg-tertiary-container/20 rounded-md flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">link</span>
+</div>
+<div>
+<p class="font-body text-sm font-bold">Private Link</p>
+<p class="font-label text-[10px] uppercase opacity-50">Self-Destructing • 24 Hours</p>
+</div>
+</button>
+</div>
+</div>
+<!-- Primary Action -->
+<button class="w-full py-4 bg-primary text-on-primary font-label font-bold uppercase tracking-widest text-sm rounded transition-all hover:bg-primary/90 active:scale-[0.98] shadow-lg shadow-primary/20 flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-lg">download</span>
+                    Finalize Souvenir
+                </button>
+<p class="font-label text-[9px] text-center uppercase tracking-tighter text-on-surface-variant opacity-60 px-4">
+                    By exporting, you acknowledge the terms of digital heritage dissemination and fair-use copyright.
+                </p>
+</div>
+</aside>
+</main>
+<!-- BottomNavBar (Suppressed as per rules for task-focused page, but following structure for reference) -->
+<!-- Not rendered to prioritize the focus on the Export Task -->
+<!-- Mobile Action Overlay (Floating) -->
+<div class="fixed bottom-8 left-1/2 -translate-x-1/2 md:hidden z-50">
+<button class="flex items-center gap-3 bg-primary text-on-primary px-8 py-4 rounded-full shadow-2xl font-label font-bold uppercase tracking-widest text-xs">
+<span class="material-symbols-outlined">share</span>
+            Share Now
+        </button>
+</div>
+</body></html>

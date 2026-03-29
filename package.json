@@ -1,17 +1,24 @@
 {
   "name": "anand-heritage-gallery",
-  "version": "1.0.0",
-  "description": "Anand Heritage Gallery - A digital showcase of Indian heritage",
-  "homepage": "https://Amritesh.github.io/indian-heritage",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Indian Heritage Gallery rebuilt as a Firebase-first archive",
+  "workspaces": [
+    "frontend"
+  ],
   "scripts": {
-    "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
-    "start:frontend": "cd frontend && npm start",
-    "start:backend": "cd backend && npm run dev",
-    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "dev": "npm run dev --workspace frontend",
+    "build": "npm run build --workspace frontend",
+    "lint": "npm run lint --workspace frontend",
+    "test": "npm run test --workspace frontend",
+    "firebase:env": "node ./scripts/sync-firebase-web-env.cjs",
+    "deploy:firebase": "node ./scripts/deploy-firebase.cjs",
+    "import:collections": "npm run import:collections --workspace frontend",
+    "import:british": "npm run import:british --workspace frontend",
+    "import:mughals": "npm run import:mughals --workspace frontend"
   },
   "devDependencies": {
-    "concurrently": "^8.0.1"
+    "firebase-tools": "^15.12.0",
+    "google-auth-library": "^10.6.2"
   }
 }
