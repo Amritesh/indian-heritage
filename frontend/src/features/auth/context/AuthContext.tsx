@@ -62,8 +62,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
               if (profile) {
                 updateLastLogin(user.uid).catch(() => {});
               }
-            } catch {
-              setUserProfile(null);
+            } catch (error) {
+              console.error('Failed to load user profile:', error);
+              // Don't set userProfile to null here if it might exist
+              // Maybe keep it as it is or have an error state
             }
           } else {
             setUserProfile(null);
@@ -71,7 +73,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
           setLoading(false);
         },
         () => {
-          // Auth error (e.g. Firebase Auth not enabled in console)
           setLoading(false);
         },
       );

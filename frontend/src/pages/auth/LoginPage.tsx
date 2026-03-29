@@ -52,7 +52,7 @@ export function LoginPage() {
           </div>
           <div>
             <span className="font-label text-[10px] uppercase tracking-[0.3em] text-primary/60 block mb-2">
-              The Digital Curator
+              Indian Heritage Gallery
             </span>
             <h1 className="font-headline text-3xl font-bold text-on-surface">
               {isSignUp ? 'Create Account' : 'Welcome Back'}

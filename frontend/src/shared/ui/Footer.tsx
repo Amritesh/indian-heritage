@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="border-t border-outline-variant/20 bg-surface-container-low/50">
       <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
         <div className="space-y-3">
-          <span className="eyebrow">The Digital Curator</span>
+          <span className="eyebrow">Indian Heritage Gallery</span>
           <p className="max-w-md text-sm text-on-surface-variant leading-relaxed">
             A museum-grade digital archive preserving Indian heritage numismatics
             with scholarly detail and curatorial precision.

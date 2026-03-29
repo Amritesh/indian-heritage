@@ -16,6 +16,8 @@ import { CollectionItemQuery, ItemRecord } from '@/entities/item/model/types';
 import { scoreSearchResults } from '@/shared/lib/search';
 import { getFirestoreOrThrow } from '@/shared/services/firestore';
 import { gsUrlToHttps } from '@/shared/lib/formatters';
+import { firestore } from '@/shared/config/firebase';
+import { getCollectionRegistryEntry, collectionRegistry } from '@/shared/config/collections';
 
 const COLLECTION_SCAN_LIMIT = 500;
 const RELATED_ITEMS_LIMIT = 4;
@@ -54,6 +56,15 @@ function mapItemSnapshot(data: Record<string, unknown>): ItemRecord {
 }
 
 export async function getItemById(itemId: string) {
+  if (!firestore) {
+    // When Firebase is missing, we check all collections' APIs for this item
+    // This is slow but better than crashing on the detail page
+    const results = await Promise.all(
+      collectionRegistry.filter(c => c.enabled).map(c => fetchItemsFromApi(c.slug))
+    );
+    const allItems = results.flat();
+    return allItems.find(i => i.id === itemId) || null;
+  }
   const db = getFirestoreOrThrow();
   const snapshot = await getDoc(doc(db, 'items', itemId));
   if (!snapshot.exists()) return null;
@@ -66,10 +77,47 @@ export type ItemPage = {
   hasMore: boolean;
 };
 
+async function fetchItemsFromApi(collectionSlug: string): Promise<ItemRecord[]> {
+  const entry = getCollectionRegistryEntry(collectionSlug);
+  if (!entry?.sourceUrl) return [];
+
+  try {
+    const response = await fetch(entry.sourceUrl);
+    if (!response.ok) return [];
+    const data = await response.json();
+    return Array.isArray(data) ? data.map(mapItemSnapshot) : [];
+  } catch (error) {
+    console.error('Failed to fetch items from API fallback:', error);
+    return [];
+  }
+}
+
 export async function getCollectionItemsPage(
   params: CollectionItemQuery,
   cursor?: QueryDocumentSnapshot<DocumentData> | null,
 ): Promise<ItemPage> {
+  if (!firestore) {
+    const allItems = await fetchItemsFromApi(params.collectionSlug);
+    let items = allItems;
+
+    if (params.material) {
+      items = items.filter((i) => i.materials.includes(params.material!));
+    }
+
+    if (params.search) {
+      items = scoreSearchResults(items, params.search);
+    }
+
+    // Basic pagination for fallback
+    const pageSize = params.limit ?? DEFAULT_PAGE_SIZE;
+    // Note: We don't have a real cursor for the API fallback
+    return {
+      items: items.slice(0, pageSize),
+      cursor: null,
+      hasMore: items.length > pageSize,
+    };
+  }
+
   const db = getFirestoreOrThrow();
   const pageSize = params.limit ?? DEFAULT_PAGE_SIZE;
   const normalizedSearch = params.search?.trim().toLowerCase() ?? '';
@@ -144,6 +192,12 @@ async function getAllCollectionItemsForSearch(collectionSlug: string, material?:
 }
 
 export async function getRelatedItems(item: ItemRecord) {
+  if (!firestore) {
+    const allItems = await fetchItemsFromApi(item.collectionSlug);
+    return allItems
+      .filter((related) => related.id !== item.id)
+      .slice(0, 3);
+  }
   const db = getFirestoreOrThrow();
   const snapshot = await getDocs(
     query(
@@ -162,9 +216,21 @@ export async function getRelatedItems(item: ItemRecord) {
 }
 
 export async function searchItems(term: string, collectionSlug?: string) {
-  const db = getFirestoreOrThrow();
   const normalizedTerm = term.trim().toLowerCase();
   if (normalizedTerm.length < 2) return [];
+
+  if (!firestore) {
+    // Basic search across all fallback-eligible collections
+    const collectionsToSearch = collectionSlug 
+      ? [collectionSlug] 
+      : collectionRegistry.filter(c => c.enabled).map(c => c.slug);
+    
+    const results = await Promise.all(collectionsToSearch.map(fetchItemsFromApi));
+    const allItems = results.flat();
+    return scoreSearchResults(allItems, normalizedTerm);
+  }
+
+  const db = getFirestoreOrThrow();
 
   const constraints: QueryConstraint[] = [where('published', '==', true), orderBy('pageNumber', 'asc')];
 

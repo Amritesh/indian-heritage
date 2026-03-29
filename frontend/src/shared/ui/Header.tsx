@@ -20,7 +20,7 @@ export function Header() {
           <Link to="/" className="flex items-center gap-4">
             <span className="material-symbols-outlined text-primary text-2xl">account_balance</span>
             <h1 className="font-headline text-primary italic text-xl tracking-tight font-semibold">
-              The Digital Curator
+              Indian Heritage Gallery
             </h1>
           </Link>
 
