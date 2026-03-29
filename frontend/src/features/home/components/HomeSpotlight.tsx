@@ -17,6 +17,8 @@ export function HomeSpotlight() {
     sort: 'featured',
   });
 
+  const items = data?.items?.slice(0, 3) ?? [];
+
   return (
     <section className="page-shell">
       <SectionHeader
@@ -33,8 +35,8 @@ export function HomeSpotlight() {
 
       {isLoading && <ItemSkeletonGrid count={3} />}
       {isError && <ErrorState message={(error as Error).message} />}
-      {data && data.length > 0 && <ItemGrid items={data} />}
-      {data && data.length === 0 && (
+      {items.length > 0 && <ItemGrid items={items} />}
+      {!isLoading && items.length === 0 && (
         <EmptyState
           title="Spotlight will appear after import"
           description="Run the import script to populate Firestore with collection items."

@@ -24,7 +24,15 @@ export function ProtectedRoute() {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (!isAdmin && !isEditor) {
+  // Onboarding check BEFORE role check — a brand-new user has no profile yet
+  // and should be guided through setup, not shown "Access Denied"
+  if (needsOnboarding && location.pathname !== '/admin/onboarding') {
+    return <Navigate to="/admin/onboarding" replace />;
+  }
+
+  // Only show access denied after the user has completed onboarding
+  // but still lacks the required role
+  if (!needsOnboarding && !isAdmin && !isEditor) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="text-center space-y-4 max-w-md px-6">
@@ -36,10 +44,6 @@ export function ProtectedRoute() {
         </div>
       </div>
     );
-  }
-
-  if (needsOnboarding && location.pathname !== '/admin/onboarding') {
-    return <Navigate to="/admin/onboarding" replace />;
   }
 
   return <Outlet />;

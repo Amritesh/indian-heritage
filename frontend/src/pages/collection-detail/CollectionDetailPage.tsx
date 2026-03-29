@@ -10,6 +10,7 @@ import { ErrorState } from '@/shared/ui/ErrorState';
 import { ImageWithFallback } from '@/shared/ui/ImageWithFallback';
 import { ItemGrid } from '@/shared/ui/ItemGrid';
 import { ItemSkeletonGrid } from '@/shared/ui/Skeletons';
+import { formatCurrency } from '@/shared/lib/formatters';
 
 export function CollectionDetailPage() {
   const { slug = '' } = useParams();
@@ -26,10 +27,12 @@ export function CollectionDetailPage() {
   const debouncedSearch = useDebouncedValue(search);
 
   const {
-    data: items,
+    data,
     isLoading: isItemsLoading,
     isError: isItemsError,
     error: itemsError,
+    fetchNextPage,
+    isFetchingNextPage,
   } = useCollectionItems({
     collectionSlug: slug,
     search: debouncedSearch,
@@ -37,10 +40,16 @@ export function CollectionDetailPage() {
     sort,
   });
 
+  const items = data?.items ?? [];
+  const hasMore = data?.hasMore ?? false;
+  const totalLoaded = data?.totalLoaded ?? 0;
+
   const materials = useMemo(
     () => collection?.filterableMaterials ?? [],
     [collection?.filterableMaterials],
   );
+
+  const worthLabel = formatCurrency(collection?.estimatedWorth);
 
   if (isCollectionLoading) {
     return (
@@ -97,23 +106,34 @@ export function CollectionDetailPage() {
               {collection.name}
             </span>
           </nav>
-          <h1 className="font-headline text-3xl md:text-4xl font-bold leading-tight text-on-surface">
-            {collection.displayName}
-          </h1>
+          <div>
+            {collection.heroEyebrow && (
+              <span className="eyebrow">{collection.heroEyebrow}</span>
+            )}
+            <h1 className="mt-2 font-headline text-3xl md:text-4xl font-bold leading-tight text-on-surface">
+              {collection.displayName}
+            </h1>
+          </div>
           <p className="text-on-surface-variant leading-relaxed">{collection.longDescription}</p>
-          <div className="grid grid-cols-3 gap-4 pt-4 border-t border-outline-variant/20">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-outline-variant/20">
             <div>
               <div className="metadata-label">Culture</div>
-              <div className="mt-1 text-sm font-semibold">{collection.culture}</div>
+              <div className="mt-1 text-sm font-semibold">{collection.culture || '—'}</div>
             </div>
             <div>
               <div className="metadata-label">Period</div>
-              <div className="mt-1 text-sm font-semibold">{collection.periodLabel}</div>
+              <div className="mt-1 text-sm font-semibold">{collection.periodLabel || '—'}</div>
             </div>
             <div>
               <div className="metadata-label">Items</div>
-              <div className="mt-1 text-sm font-semibold">{collection.itemCount}</div>
+              <div className="mt-1 text-sm font-semibold tabular-nums">{collection.itemCount.toLocaleString()}</div>
             </div>
+            {worthLabel && (
+              <div>
+                <div className="metadata-label">Est. Worth</div>
+                <div className="mt-1 text-sm font-semibold text-primary">{worthLabel}</div>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -131,8 +151,48 @@ export function CollectionDetailPage() {
 
       {isItemsLoading && <ItemSkeletonGrid />}
       {isItemsError && <ErrorState message={(itemsError as Error).message} />}
-      {items && items.length > 0 && <ItemGrid items={items} />}
-      {items && items.length === 0 && (
+
+      {items.length > 0 && (
+        <>
+          <ItemGrid items={items} />
+
+          {/* Pagination footer */}
+          <div className="mt-10 flex flex-col items-center gap-4">
+            <p className="text-sm text-on-surface-variant">
+              Showing <span className="font-semibold text-on-surface">{totalLoaded}</span> of{' '}
+              <span className="font-semibold text-on-surface">{collection.itemCount}</span> artifacts
+            </p>
+
+            {hasMore && (
+              <button
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+                className="btn-secondary disabled:opacity-50"
+              >
+                {isFetchingNextPage ? (
+                  <>
+                    <span className="material-symbols-outlined animate-spin text-lg">progress_activity</span>
+                    Loading more…
+                  </>
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined text-lg">expand_more</span>
+                    Load more artifacts
+                  </>
+                )}
+              </button>
+            )}
+
+            {!hasMore && totalLoaded > 0 && (
+              <p className="text-xs text-outline uppercase tracking-wider font-label">
+                ── All {totalLoaded} artifacts loaded ──
+              </p>
+            )}
+          </div>
+        </>
+      )}
+
+      {!isItemsLoading && items.length === 0 && (
         <EmptyState
           title="No matching artifacts"
           description="Try clearing the current search or material filter to reveal the full collection."

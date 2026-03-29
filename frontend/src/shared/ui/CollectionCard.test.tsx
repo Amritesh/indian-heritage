@@ -23,6 +23,7 @@ describe('CollectionCard', () => {
             thumbnailImage: 'https://example.com/image.jpg',
             itemCount: 90,
             filterableMaterials: ['Silver'],
+            estimatedWorth: 0,
             sortOrder: 2,
             status: 'active',
             enabled: true,

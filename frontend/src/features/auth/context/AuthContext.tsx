@@ -49,25 +49,37 @@ export function AuthProvider({ children }: PropsWithChildren) {
       return;
     }
 
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setFirebaseUser(user);
-      if (user) {
-        try {
-          const profile = await getUserProfile(user.uid);
-          setUserProfile(profile);
-          if (profile) {
-            updateLastLogin(user.uid).catch(() => {});
+    let unsubscribe: (() => void) | undefined;
+    try {
+      unsubscribe = onAuthStateChanged(
+        auth,
+        async (user) => {
+          setFirebaseUser(user);
+          if (user) {
+            try {
+              const profile = await getUserProfile(user.uid);
+              setUserProfile(profile);
+              if (profile) {
+                updateLastLogin(user.uid).catch(() => {});
+              }
+            } catch {
+              setUserProfile(null);
+            }
+          } else {
+            setUserProfile(null);
           }
-        } catch {
-          setUserProfile(null);
-        }
-      } else {
-        setUserProfile(null);
-      }
+          setLoading(false);
+        },
+        () => {
+          // Auth error (e.g. Firebase Auth not enabled in console)
+          setLoading(false);
+        },
+      );
+    } catch {
       setLoading(false);
-    });
+    }
 
-    return unsubscribe;
+    return () => unsubscribe?.();
   }, []);
 
   const isAuthenticated = !!firebaseUser;
