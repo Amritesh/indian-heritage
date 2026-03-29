@@ -1,0 +1,6 @@
+{
+  "command": "npm run start",
+  "serverUrl": "http://localhost:3000/my-collections",
+  "authenticateProxy": false,
+  "commitMode": "commits"
+}

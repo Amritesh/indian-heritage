@@ -148,11 +148,19 @@ def _ensure_unique_item_id(collection_name, item, used_ids, sequence_start):
 
     next_sequence = sequence_start
     while True:
-        candidate = f"{collection_name}-item-{next_sequence}"
-        next_sequence += 1
+        # Check for 'coin-X' pattern which is used in existing mughals collection
+        candidate = f"coin-{next_sequence}"
         if candidate not in used_ids:
             used_ids.add(candidate)
-            return candidate, next_sequence
+            return candidate, next_sequence + 1
+        
+        # Fallback to collection-item-X if coin-X is taken
+        candidate = f"{collection_name}-item-{next_sequence}"
+        if candidate not in used_ids:
+            used_ids.add(candidate)
+            return candidate, next_sequence + 1
+        
+        next_sequence += 1
 
 
 def _upsert_collection_meta(database, collection_meta):
