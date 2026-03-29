@@ -13,6 +13,7 @@ export type CollectionRecord = {
   thumbnailImage: string;
   itemCount: number;
   filterableMaterials: string[];
+  estimatedWorth: number;
   sortOrder: number;
   status: string;
   enabled: boolean;
