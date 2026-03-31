@@ -45,6 +45,43 @@ def test_build_initial_run_payload_counts_populated_pages():
     assert len(page_jobs) == 3
 
 
+def test_write_progress_updates_local_and_remote_state(monkeypatch):
+    local_writes = []
+    remote_writes = []
+
+    monkeypatch.setattr(
+        batch_ingest,
+        "write_local_progress",
+        lambda path, payload: local_writes.append((path, deepcopy(payload))),
+    )
+    monkeypatch.setattr(
+        batch_ingest,
+        "update_remote_progress",
+        lambda database, run_id, payload: remote_writes.append((database, run_id, deepcopy(payload))) or True,
+    )
+
+    payload = {
+        "runId": "run-1",
+        "collection": "princely-states",
+        "collectionSlug": "princely-states",
+        "status": "running",
+        "startedAt": "2026-04-01T10:00:00+00:00",
+        "updatedAt": "2026-04-01T10:05:00+00:00",
+        "pages": [
+            {"status": "completed"},
+            {"status": "failed"},
+        ],
+        "summary": {"completedPages": 1, "failedPages": 1, "totalPages": 2},
+    }
+
+    batch_ingest._write_progress("/tmp/run-1.json", payload, database=object())
+
+    assert len(local_writes) == 1
+    assert len(remote_writes) == 1
+    assert remote_writes[0][1] == "run-1"
+    assert remote_writes[0][2]["collectionSlug"] == "princely-states"
+
+
 def test_process_page_job_marks_upload_failure_and_keeps_clear_first_available(monkeypatch):
     upload_calls = []
 
@@ -333,7 +370,7 @@ def test_main_writes_running_page_snapshot_before_completion(monkeypatch):
 
     writes = []
 
-    def fake_write_progress(_path, payload):
+    def fake_write_progress(_path, payload, **kwargs):
         writes.append(deepcopy(payload))
 
     monkeypatch.setattr(
