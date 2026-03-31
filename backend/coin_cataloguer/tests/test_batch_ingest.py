@@ -82,6 +82,35 @@ def test_write_progress_updates_local_and_remote_state(monkeypatch):
     assert remote_writes[0][2]["collectionSlug"] == "princely-states"
 
 
+def test_write_progress_keeps_local_snapshot_when_remote_write_fails(monkeypatch):
+    local_writes = []
+
+    monkeypatch.setattr(
+        batch_ingest,
+        "write_local_progress",
+        lambda path, payload: local_writes.append((path, deepcopy(payload))),
+    )
+    monkeypatch.setattr(
+        batch_ingest,
+        "update_remote_progress",
+        lambda *args, **kwargs: (_ for _ in ()).throw(RuntimeError("temporary firebase outage")),
+    )
+
+    payload = {
+        "runId": "run-1",
+        "collection": "princely-states",
+        "collectionSlug": "princely-states",
+        "status": "running",
+        "startedAt": "2026-04-01T10:00:00+00:00",
+        "updatedAt": "2026-04-01T10:05:00+00:00",
+        "pages": [{"status": "completed"}],
+        "summary": {"completedPages": 1, "failedPages": 0, "totalPages": 1},
+    }
+
+    assert batch_ingest._write_progress("/tmp/run-1.json", payload, database=object()) is False
+    assert len(local_writes) == 1
+
+
 def test_process_page_job_marks_upload_failure_and_keeps_clear_first_available(monkeypatch):
     upload_calls = []
 
@@ -337,6 +366,53 @@ def test_main_prints_run_id_from_initial_payload(monkeypatch, capsys):
 
     captured = capsys.readouterr()
     assert "Run ID: run-1" in captured.out
+
+
+def test_main_dry_run_does_not_require_progress_database(monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    monkeypatch.setattr(batch_ingest, "_load_progress_database", lambda: (_ for _ in ()).throw(AssertionError("progress init should not run")))
+    monkeypatch.setattr(
+        batch_ingest,
+        "build_initial_run_payload",
+        lambda **kwargs: (
+            "/tmp/run-1.json",
+            {
+                "runId": "run-1",
+                "status": "running",
+                "summary": {"completedPages": 0, "failedPages": 0, "totalPages": 1},
+                "pages": [
+                    {
+                        "sourceBatch": "princeley-states-1-1",
+                        "pageNumber": 5,
+                        "imagePath": "/repo/temp/images/princeley-states-1-1/page-5.png",
+                        "outputDir": "/repo/temp/output/princely-states/princeley-states-1-1/page-05",
+                        "status": "pending",
+                        "cataloguePath": "",
+                        "itemsUploaded": 0,
+                        "error": "",
+                    }
+                ],
+            },
+            [
+                {
+                    "source": {"folder": "princeley-states-1-1"},
+                    "pageNumber": 5,
+                    "imagePath": "/repo/temp/images/princeley-states-1-1/page-5.png",
+                    "outputDir": "/repo/temp/output/princely-states/princeley-states-1-1/page-05",
+                }
+            ],
+        ),
+    )
+    monkeypatch.setattr(
+        batch_ingest,
+        "process_page_job",
+        lambda **kwargs: ({"status": "completed", "error": ""}, False),
+    )
+    monkeypatch.setattr(batch_ingest, "_write_progress", lambda *args, **kwargs: None)
+    monkeypatch.setattr(batch_ingest.os, "makedirs", lambda *args, **kwargs: None)
+    monkeypatch.setattr(sys, "argv", ["batch_ingest", "--images-root", "/repo/temp/images", "--output-root", "/repo/temp/output/princely-states"])
+
+    batch_ingest.main()
 
 
 def test_save_catalogue_result_preserves_native_list_result(tmp_path):

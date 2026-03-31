@@ -1,4 +1,8 @@
-from coin_cataloguer.ingest_progress import build_remote_run_payload, build_run_summary
+from coin_cataloguer.ingest_progress import (
+    build_remote_run_payload,
+    build_run_summary,
+    update_remote_progress,
+)
 
 
 def test_build_run_summary_counts_completed_and_failed_pages():
@@ -34,3 +38,14 @@ def test_build_remote_run_payload_uses_online_shape():
     assert payload["summary"]["completedPages"] == 1
     assert payload["summary"]["failedPages"] == 1
     assert payload["summary"]["totalPages"] == 2
+
+
+def test_update_remote_progress_is_best_effort_when_write_fails():
+    class FailingRef:
+        def child(self, _name):
+            return self
+
+        def set(self, _payload):
+            raise RuntimeError("temporary firebase outage")
+
+    assert update_remote_progress(FailingRef(), "run-1", {"id": "run-1"}) is False

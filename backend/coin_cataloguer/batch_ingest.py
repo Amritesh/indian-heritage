@@ -13,6 +13,9 @@ from .ingest_progress import (
 )
 from .main import _find_env_path, _init_firebase, get_catalogue_entries, run_cataloguer_for_image, upload_to_firebase
 
+_PROGRESS_DATABASE = None
+_PROGRESS_DATABASE_LOADED = False
+
 
 def build_princely_states_plan(images_root):
     return {
@@ -53,6 +56,8 @@ def _build_page_record(*, source_batch, page_number, image_path, output_dir):
 def _write_progress(progress_path, payload, database=None):
     write_local_progress(progress_path, payload)
     if database is None:
+        database = _get_progress_database()
+    if database is None:
         return False
 
     remote_payload = build_remote_run_payload(
@@ -63,7 +68,25 @@ def _write_progress(progress_path, payload, database=None):
         updated_at=payload.get("updatedAt", ""),
         page_entries=payload.get("pages", []),
     )
-    return update_remote_progress(database, remote_payload["id"], remote_payload)
+    try:
+        return update_remote_progress(database, remote_payload["id"], remote_payload)
+    except Exception:
+        return False
+
+
+def _get_progress_database():
+    global _PROGRESS_DATABASE
+    global _PROGRESS_DATABASE_LOADED
+
+    if _PROGRESS_DATABASE_LOADED:
+        return _PROGRESS_DATABASE
+
+    _PROGRESS_DATABASE_LOADED = True
+    try:
+        _PROGRESS_DATABASE = _load_progress_database()
+    except Exception:
+        _PROGRESS_DATABASE = None
+    return _PROGRESS_DATABASE
 
 
 def _load_progress_database():
@@ -223,8 +246,6 @@ def main():
 
     plan = build_princely_states_plan(images_root)
     collection_name = args.collection or plan["collection"]
-    database = _load_progress_database()
-
     progress_path, run_payload, page_jobs = build_initial_run_payload(
         plan=plan,
         collection_name=collection_name,
@@ -232,14 +253,14 @@ def main():
         output_root=output_root,
     )
 
-    _write_progress(progress_path, run_payload, database=database)
+    _write_progress(progress_path, run_payload)
 
     first_upload = True
     for index, job in enumerate(page_jobs):
         run_payload["pages"][index]["status"] = "running"
         run_payload["updatedAt"] = utc_now_iso()
         run_payload["summary"] = build_run_summary(run_payload["pages"])
-        _write_progress(progress_path, run_payload, database=database)
+        _write_progress(progress_path, run_payload)
 
         page_record, first_upload = process_page_job(
             job=job,
@@ -250,7 +271,7 @@ def main():
         run_payload["pages"][index] = page_record
         run_payload["updatedAt"] = utc_now_iso()
         run_payload["summary"] = build_run_summary(run_payload["pages"])
-        _write_progress(progress_path, run_payload, database=database)
+        _write_progress(progress_path, run_payload)
 
     run_payload["status"] = (
         "completed"
@@ -258,7 +279,7 @@ def main():
         else "completed_with_errors"
     )
     run_payload["updatedAt"] = utc_now_iso()
-    _write_progress(progress_path, run_payload, database=database)
+    _write_progress(progress_path, run_payload)
 
     print(f"Run ID: {run_payload['runId']}")
     print(f"Progress: {progress_path}")

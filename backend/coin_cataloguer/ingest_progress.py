@@ -48,5 +48,8 @@ def write_local_progress(path, payload):
 def update_remote_progress(database, run_id, payload):
     if database is None:
         return False
-    database.child("ingest_runs").child(run_id).set(payload)
+    try:
+        database.child("ingest_runs").child(run_id).set(payload)
+    except Exception:
+        return False
     return True
