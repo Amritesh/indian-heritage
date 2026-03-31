@@ -32,6 +32,34 @@ def test_build_uploaded_item_attaches_provenance_and_review_flags():
     assert "low_confidence" in item["metadata"]["review_flags"]
 
 
+def test_build_uploaded_item_normalizes_blank_user_visible_fields():
+    item = build_uploaded_item(
+        coin={
+            "image_path": "/tmp/princely/page-05/coin-1.png",
+            "ruler_or_issuer": None,
+            "year_or_period": " ",
+            "mint_or_place": None,
+            "denomination": None,
+            "material": None,
+            "estimated_price_inr": None,
+            "confidence": None,
+            "notes": "",
+        },
+        collection_name="princely-states",
+        item_index=1,
+        source_page_path="/abs/temp/images/princeley-states-1-1/page-05.png",
+        source_batch="princeley-states-1-1",
+        ingestion_mode="independent-page",
+        gs_url="",
+    )
+
+    assert item["title"] == "Unknown - Unknown"
+    assert item["description"] == "Unknown issued by Unknown."
+    assert item["period"] is None
+    assert item["region"] is None
+    assert item["materials"] == ["Unknown"]
+
+
 def test_build_review_flags_handles_none_values():
     flags = build_review_flags(
         {
