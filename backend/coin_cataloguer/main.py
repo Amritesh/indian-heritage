@@ -248,6 +248,13 @@ def _source_page_reference(source_page_path):
     return os.path.splitext(os.path.basename(str(source_page_path)))[0]
 
 
+def _clean_text(value, fallback=""):
+    if value is None:
+        return fallback
+    text = str(value).strip()
+    return text if text else fallback
+
+
 def build_review_flags(coin):
     flags = []
     price = coin.get("estimated_price_inr")
@@ -279,15 +286,15 @@ def build_uploaded_item(
     ingestion_mode="independent-page",
     gs_url="",
 ):
-    ruler = coin.get("ruler_or_issuer", "Unknown")
-    denomination = coin.get("denomination", "Unknown")
-    year = coin.get("year_or_period", "")
-    mint = coin.get("mint_or_place", "")
-    material = coin.get("material", "")
-    condition = coin.get("condition", "")
-    weight = coin.get("weight_estimate", "")
-    price = coin.get("estimated_price_inr", "")
-    catalog_ref = coin.get("series_or_catalog", "")
+    ruler = _clean_text(coin.get("ruler_or_issuer"), "Unknown")
+    denomination = _clean_text(coin.get("denomination"), "Unknown")
+    year = _clean_text(coin.get("year_or_period"), "")
+    mint = _clean_text(coin.get("mint_or_place"), "")
+    material = _clean_text(coin.get("material"), "")
+    condition = _clean_text(coin.get("condition"), "")
+    weight = _clean_text(coin.get("weight_estimate"), "")
+    price = _clean_text(coin.get("estimated_price_inr"), "")
+    catalog_ref = _clean_text(coin.get("series_or_catalog"), "")
     review_flags = build_review_flags(coin)
 
     display_labels = []
@@ -299,13 +306,13 @@ def build_uploaded_item(
         display_labels.append(f"₹{price}")
 
     notes = []
-    obverse = coin.get("obverse_description", "")
-    reverse = coin.get("reverse_description", "")
+    obverse = _clean_text(coin.get("obverse_description"), "")
+    reverse = _clean_text(coin.get("reverse_description"), "")
     if obverse:
         notes.append(f"Obverse: {obverse}")
     if reverse:
         notes.append(f"Reverse: {reverse}")
-    extra_notes = coin.get("notes", "")
+    extra_notes = _clean_text(coin.get("notes"), "")
     if extra_notes:
         notes.append(extra_notes)
 
