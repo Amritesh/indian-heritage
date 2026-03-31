@@ -1,4 +1,5 @@
 node_modules
+.worktrees/
 frontend/build/
 frontend/.env
 temp
