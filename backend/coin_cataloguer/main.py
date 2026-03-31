@@ -24,6 +24,21 @@ def _project_root():
     return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 
+def _find_env_path():
+    current = os.path.abspath(os.path.dirname(__file__))
+    search_dirs = [current]
+    for _ in range(6):
+        current = os.path.dirname(current)
+        search_dirs.append(current)
+
+    for base in search_dirs:
+        for candidate in (os.path.join(base, ".env"), os.path.join(base, "backend", ".env")):
+            if os.path.isfile(candidate):
+                return candidate
+
+    return os.path.join(os.path.dirname(__file__), "..", ".env")
+
+
 def _titleize_collection_name(collection_name):
     return collection_name.replace("-", " ").replace("_", " ").title()
 
@@ -357,6 +372,51 @@ def build_uploaded_item(
     }
 
 
+def get_catalogue_entries(catalogue_data):
+    if isinstance(catalogue_data, list):
+        return catalogue_data
+    if isinstance(catalogue_data, dict) and "catalogue" in catalogue_data:
+        return catalogue_data["catalogue"]
+    if isinstance(catalogue_data, dict):
+        return [catalogue_data]
+    return []
+
+
+def save_catalogue_result(*, result, image_path, output_dir):
+    save_dir = os.path.abspath(output_dir) if output_dir else os.path.join(
+        os.path.dirname(image_path), "coins_output"
+    )
+    os.makedirs(save_dir, exist_ok=True)
+    catalogue_path = os.path.join(save_dir, "catalogue.json")
+
+    catalogue_data = None
+    try:
+        catalogue_data = json.loads(str(result))
+        with open(catalogue_path, "w", encoding="utf-8") as f:
+            json.dump(catalogue_data, f, indent=2, ensure_ascii=False)
+    except (json.JSONDecodeError, TypeError):
+        with open(catalogue_path, "w", encoding="utf-8") as f:
+            f.write(str(result))
+
+    return {
+        "catalogue_path": catalogue_path,
+        "catalogue_data": catalogue_data,
+        "save_dir": save_dir,
+    }
+
+
+def run_cataloguer_for_image(*, image_path, output_dir, collection_name):
+    from .crew import create_crew
+
+    crew = create_crew(
+        image_path=image_path,
+        output_dir=output_dir,
+        collection_name=collection_name,
+    )
+    result = crew.kickoff()
+    return save_catalogue_result(result=result, image_path=image_path, output_dir=output_dir)
+
+
 def upload_to_firebase(catalogue, collection_name, source_page_path="", clear_collection=False):
     """Upload catalogue data and images to Firebase matching the frontend's expected format.
 
@@ -506,7 +566,7 @@ def main():
     args = parser.parse_args()
 
     # Load environment variables from backend/.env
-    env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
+    env_path = _find_env_path()
     load_dotenv(env_path)
 
     # Validate API keys
@@ -537,31 +597,13 @@ def main():
     print("=" * 60)
     print()
 
-    # Import crew here (after env is loaded) so Gemini client picks up the key
-    from .crew import create_crew
-
-    crew = create_crew(
+    result = run_cataloguer_for_image(
         image_path=image_path,
         output_dir=output_dir,
         collection_name=args.collection,
     )
-
-    result = crew.kickoff()
-
-    # Save catalogue JSON locally
-    save_dir = output_dir or os.path.join(os.path.dirname(image_path), "coins_output")
-    os.makedirs(save_dir, exist_ok=True)
-    catalogue_path = os.path.join(save_dir, "catalogue.json")
-
-    # Try to parse the final result as JSON for clean saving
-    catalogue_data = None
-    try:
-        catalogue_data = json.loads(str(result))
-        with open(catalogue_path, "w") as f:
-            json.dump(catalogue_data, f, indent=2, ensure_ascii=False)
-    except (json.JSONDecodeError, TypeError):
-        with open(catalogue_path, "w") as f:
-            f.write(str(result))
+    catalogue_path = result["catalogue_path"]
+    catalogue_data = result["catalogue_data"]
 
     print()
     print(f"  Catalogue saved to: {catalogue_path}")
@@ -571,14 +613,7 @@ def main():
         print()
         print("  Uploading to Firebase...")
 
-        # Parse catalogue - handle both list and dict formats
-        coins = []
-        if isinstance(catalogue_data, list):
-            coins = catalogue_data
-        elif isinstance(catalogue_data, dict) and "catalogue" in catalogue_data:
-            coins = catalogue_data["catalogue"]
-        elif isinstance(catalogue_data, dict):
-            coins = [catalogue_data]
+        coins = get_catalogue_entries(catalogue_data)
 
         if not coins:
             print("  Warning: Could not parse catalogue for upload.")
