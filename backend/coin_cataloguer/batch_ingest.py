@@ -4,8 +4,14 @@ import sys
 
 from dotenv import load_dotenv
 
-from .ingest_progress import utc_now_iso, write_local_progress
-from .main import _find_env_path, get_catalogue_entries, run_cataloguer_for_image, upload_to_firebase
+from .ingest_progress import (
+    build_remote_run_payload,
+    build_run_summary,
+    update_remote_progress,
+    utc_now_iso,
+    write_local_progress,
+)
+from .main import _find_env_path, _init_firebase, get_catalogue_entries, run_cataloguer_for_image, upload_to_firebase
 
 
 def build_princely_states_plan(images_root):
@@ -44,17 +50,40 @@ def _build_page_record(*, source_batch, page_number, image_path, output_dir):
     }
 
 
-def _summarize_pages(pages):
-    return {
-        "totalPages": len(pages),
-        "completedPages": sum(1 for page in pages if page.get("status") == "completed"),
-        "failedPages": sum(1 for page in pages if page.get("status") == "failed"),
-        "runningPages": sum(1 for page in pages if page.get("status") == "running"),
-    }
-
-
-def _write_progress(progress_path, payload):
+def _write_progress(progress_path, payload, database=None):
     write_local_progress(progress_path, payload)
+    if database is None:
+        return False
+
+    remote_payload = build_remote_run_payload(
+        run_id=payload["runId"],
+        collection_slug=payload.get("collectionSlug") or payload.get("collection", ""),
+        status=payload.get("status", "running"),
+        started_at=payload.get("startedAt", ""),
+        updated_at=payload.get("updatedAt", ""),
+        page_entries=payload.get("pages", []),
+    )
+    return update_remote_progress(database, remote_payload["id"], remote_payload)
+
+
+def _load_progress_database():
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    env_key = os.environ.get("FIREBASE_SERVICE_ACCOUNT_KEY", "")
+    default_key = os.path.join(
+        project_root,
+        "indian-heritage-gallery-firebase-adminsdk-fbsvc-1c3ae1c07a.json",
+    )
+    cred_path = env_key if env_key and os.path.isfile(env_key) else default_key
+    if not os.path.isfile(cred_path):
+        return None
+
+    try:
+        _, database = _init_firebase()
+    except ModuleNotFoundError:
+        return None
+    except ImportError:
+        return None
+    return database
 
 
 def build_initial_run_payload(*, plan, collection_name, images_root, output_root, run_id=None):
@@ -87,6 +116,7 @@ def build_initial_run_payload(*, plan, collection_name, images_root, output_root
     run_payload = {
         "runId": run_id,
         "collection": collection_name,
+        "collectionSlug": collection_name,
         "imagesRoot": images_root,
         "outputRoot": output_root,
         "status": "running",
@@ -94,7 +124,7 @@ def build_initial_run_payload(*, plan, collection_name, images_root, output_root
         "updatedAt": utc_now_iso(),
         "sources": plan["sources"],
         "pages": pages,
-        "summary": _summarize_pages(pages),
+        "summary": build_run_summary(pages),
     }
 
     return progress_path, run_payload, page_jobs
@@ -193,6 +223,7 @@ def main():
 
     plan = build_princely_states_plan(images_root)
     collection_name = args.collection or plan["collection"]
+    database = _load_progress_database()
 
     progress_path, run_payload, page_jobs = build_initial_run_payload(
         plan=plan,
@@ -201,14 +232,14 @@ def main():
         output_root=output_root,
     )
 
-    _write_progress(progress_path, run_payload)
+    _write_progress(progress_path, run_payload, database=database)
 
     first_upload = True
     for index, job in enumerate(page_jobs):
         run_payload["pages"][index]["status"] = "running"
         run_payload["updatedAt"] = utc_now_iso()
-        run_payload["summary"] = _summarize_pages(run_payload["pages"])
-        _write_progress(progress_path, run_payload)
+        run_payload["summary"] = build_run_summary(run_payload["pages"])
+        _write_progress(progress_path, run_payload, database=database)
 
         page_record, first_upload = process_page_job(
             job=job,
@@ -218,8 +249,8 @@ def main():
         )
         run_payload["pages"][index] = page_record
         run_payload["updatedAt"] = utc_now_iso()
-        run_payload["summary"] = _summarize_pages(run_payload["pages"])
-        _write_progress(progress_path, run_payload)
+        run_payload["summary"] = build_run_summary(run_payload["pages"])
+        _write_progress(progress_path, run_payload, database=database)
 
     run_payload["status"] = (
         "completed"
@@ -227,7 +258,7 @@ def main():
         else "completed_with_errors"
     )
     run_payload["updatedAt"] = utc_now_iso()
-    _write_progress(progress_path, run_payload)
+    _write_progress(progress_path, run_payload, database=database)
 
     print(f"Run ID: {run_payload['runId']}")
     print(f"Progress: {progress_path}")
