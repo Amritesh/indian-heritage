@@ -377,22 +377,25 @@ def build_uploaded_item(
 
 
 def get_catalogue_entries(catalogue_data):
+    def _is_coin_like_entry(entry):
+        return isinstance(entry, dict) and any(
+            key in entry for key in ("image_path", "ruler_or_issuer", "denomination")
+        )
+
     if isinstance(catalogue_data, list):
+        if not all(_is_coin_like_entry(entry) for entry in catalogue_data):
+            raise ValueError("catalogue payload must contain coin-like dict entries")
         return catalogue_data
     if isinstance(catalogue_data, dict) and "catalogue" in catalogue_data:
         catalogue_entries = catalogue_data["catalogue"]
         if not isinstance(catalogue_entries, list):
             raise ValueError("catalogue payload must be a list")
+        if not all(_is_coin_like_entry(entry) for entry in catalogue_entries):
+            raise ValueError("catalogue payload must contain coin-like dict entries")
         return catalogue_entries
+    if _is_coin_like_entry(catalogue_data):
+        return [catalogue_data]
     if isinstance(catalogue_data, dict):
-        coin_like_keys = {
-            "image_path",
-            "ruler_or_issuer",
-            "denomination",
-            "metadata",
-        }
-        if any(key in catalogue_data for key in coin_like_keys):
-            return [catalogue_data]
         raise ValueError("catalogue payload must be a coin-like dict or a list of coins")
     return []
 
