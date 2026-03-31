@@ -26,15 +26,19 @@ def _project_root():
 
 def _find_env_path():
     current = os.path.abspath(os.path.dirname(__file__))
-    search_dirs = [current]
-    for _ in range(6):
-        current = os.path.dirname(current)
-        search_dirs.append(current)
+    seen = set()
 
-    for base in search_dirs:
-        for candidate in (os.path.join(base, ".env"), os.path.join(base, "backend", ".env")):
+    while True:
+        if os.path.basename(current) == "backend":
+            candidate = os.path.join(current, ".env")
             if os.path.isfile(candidate):
                 return candidate
+
+        parent = os.path.dirname(current)
+        if parent == current or parent in seen:
+            break
+        seen.add(current)
+        current = parent
 
     return os.path.join(os.path.dirname(__file__), "..", ".env")
 
@@ -376,7 +380,10 @@ def get_catalogue_entries(catalogue_data):
     if isinstance(catalogue_data, list):
         return catalogue_data
     if isinstance(catalogue_data, dict) and "catalogue" in catalogue_data:
-        return catalogue_data["catalogue"]
+        catalogue_entries = catalogue_data["catalogue"]
+        if not isinstance(catalogue_entries, list):
+            raise ValueError("catalogue payload must be a list")
+        return catalogue_entries
     if isinstance(catalogue_data, dict):
         return [catalogue_data]
     return []
