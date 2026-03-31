@@ -26,7 +26,7 @@ def test_build_uploaded_item_attaches_provenance_and_review_flags():
 
     assert item["title"] == "Rupee - Unknown"
     assert item["metadata"]["source_batch"] == "princeley-states-1-1"
-    assert item["metadata"]["source_page_path"].endswith("page-05.png")
+    assert item["metadata"]["source_page_path"] == "page-05"
     assert item["metadata"]["ingestion_mode"] == "independent-page"
     assert "missing_price" in item["metadata"]["review_flags"]
     assert "low_confidence" in item["metadata"]["review_flags"]
@@ -60,6 +60,7 @@ def test_normalize_existing_item_adds_metadata_defaults():
             "notes": "Legacy note",
             "display_labels": ["₹100"],
             "description": "Legacy description",
+            "source_page_path": "/Users/someone/Desktop/images/page-05.png",
             "metadata": {
                 "type": "coin",
                 "ruler_or_issuer": "Akbar",
@@ -76,8 +77,8 @@ def test_normalize_existing_item_adds_metadata_defaults():
         }
     )
 
-    assert item["metadata"]["ingest_status"] == "draft"
+    assert "ingest_status" not in item["metadata"]
     assert item["metadata"]["review_flags"] == []
     assert item["metadata"]["source_batch"] == ""
-    assert item["metadata"]["source_page_path"] == ""
+    assert item["metadata"]["source_page_path"] == "page-05"
     assert item["metadata"]["ingestion_mode"] == "legacy"

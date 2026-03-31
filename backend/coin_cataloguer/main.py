@@ -106,11 +106,14 @@ def _normalize_existing_item(item):
     metadata.setdefault("weight_estimate", item.get("weight_estimate", ""))
     metadata.setdefault("estimated_price_inr", item.get("estimated_price_inr", ""))
     metadata.setdefault("confidence", item.get("confidence", ""))
-    metadata.setdefault("ingest_status", "draft")
     metadata.setdefault("review_flags", [])
     metadata.setdefault("source_batch", "")
-    metadata.setdefault("source_page_path", "")
+    metadata["source_page_path"] = _source_page_reference(
+        metadata.get("source_page_path") or item.get("source_page_path", "")
+    )
     metadata.setdefault("ingestion_mode", "legacy")
+    if metadata.get("ingest_status") is None:
+        metadata.pop("ingest_status", None)
 
     materials = item.get("materials")
     material = metadata.get("material") or item.get("material") or ""
@@ -239,6 +242,12 @@ def _is_missing_value(value):
     return value is None or not str(value).strip()
 
 
+def _source_page_reference(source_page_path):
+    if not source_page_path:
+        return ""
+    return os.path.splitext(os.path.basename(str(source_page_path)))[0]
+
+
 def build_review_flags(coin):
     flags = []
     price = coin.get("estimated_price_inr")
@@ -335,7 +344,7 @@ def build_uploaded_item(
             "ingest_status": "draft",
             "review_flags": review_flags,
             "source_batch": source_batch,
-            "source_page_path": source_page_path,
+            "source_page_path": _source_page_reference(source_page_path),
             "ingestion_mode": ingestion_mode,
         },
     }
