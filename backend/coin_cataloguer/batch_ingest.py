@@ -238,6 +238,9 @@ def main():
         f"{run_payload['summary']['totalPages']} total"
     )
 
+    if run_payload["summary"]["failedPages"] > 0:
+        sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

@@ -2,6 +2,8 @@ from copy import deepcopy
 from types import SimpleNamespace
 import sys
 
+import pytest
+
 import coin_cataloguer.batch_ingest as batch_ingest
 import coin_cataloguer.main as main_module
 from coin_cataloguer.batch_ingest import build_princely_states_plan
@@ -371,3 +373,48 @@ def test_main_handles_malformed_catalogue_payload_in_upload_mode(monkeypatch, ca
 
     captured = capsys.readouterr()
     assert "could not parse catalogue for upload" in captured.out.lower()
+
+
+def test_main_exits_nonzero_when_run_completes_with_errors(monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    monkeypatch.setattr(
+        batch_ingest,
+        "build_initial_run_payload",
+        lambda **kwargs: (
+            "/tmp/run-1.json",
+            {
+                "runId": "run-1",
+                "status": "running",
+                "summary": {"completedPages": 0, "failedPages": 1, "totalPages": 1},
+                "pages": [
+                    {
+                        "sourceBatch": "princeley-states-1-1",
+                        "pageNumber": 5,
+                        "imagePath": "/repo/temp/images/princeley-states-1-1/page-5.png",
+                        "outputDir": "/repo/temp/output/princely-states/princeley-states-1-1/page-05",
+                        "status": "failed",
+                        "cataloguePath": "",
+                        "itemsUploaded": 0,
+                        "error": "No structured catalogue entries found in catalogue output.",
+                    }
+                ],
+            },
+            [
+                {
+                    "source": {"folder": "princeley-states-1-1"},
+                    "pageNumber": 5,
+                    "imagePath": "/repo/temp/images/princeley-states-1-1/page-5.png",
+                    "outputDir": "/repo/temp/output/princely-states/princeley-states-1-1/page-05",
+                }
+            ],
+        ),
+    )
+    monkeypatch.setattr(batch_ingest, "process_page_job", lambda **kwargs: ({"status": "failed", "error": "boom"}, True))
+    monkeypatch.setattr(batch_ingest, "_write_progress", lambda *args, **kwargs: None)
+    monkeypatch.setattr(batch_ingest.os, "makedirs", lambda *args, **kwargs: None)
+    monkeypatch.setattr(sys, "argv", ["batch_ingest", "--images-root", "/repo/temp/images", "--output-root", "/repo/temp/output/princely-states"])
+
+    with pytest.raises(SystemExit) as excinfo:
+        batch_ingest.main()
+
+    assert excinfo.value.code == 1
