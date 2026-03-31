@@ -1,210 +1,138 @@
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getAllCollectionsAdmin } from '@/entities/collection/api/collectionAdminService';
+import { getLatestIngestRun } from '@/entities/ingest/api/ingestProgressService';
 
-type ImportStatus = 'idle' | 'running' | 'done' | 'error';
-
-type ImportLog = {
-  timestamp: string;
-  message: string;
-  type: 'info' | 'success' | 'error';
-};
+const BATCH_COMMAND = `cd /Users/amritesh/Desktop/code/AHG/backend
+/Users/amritesh/.pyenv/versions/3.12.3/bin/python -m coin_cataloguer.batch_ingest \
+  --images-root /Users/amritesh/Desktop/code/AHG/temp/images \
+  --output-root /Users/amritesh/Desktop/code/AHG/temp/output/princely-states \
+  --collection princely-states \
+  --upload \
+  --clear-first`;
 
 export function AdminImportPage() {
-  const [status, setStatus] = useState<ImportStatus>('idle');
-  const [logs, setLogs] = useState<ImportLog[]>([]);
-  const [selectedCollection, setSelectedCollection] = useState('');
-
-  const { data: collections = [] } = useQuery({
-    queryKey: ['admin', 'collections'],
-    queryFn: getAllCollectionsAdmin,
+  const { data: latestRun, isLoading } = useQuery({
+    queryKey: ['admin', 'ingest-run', 'princely-states'],
+    queryFn: () => getLatestIngestRun('princely-states'),
   });
 
-  function addLog(message: string, type: ImportLog['type'] = 'info') {
-    setLogs((prev) => [...prev, { timestamp: new Date().toLocaleTimeString(), message, type }]);
-  }
-
-  async function runImport() {
-    setStatus('running');
-    setLogs([]);
-    addLog('Starting import process…');
-
-    try {
-      addLog('Import pipeline runs server-side via the Python backend scripts.', 'info');
-      addLog('To import data, run the following from the /backend directory:', 'info');
-      addLog(
-        selectedCollection
-          ? `python -m coin_cataloguer.main --collection ${selectedCollection}`
-          : 'python -m coin_cataloguer.main',
-        'info',
-      );
-      addLog('');
-      addLog('The import pipeline will:', 'info');
-      addLog('  1. Fetch items from the source API', 'info');
-      addLog('  2. Normalize and validate with Zod schemas', 'info');
-      addLog('  3. Download and process images', 'info');
-      addLog('  4. Upsert records to Firestore', 'info');
-      addLog('  5. Update collection item counts', 'info');
-      addLog('');
-      addLog('Check the backend terminal for live import progress.', 'success');
-      setStatus('done');
-    } catch (err) {
-      addLog(err instanceof Error ? err.message : 'Unknown error', 'error');
-      setStatus('error');
-    }
-  }
-
-  const logColors = {
-    info: 'text-on-surface-variant',
-    success: 'text-tertiary',
-    error: 'text-error',
-  };
+  const failedPages = latestRun?.pages.filter((page) => page.status === 'failed').slice(0, 5) ?? [];
 
   return (
     <div className="space-y-8">
       <div>
         <span className="eyebrow">Tools</span>
-        <h1 className="mt-2 font-headline text-3xl font-bold text-on-surface">Import Tools</h1>
-        <p className="mt-1 text-on-surface-variant">Trigger and monitor collection import pipelines.</p>
+        <h1 className="mt-2 font-headline text-3xl font-bold text-on-surface">Princely States Ingest</h1>
+        <p className="mt-1 text-on-surface-variant">
+          Track the current batch run and verify that princely-states data is landing before any public UI work starts.
+        </p>
       </div>
 
-      {/* Import Control */}
-      <div className="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/10 space-y-6">
-        <h2 className="font-label text-xs font-bold uppercase tracking-[0.2em] text-primary border-b border-outline-variant/20 pb-4">
-          Run Import
-        </h2>
-
-        <div className="space-y-2">
-          <label className="font-label text-xs font-bold uppercase tracking-wider text-outline">
-            Target Collection
-          </label>
-          <select
-            value={selectedCollection}
-            onChange={(e) => setSelectedCollection(e.target.value)}
-            className="w-full text-sm border border-outline-variant/30 rounded-lg px-3 py-2 bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20"
-          >
-            <option value="">All collections</option>
-            {collections.map((c) => (
-              <option key={c.id} value={c.slug}>
-                {c.displayName}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <button
-            onClick={runImport}
-            disabled={status === 'running'}
-            className="btn-primary disabled:opacity-50"
-          >
-            {status === 'running' ? (
-              <>
-                <span className="material-symbols-outlined animate-spin text-lg">progress_activity</span>
-                Running…
-              </>
-            ) : (
-              <>
-                <span className="material-symbols-outlined text-lg">cloud_download</span>
-                Start Import
-              </>
-            )}
-          </button>
-
-          {status !== 'idle' && (
-            <button
-              onClick={() => { setStatus('idle'); setLogs([]); }}
-              className="btn-secondary"
-            >
-              Clear
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Import Log */}
-      {logs.length > 0 && (
-        <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 overflow-hidden">
-          <div className="px-6 py-4 border-b border-outline-variant/10 flex items-center justify-between">
+      <section className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 p-8 space-y-5">
+        <div className="flex items-center justify-between gap-4 border-b border-outline-variant/20 pb-4">
+          <div>
             <h2 className="font-label text-xs font-bold uppercase tracking-[0.2em] text-primary">
-              Import Log
+              Batch Command
             </h2>
-            {status === 'done' && (
-              <span className="text-xs text-tertiary font-semibold flex items-center gap-1">
-                <span className="material-symbols-outlined text-sm">check_circle</span>
-                Complete
-              </span>
-            )}
-            {status === 'error' && (
-              <span className="text-xs text-error font-semibold flex items-center gap-1">
-                <span className="material-symbols-outlined text-sm">error</span>
-                Failed
-              </span>
-            )}
-          </div>
-          <div className="p-6 font-mono text-xs space-y-1 max-h-96 overflow-y-auto bg-surface-container-low/50">
-            {logs.map((log, i) => (
-              <div key={i} className={`flex gap-4 ${logColors[log.type]}`}>
-                {log.message ? (
-                  <>
-                    <span className="text-outline shrink-0">{log.timestamp}</span>
-                    <span>{log.message}</span>
-                  </>
-                ) : (
-                  <span>&nbsp;</span>
-                )}
-              </div>
-            ))}
+            <p className="mt-1 text-sm text-on-surface-variant">
+              Run this exact command from the backend directory to ingest the current princely-states batch.
+            </p>
           </div>
         </div>
-      )}
+        <pre className="overflow-x-auto rounded-lg border border-outline-variant/10 bg-surface-container-lowest px-4 py-3 font-mono text-sm text-on-surface-variant">
+          {BATCH_COMMAND}
+        </pre>
+        <p className="text-sm text-on-surface-variant">
+          Complete the data sync before starting any admin dashboard or public gallery redesign work.
+        </p>
+      </section>
 
-      {/* Collection Status Grid */}
-      <div className="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/10 space-y-4">
-        <h2 className="font-label text-xs font-bold uppercase tracking-[0.2em] text-primary border-b border-outline-variant/20 pb-4">
-          Collection Sync Status
-        </h2>
-        <div className="divide-y divide-outline-variant/10">
-          {collections.map((col) => (
-            <div key={col.id} className="py-4 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-sm font-semibold text-on-surface">{col.displayName}</p>
-                <p className="text-xs text-on-surface-variant mt-0.5">{col.itemCount} items</p>
+      <section className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 p-8 space-y-6">
+        <div className="flex items-start justify-between gap-4 border-b border-outline-variant/20 pb-4">
+          <div>
+            <h2 className="font-label text-xs font-bold uppercase tracking-[0.2em] text-primary">
+              Live Progress
+            </h2>
+            <p className="mt-1 text-sm text-on-surface-variant">
+              Latest run for <span className="font-semibold text-on-surface">princely-states</span>.
+            </p>
+          </div>
+          <div className="rounded-full border border-outline-variant/10 bg-surface-container-low px-3 py-1 text-xs font-semibold uppercase tracking-wider text-on-surface-variant">
+            {isLoading ? 'Loading…' : latestRun?.status ?? 'No run yet'}
+          </div>
+        </div>
+
+        {latestRun ? (
+          <>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="rounded-xl bg-surface-container-low/60 p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-outline">Total Pages</p>
+                <p className="mt-2 font-headline text-2xl font-bold text-on-surface tabular-nums">
+                  {latestRun.summary.totalPages}
+                </p>
               </div>
-              <div className="text-right">
-                {col.lastSyncedAt ? (
-                  <p className="text-xs text-on-surface-variant">
-                    Last synced {new Date(col.lastSyncedAt).toLocaleDateString()}
+              <div className="rounded-xl bg-surface-container-low/60 p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-outline">Completed</p>
+                <p className="mt-2 font-headline text-2xl font-bold text-on-surface tabular-nums">
+                  {latestRun.summary.completedPages} completed pages
+                </p>
+              </div>
+              <div className="rounded-xl bg-surface-container-low/60 p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-outline">Running</p>
+                <p className="mt-2 font-headline text-2xl font-bold text-on-surface tabular-nums">
+                  {latestRun.summary.runningPages} running pages
+                </p>
+              </div>
+              <div className="rounded-xl bg-surface-container-low/60 p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-outline">Failed</p>
+                <p className="mt-2 font-headline text-2xl font-bold text-on-surface tabular-nums">
+                  {latestRun.summary.failedPages} failed pages
+                </p>
+              </div>
+            </div>
+
+            <div className="grid gap-6 lg:grid-cols-[1.4fr,1fr]">
+              <div className="rounded-xl border border-outline-variant/10 bg-surface-container-low/40 p-5">
+                <h3 className="font-semibold text-sm text-on-surface">Run Details</h3>
+                <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                  <p className="text-on-surface-variant">
+                    Current status: <span className="font-semibold text-on-surface">{latestRun.status}</span>
                   </p>
+                  <p className="text-on-surface-variant">
+                    Last updated: <span className="font-semibold text-on-surface">{latestRun.updatedAt || '—'}</span>
+                  </p>
+                  <p className="text-on-surface-variant">
+                    Started: <span className="font-semibold text-on-surface">{latestRun.startedAt || '—'}</span>
+                  </p>
+                  <p className="text-on-surface-variant">
+                    Completed pages: <span className="font-semibold text-on-surface">{latestRun.summary.completedPages}</span>
+                  </p>
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-outline-variant/10 bg-surface-container-low/40 p-5">
+                <h3 className="font-semibold text-sm text-on-surface">Recent Failed Pages</h3>
+                {failedPages.length > 0 ? (
+                  <ul className="mt-3 space-y-3 text-sm">
+                    {failedPages.map((page) => (
+                      <li key={`${page.sourceBatch}-${page.pageNumber}`} className="rounded-lg bg-surface-container-lowest px-4 py-3">
+                        <p className="font-semibold text-on-surface">Page {page.pageNumber}</p>
+                        <p className="text-on-surface-variant">{page.sourceBatch}</p>
+                        <p className="mt-1 text-error">{page.error || 'No error message recorded.'}</p>
+                      </li>
+                    ))}
+                  </ul>
                 ) : (
-                  <p className="text-xs text-outline">Never synced</p>
+                  <p className="mt-3 text-sm text-on-surface-variant">No failed pages recorded yet.</p>
                 )}
               </div>
             </div>
-          ))}
-          {collections.length === 0 && (
-            <p className="py-4 text-sm text-on-surface-variant text-center">No collections found</p>
-          )}
-        </div>
-      </div>
-
-      {/* Backend Instructions */}
-      <div className="bg-surface-container-low rounded-xl border border-outline-variant/10 p-6 space-y-3">
-        <h3 className="font-label text-xs font-bold uppercase tracking-wider text-outline">
-          Backend Import Instructions
-        </h3>
-        <div className="space-y-2 text-sm text-on-surface-variant font-mono">
-          <p className="text-on-surface font-semibold font-body">From project root:</p>
-          <div className="bg-surface-container-lowest rounded-lg px-4 py-3 space-y-1 border border-outline-variant/10">
-            <p>cd backend</p>
-            <p>pip install -r requirements.txt</p>
-            <p>python -m coin_cataloguer.main</p>
+          </>
+        ) : (
+          <div className="rounded-xl border border-dashed border-outline-variant/20 bg-surface-container-low/30 p-6 text-sm text-on-surface-variant">
+            {isLoading ? 'Loading the latest ingest run…' : 'No princely-states ingest run has been recorded yet.'}
           </div>
-          <p className="font-body mt-2">
-            Set <span className="text-primary">GOOGLE_APPLICATION_CREDENTIALS</span> or use Firebase emulator for local testing.
-          </p>
-        </div>
-      </div>
+        )}
+      </section>
     </div>
   );
 }
