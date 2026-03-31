@@ -369,10 +369,37 @@ def test_main_handles_malformed_catalogue_payload_in_upload_mode(monkeypatch, ca
     monkeypatch.setattr(main_module, "_find_env_path", lambda: "/repo/backend/.env")
     monkeypatch.setattr(main_module, "load_dotenv", lambda *args, **kwargs: None)
 
-    main_module.main()
+    with pytest.raises(SystemExit) as excinfo:
+        main_module.main()
 
     captured = capsys.readouterr()
     assert "could not parse catalogue for upload" in captured.out.lower()
+    assert excinfo.value.code == 1
+
+
+def test_main_exits_nonzero_when_upload_mode_has_no_structured_entries(monkeypatch, capsys):
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    monkeypatch.setattr(
+        main_module,
+        "run_cataloguer_for_image",
+        lambda **kwargs: {
+            "catalogue_path": "/tmp/catalogue.json",
+            "catalogue_data": [],
+            "save_dir": "/tmp",
+        },
+    )
+    monkeypatch.setattr(main_module, "upload_to_firebase", lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("upload should not be called")))
+    monkeypatch.setattr(sys, "argv", ["main", "--image", "/repo/temp/images/page-5.png", "--upload"])
+    monkeypatch.setattr(main_module.os.path, "isfile", lambda path: True)
+    monkeypatch.setattr(main_module, "_find_env_path", lambda: "/repo/backend/.env")
+    monkeypatch.setattr(main_module, "load_dotenv", lambda *args, **kwargs: None)
+
+    with pytest.raises(SystemExit) as excinfo:
+        main_module.main()
+
+    captured = capsys.readouterr()
+    assert "could not parse catalogue for upload" in captured.out.lower()
+    assert excinfo.value.code == 1
 
 
 def test_main_exits_nonzero_when_run_completes_with_errors(monkeypatch):

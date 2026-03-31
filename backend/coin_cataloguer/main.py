@@ -625,6 +625,7 @@ def main():
         print()
         print("  Uploading to Firebase...")
 
+        upload_succeeded = False
         try:
             coins = get_catalogue_entries(catalogue_data)
         except ValueError as exc:
@@ -638,12 +639,17 @@ def main():
                 coins, args.collection, source_page_path=image_path, clear_collection=args.clear
             )
             if upload_result:
+                upload_succeeded = True
                 print(f"  Collection ID: {upload_result['collection_id']}")
                 print(f"  Items uploaded: {upload_result['items_uploaded']}")
                 print(f"  Collection total: {upload_result['items_total']}")
                 print(f"  DB path: collections/{upload_result['collection_id']}")
             else:
                 print("  Upload failed. Check Firebase credentials.")
+                upload_succeeded = False
+
+        if not upload_succeeded:
+            sys.exit(1)
 
     print()
     print("=" * 60)
