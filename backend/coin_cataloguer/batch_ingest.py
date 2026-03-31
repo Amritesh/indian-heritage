@@ -121,8 +121,10 @@ def process_page_job(*, job, collection_name, args, first_upload):
 
         coins = get_catalogue_entries(result["catalogue_data"])
         upload_result = None
-        if args.upload and not coins:
-            raise RuntimeError("No uploadable entries found in catalogue output.")
+        if not coins:
+            if args.upload:
+                raise RuntimeError("No uploadable entries found in catalogue output.")
+            raise RuntimeError("No structured catalogue entries found in catalogue output.")
         if args.upload and coins:
             upload_result = upload_to_firebase(
                 coins,

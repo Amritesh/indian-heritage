@@ -189,6 +189,35 @@ def test_process_page_job_fails_when_upload_mode_has_no_entries(monkeypatch):
     assert first_upload is True
 
 
+def test_process_page_job_fails_when_unstructured_catalogue_has_no_entries(monkeypatch):
+    monkeypatch.setattr(
+        batch_ingest,
+        "run_cataloguer_for_image",
+        lambda **kwargs: {
+            "catalogue_path": "/tmp/catalogue.json",
+            "catalogue_data": [],
+            "save_dir": "/tmp",
+        },
+    )
+    monkeypatch.setattr(batch_ingest.os.path, "isfile", lambda path: True)
+
+    page_record, first_upload = batch_ingest.process_page_job(
+        job={
+            "source": {"folder": "princeley-states-1-1"},
+            "pageNumber": 5,
+            "imagePath": "/repo/temp/images/princeley-states-1-1/page-5.png",
+            "outputDir": "/repo/temp/output/princely-states/princeley-states-1-1/page-05",
+        },
+        collection_name="princely-states",
+        args=SimpleNamespace(upload=False, clear_first=False),
+        first_upload=True,
+    )
+
+    assert page_record["status"] == "failed"
+    assert "no structured catalogue entries" in page_record["error"].lower()
+    assert first_upload is True
+
+
 def test_main_prints_run_id_from_initial_payload(monkeypatch, capsys):
     monkeypatch.setenv("GEMINI_API_KEY", "test-key")
     monkeypatch.setattr(batch_ingest, "build_initial_run_payload", lambda **kwargs: ("/tmp/run-1.json", {"runId": "run-1", "summary": {"completedPages": 0, "failedPages": 0, "totalPages": 1}, "pages": [{}]}, [{}]))
@@ -319,3 +348,26 @@ def test_find_env_path_prefers_backend_env_over_parent_env(tmp_path, monkeypatch
     monkeypatch.setattr(main_module, "__file__", str(fake_main_path))
 
     assert main_module._find_env_path() == str(preferred_env)
+
+
+def test_main_handles_malformed_catalogue_payload_in_upload_mode(monkeypatch, capsys):
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    monkeypatch.setattr(
+        main_module,
+        "run_cataloguer_for_image",
+        lambda **kwargs: {
+            "catalogue_path": "/tmp/catalogue.json",
+            "catalogue_data": {"catalogue": {"image_path": "/tmp/coin.png"}},
+            "save_dir": "/tmp",
+        },
+    )
+    monkeypatch.setattr(main_module, "upload_to_firebase", lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("upload should not be called")))
+    monkeypatch.setattr(sys, "argv", ["main", "--image", "/repo/temp/images/page-5.png", "--upload"])
+    monkeypatch.setattr(main_module.os.path, "isfile", lambda path: True)
+    monkeypatch.setattr(main_module, "_find_env_path", lambda: "/repo/backend/.env")
+    monkeypatch.setattr(main_module, "load_dotenv", lambda *args, **kwargs: None)
+
+    main_module.main()
+
+    captured = capsys.readouterr()
+    assert "could not parse catalogue for upload" in captured.out.lower()
