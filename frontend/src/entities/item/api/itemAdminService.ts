@@ -54,7 +54,12 @@ export type AdminItemQuery = {
   pageSize?: number;
 };
 
-export async function getAdminItems({ collectionSlug, status = 'all', pageSize = 50 }: AdminItemQuery): Promise<ItemRecord[]> {
+export async function getAdminItems({
+  collectionSlug,
+  status = 'all',
+  search = '',
+  pageSize = 100,
+}: AdminItemQuery): Promise<ItemRecord[]> {
   const db = getFirestoreOrThrow();
   const constraints: QueryConstraint[] = [];
 
@@ -65,7 +70,27 @@ export async function getAdminItems({ collectionSlug, status = 'all', pageSize =
   constraints.push(orderBy('pageNumber', 'asc'), limit(pageSize));
 
   const snapshot = await getDocs(query(collection(db, 'items'), ...constraints));
-  return snapshot.docs.map((d) => mapItemSnapshot(d.data()));
+  const items = snapshot.docs.map((d) => mapItemSnapshot(d.data()));
+  const normalizedSearch = search.trim().toLowerCase();
+
+  if (!normalizedSearch) return items;
+
+  return items.filter((item) =>
+    [
+      item.title,
+      item.period,
+      item.collectionName,
+      item.description,
+      item.searchText,
+      item.notes.join(' '),
+      String(item.metadata?.ruler_or_issuer ?? ''),
+      String(item.metadata?.mint_or_place ?? ''),
+      String(item.metadata?.denomination ?? ''),
+    ]
+      .join(' ')
+      .toLowerCase()
+      .includes(normalizedSearch),
+  );
 }
 
 export type ItemFormData = {
