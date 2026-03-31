@@ -1,8 +1,10 @@
+from copy import deepcopy
 from types import SimpleNamespace
 import sys
 
 import coin_cataloguer.batch_ingest as batch_ingest
 from coin_cataloguer.batch_ingest import build_princely_states_plan
+from coin_cataloguer.main import save_catalogue_result
 
 
 def test_build_princely_states_plan_uses_expected_page_ranges():
@@ -198,3 +200,98 @@ def test_main_prints_run_id_from_initial_payload(monkeypatch, capsys):
 
     captured = capsys.readouterr()
     assert "Run ID: run-1" in captured.out
+
+
+def test_save_catalogue_result_preserves_native_list_result(tmp_path):
+    source = [{"image_path": "/tmp/coin.png", "ruler_or_issuer": "Akbar"}]
+
+    result = save_catalogue_result(
+        result=source,
+        image_path="/repo/temp/images/page-5.png",
+        output_dir=str(tmp_path),
+    )
+
+    assert result["catalogue_data"] == source
+    assert result["catalogue_path"].endswith("catalogue.json")
+
+
+def test_save_catalogue_result_preserves_native_dict_result(tmp_path):
+    source = {"catalogue": [{"image_path": "/tmp/coin.png", "ruler_or_issuer": "Akbar"}]}
+
+    result = save_catalogue_result(
+        result=source,
+        image_path="/repo/temp/images/page-5.png",
+        output_dir=str(tmp_path),
+    )
+
+    assert result["catalogue_data"] == source
+    assert result["catalogue_path"].endswith("catalogue.json")
+
+
+def test_main_writes_running_page_snapshot_before_completion(monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+
+    writes = []
+
+    def fake_write_progress(_path, payload):
+        writes.append(deepcopy(payload))
+
+    monkeypatch.setattr(
+        batch_ingest,
+        "build_initial_run_payload",
+        lambda **kwargs: (
+            "/tmp/run-1.json",
+            {
+                "runId": "run-1",
+                "status": "running",
+                "summary": {"completedPages": 0, "failedPages": 0, "totalPages": 1},
+                "pages": [
+                    {
+                        "sourceBatch": "princeley-states-1-1",
+                        "pageNumber": 5,
+                        "imagePath": "/repo/temp/images/princeley-states-1-1/page-5.png",
+                        "outputDir": "/repo/temp/output/princely-states/princeley-states-1-1/page-05",
+                        "status": "pending",
+                        "cataloguePath": "",
+                        "itemsUploaded": 0,
+                        "error": "",
+                    }
+                ],
+            },
+            [
+                {
+                    "source": {"folder": "princeley-states-1-1"},
+                    "pageNumber": 5,
+                    "imagePath": "/repo/temp/images/princeley-states-1-1/page-5.png",
+                    "outputDir": "/repo/temp/output/princely-states/princeley-states-1-1/page-05",
+                }
+            ],
+        ),
+    )
+    monkeypatch.setattr(
+        batch_ingest,
+        "process_page_job",
+        lambda **kwargs: (
+            {
+                "sourceBatch": "princeley-states-1-1",
+                "pageNumber": 5,
+                "imagePath": "/repo/temp/images/princeley-states-1-1/page-5.png",
+                "outputDir": "/repo/temp/output/princely-states/princeley-states-1-1/page-05",
+                "status": "completed",
+                "cataloguePath": "/tmp/catalogue.json",
+                "itemsUploaded": 1,
+                "error": "",
+            },
+            False,
+        ),
+    )
+    monkeypatch.setattr(batch_ingest, "_write_progress", fake_write_progress)
+    monkeypatch.setattr(batch_ingest.os, "makedirs", lambda *args, **kwargs: None)
+    monkeypatch.setattr(sys, "argv", ["batch_ingest", "--images-root", "/repo/temp/images", "--output-root", "/repo/temp/output/princely-states"])
+
+    batch_ingest.main()
+
+    statuses = [snapshot["pages"][0]["status"] for snapshot in writes]
+    assert "running" in statuses
+    assert "completed" in statuses
+    assert statuses.index("running") < statuses.index("completed")
