@@ -76,17 +76,12 @@ export async function getAdminItems({
   if (!normalizedSearch) return items;
 
   return items.filter((item) =>
-    [
-      item.title,
-      item.period,
-      item.collectionName,
-      item.description,
-      item.searchText,
-      item.notes.join(' '),
-      String(item.metadata?.ruler_or_issuer ?? ''),
-      String(item.metadata?.mint_or_place ?? ''),
-      String(item.metadata?.denomination ?? ''),
-    ]
+    [item.title, item.period, item.collectionName, item.description, item.searchText, item.notes.join(' ')]
+      .concat([
+        String(item.metadata?.rulerOrIssuer ?? ''),
+        String(item.metadata?.mintOrPlace ?? ''),
+        String(item.metadata?.denomination ?? ''),
+      ])
       .join(' ')
       .toLowerCase()
       .includes(normalizedSearch),
