@@ -57,6 +57,96 @@ def _write_progress(progress_path, payload):
     write_local_progress(progress_path, payload)
 
 
+def build_initial_run_payload(*, plan, collection_name, images_root, output_root, run_id=None):
+    run_id = run_id or _run_id()
+    progress_path = os.path.join(output_root, "ingest_runs", f"{run_id}.json")
+
+    pages = []
+    page_jobs = []
+    for source in plan["sources"]:
+        for page_number in source["pages"]:
+            image_path = page_image_path(images_root, source["folder"], page_number)
+            page_output_dir = _page_output_dir(output_root, source["folder"], page_number)
+            page_jobs.append(
+                {
+                    "source": source,
+                    "pageNumber": page_number,
+                    "imagePath": image_path,
+                    "outputDir": page_output_dir,
+                }
+            )
+            pages.append(
+                _build_page_record(
+                    source_batch=source["folder"],
+                    page_number=page_number,
+                    image_path=image_path,
+                    output_dir=page_output_dir,
+                )
+            )
+
+    run_payload = {
+        "runId": run_id,
+        "collection": collection_name,
+        "imagesRoot": images_root,
+        "outputRoot": output_root,
+        "status": "running",
+        "startedAt": utc_now_iso(),
+        "updatedAt": utc_now_iso(),
+        "sources": plan["sources"],
+        "pages": pages,
+        "summary": _summarize_pages(pages),
+    }
+
+    return progress_path, run_payload, page_jobs
+
+
+def process_page_job(*, job, collection_name, args, first_upload):
+    page_record = _build_page_record(
+        source_batch=job["source"]["folder"],
+        page_number=job["pageNumber"],
+        image_path=job["imagePath"],
+        output_dir=job["outputDir"],
+    )
+    page_record["status"] = "running"
+
+    try:
+        if not os.path.isfile(job["imagePath"]):
+            raise FileNotFoundError(f"Image not found: {job['imagePath']}")
+
+        result = run_cataloguer_for_image(
+            image_path=job["imagePath"],
+            output_dir=job["outputDir"],
+            collection_name=collection_name,
+        )
+
+        coins = get_catalogue_entries(result["catalogue_data"])
+        upload_result = None
+        if args.upload and coins:
+            upload_result = upload_to_firebase(
+                coins,
+                collection_name,
+                source_page_path=job["imagePath"],
+                clear_collection=(args.clear_first and first_upload),
+            )
+            if upload_result is None:
+                raise RuntimeError("Upload to Firebase returned None.")
+            first_upload = False
+
+        page_record["status"] = "completed"
+        page_record["cataloguePath"] = result["catalogue_path"]
+        page_record["itemsUploaded"] = (
+            upload_result["items_uploaded"]
+            if upload_result
+            else (len(coins) if args.upload else 0)
+        )
+        page_record["error"] = ""
+    except Exception as exc:
+        page_record["status"] = "failed"
+        page_record["error"] = str(exc)
+
+    return page_record, first_upload
+
+
 def main():
     parser = argparse.ArgumentParser(description="Batch ingest independent-page coin folders")
     parser.add_argument(
@@ -100,85 +190,27 @@ def main():
     plan = build_princely_states_plan(images_root)
     collection_name = args.collection or plan["collection"]
 
-    run_id = _run_id()
-    progress_path = os.path.join(output_root, "ingest_runs", f"{run_id}.json")
-    run_payload = {
-        "runId": run_id,
-        "collection": collection_name,
-        "imagesRoot": images_root,
-        "outputRoot": output_root,
-        "status": "running",
-        "startedAt": utc_now_iso(),
-        "updatedAt": utc_now_iso(),
-        "sources": plan["sources"],
-        "pages": [],
-        "summary": _summarize_pages([]),
-    }
-
-    page_jobs = []
-    for source in plan["sources"]:
-        for page_number in source["pages"]:
-            image_path = page_image_path(images_root, source["folder"], page_number)
-            page_output_dir = _page_output_dir(output_root, source["folder"], page_number)
-            page_jobs.append(
-                {
-                    "source": source,
-                    "pageNumber": page_number,
-                    "imagePath": image_path,
-                    "outputDir": page_output_dir,
-                }
-            )
-            run_payload["pages"].append(
-                _build_page_record(
-                    source_batch=source["folder"],
-                    page_number=page_number,
-                    image_path=image_path,
-                    output_dir=page_output_dir,
-                )
-            )
+    progress_path, run_payload, page_jobs = build_initial_run_payload(
+        plan=plan,
+        collection_name=collection_name,
+        images_root=images_root,
+        output_root=output_root,
+    )
 
     _write_progress(progress_path, run_payload)
 
     first_upload = True
     for index, job in enumerate(page_jobs):
-        page_record = run_payload["pages"][index]
-        page_record["status"] = "running"
+        page_record, first_upload = process_page_job(
+            job=job,
+            collection_name=collection_name,
+            args=args,
+            first_upload=first_upload,
+        )
+        run_payload["pages"][index] = page_record
         run_payload["updatedAt"] = utc_now_iso()
         run_payload["summary"] = _summarize_pages(run_payload["pages"])
         _write_progress(progress_path, run_payload)
-
-        try:
-            if not os.path.isfile(job["imagePath"]):
-                raise FileNotFoundError(f"Image not found: {job['imagePath']}")
-
-            result = run_cataloguer_for_image(
-                image_path=job["imagePath"],
-                output_dir=job["outputDir"],
-                collection_name=collection_name,
-            )
-
-            coins = get_catalogue_entries(result["catalogue_data"])
-            upload_result = None
-            if args.upload and coins:
-                upload_result = upload_to_firebase(
-                    coins,
-                    collection_name,
-                    source_page_path=job["imagePath"],
-                    clear_collection=(args.clear_first and first_upload),
-                )
-                first_upload = False
-
-            page_record["status"] = "completed"
-            page_record["cataloguePath"] = result["catalogue_path"]
-            page_record["itemsUploaded"] = (
-                upload_result["items_uploaded"]
-                if upload_result
-                else (len(coins) if args.upload else 0)
-            )
-            page_record["error"] = ""
-        except Exception as exc:
-            page_record["status"] = "failed"
-            page_record["error"] = str(exc)
 
         run_payload["updatedAt"] = utc_now_iso()
         run_payload["summary"] = _summarize_pages(run_payload["pages"])
