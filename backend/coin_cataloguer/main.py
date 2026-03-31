@@ -94,6 +94,24 @@ def _normalize_existing_item(item):
             "confidence": item.get("confidence", ""),
         }
 
+    metadata = dict(metadata)
+    metadata.setdefault("type", "coin")
+    metadata.setdefault("ruler_or_issuer", item.get("ruler_or_issuer", ""))
+    metadata.setdefault("year_or_period", item.get("year_or_period", item.get("period", "")))
+    metadata.setdefault("mint_or_place", item.get("mint_or_place", item.get("mint", item.get("region", ""))))
+    metadata.setdefault("denomination", item.get("denomination", ""))
+    metadata.setdefault("series_or_catalog", item.get("series_or_catalog", ""))
+    metadata.setdefault("material", item.get("material", ""))
+    metadata.setdefault("condition", item.get("condition", ""))
+    metadata.setdefault("weight_estimate", item.get("weight_estimate", ""))
+    metadata.setdefault("estimated_price_inr", item.get("estimated_price_inr", ""))
+    metadata.setdefault("confidence", item.get("confidence", ""))
+    metadata.setdefault("ingest_status", "draft")
+    metadata.setdefault("review_flags", [])
+    metadata.setdefault("source_batch", "")
+    metadata.setdefault("source_page_path", "")
+    metadata.setdefault("ingestion_mode", "legacy")
+
     materials = item.get("materials")
     material = metadata.get("material") or item.get("material") or ""
     if not isinstance(materials, list) or not materials:
@@ -217,20 +235,26 @@ def _init_firebase():
     return storage.bucket(), db.reference()
 
 
+def _is_missing_value(value):
+    return value is None or not str(value).strip()
+
+
 def build_review_flags(coin):
     flags = []
-    price = str(coin.get("estimated_price_inr", "")).strip()
-    mint = str(coin.get("mint_or_place", "")).strip()
-    ruler = str(coin.get("ruler_or_issuer", "")).strip()
-    confidence = str(coin.get("confidence", "")).strip().lower()
+    price = coin.get("estimated_price_inr")
+    mint = coin.get("mint_or_place")
+    ruler = coin.get("ruler_or_issuer")
+    confidence = coin.get("confidence")
+    confidence_text = str(confidence).strip().lower() if confidence is not None else ""
 
-    if not price:
+    if _is_missing_value(price):
         flags.append("missing_price")
-    if not mint:
+    if _is_missing_value(mint):
         flags.append("missing_mint")
-    if not ruler or ruler.lower() == "unknown":
+    ruler_text = str(ruler).strip() if ruler is not None else ""
+    if not ruler_text or ruler_text.lower() == "unknown":
         flags.append("missing_issuer")
-    if confidence in {"low", "low confidence"}:
+    if confidence_text in {"low", "low confidence"}:
         flags.append("low_confidence")
 
     return flags
