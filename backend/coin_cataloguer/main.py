@@ -217,6 +217,106 @@ def _init_firebase():
     return storage.bucket(), db.reference()
 
 
+def build_review_flags(coin):
+    flags = []
+    price = str(coin.get("estimated_price_inr", "")).strip()
+    mint = str(coin.get("mint_or_place", "")).strip()
+    ruler = str(coin.get("ruler_or_issuer", "")).strip()
+    confidence = str(coin.get("confidence", "")).strip().lower()
+
+    if not price:
+        flags.append("missing_price")
+    if not mint:
+        flags.append("missing_mint")
+    if not ruler or ruler.lower() == "unknown":
+        flags.append("missing_issuer")
+    if confidence in {"low", "low confidence"}:
+        flags.append("low_confidence")
+
+    return flags
+
+
+def build_uploaded_item(
+    *,
+    coin,
+    collection_name,
+    item_index,
+    source_page_path="",
+    source_batch="",
+    ingestion_mode="independent-page",
+    gs_url="",
+):
+    ruler = coin.get("ruler_or_issuer", "Unknown")
+    denomination = coin.get("denomination", "Unknown")
+    year = coin.get("year_or_period", "")
+    mint = coin.get("mint_or_place", "")
+    material = coin.get("material", "")
+    condition = coin.get("condition", "")
+    weight = coin.get("weight_estimate", "")
+    price = coin.get("estimated_price_inr", "")
+    catalog_ref = coin.get("series_or_catalog", "")
+    review_flags = build_review_flags(coin)
+
+    display_labels = []
+    if weight:
+        display_labels.append(f"Wt: {weight}")
+    if condition:
+        display_labels.append(condition)
+    if price:
+        display_labels.append(f"₹{price}")
+
+    notes = []
+    obverse = coin.get("obverse_description", "")
+    reverse = coin.get("reverse_description", "")
+    if obverse:
+        notes.append(f"Obverse: {obverse}")
+    if reverse:
+        notes.append(f"Reverse: {reverse}")
+    extra_notes = coin.get("notes", "")
+    if extra_notes:
+        notes.append(extra_notes)
+
+    parts = [f"{denomination} issued by {ruler}"]
+    if year:
+        parts.append(f"Period: {year}")
+    if mint:
+        parts.append(f"Mint: {mint}")
+    if catalog_ref:
+        parts.append(f"Catalog: {catalog_ref}")
+    description = ". ".join(parts) + "."
+
+    return {
+        "id": "",
+        "page": item_index,
+        "title": f"{denomination} - {ruler}",
+        "period": year or None,
+        "region": mint or None,
+        "materials": [material] if material else ["Unknown"],
+        "image": gs_url or coin.get("image_path", ""),
+        "notes": notes if notes else ["Auto-catalogued coin"],
+        "display_labels": display_labels,
+        "description": description,
+        "metadata": {
+            "type": "coin",
+            "ruler_or_issuer": ruler,
+            "year_or_period": year,
+            "mint_or_place": mint,
+            "denomination": denomination,
+            "series_or_catalog": catalog_ref,
+            "material": material,
+            "condition": condition,
+            "weight_estimate": weight,
+            "estimated_price_inr": price,
+            "confidence": coin.get("confidence", ""),
+            "ingest_status": "draft",
+            "review_flags": review_flags,
+            "source_batch": source_batch,
+            "source_page_path": source_page_path,
+            "ingestion_mode": ingestion_mode,
+        },
+    }
+
+
 def upload_to_firebase(catalogue, collection_name, source_page_path="", clear_collection=False):
     """Upload catalogue data and images to Firebase matching the frontend's expected format.
 
@@ -281,73 +381,15 @@ def upload_to_firebase(catalogue, collection_name, source_page_path="", clear_co
             gs_url = f"gs://{STORAGE_BUCKET}/{blob_path}"
             print(f"  Uploaded: {os.path.basename(image_path)} -> {gs_url}")
 
-        ruler = coin.get("ruler_or_issuer", "Unknown")
-        denomination = coin.get("denomination", "Unknown")
-        year = coin.get("year_or_period", "")
-        mint = coin.get("mint_or_place", "")
-        material = coin.get("material", "")
-        condition = coin.get("condition", "")
-        weight = coin.get("weight_estimate", "")
-        price = coin.get("estimated_price_inr", "")
-        catalog_ref = coin.get("series_or_catalog", "")
-
-        # Build display_labels for the orange tags shown on ItemCard
-        display_labels = []
-        if weight:
-            display_labels.append(f"Wt: {weight}")
-        if condition:
-            display_labels.append(condition)
-        if price:
-            display_labels.append(f"₹{price}")
-
-        # Build notes array
-        notes = []
-        obverse = coin.get("obverse_description", "")
-        reverse = coin.get("reverse_description", "")
-        if obverse:
-            notes.append(f"Obverse: {obverse}")
-        if reverse:
-            notes.append(f"Reverse: {reverse}")
-        extra_notes = coin.get("notes", "")
-        if extra_notes:
-            notes.append(extra_notes)
-
-        # Build description
-        parts = [f"{denomination} issued by {ruler}"]
-        if year:
-            parts.append(f"Period: {year}")
-        if mint:
-            parts.append(f"Mint: {mint}")
-        if catalog_ref:
-            parts.append(f"Catalog: {catalog_ref}")
-        description = ". ".join(parts) + "."
-
-        # Item structure matching what the frontend renders
-        item = {
-            "id": "",
-            "page": idx,
-            "title": f"{denomination} - {ruler}",
-            "period": year or None,
-            "region": mint or None,
-            "materials": [material] if material else ["Unknown"],
-            "image": gs_url or image_path,
-            "notes": notes if notes else ["Auto-catalogued coin"],
-            "display_labels": display_labels,
-            "description": description,
-            "metadata": {
-                "type": "coin",
-                "ruler_or_issuer": ruler,
-                "year_or_period": year,
-                "mint_or_place": mint,
-                "denomination": denomination,
-                "series_or_catalog": catalog_ref,
-                "material": material,
-                "condition": condition,
-                "weight_estimate": weight,
-                "estimated_price_inr": price,
-                "confidence": coin.get("confidence", ""),
-            },
-        }
+        item = build_uploaded_item(
+            coin=coin,
+            collection_name=collection_name,
+            item_index=idx,
+            source_page_path=source_page_path,
+            source_batch=os.path.basename(os.path.dirname(source_page_path)) if source_page_path else "",
+            ingestion_mode="independent-page",
+            gs_url=gs_url,
+        )
         item["id"], sequence = _ensure_unique_item_id(collection_name, item, used_ids, sequence)
         merged_by_key[_item_dedupe_key(item)] = item
 
