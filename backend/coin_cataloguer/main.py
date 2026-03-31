@@ -625,7 +625,11 @@ def main():
         print()
         print("  Uploading to Firebase...")
 
-        coins = get_catalogue_entries(catalogue_data)
+        try:
+            coins = get_catalogue_entries(catalogue_data)
+        except ValueError as exc:
+            print(f"  Warning: {exc}")
+            coins = []
 
         if not coins:
             print("  Warning: Could not parse catalogue for upload.")
