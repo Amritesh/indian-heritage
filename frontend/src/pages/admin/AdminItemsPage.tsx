@@ -12,6 +12,7 @@ export function AdminItemsPage() {
   const qc = useQueryClient();
   const [collectionSlug, setCollectionSlug] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [search, setSearch] = useState('');
   const [confirmArchive, setConfirmArchive] = useState<string | null>(null);
 
   const { data: collections = [] } = useQuery({
@@ -20,8 +21,13 @@ export function AdminItemsPage() {
   });
 
   const { data: items = [], isLoading } = useQuery({
-    queryKey: ['admin', 'items', collectionSlug, statusFilter],
-    queryFn: () => getAdminItems({ collectionSlug: collectionSlug || undefined, status: statusFilter }),
+    queryKey: ['admin', 'items', collectionSlug, statusFilter, search],
+    queryFn: () =>
+      getAdminItems({
+        collectionSlug: collectionSlug || undefined,
+        status: statusFilter,
+        search,
+      }),
   });
 
   const publishMutation = useMutation({
@@ -57,6 +63,13 @@ export function AdminItemsPage() {
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search items, issuers, mints, notes..."
+          className="min-w-[18rem] text-sm border border-outline-variant/30 rounded-lg px-3 py-2 bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20"
+        />
+
         <select
           value={collectionSlug}
           onChange={(e) => setCollectionSlug(e.target.value)}
