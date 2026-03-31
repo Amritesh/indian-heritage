@@ -1,4 +1,5 @@
 from types import SimpleNamespace
+import sys
 
 import coin_cataloguer.batch_ingest as batch_ingest
 from coin_cataloguer.batch_ingest import build_princely_states_plan
@@ -145,3 +146,55 @@ def test_process_page_job_consumes_clear_first_only_after_success(monkeypatch):
     assert page_3["status"] == "completed"
     assert upload_calls == [True, True, False]
     assert first_upload is False
+
+
+def test_process_page_job_fails_when_upload_mode_has_no_entries(monkeypatch):
+    upload_calls = []
+
+    monkeypatch.setattr(
+        batch_ingest,
+        "run_cataloguer_for_image",
+        lambda **kwargs: {
+            "catalogue_path": "/tmp/catalogue.json",
+            "catalogue_data": [],
+            "save_dir": "/tmp",
+        },
+    )
+    monkeypatch.setattr(batch_ingest.os.path, "isfile", lambda path: True)
+
+    def fake_upload_to_firebase(*args, **kwargs):
+        upload_calls.append(True)
+        return {"collection_id": "princely-states", "items_uploaded": 1, "items_total": 1}
+
+    monkeypatch.setattr(batch_ingest, "upload_to_firebase", fake_upload_to_firebase)
+
+    page_record, first_upload = batch_ingest.process_page_job(
+        job={
+            "source": {"folder": "princeley-states-1-1"},
+            "pageNumber": 5,
+            "imagePath": "/repo/temp/images/princeley-states-1-1/page-5.png",
+            "outputDir": "/repo/temp/output/princely-states/princeley-states-1-1/page-05",
+        },
+        collection_name="princely-states",
+        args=SimpleNamespace(upload=True, clear_first=True),
+        first_upload=True,
+    )
+
+    assert page_record["status"] == "failed"
+    assert "uploadable entries" in page_record["error"].lower()
+    assert upload_calls == []
+    assert first_upload is True
+
+
+def test_main_prints_run_id_from_initial_payload(monkeypatch, capsys):
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    monkeypatch.setattr(batch_ingest, "build_initial_run_payload", lambda **kwargs: ("/tmp/run-1.json", {"runId": "run-1", "summary": {"completedPages": 0, "failedPages": 0, "totalPages": 1}, "pages": [{}]}, [{}]))
+    monkeypatch.setattr(batch_ingest, "process_page_job", lambda **kwargs: ({"status": "completed"}, False))
+    monkeypatch.setattr(batch_ingest, "_write_progress", lambda *args, **kwargs: None)
+    monkeypatch.setattr(batch_ingest.os, "makedirs", lambda *args, **kwargs: None)
+    monkeypatch.setattr(sys, "argv", ["batch_ingest", "--images-root", "/repo/temp/images", "--output-root", "/repo/temp/output/princely-states"])
+
+    batch_ingest.main()
+
+    captured = capsys.readouterr()
+    assert "Run ID: run-1" in captured.out
