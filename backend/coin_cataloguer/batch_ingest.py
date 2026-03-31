@@ -121,6 +121,8 @@ def process_page_job(*, job, collection_name, args, first_upload):
 
         coins = get_catalogue_entries(result["catalogue_data"])
         upload_result = None
+        if args.upload and not coins:
+            raise RuntimeError("No uploadable entries found in catalogue output.")
         if args.upload and coins:
             upload_result = upload_to_firebase(
                 coins,
@@ -212,10 +214,6 @@ def main():
         run_payload["summary"] = _summarize_pages(run_payload["pages"])
         _write_progress(progress_path, run_payload)
 
-        run_payload["updatedAt"] = utc_now_iso()
-        run_payload["summary"] = _summarize_pages(run_payload["pages"])
-        _write_progress(progress_path, run_payload)
-
     run_payload["status"] = (
         "completed"
         if run_payload["summary"]["failedPages"] == 0
@@ -224,7 +222,7 @@ def main():
     run_payload["updatedAt"] = utc_now_iso()
     _write_progress(progress_path, run_payload)
 
-    print(f"Run ID: {run_id}")
+    print(f"Run ID: {run_payload['runId']}")
     print(f"Progress: {progress_path}")
     print(
         "Summary: "
