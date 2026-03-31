@@ -250,6 +250,44 @@ def test_process_page_job_preserves_catalogue_path_when_validation_fails(monkeyp
     assert first_upload is True
 
 
+def test_process_page_job_rejects_list_with_non_coin_entries_before_upload(monkeypatch):
+    upload_calls = []
+
+    monkeypatch.setattr(
+        batch_ingest,
+        "run_cataloguer_for_image",
+        lambda **kwargs: {
+            "catalogue_path": "/tmp/catalogue.json",
+            "catalogue_data": ["bad"],
+            "save_dir": "/tmp",
+        },
+    )
+    monkeypatch.setattr(batch_ingest.os.path, "isfile", lambda path: True)
+    monkeypatch.setattr(
+        batch_ingest,
+        "upload_to_firebase",
+        lambda *args, **kwargs: upload_calls.append(True) or {"collection_id": "princely-states", "items_uploaded": 1, "items_total": 1},
+    )
+
+    page_record, first_upload = batch_ingest.process_page_job(
+        job={
+            "source": {"folder": "princeley-states-1-1"},
+            "pageNumber": 5,
+            "imagePath": "/repo/temp/images/princeley-states-1-1/page-5.png",
+            "outputDir": "/repo/temp/output/princely-states/princeley-states-1-1/page-05",
+        },
+        collection_name="princely-states",
+        args=SimpleNamespace(upload=True, clear_first=True),
+        first_upload=True,
+    )
+
+    assert page_record["status"] == "failed"
+    assert page_record["cataloguePath"] == "/tmp/catalogue.json"
+    assert "coin-like dict entries" in page_record["error"].lower()
+    assert upload_calls == []
+    assert first_upload is True
+
+
 def test_main_prints_run_id_from_initial_payload(monkeypatch, capsys):
     monkeypatch.setenv("GEMINI_API_KEY", "test-key")
     monkeypatch.setattr(batch_ingest, "build_initial_run_payload", lambda **kwargs: ("/tmp/run-1.json", {"runId": "run-1", "summary": {"completedPages": 0, "failedPages": 0, "totalPages": 1}, "pages": [{}]}, [{}]))
@@ -377,6 +415,16 @@ def test_get_catalogue_entries_accepts_coin_like_dict():
     coin = {"image_path": "/tmp/coin.png", "ruler_or_issuer": "Akbar"}
 
     assert get_catalogue_entries(coin) == [coin]
+
+
+def test_get_catalogue_entries_rejects_list_with_non_coin_entries():
+    with pytest.raises(ValueError):
+        get_catalogue_entries(["bad"])
+
+
+def test_get_catalogue_entries_rejects_catalogue_list_with_non_coin_entries():
+    with pytest.raises(ValueError):
+        get_catalogue_entries({"catalogue": ["bad"]})
 
 
 def test_find_env_path_prefers_backend_env_over_parent_env(tmp_path, monkeypatch):
