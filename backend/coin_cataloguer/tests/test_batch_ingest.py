@@ -3,8 +3,9 @@ from types import SimpleNamespace
 import sys
 
 import coin_cataloguer.batch_ingest as batch_ingest
+import coin_cataloguer.main as main_module
 from coin_cataloguer.batch_ingest import build_princely_states_plan
-from coin_cataloguer.main import save_catalogue_result
+from coin_cataloguer.main import get_catalogue_entries, save_catalogue_result
 
 
 def test_build_princely_states_plan_uses_expected_page_ranges():
@@ -295,3 +296,26 @@ def test_main_writes_running_page_snapshot_before_completion(monkeypatch):
     assert "running" in statuses
     assert "completed" in statuses
     assert statuses.index("running") < statuses.index("completed")
+
+
+def test_get_catalogue_entries_rejects_non_list_catalogue_payload():
+    try:
+        get_catalogue_entries({"catalogue": {"image_path": "/tmp/coin.png"}})
+    except ValueError as exc:
+        assert "catalogue" in str(exc).lower()
+    else:
+        raise AssertionError("expected ValueError for malformed catalogue payload")
+
+
+def test_find_env_path_prefers_backend_env_over_parent_env(tmp_path, monkeypatch):
+    worktree_backend = tmp_path / "worktree" / "backend"
+    worktree_backend.mkdir(parents=True)
+    preferred_env = worktree_backend / ".env"
+    preferred_env.write_text("GEMINI_API_KEY=preferred\n", encoding="utf-8")
+    parent_env = tmp_path / "worktree" / ".env"
+    parent_env.write_text("GEMINI_API_KEY=parent\n", encoding="utf-8")
+
+    fake_main_path = worktree_backend / "coin_cataloguer" / "main.py"
+    monkeypatch.setattr(main_module, "__file__", str(fake_main_path))
+
+    assert main_module._find_env_path() == str(preferred_env)
