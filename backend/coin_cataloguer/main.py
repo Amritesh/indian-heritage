@@ -389,14 +389,19 @@ def save_catalogue_result(*, result, image_path, output_dir):
     os.makedirs(save_dir, exist_ok=True)
     catalogue_path = os.path.join(save_dir, "catalogue.json")
 
-    catalogue_data = None
-    try:
-        catalogue_data = json.loads(str(result))
+    if isinstance(result, (list, dict)):
+        catalogue_data = result
         with open(catalogue_path, "w", encoding="utf-8") as f:
             json.dump(catalogue_data, f, indent=2, ensure_ascii=False)
-    except (json.JSONDecodeError, TypeError):
-        with open(catalogue_path, "w", encoding="utf-8") as f:
-            f.write(str(result))
+    else:
+        catalogue_data = None
+        try:
+            catalogue_data = json.loads(str(result))
+            with open(catalogue_path, "w", encoding="utf-8") as f:
+                json.dump(catalogue_data, f, indent=2, ensure_ascii=False)
+        except (json.JSONDecodeError, TypeError):
+            with open(catalogue_path, "w", encoding="utf-8") as f:
+                f.write(str(result))
 
     return {
         "catalogue_path": catalogue_path,

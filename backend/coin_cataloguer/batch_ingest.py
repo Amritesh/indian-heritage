@@ -203,6 +203,11 @@ def main():
 
     first_upload = True
     for index, job in enumerate(page_jobs):
+        run_payload["pages"][index]["status"] = "running"
+        run_payload["updatedAt"] = utc_now_iso()
+        run_payload["summary"] = _summarize_pages(run_payload["pages"])
+        _write_progress(progress_path, run_payload)
+
         page_record, first_upload = process_page_job(
             job=job,
             collection_name=collection_name,
