@@ -7,6 +7,8 @@ import {
   IngestRunSummary,
 } from '@/entities/ingest/model/types';
 
+export const INGEST_RUNS_COLLECTION = 'ingest_runs';
+
 function readString(data: Record<string, unknown>, keys: string[], fallback = ''): string {
   for (const key of keys) {
     const value = data[key];
@@ -102,7 +104,7 @@ export async function getLatestIngestRun(collectionSlug: string): Promise<Ingest
   const db = getFirestoreOrThrow();
   const snapshot = await getDocs(
     query(
-      collection(db, 'ingest_runs'),
+      collection(db, INGEST_RUNS_COLLECTION),
       where('collectionSlug', '==', collectionSlug),
       orderBy('updatedAt', 'desc'),
       limit(1),

@@ -13,6 +13,7 @@ import {
 import { getFirestoreOrThrow } from '@/shared/services/firestore';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { formatCurrency } from '@/shared/lib/formatters';
+import { getLatestIngestRun } from '@/entities/ingest/api/ingestProgressService';
 
 async function getDashboardStats() {
   const db = getFirestoreOrThrow();
@@ -52,6 +53,10 @@ async function getDashboardStats() {
 
 export function AdminDashboardPage() {
   const { userProfile } = useAuth();
+  const { data: latestIngestRun, isLoading: isLoadingLatestIngestRun } = useQuery({
+    queryKey: ['admin', 'ingest-run', 'princely-states'],
+    queryFn: () => getLatestIngestRun('princely-states'),
+  });
   const { data, isLoading } = useQuery({
     queryKey: ['admin', 'dashboard-stats'],
     queryFn: getDashboardStats,
@@ -121,6 +126,55 @@ export function AdminDashboardPage() {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 p-6">
+        <div className="flex items-start justify-between gap-4 border-b border-outline-variant/10 pb-4">
+          <div>
+            <h2 className="font-label text-xs font-bold uppercase tracking-[0.2em] text-primary">
+              Latest Ingest
+            </h2>
+            <p className="mt-1 text-sm text-on-surface-variant">
+              Current progress for the princely-states batch.
+            </p>
+          </div>
+          <div className="rounded-full border border-outline-variant/10 bg-surface-container-low px-3 py-1 text-xs font-semibold uppercase tracking-wider text-on-surface-variant">
+            {isLoadingLatestIngestRun ? 'Loading…' : latestIngestRun?.status ?? 'No run yet'}
+          </div>
+        </div>
+
+        {latestIngestRun ? (
+          <div className="mt-5 grid grid-cols-2 gap-4 text-sm lg:grid-cols-4">
+            <div className="rounded-xl bg-surface-container-low/60 p-4">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-outline">Total Pages</p>
+              <p className="mt-2 font-headline text-2xl font-bold text-on-surface tabular-nums">
+                {latestIngestRun.summary.totalPages}
+              </p>
+            </div>
+            <div className="rounded-xl bg-surface-container-low/60 p-4">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-outline">Completed</p>
+              <p className="mt-2 font-headline text-2xl font-bold text-on-surface tabular-nums">
+                {latestIngestRun.summary.completedPages}
+              </p>
+            </div>
+            <div className="rounded-xl bg-surface-container-low/60 p-4">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-outline">Failed</p>
+              <p className="mt-2 font-headline text-2xl font-bold text-on-surface tabular-nums">
+                {latestIngestRun.summary.failedPages}
+              </p>
+            </div>
+            <div className="rounded-xl bg-surface-container-low/60 p-4">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-outline">Running</p>
+              <p className="mt-2 font-headline text-2xl font-bold text-on-surface tabular-nums">
+                {latestIngestRun.summary.runningPages}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <p className="mt-4 text-sm text-on-surface-variant">
+            No ingest runs recorded yet for princely-states.
+          </p>
+        )}
       </div>
 
       {/* Recent Items */}
