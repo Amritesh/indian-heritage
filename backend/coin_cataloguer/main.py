@@ -385,7 +385,15 @@ def get_catalogue_entries(catalogue_data):
             raise ValueError("catalogue payload must be a list")
         return catalogue_entries
     if isinstance(catalogue_data, dict):
-        return [catalogue_data]
+        coin_like_keys = {
+            "image_path",
+            "ruler_or_issuer",
+            "denomination",
+            "metadata",
+        }
+        if any(key in catalogue_data for key in coin_like_keys):
+            return [catalogue_data]
+        raise ValueError("catalogue payload must be a coin-like dict or a list of coins")
     return []
 
 

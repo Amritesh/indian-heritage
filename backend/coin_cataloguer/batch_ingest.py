@@ -118,6 +118,7 @@ def process_page_job(*, job, collection_name, args, first_upload):
             output_dir=job["outputDir"],
             collection_name=collection_name,
         )
+        page_record["cataloguePath"] = result["catalogue_path"]
 
         coins = get_catalogue_entries(result["catalogue_data"])
         upload_result = None
@@ -137,7 +138,6 @@ def process_page_job(*, job, collection_name, args, first_upload):
             first_upload = False
 
         page_record["status"] = "completed"
-        page_record["cataloguePath"] = result["catalogue_path"]
         page_record["itemsUploaded"] = (
             upload_result["items_uploaded"]
             if upload_result
