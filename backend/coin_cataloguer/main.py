@@ -217,7 +217,7 @@ def _init_firebase():
     return storage.bucket(), db.reference()
 
 
-def upload_to_firebase(catalogue, collection_name, source_page_path=""):
+def upload_to_firebase(catalogue, collection_name, source_page_path="", clear_collection=False):
     """Upload catalogue data and images to Firebase matching the frontend's expected format.
 
     Frontend expects:
@@ -231,16 +231,24 @@ def upload_to_firebase(catalogue, collection_name, source_page_path=""):
         return None
 
     collection_id = collection_name
-    existing_detail = _load_local_collection_detail(collection_name)
-    if not existing_detail:
-        remote_detail = database.child("collection_details").child(collection_id).get()
-        if isinstance(remote_detail, dict) and isinstance(remote_detail.get("items"), list):
-            existing_detail = remote_detail
-        else:
-            existing_detail = {
-                "album_title": _titleize_collection_name(collection_name),
-                "items": [],
-            }
+    
+    if clear_collection:
+        print(f"  CLEARING collection: {collection_id}")
+        existing_detail = {
+            "album_title": _titleize_collection_name(collection_name),
+            "items": [],
+        }
+    else:
+        existing_detail = _load_local_collection_detail(collection_name)
+        if not existing_detail:
+            remote_detail = database.child("collection_details").child(collection_id).get()
+            if isinstance(remote_detail, dict) and isinstance(remote_detail.get("items"), list):
+                existing_detail = remote_detail
+            else:
+                existing_detail = {
+                    "album_title": _titleize_collection_name(collection_name),
+                    "items": [],
+                }
 
     existing_items = []
     for existing_item in existing_detail.get("items", []):
@@ -408,6 +416,11 @@ def main():
         action="store_true",
         help="Upload catalogue and images to Firebase after processing",
     )
+    parser.add_argument(
+        "--clear",
+        action="store_true",
+        help="Clear existing collection items before uploading (use with --upload)",
+    )
     args = parser.parse_args()
 
     # Load environment variables from backend/.env
@@ -448,6 +461,7 @@ def main():
     crew = create_crew(
         image_path=image_path,
         output_dir=output_dir,
+        collection_name=args.collection,
     )
 
     result = crew.kickoff()
@@ -487,7 +501,9 @@ def main():
         if not coins:
             print("  Warning: Could not parse catalogue for upload.")
         else:
-            upload_result = upload_to_firebase(coins, args.collection, source_page_path=image_path)
+            upload_result = upload_to_firebase(
+                coins, args.collection, source_page_path=image_path, clear_collection=args.clear
+            )
             if upload_result:
                 print(f"  Collection ID: {upload_result['collection_id']}")
                 print(f"  Items uploaded: {upload_result['items_uploaded']}")

@@ -33,7 +33,7 @@ const COLLECTION_CONFIGS = {
     heroEyebrow: 'Indian Numismatic Heritage',
     culture: 'Mughal Empire',
     periodLabel: 'c. 1526–1857 CE',
-    heroImagePath: 'images/mughals/page-1.png',
+    heroImagePath: 'images/mughals-1-1/page-1.png',
     sortOrder: 1,
   },
   british: {
@@ -47,7 +47,7 @@ const COLLECTION_CONFIGS = {
     heroEyebrow: 'Colonial Numismatic Archive',
     culture: 'British India',
     periodLabel: 'c. 1757–1947 CE',
-    heroImagePath: 'images/british/page-10-11/coin_1.png',
+    heroImagePath: 'images/british-india-1-1/page-1.png',
     sortOrder: 2,
   },
 };
@@ -66,7 +66,7 @@ function gsUrlToHttps(gsUrl) {
   if (slashIdx === -1) return gsUrl;
   const bucket = withoutProto.substring(0, slashIdx);
   const filePath = withoutProto.substring(slashIdx + 1);
-  return `https://storage.googleapis.com/${bucket}/${filePath}`;
+  return `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(filePath)}?alt=media`;
 }
 
 function parseArgs() {
@@ -84,6 +84,16 @@ function slugify(text) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
+}
+
+function extractYear(period) {
+  if (!period) return 0;
+  // Match 4-digit CE years (1000–2100), prefer ones in parentheses like "(1618-1619 AD)"
+  const parenMatch = String(period).match(/\((\d{3,4})[-–\/]/);
+  if (parenMatch) return parseInt(parenMatch[1], 10);
+  const allYears = String(period).match(/\b(1[0-9]{3}|20[0-9]{2})\b/g);
+  if (allYears) return parseInt(allYears[0], 10);
+  return 0;
 }
 
 function parsePriceRange(priceStr) {
@@ -178,6 +188,7 @@ function transformItem(rawItem, collectionConfig, collectionDocId, pageNumber) {
     searchKeywords: buildTags(rawItem, meta, collectionConfig.culture),
     metadata: meta,
     estimatedPriceAvg: parsePriceRange(meta.estimatedPriceInr),
+    sortYear: extractYear(rawItem.period || meta.year_or_period || ''),
     published: true,
     importedAt: admin.firestore.FieldValue.serverTimestamp(),
   };

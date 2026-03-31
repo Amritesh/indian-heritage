@@ -85,10 +85,12 @@ export function CollectionDetailPage() {
     <div className="page-shell">
       {/* Collection Hero */}
       <section className="grid grid-cols-1 md:grid-cols-12 gap-0 items-center bg-surface-container-low rounded-xl overflow-hidden min-h-[350px] mb-12">
-        <div className="md:col-span-7 h-full relative min-h-[250px]">
+        <div className="md:col-span-7 h-full relative min-h-[250px] bg-surface-container-lowest">
           <ImageWithFallback
             src={collection.heroImage}
             alt={collection.name}
+            objectFit="contain"
+            className="p-6"
             wrapperClassName="min-h-[250px] md:min-h-[350px]"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-surface-container-low md:block hidden" />

@@ -55,6 +55,61 @@ Firebase Hosting deploys [`frontend/dist`](/Users/amritesh/Desktop/code/AHG/fron
 - [`firestore.indexes.json`](/Users/amritesh/Desktop/code/AHG/firestore.indexes.json)
 - [`storage.rules`](/Users/amritesh/Desktop/code/AHG/storage.rules)
 
+## Coin Cataloguer (CrewAI Pipeline)
+
+The cataloguer uses three AI agents in sequence to process a coin album page and sync it to Firestore.
+
+### Setup
+
+```bash
+cd backend
+pip install -r requirements.txt
+cp .env.example .env   # add GEMINI_API_KEY and SERPER_API_KEY
+```
+
+### Full Pipeline — All Three Tools in Order
+
+```bash
+# From repo root
+cd backend
+
+# Tool 1 — segment_coins: detect and crop individual coins from a page image
+# Tool 2 — analyze_coin:  identify each coin and produce a full catalogue entry
+# Tool 3 — sync_collection_stats: push updated itemCount, materials, worth,
+#           sortYear, and estimatedPriceAvg to Firestore
+python -m coin_cataloguer.main \
+  --image /path/to/temp/images/mughals-1-1/page-25.png \
+  --collection mughals \
+  --output /path/to/temp/output \
+  --upload
+```
+
+The crew runs the three steps sequentially. `--upload` triggers the Firebase image upload (Tool 2 output) and the stats sync (Tool 3) automatically.
+
+### Paired-Page Processing (obverse + reverse)
+
+```bash
+python -m coin_cataloguer.process_pairs \
+  --collection mughals \
+  --base-dir /path/to/temp/images/mughals-1-1 \
+  --pairs "1:2,3:4,5:6" \
+  --upload
+```
+
+After `process_pairs` adds new items, run the stats sync separately:
+
+```bash
+node backend/scripts/importToFirestore.js --collection mughals
+```
+
+### Sync Stats Only (after manual data edits)
+
+```bash
+node backend/scripts/importToFirestore.js --collection mughals
+node backend/scripts/importToFirestore.js --collection british
+node backend/scripts/importToFirestore.js   # both collections
+```
+
 ## Data Model
 
 Top-level `items` are intentional so item lookup, search, and future collections stay generic. Current indexed query patterns cover:

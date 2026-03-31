@@ -3,12 +3,14 @@ import { cn } from '@/shared/lib/cn';
 
 type ImageWithFallbackProps = ImgHTMLAttributes<HTMLImageElement> & {
   wrapperClassName?: string;
+  objectFit?: 'cover' | 'contain';
 };
 
 export function ImageWithFallback({
   alt,
   className,
   wrapperClassName,
+  objectFit = 'cover',
   ...props
 }: ImageWithFallbackProps) {
   const [failed, setFailed] = useState(false);
@@ -32,7 +34,11 @@ export function ImageWithFallback({
   return (
     <img
       alt={alt}
-      className={cn('h-full w-full object-cover', className)}
+      className={cn(
+        'h-full w-full',
+        objectFit === 'contain' ? 'object-contain' : 'object-cover',
+        className,
+      )}
       onError={() => setFailed(true)}
       loading="lazy"
       {...props}
