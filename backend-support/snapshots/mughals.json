@@ -3150,6 +3150,3401 @@
         "year_or_period": "1719 AD (AH 1131)"
       },
       "page": 2
+    },
+    {
+      "id": "mughals-item-143",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1143 (1730 AD), RY 13. Mint: Ahmedabad. Catalog: KM# 436.1.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-9/coin_1.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Sahib-i-Qiran Thani Muhammad Shah Badshah Ghazi' (Auspicious coin of the second Lord of the Fortunate Conjunction, Muhammad Shah, Emperor and Fighter for the Faith).",
+        "Reverse: Persian legend: 'Zarb Ahmedabad Sanat 13 Julus Manus Maimanat' (Struck at Ahmedabad in the 13th year of his reign associated with prosperity).",
+        "Muhammad Shah (reigned 1719–1748) was known as 'Rangeela'. Ahmedabad was a significant provincial mint during the Mughal period."
+      ],
+      "period": "AH 1143 (1730 AD), RY 13",
+      "region": "Ahmedabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.2 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 4,000"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 4,000",
+        "material": "Silver",
+        "mint_or_place": "Ahmedabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.1",
+        "type": "coin",
+        "weight_estimate": "11.2 - 11.6 grams",
+        "year_or_period": "AH 1143 (1730 AD), RY 13"
+      },
+      "page": 1
+    },
+    {
+      "id": "mughals-item-144",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1154 (1741 AD), RY 23. Mint: Ahmedabad. Catalog: KM# 436.1.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-9/coin_2.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Sahib-i-Qiran Thani Muhammad Shah Badshah Ghazi'.",
+        "Reverse: Persian legend: 'Zarb Ahmedabad Sanat 23 Julus Manus Maimanat'.",
+        "The visual analysis suggested a Gold Mohur, but the color is likely due to lighting; the coin is a silver rupee as per the collection label."
+      ],
+      "period": "AH 1154 (1741 AD), RY 23",
+      "region": "Ahmedabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.2 - 11.6 grams",
+        "Extremely Fine (XF)",
+        "₹2,500 - 4,000"
+      ],
+      "metadata": {
+        "condition": "Extremely Fine (XF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 4,000",
+        "material": "Silver",
+        "mint_or_place": "Ahmedabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.1",
+        "type": "coin",
+        "weight_estimate": "11.2 - 11.6 grams",
+        "year_or_period": "AH 1154 (1741 AD), RY 23"
+      },
+      "page": 2
+    },
+    {
+      "id": "mughals-item-145",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1157 (1744 AD), RY 25. Mint: Allahabad. Catalog: KM# 436.8.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-9/coin_3.png",
+      "notes": [
+        "Obverse: Persian legend with the name of Muhammad Shah and the epithet 'Badshah Ghazi'.",
+        "Reverse: Persian legend: 'Zarb Allahabad Sanat 25 Julus Manus Maimanat'.",
+        "Allahabad (Ilahabad) mint issues under Muhammad Shah are well-regarded for their calligraphy."
+      ],
+      "period": "AH 1157 (1744 AD), RY 25",
+      "region": "Allahabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.2 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹3,000 - 5,000"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,000 - 5,000",
+        "material": "Silver",
+        "mint_or_place": "Allahabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.8",
+        "type": "coin",
+        "weight_estimate": "11.2 - 11.6 grams",
+        "year_or_period": "AH 1157 (1744 AD), RY 25"
+      },
+      "page": 3
+    },
+    {
+      "id": "mughals-item-146",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1136 (1723 AD), RY 5. Mint: Arkat. Catalog: KM# 436.7.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-9/coin_4.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Badshah Ghazi Muhammad Shah'. AH date 1136.",
+        "Reverse: Persian legend: 'Zarb Arkat Sanat 5 Julus Manus Maimanat'.",
+        "Arkat (Arcot) was a major mint in the Carnatic region, frequently used by both the Mughals and later the Nawabs of Arcot and the East India Company."
+      ],
+      "period": "AH 1136 (1723 AD), RY 5",
+      "region": "Arkat",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 3,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 3,500",
+        "material": "Silver",
+        "mint_or_place": "Arkat",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.7",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1136 (1723 AD), RY 5"
+      },
+      "page": 4
+    },
+    {
+      "id": "mughals-item-147",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1143 (1730 AD), RY 12. Mint: Arkat. Catalog: KM# 436.7.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-9/coin_5.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Badshah Ghazi Muhammad Shah'.",
+        "Reverse: Persian legend: 'Zarb Arkat Sanat 12 Julus Manus Maimanat'.",
+        "Silver rupee of the Arkat mint during the middle of Muhammad Shah's reign."
+      ],
+      "period": "AH 1143 (1730 AD), RY 12",
+      "region": "Arkat",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.3 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 3,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 3,500",
+        "material": "Silver",
+        "mint_or_place": "Arkat",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.7",
+        "type": "coin",
+        "weight_estimate": "11.3 - 11.6 grams",
+        "year_or_period": "AH 1143 (1730 AD), RY 12"
+      },
+      "page": 5
+    },
+    {
+      "id": "mughals-item-148",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1143 (1730 AD), RY 12. Mint: Akbarabad. Catalog: KM# 436.3.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-9/coin_6.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Sahib-i-qiran sani Muhammad Shah Badshah Ghazi'.",
+        "Reverse: Persian legend: 'Zarb Akbarabad Sanat 12 Julus Manus Maimanat'.",
+        "Akbarabad is the Mughal name for Agra, the city of the Taj Mahal and a primary imperial mint."
+      ],
+      "period": "AH 1143 (1730 AD), RY 12",
+      "region": "Akbarabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹1,800 - 2,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "1,800 - 2,500",
+        "material": "Silver",
+        "mint_or_place": "Akbarabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.3",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1143 (1730 AD), RY 12"
+      },
+      "page": 6
+    },
+    {
+      "id": "coin-149",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1153 (1740 AD). Mint: Akbarabad. Catalog: KM# 436.3.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-9/coin_7.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Sahib-i-qiran sani Muhammad Shah Badshah Ghazi' with AH date 1153.",
+        "Reverse: Persian legend: 'Zarb Akbarabad Sanat Julus Manus Maimanat'.",
+        "Standard silver rupee from the Agra mint."
+      ],
+      "period": "AH 1153 (1740 AD)",
+      "region": "Akbarabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹1,800 - 2,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "1,800 - 2,500",
+        "material": "Silver",
+        "mint_or_place": "Akbarabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.3",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1153 (1740 AD)"
+      },
+      "page": 7
+    },
+    {
+      "id": "coin-150",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1147 (1734 AD), RY 17. Mint: Muhammadabad Banaras. Catalog: KM# 436.45.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-9/coin_8.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Badshah Ghazi Muhammad Shah' with AH date 1147.",
+        "Reverse: Persian legend: 'Zarb Muhammadabad Banaras Sanat 17 Julus Manus Maimanat'.",
+        "Banaras was renamed Muhammadabad in honor of the emperor."
+      ],
+      "period": "AH 1147 (1734 AD), RY 17",
+      "region": "Muhammadabad Banaras",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹1,800 - 2,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "1,800 - 2,500",
+        "material": "Silver",
+        "mint_or_place": "Muhammadabad Banaras",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.45",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1147 (1734 AD), RY 17"
+      },
+      "page": 8
+    },
+    {
+      "id": "coin-151",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1158 (1745 AD), RY 28. Mint: Muhammadabad Banaras. Catalog: KM# 436.45.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-9/coin_9.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Sahib-i-qiran sani Muhammad Shah Badshah Ghazi' with AH date 1158.",
+        "Reverse: Persian legend: 'Zarb Muhammadabad Banaras Sanat 28 Julus Manus Maimanat'.",
+        "Late-reign issue from the Banaras mint."
+      ],
+      "period": "AH 1158 (1745 AD), RY 28",
+      "region": "Muhammadabad Banaras",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,000 - 3,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,000 - 3,500",
+        "material": "Silver",
+        "mint_or_place": "Muhammadabad Banaras",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.45",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1158 (1745 AD), RY 28"
+      },
+      "page": 9
+    },
+    {
+      "id": "coin-152",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1160 (1747 AD), RY 30. Mint: Banaras. Catalog: KM# 436.45.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-9/coin_10.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Badshah Ghazi Muhammad Shah'. AH date 1160.",
+        "Reverse: Persian legend: 'Zarb Banaras Sanat 30 Julus Manus Maimanat'.",
+        "Final years of Muhammad Shah's reign; Banaras mint continued to be active."
+      ],
+      "period": "AH 1160 (1747 AD), RY 30",
+      "region": "Banaras",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.2 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 4,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 4,500",
+        "material": "Silver",
+        "mint_or_place": "Banaras",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.45",
+        "type": "coin",
+        "weight_estimate": "11.2 - 11.6 grams",
+        "year_or_period": "AH 1160 (1747 AD), RY 30"
+      },
+      "page": 10
+    },
+    {
+      "id": "mughals-item-123",
+      "title": "Rupee - Muhammad Shah (Mughal Emperor)",
+      "description": "Rupee issued by Muhammad Shah (Mughal Emperor). Period: AH 1147 / RY 17 (c. 1734 AD). Mint: Kora (Kora Jahanabad). Catalog: Krause KM# 436.39.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-10/coin_1.png",
+      "notes": [
+        "Obverse: Persian legend: Sikka Mubarak Sahib-i-qiran Sani Muhammad Shah Badshah Ghazi (The auspicious coin of the second Lord of the Conjunctions, Muhammad Shah, Emperor and Fighter against Infidels). Note: This side is not visible in the photo but is standard for this issue.",
+        "Reverse: Persian legend: Zarb Kora Sanat 17 Julus Manus Maimanat (Struck at Kora in the 17th year of his reign of prosperous association).",
+        "The coin is a silver Rupee of the Mughal Emperor Muhammad Shah, specifically attributed to the Kora mint (Kora Jahanabad). The regnal year (RY) 17 is visible on the reverse. The attribution on the coin holder matches the visible numismatic features of the coin."
+      ],
+      "period": "AH 1147 / RY 17 (c. 1734 AD)",
+      "region": "Kora (Kora Jahanabad)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 4,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 4,500",
+        "material": "Silver",
+        "mint_or_place": "Kora (Kora Jahanabad)",
+        "ruler_or_issuer": "Muhammad Shah (Mughal Emperor)",
+        "series_or_catalog": "Krause KM# 436.39",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1147 / RY 17 (c. 1734 AD)"
+      },
+      "page": 1
+    },
+    {
+      "id": "mughals-item-124",
+      "title": "1 Rupee - Muhammad Shah (Mughal Emperor)",
+      "description": "1 Rupee issued by Muhammad Shah (Mughal Emperor). Period: AH 1149 / RY 18 (c. 1736-1737 AD). Mint: Murshidabad. Catalog: KM# 436.46.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-10/coin_2.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Sahib-i-qiran sani Muhammad Shah Badshah Ghazi' (The auspicious coin of the second Lord of the Conjunctions, Muhammad Shah, Emperor, Warrior against Infidels).",
+        "Reverse: Persian legend: 'Zarb Murshidabad Sanah 18 Julus Manus Maimanat' (Struck at Murshidabad in the 18th year of the reign associated with prosperity).",
+        "This is a silver rupee from the reign of Muhammad Shah 'Rangeela'. Murshidabad was a prolific mint under the Nawabs of Bengal who acknowledged Mughal suzerainty. The coin displays clear calligraphy typical of the period, though part of the legend is off the flan as is standard for these hand-struck coins."
+      ],
+      "period": "AH 1149 / RY 18 (c. 1736-1737 AD)",
+      "region": "Murshidabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 4,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "1 Rupee",
+        "estimated_price_inr": "2,500 - 4,500",
+        "material": "Silver",
+        "mint_or_place": "Murshidabad",
+        "ruler_or_issuer": "Muhammad Shah (Mughal Emperor)",
+        "series_or_catalog": "KM# 436.46",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1149 / RY 18 (c. 1736-1737 AD)"
+      },
+      "page": 2
+    },
+    {
+      "id": "mughals-item-125",
+      "title": "Rupee - Muhammad Shah (Mughal Emperor)",
+      "description": "Rupee issued by Muhammad Shah (Mughal Emperor). Period: AH 1151 / RY 20 (c. 1738 AD). Mint: Jahangirnagar (modern-day Dhaka, Bangladesh). Catalog: KM# 436.31.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-10/coin_3.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Badshah Ghazi Muhammad Shah'. The title 'Badshah' is clearly legible across the center, with 'Muhammad Shah' at the top.",
+        "Reverse: Not visible in the image, but based on the collector's holder, it contains the formula: 'Zarb Jahangirnagar Sanah 20 Julus Manus Maimanat'.",
+        "Jahangirnagar was the Mughal name for Dhaka. Coins from this mint are highly sought after by collectors of the Bengal region. The handwritten details on the holder (AH 1151, RY 20) are consistent with the historical reign of Muhammad Shah 'Rangeela'."
+      ],
+      "period": "AH 1151 / RY 20 (c. 1738 AD)",
+      "region": "Jahangirnagar (modern-day Dhaka, Bangladesh)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹3,500 - 5,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,500 - 5,500",
+        "material": "Silver",
+        "mint_or_place": "Jahangirnagar (modern-day Dhaka, Bangladesh)",
+        "ruler_or_issuer": "Muhammad Shah (Mughal Emperor)",
+        "series_or_catalog": "KM# 436.31",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1151 / RY 20 (c. 1738 AD)"
+      },
+      "page": 3
+    },
+    {
+      "id": "mughals-item-126",
+      "title": "Rupee - Muhammad Shah (Mughal Emperor)",
+      "description": "Rupee issued by Muhammad Shah (Mughal Emperor). Period: AH 1133 / RY 3 (approx. 1721 AD). Mint: Gwalior. Catalog: KM# 436.25.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-10/coin_4.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Badshah Ghazi Muhammad Shah' (Auspicious coin of the Victorious Emperor Muhammad Shah).",
+        "Reverse: Persian legend: 'Manus Maimanat Sanah 3 Zarb Gwalior' (Associated with the prosperity of the 3rd regnal year, struck at Gwalior).",
+        "The coin is a silver rupee of the Mughal Emperor Muhammad Shah, often referred to as 'Rangeela'. The reverse side is clearly visible in the image, showing the regnal year '3' (Julus) and the mint name 'Gwalior' at the bottom. The information handwritten on the flip matches the visible details of the coin."
+      ],
+      "period": "AH 1133 / RY 3 (approx. 1721 AD)",
+      "region": "Gwalior",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹3,000 - 4,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,000 - 4,500",
+        "material": "Silver",
+        "mint_or_place": "Gwalior",
+        "ruler_or_issuer": "Muhammad Shah (Mughal Emperor)",
+        "series_or_catalog": "KM# 436.25",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1133 / RY 3 (approx. 1721 AD)"
+      },
+      "page": 4
+    },
+    {
+      "id": "mughals-item-127",
+      "title": "Rupee - Muhammad Shah, Mughal Emperor",
+      "description": "Rupee issued by Muhammad Shah, Mughal Emperor. Period: AH 1131 / 1719 AD (Regnal Year: Ahad / Year 1). Mint: Surat. Catalog: KM #436.60.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-10/coin_5.png",
+      "notes": [
+        "Obverse: Standard Persian legend for Muhammad Shah: 'Sikka Mubarak Badshah Ghazi Muhammad Shah' (The auspicious coin of the Victorious Emperor Muhammad Shah) along with the AH date (not visible in this image side).",
+        "Reverse: Persian legend: 'Manus Maimanat Sanah Ahad Julus Zarb Surat' which translates to 'Struck at Surat in the first year of the accession associated with prosperity'.",
+        "The coin is a silver Rupee from the first regnal year (Ahad) of Muhammad Shah, often referred to as Muhammad Shah 'Rangeela'. The flip details provided in the image match the visible Persian script on the reverse of the coin. Surat was a major maritime trade hub and a prolific mint for the Mughals."
+      ],
+      "period": "AH 1131 / 1719 AD (Regnal Year: Ahad / Year 1)",
+      "region": "Surat",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 4,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 4,500",
+        "material": "Silver",
+        "mint_or_place": "Surat",
+        "ruler_or_issuer": "Muhammad Shah, Mughal Emperor",
+        "series_or_catalog": "KM #436.60",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1131 / 1719 AD (Regnal Year: Ahad / Year 1)"
+      },
+      "page": 5
+    },
+    {
+      "id": "mughals-item-128",
+      "title": "1 Rupee - Muhammad Shah (Mughal Emperor)",
+      "description": "1 Rupee issued by Muhammad Shah (Mughal Emperor). Period: AH 1132 / RY 2 (c. 1720 AD). Mint: Surat. Catalog: KM# 436.60.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-10/coin_6.png",
+      "notes": [
+        "Obverse: Though not visible in this image, the standard obverse features the Persian legend: \"Sikka Mubarak Badshah Ghazi Muhammad Shah\" (Auspicious coin of the Emperor Muhammad Shah, fighter for the faith).",
+        "Reverse: Persian legend: \"Manus Maimanat Manus Zarb Surat Sanah 2 Julus\" which translates to: \"Associated with prosperity of the reign, struck at Surat in the 2nd regnal year.\"",
+        "Muhammad Shah, known as 'Rangila', had a long reign during which the Mughal Empire began to decline significantly. Coins from the Surat mint are quite common but highly collectible due to their bold calligraphy. This specific coin shows the 2nd regnal year (RY 2) clearly on the reverse."
+      ],
+      "period": "AH 1132 / RY 2 (c. 1720 AD)",
+      "region": "Surat",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 3,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "1 Rupee",
+        "estimated_price_inr": "2,500 - 3,500",
+        "material": "Silver",
+        "mint_or_place": "Surat",
+        "ruler_or_issuer": "Muhammad Shah (Mughal Emperor)",
+        "series_or_catalog": "KM# 436.60",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1132 / RY 2 (c. 1720 AD)"
+      },
+      "page": 6
+    },
+    {
+      "id": "mughals-item-129",
+      "title": "Rupee - Muhammad Shah (Mughal Emperor)",
+      "description": "Rupee issued by Muhammad Shah (Mughal Emperor). Period: AH 1134 / Regnal Year 3 (1721-1722 AD). Mint: Surat. Catalog: KM# 436.60.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-10/coin_7.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Sahiba-i-Qiran Thani Muhammad Shah Badshah Ghazi' (Lucky coin of the second Lord of the auspicious Conjunction, Muhammad Shah, Emperor, Warrior against Infidels). The central part 'Muhammad Shah Badshah' is clearly visible.",
+        "Reverse: Likely contains the formula: 'Manus Maimanat Sanah 3 Julus' (In the 3rd year of his reign associated with prosperity) and the mint name 'Surat' at the bottom (as per the holder's description).",
+        "A standard silver rupee of the Mughal Emperor Muhammad Shah (reigned 1719-1748). The handwritten details on the coin holder (2x2 flip) correctly identify the ruler, year, and mint. Surat was a prolific mint for the Mughal Empire during this period."
+      ],
+      "period": "AH 1134 / Regnal Year 3 (1721-1722 AD)",
+      "region": "Surat",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.2 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 3,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 3,500",
+        "material": "Silver",
+        "mint_or_place": "Surat",
+        "ruler_or_issuer": "Muhammad Shah (Mughal Emperor)",
+        "series_or_catalog": "KM# 436.60",
+        "type": "coin",
+        "weight_estimate": "11.2 - 11.6 grams",
+        "year_or_period": "AH 1134 / Regnal Year 3 (1721-1722 AD)"
+      },
+      "page": 7
+    },
+    {
+      "id": "mughals-item-130",
+      "title": "Rupee - Muhammad Shah (Mughal Emperor)",
+      "description": "Rupee issued by Muhammad Shah (Mughal Emperor). Period: AH 1151 / RY 20 (1738 AD). Mint: Surat. Catalog: KM #436.60.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-10/coin_8.png",
+      "notes": [
+        "Obverse: Persian legend 'Sikka Mubarak Badshah Ghazi Muhammad Shah' with the Hijri date 1151 clearly visible at the bottom.",
+        "Reverse: Persian legend including 'Manus Maimanat Sanah 20 Julus Zarab Surat' (standard for this issue; only partially visible or on the other side).",
+        "This is a silver rupee from the reign of the Mughal Emperor Muhammad Shah (nicknamed 'Rangila'). The Hijri date 1151 (١١٥١) is clearly struck at the bottom of the obverse. The regnal year (Julus) 20 and the Surat mint attribution provided on the coin holder are consistent with the known types for this date. Surat was one of the most important and prolific mints of the later Mughal period."
+      ],
+      "period": "AH 1151 / RY 20 (1738 AD)",
+      "region": "Surat",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 4,000"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 4,000",
+        "material": "Silver",
+        "mint_or_place": "Surat",
+        "ruler_or_issuer": "Muhammad Shah (Mughal Emperor)",
+        "series_or_catalog": "KM #436.60",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1151 / RY 20 (1738 AD)"
+      },
+      "page": 8
+    },
+    {
+      "id": "mughals-item-131",
+      "title": "Fractional Paisa / Dam - Muhammad Shah (Mughal Emperor)",
+      "description": "Fractional Paisa / Dam issued by Muhammad Shah (Mughal Emperor). Period: 1748 AD (AH 1161). Mint: Mint name off-flan (likely Shahjahanabad or Surat). Catalog: Krause KM# 430 (general copper series).",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-10/coin_9.png",
+      "notes": [
+        "Obverse: Though not clearly visible in this single-sided view, it would typically contain the Emperor's name and titles: 'Sikka Mubarak Sahib Qiran Sani Muhammad Shah Badshah Ghazi'.",
+        "Reverse: The visible side displays the Persian legend 'Sanat [RY] Manus Maimanat Zarb', which translates to 'Struck in the [Regnal Year] of prosperous association'. The word 'Zarb' is partially visible at the bottom.",
+        "This coin is a small copper fractional unit from the late Mughal period. The year written on the holder (AH 1161) corresponds to the final year of Muhammad Shah's reign. In this era, small copper coins (often called Falus or Dams) were minted in large quantities for local circulation, and identifying specific mints often requires seeing the very bottom portion of the reverse legend, which is frequently off-flan on these small types."
+      ],
+      "period": "1748 AD (AH 1161)",
+      "region": "Mint name off-flan (likely Shahjahanabad or Surat)",
+      "materials": [
+        "Copper"
+      ],
+      "display_labels": [
+        "Wt: 3.0 - 5.0 grams",
+        "Very Fine (VF)",
+        "₹250 - 500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "Medium",
+        "denomination": "Fractional Paisa / Dam",
+        "estimated_price_inr": "250 - 500",
+        "material": "Copper",
+        "mint_or_place": "Mint name off-flan (likely Shahjahanabad or Surat)",
+        "ruler_or_issuer": "Muhammad Shah (Mughal Emperor)",
+        "series_or_catalog": "Krause KM# 430 (general copper series)",
+        "type": "coin",
+        "weight_estimate": "3.0 - 5.0 grams",
+        "year_or_period": "1748 AD (AH 1161)"
+      },
+      "page": 9
+    },
+    {
+      "id": "mughals-item-132",
+      "title": "Rupee - Ahmad Shah Bahadur",
+      "description": "Rupee issued by Ahmad Shah Bahadur. Period: RY 2 (c. 1749-1750 CE). Mint: Azimabad (Patna). Catalog: KM# 446.5.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-11/coin_1.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka zad bar haft kishwar, sa'aya fazl-e-ilah, Hami-e-din-e-Muhammad, Ahmad Shah Bahadur' (meaning 'Struck coin in the seven climes, by the grace of God, the defender of the religion of Muhammad, Ahmad Shah Bahadur').",
+        "Reverse: Persian legend: 'Zarb Azimabad, Sanat 2, Julus-e-Maimanat-e-Manus' (meaning 'Struck at Azimabad, Year 2, of the prosperous reign').",
+        "A well-centered strike with clear mint name and regnal year 2. Ahmad Shah Bahadur was the Mughal emperor from 1748 to 1754."
+      ],
+      "period": "RY 2 (c. 1749-1750 CE)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 grams",
+        "Very Fine (VF)",
+        "₹3,000"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "0.95",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,000",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Ahmad Shah Bahadur",
+        "series_or_catalog": "KM# 446.5",
+        "type": "coin",
+        "weight_estimate": "11.4 grams",
+        "year_or_period": "RY 2 (c. 1749-1750 CE)"
+      },
+      "page": 1
+    },
+    {
+      "id": "coin-133",
+      "title": "Rupee - Ahmad Shah Bahadur",
+      "description": "Rupee issued by Ahmad Shah Bahadur. Period: RY 3 (c. 1750-1751 CE). Mint: Azimabad (Patna). Catalog: KM# 446.5.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-11/coin_2.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka zad bar haft kishwar, sa'aya fazl-e-ilah...' with the name of Ahmad Shah Bahadur.",
+        "Reverse: Persian legend: 'Zarb Azimabad, Sanat 3, Julus-e-Maimanat-e-Manus'.",
+        "Standard issue from the Azimabad mint during the third regnal year of Ahmad Shah Bahadur."
+      ],
+      "period": "RY 3 (c. 1750-1751 CE)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 grams",
+        "Very Fine (VF)",
+        "₹3,000"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "0.95",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,000",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Ahmad Shah Bahadur",
+        "series_or_catalog": "KM# 446.5",
+        "type": "coin",
+        "weight_estimate": "11.4 grams",
+        "year_or_period": "RY 3 (c. 1750-1751 CE)"
+      },
+      "page": 2
+    },
+    {
+      "id": "coin-134",
+      "title": "Rupee - Ahmad Shah Bahadur",
+      "description": "Rupee issued by Ahmad Shah Bahadur. Period: RY 4 (c. 1751-1752 CE). Mint: Azimabad (Patna). Catalog: KM# 446.5.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-11/coin_3.png",
+      "notes": [
+        "Obverse: Persian legend of Ahmad Shah Bahadur.",
+        "Reverse: Persian legend: 'Zarb Azimabad, Sanat 4, Julus-e-Maimanat-e-Manus'.",
+        "Mughal Silver Rupee of Ahmad Shah Bahadur from Azimabad mint, regnal year 4."
+      ],
+      "period": "RY 4 (c. 1751-1752 CE)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 grams",
+        "About Very Fine (AVF)",
+        "₹2,600"
+      ],
+      "metadata": {
+        "condition": "About Very Fine (AVF)",
+        "confidence": "0.94",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,600",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Ahmad Shah Bahadur",
+        "series_or_catalog": "KM# 446.5",
+        "type": "coin",
+        "weight_estimate": "11.4 grams",
+        "year_or_period": "RY 4 (c. 1751-1752 CE)"
+      },
+      "page": 3
+    },
+    {
+      "id": "coin-135",
+      "title": "Rupee - Ahmad Shah Bahadur",
+      "description": "Rupee issued by Ahmad Shah Bahadur. Period: RY 5 (c. 1752-1753 CE). Mint: Azimabad (Patna). Catalog: KM# 446.5.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-11/coin_4.png",
+      "notes": [
+        "Obverse: Standard Ahmad Shah Bahadur Persian legend.",
+        "Reverse: Persian legend: 'Zarb Azimabad, Sanat 5, Julus-e-Maimanat-e-Manus'.",
+        "Well-preserved specimen with clear RY 5 and mint name Azimabad."
+      ],
+      "period": "RY 5 (c. 1752-1753 CE)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.5 grams",
+        "Very Fine (VF)",
+        "₹3,000"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "0.95",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,000",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Ahmad Shah Bahadur",
+        "series_or_catalog": "KM# 446.5",
+        "type": "coin",
+        "weight_estimate": "11.5 grams",
+        "year_or_period": "RY 5 (c. 1752-1753 CE)"
+      },
+      "page": 4
+    },
+    {
+      "id": "coin-136",
+      "title": "Rupee - Ahmad Shah Bahadur",
+      "description": "Rupee issued by Ahmad Shah Bahadur. Period: RY 7 (c. 1754 CE). Mint: Azimabad (Patna). Catalog: KM# 446.5.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-11/coin_5.png",
+      "notes": [
+        "Obverse: Complete Persian legend for Ahmad Shah Bahadur.",
+        "Reverse: Persian legend: 'Zarb Azimabad, Sanat 7, Julus-e-Maimanat-e-Manus'.",
+        "Excellent condition for this series, regnal year 7 was the final year of his reign."
+      ],
+      "period": "RY 7 (c. 1754 CE)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.5 grams",
+        "Extremely Fine (XF)",
+        "₹4,000"
+      ],
+      "metadata": {
+        "condition": "Extremely Fine (XF)",
+        "confidence": "0.96",
+        "denomination": "Rupee",
+        "estimated_price_inr": "4,000",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Ahmad Shah Bahadur",
+        "series_or_catalog": "KM# 446.5",
+        "type": "coin",
+        "weight_estimate": "11.5 grams",
+        "year_or_period": "RY 7 (c. 1754 CE)"
+      },
+      "page": 5
+    },
+    {
+      "id": "coin-137",
+      "title": "Rupee - Ahmad Shah Bahadur",
+      "description": "Rupee issued by Ahmad Shah Bahadur. Period: RY Ahd (Year 1, c. 1748 CE). Mint: Muhammadabad Banaras. Catalog: KM# 446.6.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-11/coin_6.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka zad bar haft kishwar...' name of Ahmad Shah Bahadur.",
+        "Reverse: Persian legend: 'Zarb Muhammadabad Banaras, Sanat Ahd, Julus-e-Maimanat-e-Manus'.",
+        "Regnal year 'Ahd' corresponds to the first year of the reign of Ahmad Shah Bahadur at the Muhammadabad Banaras mint."
+      ],
+      "period": "RY Ahd (Year 1, c. 1748 CE)",
+      "region": "Muhammadabad Banaras",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.3 grams",
+        "Very Fine (VF)",
+        "₹3,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "0.95",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,500",
+        "material": "Silver",
+        "mint_or_place": "Muhammadabad Banaras",
+        "ruler_or_issuer": "Ahmad Shah Bahadur",
+        "series_or_catalog": "KM# 446.6",
+        "type": "coin",
+        "weight_estimate": "11.3 grams",
+        "year_or_period": "RY Ahd (Year 1, c. 1748 CE)"
+      },
+      "page": 6
+    },
+    {
+      "id": "coin-138",
+      "title": "Rupee - Ahmad Shah Bahadur",
+      "description": "Rupee issued by Ahmad Shah Bahadur. Period: RY 3 (c. 1750-1751 CE). Mint: Muhammadabad Banaras. Catalog: KM# 446.6.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-11/coin_7.png",
+      "notes": [
+        "Obverse: Standard Ahmad Shah Bahadur Persian legend.",
+        "Reverse: Persian legend: 'Zarb Muhammadabad Banaras, Sanat 3, Julus...'",
+        "Specimen from the Muhammadabad Banaras mint, RY 3."
+      ],
+      "period": "RY 3 (c. 1750-1751 CE)",
+      "region": "Muhammadabad Banaras",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.3 grams",
+        "Very Fine (VF)",
+        "₹3,150"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "0.94",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,150",
+        "material": "Silver",
+        "mint_or_place": "Muhammadabad Banaras",
+        "ruler_or_issuer": "Ahmad Shah Bahadur",
+        "series_or_catalog": "KM# 446.6",
+        "type": "coin",
+        "weight_estimate": "11.3 grams",
+        "year_or_period": "RY 3 (c. 1750-1751 CE)"
+      },
+      "page": 7
+    },
+    {
+      "id": "coin-139",
+      "title": "Empty Holder - N/A",
+      "description": "Empty Holder issued by N/A. Period: N/A. Mint: N/A. Catalog: N/A.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-11/coin_8.png",
+      "notes": [
+        "Obverse: Empty white 2x2 coin holder.",
+        "Reverse: Empty white 2x2 coin holder.",
+        "Image depicts an empty coin holder; no numismatic item present."
+      ],
+      "period": "N/A",
+      "region": "N/A",
+      "materials": [
+        "N/A"
+      ],
+      "display_labels": [
+        "Wt: 0",
+        "N/A",
+        "₹0"
+      ],
+      "metadata": {
+        "condition": "N/A",
+        "confidence": "1",
+        "denomination": "Empty Holder",
+        "estimated_price_inr": "0",
+        "material": "N/A",
+        "mint_or_place": "N/A",
+        "ruler_or_issuer": "N/A",
+        "series_or_catalog": "N/A",
+        "type": "coin",
+        "weight_estimate": "0",
+        "year_or_period": "N/A"
+      },
+      "page": 8
+    },
+    {
+      "id": "coin-140",
+      "title": "Rupee - Ahmad Shah Bahadur",
+      "description": "Rupee issued by Ahmad Shah Bahadur. Period: RY 5 (c. 1752-1753 CE). Mint: Muhammadabad Banaras. Catalog: KM# 446.6.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-11/coin_9.png",
+      "notes": [
+        "Obverse: Persian legend of Ahmad Shah Bahadur.",
+        "Reverse: Persian legend: 'Zarb Muhammadabad Banaras, Sanat 5, Julus...'",
+        "Regular silver rupee issue from Banaras mint, regnal year 5."
+      ],
+      "period": "RY 5 (c. 1752-1753 CE)",
+      "region": "Muhammadabad Banaras",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.3 grams",
+        "About Very Fine (AVF)",
+        "₹2,850"
+      ],
+      "metadata": {
+        "condition": "About Very Fine (AVF)",
+        "confidence": "0.94",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,850",
+        "material": "Silver",
+        "mint_or_place": "Muhammadabad Banaras",
+        "ruler_or_issuer": "Ahmad Shah Bahadur",
+        "series_or_catalog": "KM# 446.6",
+        "type": "coin",
+        "weight_estimate": "11.3 grams",
+        "year_or_period": "RY 5 (c. 1752-1753 CE)"
+      },
+      "page": 9
+    },
+    {
+      "id": "coin-141",
+      "title": "Rupee - Ahmad Shah Bahadur",
+      "description": "Rupee issued by Ahmad Shah Bahadur. Period: RY 6 (c. 1753-1754 CE). Mint: Muhammadabad Banaras. Catalog: KM# 446.6.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-11/coin_10.png",
+      "notes": [
+        "Obverse: Standard Persian legend for Ahmad Shah Bahadur.",
+        "Reverse: Persian legend: 'Zarb Muhammadabad Banaras, Sanat 6, Julus...'",
+        "Silver rupee from the Muhammadabad Banaras mint, regnal year 6."
+      ],
+      "period": "RY 6 (c. 1753-1754 CE)",
+      "region": "Muhammadabad Banaras",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.3 grams",
+        "Very Fine (VF)",
+        "₹3,300"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "0.95",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,300",
+        "material": "Silver",
+        "mint_or_place": "Muhammadabad Banaras",
+        "ruler_or_issuer": "Ahmad Shah Bahadur",
+        "series_or_catalog": "KM# 446.6",
+        "type": "coin",
+        "weight_estimate": "11.3 grams",
+        "year_or_period": "RY 6 (c. 1753-1754 CE)"
+      },
+      "page": 10
+    },
+    {
+      "id": "coin-142",
+      "title": "Rupee - Ahmad Shah Bahadur",
+      "description": "Rupee issued by Ahmad Shah Bahadur. Period: RY 7 (c. 1754 CE). Mint: Muhammadabad Banaras. Catalog: KM# 446.6.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-11/coin_11.png",
+      "notes": [
+        "Obverse: Complete Persian legend for Ahmad Shah Bahadur.",
+        "Reverse: Persian legend: 'Zarb Muhammadabad Banaras, Sanat 7, Julus...'",
+        "Final regnal year for Ahmad Shah Bahadur at the Banaras mint."
+      ],
+      "period": "RY 7 (c. 1754 CE)",
+      "region": "Muhammadabad Banaras",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 grams",
+        "Very Fine (VF+)",
+        "₹3,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF+)",
+        "confidence": "0.95",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,500",
+        "material": "Silver",
+        "mint_or_place": "Muhammadabad Banaras",
+        "ruler_or_issuer": "Ahmad Shah Bahadur",
+        "series_or_catalog": "KM# 446.6",
+        "type": "coin",
+        "weight_estimate": "11.4 grams",
+        "year_or_period": "RY 7 (c. 1754 CE)"
+      },
+      "page": 11
+    },
+    {
+      "id": "coin-92",
+      "title": "Silver Rupee - Akbar (Mughal Emperor)",
+      "description": "Silver Rupee issued by Akbar (Mughal Emperor). Period: c. 1584-1605 AD (Ilahi Era). Mint: Ahmedabad. Catalog: KM #93.2.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-11/coin_12.png",
+      "notes": [
+        "Obverse: Legend in Persian script: 'Allahu Akbar Jalla Jalaluhu' (God is Great, may His glory be glorified).",
+        "Reverse: Legend in Persian script: Mint name 'Ahmedabad', Ilahi month 'Aban' and the Regnal Year.",
+        "This is a 'Jalla Jalaluhu' type round silver rupee from the Ahmedabad mint. The coin identifies the month of issue as 'Aban' from the Ilahi calendar, which Akbar introduced in the later part of his reign (starting around 1584 AD). The small holes visible on the surface are 'shroff marks' (test marks) made by contemporary money changers to verify the silver's purity."
+      ],
+      "period": "c. 1584-1605 AD (Ilahi Era)",
+      "region": "Ahmedabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 grams",
+        "Very Fine (VF)",
+        "₹3,000 - 4,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Silver Rupee",
+        "estimated_price_inr": "3,000 - 4,500",
+        "material": "Silver",
+        "mint_or_place": "Ahmedabad",
+        "ruler_or_issuer": "Akbar (Mughal Emperor)",
+        "series_or_catalog": "KM #93.2",
+        "type": "coin",
+        "weight_estimate": "11.4 grams",
+        "year_or_period": "c. 1584-1605 AD (Ilahi Era)"
+      },
+      "page": 12
+    },
+    {
+      "id": "coin-93",
+      "title": "1 Silver Rupee - Jalal-ud-din Muhammad Akbar (Mughal Emperor)",
+      "description": "1 Silver Rupee issued by Jalal-ud-din Muhammad Akbar (Mughal Emperor). Period: c. 1584-1605 AD (Ilahi Era). Mint: Ahmedabad. Catalog: KM #93.2.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-11/coin_13.png",
+      "notes": [
+        "Obverse: The obverse features the Persian legend 'Allahu Akbar Jalla Jallalahu' (God is Great, Eminent is His Glory). This is the standard legend for Akbar's Ilahi coinage.",
+        "Reverse: The reverse displays the mint name 'Ahmedabad' along with the Ilahi month 'Azar' (the 9th month of the Persian solar calendar) and the Ilahi regnal year.",
+        "This coin belongs to the 'Ilahi' series, which Akbar introduced in the 30th year of his reign to replace the Islamic Hijri calendar with a solar one. The flip (holder) provides accurate identification of the ruler, mint, and month. These coins are popular among collectors of Mughal numismatics for their artistic calligraphy and historical significance regarding Akbar's religious reforms."
+      ],
+      "period": "c. 1584-1605 AD (Ilahi Era)",
+      "region": "Ahmedabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹3,500 - 5,500 INR"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "1 Silver Rupee",
+        "estimated_price_inr": "3,500 - 5,500 INR",
+        "material": "Silver",
+        "mint_or_place": "Ahmedabad",
+        "ruler_or_issuer": "Jalal-ud-din Muhammad Akbar (Mughal Emperor)",
+        "series_or_catalog": "KM #93.2",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "c. 1584-1605 AD (Ilahi Era)"
+      },
+      "page": 13
+    },
+    {
+      "id": "mughals-item-133",
+      "title": "Rupee - Ahmad Shah Bahadur",
+      "description": "Rupee issued by Ahmad Shah Bahadur. Period: AH 1162 / Ry. 2. Mint: Shahjahanabad (Delhi). Catalog: KM# 446.17.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-12/coin_1.png",
+      "notes": [
+        "Obverse: Legend: 'Sikka mubarak badshah ghazi Ahmad Shah Bahadur', AH date 1162",
+        "Reverse: Legend: 'Manus maimanat sanah 2 julus zarb Shahjahanabad'",
+        "Standard silver rupee from the Delhi mint during the second regnal year of Ahmad Shah Bahadur."
+      ],
+      "period": "AH 1162 / Ry. 2",
+      "region": "Shahjahanabad (Delhi)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4g",
+        "Very Fine",
+        "₹3000 - 4500"
+      ],
+      "metadata": {
+        "condition": "Very Fine",
+        "confidence": "0.95",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3000 - 4500",
+        "material": "Silver",
+        "mint_or_place": "Shahjahanabad (Delhi)",
+        "ruler_or_issuer": "Ahmad Shah Bahadur",
+        "series_or_catalog": "KM# 446.17",
+        "type": "coin",
+        "weight_estimate": "11.4g",
+        "year_or_period": "AH 1162 / Ry. 2"
+      },
+      "page": 1
+    },
+    {
+      "id": "mughals-item-134",
+      "title": "Rupee - Ahmad Shah Bahadur",
+      "description": "Rupee issued by Ahmad Shah Bahadur. Period: AH 1163 / Ry. 3. Mint: Shahjahanabad (Delhi). Catalog: KM# 446.17.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-12/coin_2.png",
+      "notes": [
+        "Obverse: Legend: 'Sikka mubarak badshah ghazi Ahmad Shah Bahadur', AH date 1163",
+        "Reverse: Legend: 'Manus maimanat sanah 3 julus zarb Shahjahanabad'",
+        "Regnal year 3 corresponds to the year 1750 AD."
+      ],
+      "period": "AH 1163 / Ry. 3",
+      "region": "Shahjahanabad (Delhi)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4g",
+        "Very Fine",
+        "₹3000 - 4500"
+      ],
+      "metadata": {
+        "condition": "Very Fine",
+        "confidence": "0.92",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3000 - 4500",
+        "material": "Silver",
+        "mint_or_place": "Shahjahanabad (Delhi)",
+        "ruler_or_issuer": "Ahmad Shah Bahadur",
+        "series_or_catalog": "KM# 446.17",
+        "type": "coin",
+        "weight_estimate": "11.4g",
+        "year_or_period": "AH 1163 / Ry. 3"
+      },
+      "page": 2
+    },
+    {
+      "id": "mughals-item-135",
+      "title": "Rupee - Ahmad Shah Bahadur",
+      "description": "Rupee issued by Ahmad Shah Bahadur. Period: AH 1165 / Ry. 4. Mint: Shahjahanabad (Delhi). Catalog: KM# 446.17.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-12/coin_3.png",
+      "notes": [
+        "Obverse: Legend: 'Sikka mubarak badshah ghazi Ahmad Shah Bahadur', AH date 1165 visible",
+        "Reverse: Legend: 'Manus maimanat sanah 4 julus zarb Shahjahanabad'",
+        "High grade example with clear AH date and regnal year."
+      ],
+      "period": "AH 1165 / Ry. 4",
+      "region": "Shahjahanabad (Delhi)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4g",
+        "Extremely Fine",
+        "₹4000 - 5500"
+      ],
+      "metadata": {
+        "condition": "Extremely Fine",
+        "confidence": "0.95",
+        "denomination": "Rupee",
+        "estimated_price_inr": "4000 - 5500",
+        "material": "Silver",
+        "mint_or_place": "Shahjahanabad (Delhi)",
+        "ruler_or_issuer": "Ahmad Shah Bahadur",
+        "series_or_catalog": "KM# 446.17",
+        "type": "coin",
+        "weight_estimate": "11.4g",
+        "year_or_period": "AH 1165 / Ry. 4"
+      },
+      "page": 3
+    },
+    {
+      "id": "mughals-item-136",
+      "title": "Rupee - Ahmad Shah Bahadur",
+      "description": "Rupee issued by Ahmad Shah Bahadur. Period: AH 1165 / Ry. 5. Mint: Shahjahanabad (Delhi). Catalog: KM# 446.17.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-12/coin_4.png",
+      "notes": [
+        "Obverse: Legend: 'Sikka mubarak badshah ghazi Ahmad Shah Bahadur', AH date 1165 clearly visible",
+        "Reverse: Legend: 'Manus maimanat sanah 5 julus zarb Shahjahanabad'",
+        "Regnal year 5 began in AH 1165, hence the overlap."
+      ],
+      "period": "AH 1165 / Ry. 5",
+      "region": "Shahjahanabad (Delhi)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4g",
+        "Very Fine+",
+        "₹3500 - 5000"
+      ],
+      "metadata": {
+        "condition": "Very Fine+",
+        "confidence": "0.94",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3500 - 5000",
+        "material": "Silver",
+        "mint_or_place": "Shahjahanabad (Delhi)",
+        "ruler_or_issuer": "Ahmad Shah Bahadur",
+        "series_or_catalog": "KM# 446.17",
+        "type": "coin",
+        "weight_estimate": "11.4g",
+        "year_or_period": "AH 1165 / Ry. 5"
+      },
+      "page": 4
+    },
+    {
+      "id": "mughals-item-137",
+      "title": "Rupee - Ahmad Shah Bahadur",
+      "description": "Rupee issued by Ahmad Shah Bahadur. Period: AH 1166 / Ry. 5. Mint: Shahjahanabad (Delhi). Catalog: KM# 446.17.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-12/coin_5.png",
+      "notes": [
+        "Obverse: Legend: 'Sikka mubarak badshah ghazi Ahmad Shah Bahadur', AH date 1166",
+        "Reverse: Legend: 'Manus maimanat sanah 5 julus zarb Shahjahanabad'",
+        "Standard issue for the 5th regnal year."
+      ],
+      "period": "AH 1166 / Ry. 5",
+      "region": "Shahjahanabad (Delhi)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4g",
+        "Very Fine",
+        "₹3000 - 4500"
+      ],
+      "metadata": {
+        "condition": "Very Fine",
+        "confidence": "0.93",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3000 - 4500",
+        "material": "Silver",
+        "mint_or_place": "Shahjahanabad (Delhi)",
+        "ruler_or_issuer": "Ahmad Shah Bahadur",
+        "series_or_catalog": "KM# 446.17",
+        "type": "coin",
+        "weight_estimate": "11.4g",
+        "year_or_period": "AH 1166 / Ry. 5"
+      },
+      "page": 5
+    },
+    {
+      "id": "mughals-item-138",
+      "title": "N/A - None",
+      "description": "N/A issued by None. Period: N/A. Mint: N/A. Catalog: N/A.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-12/coin_6.png",
+      "notes": [
+        "Obverse: Empty pocket",
+        "Reverse: Empty pocket",
+        "No coin present in this pocket."
+      ],
+      "period": "N/A",
+      "region": "N/A",
+      "materials": [
+        "N/A"
+      ],
+      "display_labels": [
+        "Wt: 0g",
+        "N/A",
+        "₹0"
+      ],
+      "metadata": {
+        "condition": "N/A",
+        "confidence": "1",
+        "denomination": "N/A",
+        "estimated_price_inr": "0",
+        "material": "N/A",
+        "mint_or_place": "N/A",
+        "ruler_or_issuer": "None",
+        "series_or_catalog": "N/A",
+        "type": "coin",
+        "weight_estimate": "0g",
+        "year_or_period": "N/A"
+      },
+      "page": 6
+    },
+    {
+      "id": "mughals-item-139",
+      "title": "N/A - None",
+      "description": "N/A issued by None. Period: N/A. Mint: N/A. Catalog: N/A.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-12/coin_7.png",
+      "notes": [
+        "Obverse: Empty pocket",
+        "Reverse: Empty pocket",
+        "No coin present in this pocket."
+      ],
+      "period": "N/A",
+      "region": "N/A",
+      "materials": [
+        "N/A"
+      ],
+      "display_labels": [
+        "Wt: 0g",
+        "N/A",
+        "₹0"
+      ],
+      "metadata": {
+        "condition": "N/A",
+        "confidence": "1",
+        "denomination": "N/A",
+        "estimated_price_inr": "0",
+        "material": "N/A",
+        "mint_or_place": "N/A",
+        "ruler_or_issuer": "None",
+        "series_or_catalog": "N/A",
+        "type": "coin",
+        "weight_estimate": "0g",
+        "year_or_period": "N/A"
+      },
+      "page": 7
+    },
+    {
+      "id": "mughals-item-140",
+      "title": "N/A - None",
+      "description": "N/A issued by None. Period: N/A. Mint: N/A. Catalog: N/A.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-12/coin_8.png",
+      "notes": [
+        "Obverse: Empty pocket",
+        "Reverse: Empty pocket",
+        "No coin present in this pocket."
+      ],
+      "period": "N/A",
+      "region": "N/A",
+      "materials": [
+        "N/A"
+      ],
+      "display_labels": [
+        "Wt: 0g",
+        "N/A",
+        "₹0"
+      ],
+      "metadata": {
+        "condition": "N/A",
+        "confidence": "1",
+        "denomination": "N/A",
+        "estimated_price_inr": "0",
+        "material": "N/A",
+        "mint_or_place": "N/A",
+        "ruler_or_issuer": "None",
+        "series_or_catalog": "N/A",
+        "type": "coin",
+        "weight_estimate": "0g",
+        "year_or_period": "N/A"
+      },
+      "page": 8
+    },
+    {
+      "id": "mughals-item-141",
+      "title": "Rupee - Ahmad Shah Bahadur",
+      "description": "Rupee issued by Ahmad Shah Bahadur. Period: AH 1165 / Ry. 5. Mint: Bareli (Bareilly). Catalog: KM# 446.21.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-12/coin_9.png",
+      "notes": [
+        "Obverse: Legend: 'Sikka mubarak badshah ghazi Ahmad Shah Bahadur', AH date partly visible",
+        "Reverse: Legend: 'Manus maimanat sanah 5 julus zarb Bareli'",
+        "Provincial issue from the Bareilly mint."
+      ],
+      "period": "AH 1165 / Ry. 5",
+      "region": "Bareli (Bareilly)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4g",
+        "Fine",
+        "₹2500 - 3500"
+      ],
+      "metadata": {
+        "condition": "Fine",
+        "confidence": "0.9",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2500 - 3500",
+        "material": "Silver",
+        "mint_or_place": "Bareli (Bareilly)",
+        "ruler_or_issuer": "Ahmad Shah Bahadur",
+        "series_or_catalog": "KM# 446.21",
+        "type": "coin",
+        "weight_estimate": "11.4g",
+        "year_or_period": "AH 1165 / Ry. 5"
+      },
+      "page": 9
+    },
+    {
+      "id": "mughals-item-142",
+      "title": "N/A - None",
+      "description": "N/A issued by None. Period: N/A. Mint: N/A. Catalog: N/A.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-12/coin_10.png",
+      "notes": [
+        "Obverse: Empty pocket",
+        "Reverse: Empty pocket",
+        "No coin present in this pocket."
+      ],
+      "period": "N/A",
+      "region": "N/A",
+      "materials": [
+        "N/A"
+      ],
+      "display_labels": [
+        "Wt: 0g",
+        "N/A",
+        "₹0"
+      ],
+      "metadata": {
+        "condition": "N/A",
+        "confidence": "1",
+        "denomination": "N/A",
+        "estimated_price_inr": "0",
+        "material": "N/A",
+        "mint_or_place": "N/A",
+        "ruler_or_issuer": "None",
+        "series_or_catalog": "N/A",
+        "type": "coin",
+        "weight_estimate": "0g",
+        "year_or_period": "N/A"
+      },
+      "page": 10
+    },
+    {
+      "id": "coin-104",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1132 / RY 2. Mint: Azimabad. Catalog: KM# 436.9.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-8/coin_1.png",
+      "notes": [
+        "Obverse: Standard obverse for this type featuring the Emperor's name and titles: 'Sikka Mubarak Sahab-e-Qiran Sani Muhammad Shah Badshah Ghazi'.",
+        "Reverse: Persian legend: 'Zarb Azimabad Sanah 2 Julus Manus Maimanat', indicating it was struck at the Azimabad mint in the 2nd year of his reign.",
+        "Azimabad was the Mughal name for Patna. The coin holder confirms the identification."
+      ],
+      "period": "AH 1132 / RY 2",
+      "region": "Azimabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,000"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,000",
+        "material": "Silver",
+        "mint_or_place": "Azimabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.9",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1132 / RY 2"
+      },
+      "page": 1
+    },
+    {
+      "id": "coin-105",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1133 / RY 3. Mint: Azimabad. Catalog: KM# 436.9.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-8/coin_2.png",
+      "notes": [
+        "Obverse: Standard obverse typically containing: 'Sikka Mubarak Badshah Ghazi Muhammad Shah' with the Hijri date 1133.",
+        "Reverse: Persian legend 'Manus Maimanat Manus Zarb Azimabad Sanah 3 Julus', meaning 'Struck at Azimabad in the 3rd year of the auspicious reign'.",
+        "Typical silver rupee of the Mughal Emperor Muhammad Shah from the Azimabad mint."
+      ],
+      "period": "AH 1133 / RY 3",
+      "region": "Azimabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,200"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,200",
+        "material": "Silver",
+        "mint_or_place": "Azimabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.9",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1133 / RY 3"
+      },
+      "page": 2
+    },
+    {
+      "id": "coin-106",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1138 / RY 7. Mint: Azimabad. Catalog: KM# 436.4.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-8/coin_3.png",
+      "notes": [
+        "Obverse: Legend: 'Sikka Mubarak Sahib-i-qiran sani Muhammad Shah Badshah Ghazi'.",
+        "Reverse: Standard Mughal reverse legend: 'Zarb Azimabad Sanah 7 Julus-e-Maimanat-e-Manus'.",
+        "The regnal year '7' is clearly visible in the Persian script."
+      ],
+      "period": "AH 1138 / RY 7",
+      "region": "Azimabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 grams",
+        "Very Fine (VF)",
+        "₹2,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500",
+        "material": "Silver",
+        "mint_or_place": "Azimabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.4",
+        "type": "coin",
+        "weight_estimate": "11.4 grams",
+        "year_or_period": "AH 1138 / RY 7"
+      },
+      "page": 3
+    },
+    {
+      "id": "coin-107",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1139 / RY 9. Mint: Azimabad. Catalog: KM# 436.4.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-8/coin_4.png",
+      "notes": [
+        "Obverse: Legend: 'Sikka zad dar jahan ba fazl-i-ilah, Shah-i-jahan Muhammad Shah' with AH 1139.",
+        "Reverse: Persian legend: 'Zarb Azimabad Sanah 9 Julus Maimanat Manus'.",
+        "Silver rupee from the prolific Azimabad mint during Muhammad Shah's long reign."
+      ],
+      "period": "AH 1139 / RY 9",
+      "region": "Azimabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,400"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,400",
+        "material": "Silver",
+        "mint_or_place": "Azimabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.4",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1139 / RY 9"
+      },
+      "page": 4
+    },
+    {
+      "id": "coin-108",
+      "title": "N/A - N/A",
+      "description": "N/A issued by N/A. Period: N/A. Mint: N/A. Catalog: N/A.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-8/coin_5.png",
+      "notes": [
+        "Obverse: Empty 2x2 cardboard coin holder.",
+        "Reverse: N/A",
+        "This is an empty coin holder and does not contain a coin."
+      ],
+      "period": "N/A",
+      "region": "N/A",
+      "materials": [
+        "N/A"
+      ],
+      "display_labels": [
+        "Wt: N/A",
+        "N/A",
+        "₹0"
+      ],
+      "metadata": {
+        "condition": "N/A",
+        "confidence": "High",
+        "denomination": "N/A",
+        "estimated_price_inr": "0",
+        "material": "N/A",
+        "mint_or_place": "N/A",
+        "ruler_or_issuer": "N/A",
+        "series_or_catalog": "N/A",
+        "type": "coin",
+        "weight_estimate": "N/A",
+        "year_or_period": "N/A"
+      },
+      "page": 5
+    },
+    {
+      "id": "coin-109",
+      "title": "N/A - N/A",
+      "description": "N/A issued by N/A. Period: N/A. Mint: N/A. Catalog: N/A.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-8/coin_6.png",
+      "notes": [
+        "Obverse: Empty album pocket.",
+        "Reverse: N/A",
+        "This image shows an empty pocket in the coin album."
+      ],
+      "period": "N/A",
+      "region": "N/A",
+      "materials": [
+        "N/A"
+      ],
+      "display_labels": [
+        "Wt: N/A",
+        "N/A",
+        "₹0"
+      ],
+      "metadata": {
+        "condition": "N/A",
+        "confidence": "High",
+        "denomination": "N/A",
+        "estimated_price_inr": "0",
+        "material": "N/A",
+        "mint_or_place": "N/A",
+        "ruler_or_issuer": "N/A",
+        "series_or_catalog": "N/A",
+        "type": "coin",
+        "weight_estimate": "N/A",
+        "year_or_period": "N/A"
+      },
+      "page": 6
+    },
+    {
+      "id": "coin-110",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1144 / RY 14. Mint: Azimabad. Catalog: KM# 436.9.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-8/coin_7.png",
+      "notes": [
+        "Obverse: Persian: 'Sikka Mubarak Badshah Ghazi Muhammad Shah 1144'.",
+        "Reverse: Persian: 'Manus Maimanat Julus Zarb Azimabad Sanah 14'.",
+        "Azimabad was a major provincial mint of the Mughal Empire."
+      ],
+      "period": "AH 1144 / RY 14",
+      "region": "Azimabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.3 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,600"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,600",
+        "material": "Silver",
+        "mint_or_place": "Azimabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.9",
+        "type": "coin",
+        "weight_estimate": "11.3 - 11.6 grams",
+        "year_or_period": "AH 1144 / RY 14"
+      },
+      "page": 7
+    },
+    {
+      "id": "coin-111",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1146 / RY 15. Mint: Azimabad. Catalog: KM# 436.9.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-8/coin_8.png",
+      "notes": [
+        "Obverse: Typically features Persian legend: 'Sikka Mubarak Badshah Ghazi Muhammad Shah'.",
+        "Reverse: Persian legend: 'Zarb Azimabad Sanah 15 Julus Maimanat Manus'.",
+        "Handwritten notes on the flip accurately identify the regnal year 15 and AH 1146."
+      ],
+      "period": "AH 1146 / RY 15",
+      "region": "Azimabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,800"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,800",
+        "material": "Silver",
+        "mint_or_place": "Azimabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.9",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1146 / RY 15"
+      },
+      "page": 8
+    },
+    {
+      "id": "coin-112",
+      "title": "N/A - N/A",
+      "description": "N/A issued by N/A. Period: N/A. Mint: N/A. Catalog: N/A.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-8/coin_9.png",
+      "notes": [
+        "Obverse: Empty album pocket (partially visible).",
+        "Reverse: N/A",
+        "This image shows an empty pocket in the coin album."
+      ],
+      "period": "N/A",
+      "region": "N/A",
+      "materials": [
+        "N/A"
+      ],
+      "display_labels": [
+        "Wt: N/A",
+        "N/A",
+        "₹0"
+      ],
+      "metadata": {
+        "condition": "N/A",
+        "confidence": "High",
+        "denomination": "N/A",
+        "estimated_price_inr": "0",
+        "material": "N/A",
+        "mint_or_place": "N/A",
+        "ruler_or_issuer": "N/A",
+        "series_or_catalog": "N/A",
+        "type": "coin",
+        "weight_estimate": "N/A",
+        "year_or_period": "N/A"
+      },
+      "page": 9
+    },
+    {
+      "id": "coin-113",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1153 / RY 23. Mint: Azimabad. Catalog: KM# 436.9.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-8/coin_10.png",
+      "notes": [
+        "Obverse: Standard obverse featuring: 'Sikka Mubarak Badshah Ghazi Muhammad Shah' with date 1153.",
+        "Reverse: Persian legend: 'Manus Maimanat Julus 23 Zarab Azimabad'.",
+        "Minted during the period of Nadir Shah's invasion impact on the Mughal economy."
+      ],
+      "period": "AH 1153 / RY 23",
+      "region": "Azimabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500",
+        "material": "Silver",
+        "mint_or_place": "Azimabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.9",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1153 / RY 23"
+      },
+      "page": 10
+    },
+    {
+      "id": "coin-114",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1157 / RY 26. Mint: Azimabad. Catalog: KM# 436.9.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-8/coin_11.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Sahiba-i-Qiran Sani Muhammad Shah Badshah Ghazi' with AH 1157.",
+        "Reverse: Persian legend: 'Zarb Azimabad Sanah 26 Julus Manus Maimanat'.",
+        "Better condition than average specimens from this period."
+      ],
+      "period": "AH 1157 / RY 26",
+      "region": "Azimabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF) to Extremely Fine (XF)",
+        "₹3,000"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF) to Extremely Fine (XF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,000",
+        "material": "Silver",
+        "mint_or_place": "Azimabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.9",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1157 / RY 26"
+      },
+      "page": 11
+    },
+    {
+      "id": "coin-115",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1160 / RY 30. Mint: Azimabad. Catalog: KM# 436.9.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-8/coin_12.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Badshah Ghazi Muhammad Shah' with AH 1160.",
+        "Reverse: Persian legend: 'Zarb Azimabad Sanah 30 Julus Mainamat Manus'.",
+        "Issued in the final years of Muhammad Shah's reign. RY 30 is quite clear."
+      ],
+      "period": "AH 1160 / RY 30",
+      "region": "Azimabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹3,200"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,200",
+        "material": "Silver",
+        "mint_or_place": "Azimabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 436.9",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1160 / RY 30"
+      },
+      "page": 12
+    },
+    {
+      "id": "coin-153",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1133 (1720 AD), RY 3. Mint: Shahjahanabad. Catalog: KM# 437.4.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-9/coin_11.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Sahib-i-qiran sani Muhammad Shah Badshah Ghazi'.",
+        "Reverse: Persian legend: 'Zarb Shahjahanabad Dar-ul-Khilafat Sanat 3 Julus'.",
+        "Shahjahanabad (Delhi) was the imperial capital and the most important mint of the empire."
+      ],
+      "period": "AH 1133 (1720 AD), RY 3",
+      "region": "Shahjahanabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Fine to Very Fine (F-VF)",
+        "₹2,000 - 3,000"
+      ],
+      "metadata": {
+        "condition": "Fine to Very Fine (F-VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,000 - 3,000",
+        "material": "Silver",
+        "mint_or_place": "Shahjahanabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 437.4",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1133 (1720 AD), RY 3"
+      },
+      "page": 11
+    },
+    {
+      "id": "coin-154",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1145 (1732 AD), RY 14. Mint: Shahjahanabad. Catalog: KM# 437.4.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-9/coin_12.png",
+      "notes": [
+        "Obverse: Persian legend with the name and titles of Muhammad Shah.",
+        "Reverse: Persian legend: 'Zarb Shahjahanabad Sanat 14 Julus'.",
+        "A mid-reign issue from the capital mint."
+      ],
+      "period": "AH 1145 (1732 AD), RY 14",
+      "region": "Shahjahanabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Fine to Very Fine (F-VF)",
+        "₹2,000 - 3,000"
+      ],
+      "metadata": {
+        "condition": "Fine to Very Fine (F-VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,000 - 3,000",
+        "material": "Silver",
+        "mint_or_place": "Shahjahanabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 437.4",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1145 (1732 AD), RY 14"
+      },
+      "page": 12
+    },
+    {
+      "id": "coin-155",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1149 (1736 AD), RY 19. Mint: Shahjahanabad. Catalog: KM# 437.4.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-9/coin_13.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Sahib-i-qiran sani Muhammad Shah Badshah Ghazi'.",
+        "Reverse: Persian legend: 'Zarb Shahjahanabad Sanat 19 Julus'.",
+        "Imperial issue from Delhi."
+      ],
+      "period": "AH 1149 (1736 AD), RY 19",
+      "region": "Shahjahanabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Fine to Very Fine (F-VF)",
+        "₹2,000 - 3,000"
+      ],
+      "metadata": {
+        "condition": "Fine to Very Fine (F-VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,000 - 3,000",
+        "material": "Silver",
+        "mint_or_place": "Shahjahanabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 437.4",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1149 (1736 AD), RY 19"
+      },
+      "page": 13
+    },
+    {
+      "id": "coin-156",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: RY 23 (c. 1741 AD). Mint: Shahjahanabad. Catalog: KM# 437.4.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-9/coin_14.png",
+      "notes": [
+        "Obverse: Persian legend with the name and titles of Muhammad Shah.",
+        "Reverse: Persian legend: 'Zarb Shahjahanabad Sanat 23 Julus'.",
+        "Regnal year 23 of Muhammad Shah."
+      ],
+      "period": "RY 23 (c. 1741 AD)",
+      "region": "Shahjahanabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Fine to Very Fine (F-VF)",
+        "₹2,000 - 3,000"
+      ],
+      "metadata": {
+        "condition": "Fine to Very Fine (F-VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,000 - 3,000",
+        "material": "Silver",
+        "mint_or_place": "Shahjahanabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 437.4",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "RY 23 (c. 1741 AD)"
+      },
+      "page": 14
+    },
+    {
+      "id": "coin-157",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: RY 24 (c. 1742 AD). Mint: Shahjahanabad. Catalog: KM# 437.4.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-9/coin_15.png",
+      "notes": [
+        "Obverse: Standard Muhammad Shah imperial legend.",
+        "Reverse: Persian legend: 'Zarb Shahjahanabad Sanat 24 Julus'.",
+        "Standard issue from the seat of the caliphate (Dar-ul-Khilafat)."
+      ],
+      "period": "RY 24 (c. 1742 AD)",
+      "region": "Shahjahanabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Fine to Very Fine (F-VF)",
+        "₹2,000 - 3,000"
+      ],
+      "metadata": {
+        "condition": "Fine to Very Fine (F-VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,000 - 3,000",
+        "material": "Silver",
+        "mint_or_place": "Shahjahanabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 437.4",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "RY 24 (c. 1742 AD)"
+      },
+      "page": 15
+    },
+    {
+      "id": "coin-158",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: RY 28 (c. 1745 AD). Mint: Shahjahanabad. Catalog: KM# 437.4.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-9/coin_16.png",
+      "notes": [
+        "Obverse: Standard Muhammad Shah imperial legend.",
+        "Reverse: Persian legend: 'Zarb Shahjahanabad Sanat 28 Julus'.",
+        "Coin from the later years of the reign."
+      ],
+      "period": "RY 28 (c. 1745 AD)",
+      "region": "Shahjahanabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Fine to Very Fine (F-VF)",
+        "₹2,000 - 3,000"
+      ],
+      "metadata": {
+        "condition": "Fine to Very Fine (F-VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,000 - 3,000",
+        "material": "Silver",
+        "mint_or_place": "Shahjahanabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 437.4",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "RY 28 (c. 1745 AD)"
+      },
+      "page": 16
+    },
+    {
+      "id": "coin-159",
+      "title": "Rupee - Muhammad Shah",
+      "description": "Rupee issued by Muhammad Shah. Period: AH 1161 (1748 AD), RY 30. Mint: Shahjahanabad. Catalog: KM# 437.4.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-9/coin_17.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Sahib-i-qiran sani Muhammad Shah Badshah Ghazi'.",
+        "Reverse: Persian legend: 'Manus Maimanat Sanah 30 Julus Zarub Dar-ul-Khilafat Shahjahanabad'.",
+        "Final regnal year (RY 30) of Muhammad Shah 'Rangeela'. Shahjahanabad is Old Delhi."
+      ],
+      "period": "AH 1161 (1748 AD), RY 30",
+      "region": "Shahjahanabad",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Extremely Fine (EF)",
+        "₹2,500 - 4,500"
+      ],
+      "metadata": {
+        "condition": "Extremely Fine (EF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 4,500",
+        "material": "Silver",
+        "mint_or_place": "Shahjahanabad",
+        "ruler_or_issuer": "Muhammad Shah",
+        "series_or_catalog": "KM# 437.4",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1161 (1748 AD), RY 30"
+      },
+      "page": 17
+    },
+    {
+      "id": "coin-143",
+      "title": "N/A - None",
+      "description": "N/A issued by None. Period: N/A. Mint: N/A. Catalog: N/A.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-12/coin_11.png",
+      "notes": [
+        "Obverse: Empty pocket",
+        "Reverse: Empty pocket",
+        "No coin present in this pocket."
+      ],
+      "period": "N/A",
+      "region": "N/A",
+      "materials": [
+        "N/A"
+      ],
+      "display_labels": [
+        "Wt: 0g",
+        "N/A",
+        "₹0"
+      ],
+      "metadata": {
+        "condition": "N/A",
+        "confidence": "1",
+        "denomination": "N/A",
+        "estimated_price_inr": "0",
+        "material": "N/A",
+        "mint_or_place": "N/A",
+        "ruler_or_issuer": "None",
+        "series_or_catalog": "N/A",
+        "type": "coin",
+        "weight_estimate": "0g",
+        "year_or_period": "N/A"
+      },
+      "page": 11
+    },
+    {
+      "id": "coin-144",
+      "title": "N/A - None",
+      "description": "N/A issued by None. Period: N/A. Mint: N/A. Catalog: N/A.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-12/coin_12.png",
+      "notes": [
+        "Obverse: Empty pocket",
+        "Reverse: Empty pocket",
+        "No coin present in this pocket."
+      ],
+      "period": "N/A",
+      "region": "N/A",
+      "materials": [
+        "N/A"
+      ],
+      "display_labels": [
+        "Wt: 0g",
+        "N/A",
+        "₹0"
+      ],
+      "metadata": {
+        "condition": "N/A",
+        "confidence": "1",
+        "denomination": "N/A",
+        "estimated_price_inr": "0",
+        "material": "N/A",
+        "mint_or_place": "N/A",
+        "ruler_or_issuer": "None",
+        "series_or_catalog": "N/A",
+        "type": "coin",
+        "weight_estimate": "0g",
+        "year_or_period": "N/A"
+      },
+      "page": 12
+    },
+    {
+      "id": "coin-145",
+      "title": "N/A - None",
+      "description": "N/A issued by None. Period: N/A. Mint: N/A. Catalog: N/A.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-12/coin_13.png",
+      "notes": [
+        "Obverse: Partial empty pocket",
+        "Reverse: Partial empty pocket",
+        "No coin present in this partial pocket."
+      ],
+      "period": "N/A",
+      "region": "N/A",
+      "materials": [
+        "N/A"
+      ],
+      "display_labels": [
+        "Wt: 0g",
+        "N/A",
+        "₹0"
+      ],
+      "metadata": {
+        "condition": "N/A",
+        "confidence": "1",
+        "denomination": "N/A",
+        "estimated_price_inr": "0",
+        "material": "N/A",
+        "mint_or_place": "N/A",
+        "ruler_or_issuer": "None",
+        "series_or_catalog": "N/A",
+        "type": "coin",
+        "weight_estimate": "0g",
+        "year_or_period": "N/A"
+      },
+      "page": 13
+    },
+    {
+      "id": "coin-146",
+      "title": "N/A - None",
+      "description": "N/A issued by None. Period: N/A. Mint: N/A. Catalog: N/A.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-12/coin_14.png",
+      "notes": [
+        "Obverse: Partial empty pocket",
+        "Reverse: Partial empty pocket",
+        "No coin present in this partial pocket."
+      ],
+      "period": "N/A",
+      "region": "N/A",
+      "materials": [
+        "N/A"
+      ],
+      "display_labels": [
+        "Wt: 0g",
+        "N/A",
+        "₹0"
+      ],
+      "metadata": {
+        "condition": "N/A",
+        "confidence": "1",
+        "denomination": "N/A",
+        "estimated_price_inr": "0",
+        "material": "N/A",
+        "mint_or_place": "N/A",
+        "ruler_or_issuer": "None",
+        "series_or_catalog": "N/A",
+        "type": "coin",
+        "weight_estimate": "0g",
+        "year_or_period": "N/A"
+      },
+      "page": 14
+    },
+    {
+      "id": "coin-147",
+      "title": "N/A - None",
+      "description": "N/A issued by None. Period: N/A. Mint: N/A. Catalog: N/A.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-12/coin_15.png",
+      "notes": [
+        "Obverse: Partial empty pocket",
+        "Reverse: Partial empty pocket",
+        "No coin present in this partial pocket."
+      ],
+      "period": "N/A",
+      "region": "N/A",
+      "materials": [
+        "N/A"
+      ],
+      "display_labels": [
+        "Wt: 0g",
+        "N/A",
+        "₹0"
+      ],
+      "metadata": {
+        "condition": "N/A",
+        "confidence": "1",
+        "denomination": "N/A",
+        "estimated_price_inr": "0",
+        "material": "N/A",
+        "mint_or_place": "N/A",
+        "ruler_or_issuer": "None",
+        "series_or_catalog": "N/A",
+        "type": "coin",
+        "weight_estimate": "0g",
+        "year_or_period": "N/A"
+      },
+      "page": 15
+    },
+    {
+      "id": "coin-148",
+      "title": "N/A - None",
+      "description": "N/A issued by None. Period: N/A. Mint: N/A. Catalog: N/A.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-12/coin_16.png",
+      "notes": [
+        "Obverse: Partial empty pocket",
+        "Reverse: Partial empty pocket",
+        "No coin present in this partial pocket."
+      ],
+      "period": "N/A",
+      "region": "N/A",
+      "materials": [
+        "N/A"
+      ],
+      "display_labels": [
+        "Wt: 0g",
+        "N/A",
+        "₹0"
+      ],
+      "metadata": {
+        "condition": "N/A",
+        "confidence": "1",
+        "denomination": "N/A",
+        "estimated_price_inr": "0",
+        "material": "N/A",
+        "mint_or_place": "N/A",
+        "ruler_or_issuer": "None",
+        "series_or_catalog": "N/A",
+        "type": "coin",
+        "weight_estimate": "0g",
+        "year_or_period": "N/A"
+      },
+      "page": 16
+    },
+    {
+      "id": "coin-129",
+      "title": "Rupee - Alamgir II (Mughal Emperor)",
+      "description": "Rupee issued by Alamgir II (Mughal Emperor). Period: AH 1168 / RY 1 (1754 AD). Mint: Azimabad (Patna). Catalog: KM# 460.5.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-13/coin_1.png",
+      "notes": [
+        "Obverse: Persian legend 'Sikka Mubarak Badshah Ghazi Alamgir' with AH date 1168 (partially visible on the other side).",
+        "Reverse: Persian legend 'Manus Maimanat Sanat Julus' with mint name 'Azimabad' and Regnal Year (RY) 1 visible at the top/bottom.",
+        "The coin is a silver rupee of the Mughal Emperor Alamgir II, minted at the Azimabad (modern-day Patna) mint. The handwriting on the coin holder accurately identifies the ruler, the Hijri year 1168, and the Regnal Year 1. Azimabad was a key mint city in Bihar during the later Mughal period."
+      ],
+      "period": "AH 1168 / RY 1 (1754 AD)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.3 - 11.6 g",
+        "Very Fine (VF)",
+        "₹2,500 - 4,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 4,500",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Alamgir II (Mughal Emperor)",
+        "series_or_catalog": "KM# 460.5",
+        "type": "coin",
+        "weight_estimate": "11.3 - 11.6 g",
+        "year_or_period": "AH 1168 / RY 1 (1754 AD)"
+      },
+      "page": 1
+    },
+    {
+      "id": "coin-130",
+      "title": "Rupee - Alamgir II (Mughal Emperor)",
+      "description": "Rupee issued by Alamgir II (Mughal Emperor). Period: AH 1169 / RY 2 (1755 AD). Mint: Azimabad (Patna). Catalog: KM# 460.5.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-13/coin_2.png",
+      "notes": [
+        "Obverse: Persian legend containing the name and titles of the Emperor: 'Sikka Mubarak Badshah Ghazi Aziz-ud-din Muhammad Alamgir', along with the Hijri date 1169 (not visible in this side-only image).",
+        "Reverse: Persian legend 'Manus Maimanat Manus' with the word 'Julus' (enthronement) in the center, regnal year '2' above, and the mint name 'Azimabad' clearly visible at the bottom.",
+        "Azimabad was the Mughal name for the city of Patna. This coin was minted during the short and turbulent reign of Alamgir II. The identification is highly reliable as the visible reverse side perfectly matches the handwritten attribution on the coin holder."
+      ],
+      "period": "AH 1169 / RY 2 (1755 AD)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 4,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 4,500",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Alamgir II (Mughal Emperor)",
+        "series_or_catalog": "KM# 460.5",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1169 / RY 2 (1755 AD)"
+      },
+      "page": 2
+    },
+    {
+      "id": "coin-131",
+      "title": "Rupee - Alamgir II (Mughal Emperor)",
+      "description": "Rupee issued by Alamgir II (Mughal Emperor). Period: AH 1169 / RY 3 (1755-1756 AD). Mint: Azimabad (Patna). Catalog: KM# 460.5.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-13/coin_3.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Badshah Ghazi Aziz-ud-din Muhammad Alamgir' (Name and titles of the ruler).",
+        "Reverse: Persian legend: 'Manus Maimanat Sanah 3 Zarb Azimabad' (Struck at Azimabad in the 3rd year of his reign). The image shows this side clearly with 'Sanah 3' visible.",
+        "The identification is based on the visible Persian calligraphy which matches the handwritten attribution on the coin flip. Azimabad was a major Mughal mint in Bihar. Alamgir II's reign (1754–1759) saw the further disintegration of the Mughal Empire and the rise of British influence in Bengal/Bihar."
+      ],
+      "period": "AH 1169 / RY 3 (1755-1756 AD)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 4,000"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 4,000",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Alamgir II (Mughal Emperor)",
+        "series_or_catalog": "KM# 460.5",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1169 / RY 3 (1755-1756 AD)"
+      },
+      "page": 3
+    },
+    {
+      "id": "coin-132",
+      "title": "Rupee - Alamgir II (Mughal Emperor)",
+      "description": "Rupee issued by Alamgir II (Mughal Emperor). Period: AH 1170 / RY 3 (approx. 1756-1757 AD). Mint: Azimabad (Patna). Catalog: KM #460.5.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-13/coin_4.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Badshah Ghazi Alamgir' (The auspicious coin of the Victorious Emperor Alamgir). The Hijri date 1170 is typically found on this side.",
+        "Reverse: Persian legend: 'Zarb Azimabad Sanah 3 Julus Manus Maimanat' (Struck at Azimabad in the 3rd year of the associated prosperity).",
+        "The coin is accurately labeled on its flip. Azimabad was a major mint in the province of Bihar. Alamgir II was the 14th Mughal Emperor, and his reign was marked by the decline of central Mughal authority and the rise of regional powers like the British East India Company in Bengal/Bihar."
+      ],
+      "period": "AH 1170 / RY 3 (approx. 1756-1757 AD)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 g",
+        "Fine to Very Fine",
+        "₹2,500 - 4,500"
+      ],
+      "metadata": {
+        "condition": "Fine to Very Fine",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 4,500",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Alamgir II (Mughal Emperor)",
+        "series_or_catalog": "KM #460.5",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 g",
+        "year_or_period": "AH 1170 / RY 3 (approx. 1756-1757 AD)"
+      },
+      "page": 4
+    },
+    {
+      "id": "mughals-item-149",
+      "title": "Rupee - Aziz-ud-din Alamgir II",
+      "description": "Rupee issued by Aziz-ud-din Alamgir II. Period: AH 1170 / RY 4 (c. 1757 AD). Mint: Azimabad (Patna). Catalog: Krause KM# 460.5.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-13/coin_5.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Badshah Ghazi Alamgir' (Auspicious coin of the Victorious Emperor Alamgir)",
+        "Reverse: Persian legend: 'Zarb Azimabad Sanah 4 Julus Manus Maimanat' (Struck at Azimabad in the 4th year of his prosperous reign)",
+        "Alamgir II was the Mughal Emperor of India from 1754 to 1759. Azimabad was the Mughal name for the city of Patna. The coin holder accurately reflects the ruler, mint, and dates as per standard numismatic catalogs. This specific issue corresponds to the transition period in Bengal/Bihar politics during the rise of the British East India Company's influence."
+      ],
+      "period": "AH 1170 / RY 4 (c. 1757 AD)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 4,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 4,500",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Aziz-ud-din Alamgir II",
+        "series_or_catalog": "Krause KM# 460.5",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1170 / RY 4 (c. 1757 AD)"
+      },
+      "page": 5
+    },
+    {
+      "id": "mughals-item-150",
+      "title": "Rupee - Alamgir II (Mughal Emperor)",
+      "description": "Rupee issued by Alamgir II (Mughal Emperor). Period: AH 1171 / Regnal Year 5 (approx. 1757-1758 AD). Mint: Azimabad (Patna). Catalog: KM# 460.5.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-13/coin_6.png",
+      "notes": [
+        "Obverse: The obverse (not shown, but known for this type) contains the Persian legend: 'Sikka Mubarak Badshah Ghazi Aziz-ud-din Muhammad Alamgir'.",
+        "Reverse: Persian legend: 'Manus Maimanat Sanah 5 Julus Zarb Azimabad'. The numeral '5' representing the regnal year is clearly visible in the center.",
+        "Alamgir II was the 14th Mughal Emperor. Azimabad was the prestigious Mughal name for the city of Patna. The coin holder's handwritten notes accurately identify the ruler, the regnal year (Julus 5), the AH date (1171), and the mint."
+      ],
+      "period": "AH 1171 / Regnal Year 5 (approx. 1757-1758 AD)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.3 - 11.6 g",
+        "Very Fine (VF)",
+        "₹1,500 - 3,000"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "1,500 - 3,000",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Alamgir II (Mughal Emperor)",
+        "series_or_catalog": "KM# 460.5",
+        "type": "coin",
+        "weight_estimate": "11.3 - 11.6 g",
+        "year_or_period": "AH 1171 / Regnal Year 5 (approx. 1757-1758 AD)"
+      },
+      "page": 6
+    },
+    {
+      "id": "mughals-item-151",
+      "title": "Rupee - Alamgir II (Mughal Emperor)",
+      "description": "Rupee issued by Alamgir II (Mughal Emperor). Period: AH 1172 / Regnal Year 6 (c. 1758-1759 AD). Mint: Azimabad (Patna). Catalog: KM# 460.5.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-13/coin_7.png",
+      "notes": [
+        "Obverse: Typically contains the legend 'Sikka Mubarak Badshah Ghazi Alamgir' (not visible in this single-sided view, but standard for the type).",
+        "Reverse: Contains the 'Manus Maimanat' formula and 'Julus' (reign) year 6. The mint name 'Azimabad' is clearly visible at the bottom.",
+        "This coin was minted during the reign of the Mughal Emperor Alamgir II. The handwritten details on the flip accurately identify the coin's origins. Azimabad (modern Patna) was a major provincial mint. Only one side of the coin (the reverse) is visible in the photograph."
+      ],
+      "period": "AH 1172 / Regnal Year 6 (c. 1758-1759 AD)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹3,000 - 5,000"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,000 - 5,000",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Alamgir II (Mughal Emperor)",
+        "series_or_catalog": "KM# 460.5",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1172 / Regnal Year 6 (c. 1758-1759 AD)"
+      },
+      "page": 7
+    },
+    {
+      "id": "mughals-item-152",
+      "title": "Rupee - Alamgir II (Mughal Emperor)",
+      "description": "Rupee issued by Alamgir II (Mughal Emperor). Period: AH 1172 / RY 6 (c. 1759 AD). Mint: Azimabad (Patna). Catalog: KM# 460.5.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-13/coin_8.png",
+      "notes": [
+        "Obverse: Persian legend (partially visible or inferred): 'Sikka Mubarak Badshah Ghazi Alamgir' (Auspicious coin of the Victorious Emperor Alamgir).",
+        "Reverse: Persian legend: 'Zarb Azimabad Sanah 6 Julus Manus Maimanat' (Struck at Azimabad in the 6th year of his reign associated with prosperity).",
+        "The coin clearly shows the reverse side with the mint name 'Azimabad' at the bottom and the regnal year '6' (۶) above the 'J' of Julus. The handwritten notes on the flip correctly identify the ruler, year, and mint. Alamgir II's coinage from Azimabad is sought after by collectors of the Mughal series."
+      ],
+      "period": "AH 1172 / RY 6 (c. 1759 AD)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 grams",
+        "Very Fine (VF)",
+        "₹3,500 - 5,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,500 - 5,500",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Alamgir II (Mughal Emperor)",
+        "series_or_catalog": "KM# 460.5",
+        "type": "coin",
+        "weight_estimate": "11.4 grams",
+        "year_or_period": "AH 1172 / RY 6 (c. 1759 AD)"
+      },
+      "page": 8
+    },
+    {
+      "id": "mughals-item-153",
+      "title": "Unknown - Unidentifiable",
+      "description": "Unknown issued by Unidentifiable. Period: Unknown. Mint: Unknown. Catalog: Unknown.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-13/coin_9.png",
+      "notes": [
+        "Obverse: The image is extremely blurry and obscured by reflections on the plastic holder, making details impossible to discern.",
+        "Reverse: Not visible or unidentifiable due to blur.",
+        "The provided image is of such low resolution and high blurriness that no numismatic identification is possible. The coin is housed in a standard 2x2 cardboard flip with a plastic window, which is causing significant light reflection. Without a clear image of both sides showing legends and motifs, a definitive identification cannot be made."
+      ],
+      "period": "Unknown",
+      "region": "Unknown",
+      "materials": [
+        "Metallic (appears silver-colored)"
+      ],
+      "display_labels": [
+        "Wt: Unknown",
+        "Poor (image quality prevents grading)",
+        "₹Negligible in current condition/visibility"
+      ],
+      "metadata": {
+        "condition": "Poor (image quality prevents grading)",
+        "confidence": "Low",
+        "denomination": "Unknown",
+        "estimated_price_inr": "Negligible in current condition/visibility",
+        "material": "Metallic (appears silver-colored)",
+        "mint_or_place": "Unknown",
+        "ruler_or_issuer": "Unidentifiable",
+        "series_or_catalog": "Unknown",
+        "type": "coin",
+        "weight_estimate": "Unknown",
+        "year_or_period": "Unknown"
+      },
+      "page": 9
+    },
+    {
+      "id": "mughals-item-154",
+      "title": "1 Chuckram - Princely State of Travancore",
+      "description": "1 Chuckram issued by Princely State of Travancore. Period: Late 19th to early 20th Century (c. 1860-1910 AD). Mint: Trivandrum. Catalog: KM# 29 / KM# 43.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-13/coin_10.png",
+      "notes": [
+        "Obverse: Features a stylized conch shell (Shankha) facing right, which is the emblem of the Travancore state, though it is highly worn in this image.",
+        "Reverse: A complex floral or geometric pattern known as the Sudarsana Chakram (a sacred wheel/disc), appearing as a collection of dots and lines.",
+        "The coin is a tiny silver Chuckram from the Travancore region (modern-day Kerala). Due to its small size and the reflective nature of silver, these coins are often difficult to photograph. The visible curved lines are characteristic of the stylized conch design used during this period. The significant wear and poor image resolution make a precise date or sub-type identification difficult."
+      ],
+      "period": "Late 19th to early 20th Century (c. 1860-1910 AD)",
+      "region": "Trivandrum",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 0.35 - 0.40 grams",
+        "Poor to Fair (Very worn)",
+        "₹200 - 500"
+      ],
+      "metadata": {
+        "condition": "Poor to Fair (Very worn)",
+        "confidence": "Medium",
+        "denomination": "1 Chuckram",
+        "estimated_price_inr": "200 - 500",
+        "material": "Silver",
+        "mint_or_place": "Trivandrum",
+        "ruler_or_issuer": "Princely State of Travancore",
+        "series_or_catalog": "KM# 29 / KM# 43",
+        "type": "coin",
+        "weight_estimate": "0.35 - 0.40 grams",
+        "year_or_period": "Late 19th to early 20th Century (c. 1860-1910 AD)"
+      },
+      "page": 10
+    },
+    {
+      "id": "mughals-item-155",
+      "title": "Rupee - Aziz-ud-din Alamgir II (Mughal Emperor)",
+      "description": "Rupee issued by Aziz-ud-din Alamgir II (Mughal Emperor). Period: AH 1167 / RY Ahad (1754 AD). Mint: Shahjahanabad (Delhi). Catalog: KM# 460.17.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-13/coin_11.png",
+      "notes": [
+        "Obverse: Persian legend with the ruler's name: 'Sikka-i-mubarak badshah ghazi Alamgir' (Auspicious coin of the Victorious Emperor Alamgir).",
+        "Reverse: Not visible, but typically contains the mint name 'Shahjahanabad' and the regnal year 'Ahad' (1) within the 'Manus Maimanat' formula.",
+        "This coin was issued during the first year (Ahad) of Alamgir II's reign. The identification is supported by the handwritten label on the coin holder. Shahjahanabad was the primary mint in Delhi during the late Mughal period."
+      ],
+      "period": "AH 1167 / RY Ahad (1754 AD)",
+      "region": "Shahjahanabad (Delhi)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 4,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 4,500",
+        "material": "Silver",
+        "mint_or_place": "Shahjahanabad (Delhi)",
+        "ruler_or_issuer": "Aziz-ud-din Alamgir II (Mughal Emperor)",
+        "series_or_catalog": "KM# 460.17",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1167 / RY Ahad (1754 AD)"
+      },
+      "page": 11
+    },
+    {
+      "id": "mughals-item-156",
+      "title": "Rupee - Alamgir II (Mughal Emperor)",
+      "description": "Rupee issued by Alamgir II (Mughal Emperor). Period: AH 1170 / Regnal Year 5 (c. 1756-1757 AD). Mint: Shahjahanabad (Delhi). Catalog: Krause KM# 460.40.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-13/coin_12.png",
+      "notes": [
+        "Obverse: Standard Mughal legend mentioning the Emperor (not visible in this image as the reverse is displayed).",
+        "Reverse: Persian legend: 'Zarb Shahjahanabad Sanah 5 Julus Manus Maimanat', which translates to 'Struck at Shahjahanabad in the 5th year of his prosperous reign'. The word 'Julus' is prominent in the center.",
+        "The identification is heavily supported by the handwritten details on the coin holder, which accurately match the visible Persian script on the coin's reverse. Alamgir II was the son of Jahandar Shah and reigned during a period of declining Mughal power."
+      ],
+      "period": "AH 1170 / Regnal Year 5 (c. 1756-1757 AD)",
+      "region": "Shahjahanabad (Delhi)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.3 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 4,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 4,500",
+        "material": "Silver",
+        "mint_or_place": "Shahjahanabad (Delhi)",
+        "ruler_or_issuer": "Alamgir II (Mughal Emperor)",
+        "series_or_catalog": "Krause KM# 460.40",
+        "type": "coin",
+        "weight_estimate": "11.3 - 11.6 grams",
+        "year_or_period": "AH 1170 / Regnal Year 5 (c. 1756-1757 AD)"
+      },
+      "page": 12
+    },
+    {
+      "id": "mughals-item-157",
+      "title": "Rupee - Alamgir II",
+      "description": "Rupee issued by Alamgir II. Period: AH 1169 / RY 2. Mint: Muhammadabad Benares. Catalog: KM 460.6.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-14/coin_1.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Badshah Ghazi Alamgir', with AH date 1169 clearly visible at the top.",
+        "Reverse: Persian legend: 'Manus Maimanat Sanah 2 Julus Zarb Muhammadabad Benares'.",
+        "Standard issue of Alamgir II from the Benares mint. Good luster for the grade."
+      ],
+      "period": "AH 1169 / RY 2",
+      "region": "Muhammadabad Benares",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.41 grams",
+        "Very Fine (VF)",
+        "₹3,000"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "0.95",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,000",
+        "material": "Silver",
+        "mint_or_place": "Muhammadabad Benares",
+        "ruler_or_issuer": "Alamgir II",
+        "series_or_catalog": "KM 460.6",
+        "type": "coin",
+        "weight_estimate": "11.41 grams",
+        "year_or_period": "AH 1169 / RY 2"
+      },
+      "page": 1
+    },
+    {
+      "id": "mughals-item-158",
+      "title": "Rupee - Alamgir II",
+      "description": "Rupee issued by Alamgir II. Period: AH 1170 / RY 3. Mint: Muhammadabad Benares. Catalog: KM 460.6.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-14/coin_2.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Badshah Ghazi Alamgir', with AH date 1170.",
+        "Reverse: Persian legend: 'Manus Maimanat Sanah 3 Julus Zarb Muhammadabad Benares'.",
+        "Crisp strike with well-defined legends and minor toning."
+      ],
+      "period": "AH 1170 / RY 3",
+      "region": "Muhammadabad Benares",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.45 grams",
+        "Extra Fine (XF)",
+        "₹4,000"
+      ],
+      "metadata": {
+        "condition": "Extra Fine (XF)",
+        "confidence": "0.95",
+        "denomination": "Rupee",
+        "estimated_price_inr": "4,000",
+        "material": "Silver",
+        "mint_or_place": "Muhammadabad Benares",
+        "ruler_or_issuer": "Alamgir II",
+        "series_or_catalog": "KM 460.6",
+        "type": "coin",
+        "weight_estimate": "11.45 grams",
+        "year_or_period": "AH 1170 / RY 3"
+      },
+      "page": 2
+    },
+    {
+      "id": "mughals-item-159",
+      "title": "Rupee - Alamgir II",
+      "description": "Rupee issued by Alamgir II. Period: AH 1171 / RY 4. Mint: Muhammadabad Benares. Catalog: KM 460.6.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-14/coin_3.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Badshah Ghazi Alamgir', with AH date 1171.",
+        "Reverse: Persian legend: 'Manus Maimanat Sanah 4 Julus Zarb Muhammadabad Benares'.",
+        "Excellent condition for this type, showing original mint bloom."
+      ],
+      "period": "AH 1171 / RY 4",
+      "region": "Muhammadabad Benares",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.50 grams",
+        "About Uncirculated (AU)",
+        "₹5,500"
+      ],
+      "metadata": {
+        "condition": "About Uncirculated (AU)",
+        "confidence": "0.96",
+        "denomination": "Rupee",
+        "estimated_price_inr": "5,500",
+        "material": "Silver",
+        "mint_or_place": "Muhammadabad Benares",
+        "ruler_or_issuer": "Alamgir II",
+        "series_or_catalog": "KM 460.6",
+        "type": "coin",
+        "weight_estimate": "11.50 grams",
+        "year_or_period": "AH 1171 / RY 4"
+      },
+      "page": 3
+    },
+    {
+      "id": "coin-160",
+      "title": "Rupee - Alamgir II",
+      "description": "Rupee issued by Alamgir II. Period: AH 1171 / RY 5. Mint: Muhammadabad Benares. Catalog: KM 460.6.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-14/coin_4.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Badshah Ghazi Alamgir', date 1171 retained during RY 5.",
+        "Reverse: Persian legend: 'Manus Maimanat Sanah 5 Julus Zarb Muhammadabad Benares'.",
+        "Interesting transitional piece with frozen AH date."
+      ],
+      "period": "AH 1171 / RY 5",
+      "region": "Muhammadabad Benares",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.38 grams",
+        "Very Fine (VF)",
+        "₹3,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "0.92",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,500",
+        "material": "Silver",
+        "mint_or_place": "Muhammadabad Benares",
+        "ruler_or_issuer": "Alamgir II",
+        "series_or_catalog": "KM 460.6",
+        "type": "coin",
+        "weight_estimate": "11.38 grams",
+        "year_or_period": "AH 1171 / RY 5"
+      },
+      "page": 4
+    },
+    {
+      "id": "coin-161",
+      "title": "Rupee - Alamgir II",
+      "description": "Rupee issued by Alamgir II. Period: AH 1172 / RY 6. Mint: Muhammadabad Benares. Catalog: KM 460.6.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-14/coin_5.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Badshah Ghazi Alamgir', with AH date 1172.",
+        "Reverse: Persian legend: 'Manus Maimanat Sanah 6 Julus Zarb Muhammadabad Benares'.",
+        "Slightly scarcer regnal year for this mint/ruler combination."
+      ],
+      "period": "AH 1172 / RY 6",
+      "region": "Muhammadabad Benares",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.40 grams",
+        "Fine to Very Fine (F/VF)",
+        "₹4,500"
+      ],
+      "metadata": {
+        "condition": "Fine to Very Fine (F/VF)",
+        "confidence": "0.94",
+        "denomination": "Rupee",
+        "estimated_price_inr": "4,500",
+        "material": "Silver",
+        "mint_or_place": "Muhammadabad Benares",
+        "ruler_or_issuer": "Alamgir II",
+        "series_or_catalog": "KM 460.6",
+        "type": "coin",
+        "weight_estimate": "11.40 grams",
+        "year_or_period": "AH 1172 / RY 6"
+      },
+      "page": 5
+    },
+    {
+      "id": "mughals-item-160",
+      "title": "Paisa / Falus - Muhammad Akbar II",
+      "description": "Paisa / Falus issued by Muhammad Akbar II. Period: AH 1221 / 1806 AD (Regnal Year 1). Mint: Shahjahanabad (Delhi). Catalog: Krause KM# 621.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-15/coin_1.png",
+      "notes": [
+        "Obverse: Persian legend: Sikka Mubarak Sahib Qiran Sani Muhammad Akbar Shah (Auspicious coin of the second Lord of the Conjunctions, Muhammad Akbar Shah)",
+        "Reverse: Persian legend: Sanah ahad julus manus maimanat zarb Shahjahanabad (Struck at Shahjahanabad in the first year of the prosperous reign)",
+        "The coin belongs to the first regnal year of Muhammad Akbar II. By this period, the Mughal Emperors were largely figureheads under British protection. The labeling on the coin holder matches the characteristic Persian script visible on the coin's surface."
+      ],
+      "period": "AH 1221 / 1806 AD (Regnal Year 1)",
+      "region": "Shahjahanabad (Delhi)",
+      "materials": [
+        "Copper"
+      ],
+      "display_labels": [
+        "Wt: 12.0 - 14.5 grams",
+        "Fine (F)",
+        "₹400 - 900"
+      ],
+      "metadata": {
+        "condition": "Fine (F)",
+        "confidence": "High",
+        "denomination": "Paisa / Falus",
+        "estimated_price_inr": "400 - 900",
+        "material": "Copper",
+        "mint_or_place": "Shahjahanabad (Delhi)",
+        "ruler_or_issuer": "Muhammad Akbar II",
+        "series_or_catalog": "Krause KM# 621",
+        "type": "coin",
+        "weight_estimate": "12.0 - 14.5 grams",
+        "year_or_period": "AH 1221 / 1806 AD (Regnal Year 1)"
+      },
+      "page": 1
+    },
+    {
+      "id": "mughals-item-161",
+      "title": "Silver Rupee - Shah Jahan III (Muhi-ul-Millat)",
+      "description": "Silver Rupee issued by Shah Jahan III (Muhi-ul-Millat). Period: 1760 AD (AH 1174). Mint: Azimabad (Patna). Catalog: KM #475.1.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-15/coin_2.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Shah Jahan Badshah Ghazi' with the Hijri date 1174 partially visible at the top. The name 'Shah Jahan' is clearly legible in the center.",
+        "Reverse: Standard reverse for this issue contains the mint name 'Azimabad' and the regnal year (Julus) 'Ahad' (Year 1).",
+        "Shah Jahan III was a puppet emperor who reigned for less than a year (roughly 10 months) between 1759 and 1760. Because of his very short reign, his coins are significantly scarcer than those of major Mughal emperors."
+      ],
+      "period": "1760 AD (AH 1174)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹5,000 - 10,000"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Silver Rupee",
+        "estimated_price_inr": "5,000 - 10,000",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Shah Jahan III (Muhi-ul-Millat)",
+        "series_or_catalog": "KM #475.1",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "1760 AD (AH 1174)"
+      },
+      "page": 2
+    },
+    {
+      "id": "coin-162",
+      "title": "Rupee - Akbar II (Mughal Emperor)",
+      "description": "Rupee issued by Akbar II (Mughal Emperor). Period: 1248 AH / 1832 AD. Mint: Surat. Catalog: KM# 777.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-15/coin_3.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Sahib Qiran Sani Muhammad Akbar Shah Badshah Ghazi' (Auspicious coin of the second Lord of the Fortunate Conjunction, Muhammad Akbar Shah).",
+        "Reverse: Persian legend: 'Manus Maimanat Sanah Julus Zarb Surat' (Struck at Surat in the year of the prosperous accession).",
+        "This coin was issued during the later Mughal period. Although the holder mentions '1 Julus', the date 1248 AH corresponds to the 27th regnal year of Akbar II. The mint at Surat at this time was often operated under the influence or direct control of the British East India Company."
+      ],
+      "period": "1248 AH / 1832 AD",
+      "region": "Surat",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.6 grams",
+        "Fine to Very Fine",
+        "₹3,000 - 5,500"
+      ],
+      "metadata": {
+        "condition": "Fine to Very Fine",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,000 - 5,500",
+        "material": "Silver",
+        "mint_or_place": "Surat",
+        "ruler_or_issuer": "Akbar II (Mughal Emperor)",
+        "series_or_catalog": "KM# 777",
+        "type": "coin",
+        "weight_estimate": "11.6 grams",
+        "year_or_period": "1248 AH / 1832 AD"
+      },
+      "page": 3
+    },
+    {
+      "id": "mughals-item-162",
+      "title": "Copper Paisa / Falus - Shah Alam II (Mughal Emperor)",
+      "description": "Copper Paisa / Falus issued by Shah Alam II (Mughal Emperor). Period: AH 1194 / RY 20 (c. 1779-1780 AD). Mint: Shahjahanabad (Delhi) or regional mint. Catalog: Mughal Empire Coinage.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-16/coin_1.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Badshah Ghazi Shah Alam'",
+        "Reverse: Persian legend: 'Zarb... Sanat 20 Julus Maimanat Manus'",
+        "Corresponds to 1780 AD. The coin may be a regional issue in the name of the Mughal Emperor."
+      ],
+      "period": "AH 1194 / RY 20 (c. 1779-1780 AD)",
+      "region": "Shahjahanabad (Delhi) or regional mint",
+      "materials": [
+        "Copper"
+      ],
+      "display_labels": [
+        "Wt: 12 - 14 grams",
+        "Fair to Very Fine",
+        "₹500 - 1,200"
+      ],
+      "metadata": {
+        "condition": "Fair to Very Fine",
+        "confidence": "High",
+        "denomination": "Copper Paisa / Falus",
+        "estimated_price_inr": "500 - 1,200",
+        "material": "Copper",
+        "mint_or_place": "Shahjahanabad (Delhi) or regional mint",
+        "ruler_or_issuer": "Shah Alam II (Mughal Emperor)",
+        "series_or_catalog": "Mughal Empire Coinage",
+        "type": "coin",
+        "weight_estimate": "12 - 14 grams",
+        "year_or_period": "AH 1194 / RY 20 (c. 1779-1780 AD)"
+      },
+      "page": 1
+    },
+    {
+      "id": "coin-163",
+      "title": "Copper Paisa (Falus) - Shah Alam II (Mughal Emperor)",
+      "description": "Copper Paisa (Falus) issued by Shah Alam II (Mughal Emperor). Period: AH 1218 / RY 45 (1803 AD). Mint: Bareilly or Saharanpur (Regional issues). Catalog: KM #61x.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-16/coin_2.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Badshah Ghazi Shah Alam'",
+        "Reverse: Persian legend: 'Zarb [Mint] Sanat 45 Julus Maimanat Manus'",
+        "Historical period of figurehead status; struck by regional authorities in the Emperor's name."
+      ],
+      "period": "AH 1218 / RY 45 (1803 AD)",
+      "region": "Bareilly or Saharanpur (Regional issues)",
+      "materials": [
+        "Copper"
+      ],
+      "display_labels": [
+        "Wt: 11.0 - 14.5 grams",
+        "Fine",
+        "₹500 - 1,200"
+      ],
+      "metadata": {
+        "condition": "Fine",
+        "confidence": "High",
+        "denomination": "Copper Paisa (Falus)",
+        "estimated_price_inr": "500 - 1,200",
+        "material": "Copper",
+        "mint_or_place": "Bareilly or Saharanpur (Regional issues)",
+        "ruler_or_issuer": "Shah Alam II (Mughal Emperor)",
+        "series_or_catalog": "KM #61x",
+        "type": "coin",
+        "weight_estimate": "11.0 - 14.5 grams",
+        "year_or_period": "AH 1218 / RY 45 (1803 AD)"
+      },
+      "page": 2
+    },
+    {
+      "id": "coin-164",
+      "title": "Rupee - Shah Alam II (Mughal Emperor)",
+      "description": "Rupee issued by Shah Alam II (Mughal Emperor). Period: AH 1175 / RY 2 (c. 1761 AD). Mint: Azimabad (Patna). Catalog: KM# 448.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-16/coin_3.png",
+      "notes": [
+        "Obverse: Persian: 'Sikka Mubarak Shah Alam Badshah Ghazi' with AH date 1175",
+        "Reverse: Persian: 'Manus Maimanat Sanah 2 Julus Zarab Azimabad'",
+        "Azimabad was a key mint in Bihar during the shift to British EIC influence."
+      ],
+      "period": "AH 1175 / RY 2 (c. 1761 AD)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 4,000"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 4,000",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Shah Alam II (Mughal Emperor)",
+        "series_or_catalog": "KM# 448",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1175 / RY 2 (c. 1761 AD)"
+      },
+      "page": 3
+    },
+    {
+      "id": "coin-165",
+      "title": "Rupee - Shah Alam II (Mughal Emperor)",
+      "description": "Rupee issued by Shah Alam II (Mughal Emperor). Period: AH 1175 / RY 3 (c. 1761-1762 AD). Mint: Azimabad (Patna). Catalog: KM# 448.1.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-16/coin_4.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka zad bar haft kishwar sayaye fazle ilah, Hami-e-din-e-Muhammad Shah Alam Badshah'",
+        "Reverse: Persian: 'Zarb Azimabad sanah 3 julus manus maimanat'",
+        "High grade specimen of the early Shah Alam II period from Patna mint."
+      ],
+      "period": "AH 1175 / RY 3 (c. 1761-1762 AD)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Extremely Fine (XF)",
+        "₹3,000 - 5,000"
+      ],
+      "metadata": {
+        "condition": "Extremely Fine (XF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,000 - 5,000",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Shah Alam II (Mughal Emperor)",
+        "series_or_catalog": "KM# 448.1",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1175 / RY 3 (c. 1761-1762 AD)"
+      },
+      "page": 4
+    },
+    {
+      "id": "coin-166",
+      "title": "Rupee - Shah Alam II (Mughal Emperor)",
+      "description": "Rupee issued by Shah Alam II (Mughal Emperor). Period: AH 1177 / RY 4 (c. 1763 AD). Mint: Azimabad (Patna). Catalog: KM #430.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-16/coin_5.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka zad bar haft kishwar sayaye fazl ilah...' with AH date 1177",
+        "Reverse: Persian: 'Zarb Azimabad sanah 4 julus manus maimanat'",
+        "Mughal/Bengal type struck during EIC power consolidation in Bihar."
+      ],
+      "period": "AH 1177 / RY 4 (c. 1763 AD)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 4,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "2,500 - 4,500",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Shah Alam II (Mughal Emperor)",
+        "series_or_catalog": "KM #430",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 grams",
+        "year_or_period": "AH 1177 / RY 4 (c. 1763 AD)"
+      },
+      "page": 5
+    },
+    {
+      "id": "coin-167",
+      "title": "Rupee - Shah Alam II (Mughal Emperor)",
+      "description": "Rupee issued by Shah Alam II (Mughal Emperor). Period: AH 1178 / RY 5 (1764 AD). Mint: Azimabad (Patna). Catalog: KM# 460.5.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-16/coin_6.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka zad bar haft kishwar saya fazl Ilah...' with date 1178",
+        "Reverse: Persian: 'Zarb Azimabad sanah 5 julus maimanat manus'",
+        "Minted during the year of the Battle of Buxar, a critical turning point in history."
+      ],
+      "period": "AH 1178 / RY 5 (1764 AD)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.4 - 11.6 g",
+        "Very Fine (VF)",
+        "₹3,000 - 5,000"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "Rupee",
+        "estimated_price_inr": "3,000 - 5,000",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Shah Alam II (Mughal Emperor)",
+        "series_or_catalog": "KM# 460.5",
+        "type": "coin",
+        "weight_estimate": "11.4 - 11.6 g",
+        "year_or_period": "AH 1178 / RY 5 (1764 AD)"
+      },
+      "page": 6
+    },
+    {
+      "id": "coin-168",
+      "title": "1 Rupee - Shah Alam II (Mughal Emperor)",
+      "description": "1 Rupee issued by Shah Alam II (Mughal Emperor). Period: AH 1179 / RY 5 (c. 1765 AD). Mint: Azimabad (Patna). Catalog: KM# 460.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-16/coin_7.png",
+      "notes": [
+        "Obverse: Persian legend with AH date 1179: 'Sikka zad bar haft kishwar saya fazl Ilah...'",
+        "Reverse: Persian legend: 'Zarb Azimabad sanah 5 julus maimanat manus'",
+        "Year of the Treaty of Allahabad; significant Bengal Presidency/Mughal issue."
+      ],
+      "period": "AH 1179 / RY 5 (c. 1765 AD)",
+      "region": "Azimabad (Patna)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 4,000"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "1 Rupee",
+        "estimated_price_inr": "2,500 - 4,000",
+        "material": "Silver",
+        "mint_or_place": "Azimabad (Patna)",
+        "ruler_or_issuer": "Shah Alam II (Mughal Emperor)",
+        "series_or_catalog": "KM# 460",
+        "type": "coin",
+        "weight_estimate": "11.6 grams",
+        "year_or_period": "AH 1179 / RY 5 (c. 1765 AD)"
+      },
+      "page": 7
+    },
+    {
+      "id": "coin-169",
+      "title": "1 Rupee - Shah Alam II (Maratha Confederacy issue)",
+      "description": "1 Rupee issued by Shah Alam II (Maratha Confederacy issue). Period: AH 1175 / RY 3 (1761 AD). Mint: Poona (Pune). Catalog: KM #280.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-16/coin_8.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka Mubarak Shah Alam Badshah Ghazi' with AH 1175",
+        "Reverse: Persian legend: 'Zarb Poona Sanah 3 Julus Manus Maimanat'",
+        "Struck by the Marathas in the name of Shah Alam II (Ali Gouhar) after Panipat."
+      ],
+      "period": "AH 1175 / RY 3 (1761 AD)",
+      "region": "Poona (Pune)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.2 - 11.6 grams",
+        "Very Fine (VF)",
+        "₹2,500 - 4,500"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "1 Rupee",
+        "estimated_price_inr": "2,500 - 4,500",
+        "material": "Silver",
+        "mint_or_place": "Poona (Pune)",
+        "ruler_or_issuer": "Shah Alam II (Maratha Confederacy issue)",
+        "series_or_catalog": "KM #280",
+        "type": "coin",
+        "weight_estimate": "11.2 - 11.6 grams",
+        "year_or_period": "AH 1175 / RY 3 (1761 AD)"
+      },
+      "page": 8
+    },
+    {
+      "id": "mughals-item-163",
+      "title": "Gold Mohur - Shah Alam II (Mughal Emperor)",
+      "description": "Gold Mohur issued by Shah Alam II (Mughal Emperor). Period: AH 1175 / RY 2 (1761 AD). Mint: Muhammadabad Banaras. Catalog: KM# 110.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-17/coin_1.png",
+      "notes": [
+        "Obverse: Standard obverse for this type bears the Persian legend 'Sikka Mubarak Sahab Qiran Sani Shah Alam Badshah', signifying the auspicious coinage of the Emperor.",
+        "Reverse: Persian legend: 'Manus Maimanat Sanat 2 Julus Zarb Muhammadabad Banaras'. This translates to 'Struck at Muhammadabad Banaras in the 2nd year of the reign associated with prosperity'.",
+        "The handwritten notes on the flip accurately identify the coin. The Muhammadabad Banaras mint was very active during this period, often under the local authority of the Raja of Banaras but maintaining the Mughal imperial titulature. This specimen is in excellent condition with sharp legends and a full mint name visible on the bottom of the reverse."
+      ],
+      "period": "AH 1175 / RY 2 (1761 AD)",
+      "region": "Muhammadabad Banaras",
+      "materials": [
+        "Gold"
+      ],
+      "display_labels": [
+        "Wt: 10.7 - 11.0 grams",
+        "Extremely Fine (XF)",
+        "₹90,000 - 1,25,000"
+      ],
+      "metadata": {
+        "condition": "Extremely Fine (XF)",
+        "confidence": "High",
+        "denomination": "Gold Mohur",
+        "estimated_price_inr": "90,000 - 1,25,000",
+        "material": "Gold",
+        "mint_or_place": "Muhammadabad Banaras",
+        "ruler_or_issuer": "Shah Alam II (Mughal Emperor)",
+        "series_or_catalog": "KM# 110",
+        "type": "coin",
+        "weight_estimate": "10.7 - 11.0 grams",
+        "year_or_period": "AH 1175 / RY 2 (1761 AD)"
+      },
+      "page": 1
+    },
+    {
+      "id": "mughals-item-164",
+      "title": "1 Rupee - Shah Alam II (Mughal Emperor, issued under British East India Company administration)",
+      "description": "1 Rupee issued by Shah Alam II (Mughal Emperor, issued under British East India Company administration). Period: AH 1218 / Ry 37 (c. 1803 AD). Mint: Bareilly (Bareli). Catalog: KM #52.",
+      "image": "gs://indian-heritage-gallery-bucket/images/mughals/page-17/coin_2.png",
+      "notes": [
+        "Obverse: Persian legend: 'Sikka zad bar haft kishwar saya fazl elah hami din muhammad shah alam badshah' (Shadow of the divine favor, defender of the faith, Shah Alam, the king, struck coin in the seven climes). The Hijri date '١٢١٨' (1218) is visible at the bottom.",
+        "Reverse: Persian legend: 'Zarb Bareli Sanah 37 Julus Maimanat Manus' (Struck at Bareilly in the 37th year of his prosperous reign).",
+        "This coin represents the transition period where the British East India Company struck coins in the name of the Mughal Emperor. Bareilly was ceded to the British in 1801, and coins like this AH 1218 issue are sought after for their historical significance. The AH date and regnal year (Ry 37) are clearly indicated on the holder and partially visible on the coin's calligraphy."
+      ],
+      "period": "AH 1218 / Ry 37 (c. 1803 AD)",
+      "region": "Bareilly (Bareli)",
+      "materials": [
+        "Silver"
+      ],
+      "display_labels": [
+        "Wt: 11.0 - 11.4 grams",
+        "Very Fine (VF)",
+        "₹3,500 - 5,000"
+      ],
+      "metadata": {
+        "condition": "Very Fine (VF)",
+        "confidence": "High",
+        "denomination": "1 Rupee",
+        "estimated_price_inr": "3,500 - 5,000",
+        "material": "Silver",
+        "mint_or_place": "Bareilly (Bareli)",
+        "ruler_or_issuer": "Shah Alam II (Mughal Emperor, issued under British East India Company administration)",
+        "series_or_catalog": "KM #52",
+        "type": "coin",
+        "weight_estimate": "11.0 - 11.4 grams",
+        "year_or_period": "AH 1218 / Ry 37 (c. 1803 AD)"
+      },
+      "page": 2
     }
   ]
 }

@@ -23,6 +23,8 @@ export type ItemRecord = {
   pageNumber: number;
   searchText: string;
   searchKeywords: string[];
+  estimatedPriceAvg: number;
+  sortYear: number;
   metadata: {
     type?: string;
     denomination?: string;
@@ -36,7 +38,7 @@ export type ItemRecord = {
   };
 };
 
-export type ItemSort = 'featured' | 'title' | 'recent';
+export type ItemSort = 'featured' | 'title' | 'recent' | 'price_asc' | 'price_desc' | 'year_asc' | 'year_desc';
 
 export type CollectionItemQuery = {
   collectionSlug: string;

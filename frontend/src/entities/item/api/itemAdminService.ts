@@ -36,6 +36,8 @@ function mapItemSnapshot(data: Record<string, unknown>): ItemRecord {
     tags: Array.isArray(data.tags) ? (data.tags as string[]) : [],
     notes: Array.isArray(data.notes) ? (data.notes as string[]) : [],
     pageNumber: Number(data.pageNumber ?? 0),
+    estimatedPriceAvg: Number(data.estimatedPriceAvg ?? 0),
+    sortYear: Number(data.sortYear ?? 0),
     searchText: String(data.searchText ?? ''),
     searchKeywords: Array.isArray(data.searchKeywords) ? (data.searchKeywords as string[]) : [],
     metadata:

@@ -19,9 +19,9 @@ import { gsUrlToHttps } from '@/shared/lib/formatters';
 import { firestore } from '@/shared/config/firebase';
 import { getCollectionRegistryEntry, collectionRegistry } from '@/shared/config/collections';
 
-const COLLECTION_SCAN_LIMIT = 500;
+const COLLECTION_SCAN_LIMIT = 2000;
 const RELATED_ITEMS_LIMIT = 4;
-const GLOBAL_SEARCH_SCAN_LIMIT = 500;
+const GLOBAL_SEARCH_SCAN_LIMIT = 2000;
 export const DEFAULT_PAGE_SIZE = 24;
 
 function mapItemSnapshot(data: Record<string, unknown>): ItemRecord {
@@ -46,6 +46,8 @@ function mapItemSnapshot(data: Record<string, unknown>): ItemRecord {
     tags: Array.isArray(data.tags) ? (data.tags as string[]) : [],
     notes: Array.isArray(data.notes) ? (data.notes as string[]) : [],
     pageNumber: Number(data.pageNumber ?? 0),
+    estimatedPriceAvg: Number(data.estimatedPriceAvg ?? 0),
+    sortYear: Number(data.sortYear ?? 0),
     searchText: String(data.searchText ?? ''),
     searchKeywords: Array.isArray(data.searchKeywords) ? (data.searchKeywords as string[]) : [],
     metadata:
@@ -142,6 +144,14 @@ export async function getCollectionItemsPage(
     constraints.push(orderBy('title', 'asc'));
   } else if (params.sort === 'recent') {
     constraints.push(orderBy('importedAt', 'desc'));
+  } else if (params.sort === 'price_asc') {
+    constraints.push(orderBy('estimatedPriceAvg', 'asc'));
+  } else if (params.sort === 'price_desc') {
+    constraints.push(orderBy('estimatedPriceAvg', 'desc'));
+  } else if (params.sort === 'year_asc') {
+    constraints.push(orderBy('sortYear', 'asc'));
+  } else if (params.sort === 'year_desc') {
+    constraints.push(orderBy('sortYear', 'desc'));
   } else {
     constraints.push(orderBy('pageNumber', 'asc'));
   }
@@ -153,7 +163,32 @@ export async function getCollectionItemsPage(
   // Fetch one extra to know if there's a next page
   constraints.push(limitQuery(pageSize + 1));
 
-  const snapshot = await getDocs(query(collection(db, 'items'), ...constraints));
+  let snapshot;
+  try {
+    snapshot = await getDocs(query(collection(db, 'items'), ...constraints));
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    // Index still building — fall back to pageNumber order and sort client-side
+    if (msg.includes('index') || msg.includes('Index')) {
+      const fallbackConstraints = [
+        where('collectionSlug', '==', params.collectionSlug),
+        where('published', '==', true),
+        ...(params.material ? [where('materials', 'array-contains', params.material)] : []),
+        orderBy('pageNumber', 'asc'),
+        limitQuery(COLLECTION_SCAN_LIMIT),
+      ];
+      const fallbackSnap = await getDocs(query(collection(db, 'items'), ...fallbackConstraints));
+      let allItems = fallbackSnap.docs.map((d) => mapItemSnapshot(d.data()));
+      if (params.sort === 'price_asc') allItems.sort((a, b) => a.estimatedPriceAvg - b.estimatedPriceAvg);
+      else if (params.sort === 'price_desc') allItems.sort((a, b) => b.estimatedPriceAvg - a.estimatedPriceAvg);
+      else if (params.sort === 'year_asc') allItems.sort((a, b) => a.sortYear - b.sortYear);
+      else if (params.sort === 'year_desc') allItems.sort((a, b) => b.sortYear - a.sortYear);
+      const page = cursor ? allItems.slice(pageSize) : allItems.slice(0, pageSize);
+      return { items: page, cursor: null, hasMore: allItems.length > pageSize };
+    }
+    throw err;
+  }
+
   const docs = snapshot.docs;
   const hasMore = docs.length > pageSize;
   const pageDocs = hasMore ? docs.slice(0, pageSize) : docs;

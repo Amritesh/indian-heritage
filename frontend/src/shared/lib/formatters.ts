@@ -18,5 +18,5 @@ export function gsUrlToHttps(gsUrl?: string | null): string {
   if (slashIdx === -1) return gsUrl;
   const bucket = withoutProto.substring(0, slashIdx);
   const filePath = withoutProto.substring(slashIdx + 1);
-  return `https://storage.googleapis.com/${bucket}/${filePath}`;
+  return `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(filePath)}?alt=media`;
 }

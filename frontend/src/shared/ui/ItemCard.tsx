@@ -10,11 +10,12 @@ export function ItemCard({ item }: ItemCardProps) {
   return (
     <article className="bg-surface-container-high rounded-xl overflow-hidden shadow-sm group hover:shadow-card transition-all duration-500">
       <Link to={`/items/${item.id}`} className="block">
-        <div className="h-56 relative overflow-hidden">
+        <div className="h-56 relative overflow-hidden bg-surface-container-lowest">
           <ImageWithFallback
             src={item.imageUrl}
             alt={item.imageAlt}
-            className="transition-transform duration-700 group-hover:scale-105"
+            objectFit="contain"
+            className="transition-transform duration-700 group-hover:scale-105 p-2"
             wrapperClassName="h-56"
           />
           {item.materials.length > 0 && (
