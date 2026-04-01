@@ -94,7 +94,7 @@ describe('normalizeItem', () => {
     const normalized = normalizeItem(rawItem, 'mughals', '2026-04-01T00:00:00.000Z');
 
     expect(normalized.denominationSystem).toBe('shared-indic');
-    expect(normalized.denominationKey).toBe('');
+    expect(normalized.denominationKey).toBeNull();
     expect(normalized.denominationRank).toBe(9999);
     expect(normalized.sortYearStart).toBe(1582);
     expect(normalized.sortYearEnd).toBe(1583);

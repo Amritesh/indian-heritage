@@ -53,20 +53,29 @@ function filterHistoricalYears(values: number[]) {
 }
 
 function extractAdYearRange(normalized: string) {
-  const parenthesizedRangeMatch = normalized.match(
-    /\((?:[^)]*\b(1[5-9]\d{2}|20\d{2})\s*(?:-|–|—)\s*(\d{2,4})\s*AD[^)]*)\)/i,
+  const parenthesizedSegments = normalized.match(/\([^)]*\)/g) ?? [];
+  for (const segment of parenthesizedSegments) {
+    if (!/\b(AD|CE)\b/i.test(segment)) continue;
+    const rangeMatch = segment.match(/\b(1[5-9]\d{2}|20\d{2})\b\s*(?:-|–|—|to)\s*\b(\d{2,4})\b/i);
+    if (rangeMatch) {
+      return expandYearRange(rangeMatch[1], rangeMatch[2]);
+    }
+    const yearMatch = segment.match(/\b(1[5-9]\d{2}|20\d{2})\b/i);
+    if (yearMatch) {
+      const year = Number(yearMatch[1]);
+      return [year, year] as const;
+    }
+  }
+
+  const adRangeMatch = normalized.match(
+    /(?:\b(AD|CE)\b\s*)?\b(1[5-9]\d{2}|20\d{2})\b\s*(?:-|–|—|to)\s*\b(\d{2,4})\b(?:\s*\b(AD|CE)\b)?/i,
   );
-  if (parenthesizedRangeMatch) {
-    return expandYearRange(parenthesizedRangeMatch[1], parenthesizedRangeMatch[2]);
+  if (adRangeMatch && (adRangeMatch[1] || adRangeMatch[4] || /\b(AD|CE)\b/i.test(normalized))) {
+    return expandYearRange(adRangeMatch[2], adRangeMatch[3]);
   }
 
-  const adRangeMatch = normalized.match(/\b(1[5-9]\d{2}|20\d{2})\s*(?:-|–|—)\s*(\d{2,4})\s*AD\b/i);
-  if (adRangeMatch) {
-    return expandYearRange(adRangeMatch[1], adRangeMatch[2]);
-  }
-
-  const adMatch = normalized.match(/\b(1[5-9]\d{2}|20\d{2})\b(?=[^)]*(?:\bAD\b|$))/i);
-  if (adMatch) {
+  const adMatch = normalized.match(/\b(1[5-9]\d{2}|20\d{2})\b(?=[^)]*(?:\bAD\b|\bCE\b|$))/i);
+  if (adMatch && /\b(AD|CE)\b/i.test(normalized)) {
     const year = Number(adMatch[1]);
     return [year, year] as const;
   }
@@ -81,7 +90,7 @@ export function deriveYearRange(dateText?: string | null) {
     const [start, end] = adRange;
     const years = filterHistoricalYears([start, end]);
     if (years.length === 0) {
-      return { sortYearStart: 0, sortYearEnd: 0 };
+      return { sortYearStart: 0, sortYearEnd: null };
     }
 
     if (years.length === 1) {
@@ -94,6 +103,10 @@ export function deriveYearRange(dateText?: string | null) {
     };
   }
 
+  if (/\b(AD|CE)\b/i.test(normalized)) {
+    return { sortYearStart: 0, sortYearEnd: null };
+  }
+
   const explicitRangeMatch = normalized.match(
     /\b(1[5-9]\d{2}|20\d{2}|\d{3,4})\b\s*(?:-|–|—|to)\s*\b(1[5-9]\d{2}|20\d{2}|\d{3,4})\b/i,
   );
@@ -103,7 +116,7 @@ export function deriveYearRange(dateText?: string | null) {
     const end = Number(explicitRangeMatch[2]);
     const years = filterHistoricalYears([start, end]);
     if (years.length === 0) {
-      return { sortYearStart: 0, sortYearEnd: 0 };
+      return { sortYearStart: 0, sortYearEnd: null };
     }
 
     if (years.length === 1) {
@@ -127,7 +140,7 @@ export function deriveYearRange(dateText?: string | null) {
     };
   }
 
-  return { sortYearStart: 0, sortYearEnd: 0 };
+  return { sortYearStart: 0, sortYearEnd: null };
 }
 
 export function derivePriceRange(priceText?: string | null) {
@@ -240,9 +253,9 @@ export function normalizeItem(rawItem: RawItem, collectionSlug: string, timestam
     },
     pageNumber: rawItem.page,
     denominationSystem: 'shared-indic',
-    denominationKey: denomination?.key ?? '',
+    denominationKey: denomination?.key ?? null,
     denominationRank,
-    denominationBaseValue: denomination?.baseValue ?? 0,
+    denominationBaseValue: denomination?.baseValue ?? null,
     sortYearStart: yearRange.sortYearStart,
     sortYearEnd: yearRange.sortYearEnd,
     estimatedPriceMin: priceRange.estimatedPriceMin,
