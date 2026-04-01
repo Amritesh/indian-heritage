@@ -16,6 +16,44 @@ from .tools.collection_sync import sync_collection_stats
 from .tools.image_segmenter import create_tool as create_segment_tool
 
 
+def _serper_search_enabled():
+    if os.environ.get("DISABLE_SERPER_SEARCH", "").strip().lower() in {"1", "true", "yes", "on"}:
+        return False
+    return bool(os.environ.get("SERPER_API_KEY", "").strip())
+
+
+def _build_catalogue_task_description(search_enabled: bool):
+    if search_enabled:
+        return (
+            "For each cropped coin image from the segmentation step:\n\n"
+            "1. Use the analyze_coin tool to get an initial visual identification.\n"
+            "2. Use the SerperDevTool to search the web for additional details about the "
+            "identified coin (e.g., search for 'Mughal Emperor Akbar silver rupee Agra mint "
+            "value' or similar queries based on what you see).\n"
+            "3. Cross-reference the visual analysis with web search results to produce the "
+            "most accurate identification possible.\n"
+            "4. Compile a complete catalogue entry for each coin.\n\n"
+            "Process EVERY coin image. Do not skip any.\n\n"
+            "Your final output must be a valid JSON array where each element has these fields:\n"
+            "- image_path, ruler_or_issuer, year_or_period, mint_or_place, denomination,\n"
+            "  series_or_catalog, material, condition, obverse_description, reverse_description,\n"
+            "  weight_estimate, estimated_price_inr, notes, confidence"
+        )
+
+    return (
+        "For each cropped coin image from the segmentation step:\n\n"
+        "1. Use the analyze_coin tool to get an initial visual identification.\n"
+        "2. Refine that identification from the visible legends, symbols, denomination, "
+        "and historical context in the image itself.\n"
+        "3. Compile a complete catalogue entry for each coin.\n\n"
+        "Process EVERY coin image. Do not skip any.\n\n"
+        "Your final output must be a valid JSON array where each element has these fields:\n"
+        "- image_path, ruler_or_issuer, year_or_period, mint_or_place, denomination,\n"
+        "  series_or_catalog, material, condition, obverse_description, reverse_description,\n"
+        "  weight_estimate, estimated_price_inr, notes, confidence"
+    )
+
+
 def create_crew(image_path: str, output_dir: str, collection_name: str = "coin-catalogue"):
     """Build and return the coin cataloguing crew."""
 
@@ -31,7 +69,8 @@ def create_crew(image_path: str, output_dir: str, collection_name: str = "coin-c
     # --- Tools ---
     segment_tool = create_segment_tool(output_dir=output_dir)
     analyze_tool = analyze_coin
-    search_tool = SerperDevTool()
+    search_enabled = _serper_search_enabled()
+    search_tool = SerperDevTool() if search_enabled else None
     sync_tool = sync_collection_stats
 
     # --- Agent 1: Image Cutter ---
@@ -89,7 +128,7 @@ def create_crew(image_path: str, output_dir: str, collection_name: str = "coin-c
             "English), portraits, symbols, and mint marks. You also know current market values "
             "and have access to online numismatic databases for cross-referencing."
         ),
-        tools=[analyze_tool, search_tool],
+        tools=[tool for tool in [analyze_tool, search_tool] if tool is not None],
         llm=gemini_llm,
         verbose=True,
         allow_delegation=False,
@@ -114,21 +153,7 @@ def create_crew(image_path: str, output_dir: str, collection_name: str = "coin-c
 
     # --- Task 2: Catalogue each coin ---
     catalogue_task = Task(
-        description=(
-            "For each cropped coin image from the segmentation step:\n\n"
-            "1. Use the analyze_coin tool to get an initial visual identification.\n"
-            "2. Use the SerperDevTool to search the web for additional details about the "
-            "identified coin (e.g., search for 'Mughal Emperor Akbar silver rupee Agra mint "
-            "value' or similar queries based on what you see).\n"
-            "3. Cross-reference the visual analysis with web search results to produce the "
-            "most accurate identification possible.\n"
-            "4. Compile a complete catalogue entry for each coin.\n\n"
-            "Process EVERY coin image. Do not skip any.\n\n"
-            "Your final output must be a valid JSON array where each element has these fields:\n"
-            "- image_path, ruler_or_issuer, year_or_period, mint_or_place, denomination,\n"
-            "  series_or_catalog, material, condition, obverse_description, reverse_description,\n"
-            "  weight_estimate, estimated_price_inr, notes, confidence"
-        ),
+        description=_build_catalogue_task_description(search_enabled),
         expected_output=(
             "A valid JSON array of coin catalogue entries. Each entry must have all metadata "
             "fields filled in. Example:\n"
