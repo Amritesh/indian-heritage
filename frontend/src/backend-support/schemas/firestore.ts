@@ -39,7 +39,7 @@ export const firestoreItemSchema = z.object({
   estimatedPriceMin: z.number(),
   estimatedPriceMax: z.number(),
   estimatedPriceAvg: z.number(),
-  weightGrams: z.number(),
+  weightGrams: z.number().nullable(),
   metadata: z.object({
     type: z.string().optional(),
     denomination: z.string().optional(),

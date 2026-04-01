@@ -55,7 +55,7 @@ function mapItemSnapshot(data: Record<string, unknown>): ItemRecord {
     estimatedPriceMin: Number(data.estimatedPriceMin ?? 0),
     estimatedPriceMax: Number(data.estimatedPriceMax ?? 0),
     estimatedPriceAvg: Number(data.estimatedPriceAvg ?? 0),
-    weightGrams: Number(data.weightGrams ?? 0),
+    weightGrams: data.weightGrams == null ? null : Number(data.weightGrams),
     sortYear: Number(data.sortYear ?? 0),
     searchText: String(data.searchText ?? ''),
     searchKeywords: Array.isArray(data.searchKeywords) ? (data.searchKeywords as string[]) : [],

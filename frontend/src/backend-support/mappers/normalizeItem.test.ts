@@ -31,7 +31,7 @@ describe('normalizeItem', () => {
     expect(normalized.imageUrl).toContain('firebasestorage.googleapis.com');
     expect(normalized.metadata.rulerOrIssuer).toBe('Jahangir');
     expect(normalized.metadata.confidence).toBe('92');
-    expect(normalized.denominationSystem).toBe('shared');
+    expect(normalized.denominationSystem).toBe('shared-indic');
     expect(normalized.denominationKey).toBe('rupee');
     expect(normalized.denominationRank).toBe(10);
     expect(normalized.denominationBaseValue).toBe(1);
@@ -40,7 +40,7 @@ describe('normalizeItem', () => {
     expect(normalized.estimatedPriceMin).toBe(4500);
     expect(normalized.estimatedPriceMax).toBe(7500);
     expect(normalized.estimatedPriceAvg).toBe(6000);
-    expect(normalized.weightGrams).toBe(11.4);
+    expect(normalized.weightGrams).toBeNull();
     expect(normalized.searchKeywords).toContain('jahangir');
   });
 
@@ -98,5 +98,30 @@ describe('normalizeItem', () => {
     expect(normalized.sortYearStart).toBe(1582);
     expect(normalized.sortYearEnd).toBe(1583);
     expect(normalized.sortYear).toBe(1582);
+  });
+
+  it('derives weight only from explicit weight metadata', () => {
+    const rawItem = rawItemSchema.parse({
+      id: 'coin-4',
+      title: 'Silver Rupee - Weight Source',
+      description: 'Silver rupee with explicit weight metadata.',
+      image: 'gs://indian-heritage-gallery-bucket/images/mughals-auto/coin_4.png',
+      notes: [],
+      period: 'AH 1100 / 1688 AD',
+      region: 'Patna',
+      materials: ['Silver'],
+      display_labels: ['Wt: 11.4 grams', 'Very Fine (VF)'],
+      metadata: {
+        denomination: 'Silver Rupee',
+        ruler_or_issuer: 'Aurangzeb',
+        mint_or_place: 'Patna',
+        weight_estimate: '11.4 grams',
+      },
+      page: 4,
+    });
+
+    const normalized = normalizeItem(rawItem, 'mughals', '2026-04-01T00:00:00.000Z');
+
+    expect(normalized.weightGrams).toBe(11.4);
   });
 });
