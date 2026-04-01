@@ -48,6 +48,10 @@ function expandYearRange(startText: string, endText: string) {
   return [start, end] as const;
 }
 
+function filterHistoricalYears(values: number[]) {
+  return Array.from(new Set(values.filter((year) => year >= 500 && year <= 2100)));
+}
+
 function extractAdYearRange(normalized: string) {
   const parenthesizedRangeMatch = normalized.match(
     /\((?:[^)]*\b(1[5-9]\d{2}|20\d{2})\s*(?:-|–|—)\s*(\d{2,4})\s*AD[^)]*)\)/i,
@@ -75,9 +79,18 @@ export function deriveYearRange(dateText?: string | null) {
   const adRange = extractAdYearRange(normalized);
   if (adRange) {
     const [start, end] = adRange;
+    const years = filterHistoricalYears([start, end]);
+    if (years.length === 0) {
+      return { sortYearStart: 0, sortYearEnd: 0 };
+    }
+
+    if (years.length === 1) {
+      return { sortYearStart: years[0], sortYearEnd: null };
+    }
+
     return {
-      sortYearStart: Math.min(start, end),
-      sortYearEnd: Math.max(start, end),
+      sortYearStart: Math.min(...years),
+      sortYearEnd: Math.max(...years),
     };
   }
 
@@ -88,20 +101,29 @@ export function deriveYearRange(dateText?: string | null) {
   if (explicitRangeMatch) {
     const start = Number(explicitRangeMatch[1]);
     const end = Number(explicitRangeMatch[2]);
+    const years = filterHistoricalYears([start, end]);
+    if (years.length === 0) {
+      return { sortYearStart: 0, sortYearEnd: 0 };
+    }
+
+    if (years.length === 1) {
+      return { sortYearStart: years[0], sortYearEnd: null };
+    }
+
     return {
-      sortYearStart: Math.min(start, end),
-      sortYearEnd: Math.max(start, end),
+      sortYearStart: Math.min(...years),
+      sortYearEnd: Math.max(...years),
     };
   }
 
   const allYears = normalized.match(/\b(\d{3,4})\b/g) ?? [];
-  if (allYears.length > 0) {
-    const years = allYears.map((value) => Number(value));
-    const start = years[years.length - 2] ?? years[0];
-    const end = years[years.length - 1] ?? start;
+  const years = filterHistoricalYears(allYears.map((value) => Number(value)));
+  if (years.length > 0) {
+    const start = Math.min(...years);
+    const end = Math.max(...years);
     return {
-      sortYearStart: Math.min(start, end),
-      sortYearEnd: Math.max(start, end),
+      sortYearStart: start,
+      sortYearEnd: start === end ? null : end,
     };
   }
 
@@ -217,7 +239,7 @@ export function normalizeItem(rawItem: RawItem, collectionSlug: string, timestam
       confidence: rawItem.metadata.confidence,
     },
     pageNumber: rawItem.page,
-    denominationSystem: denomination ? 'shared-indic' : '',
+    denominationSystem: 'shared-indic',
     denominationKey: denomination?.key ?? '',
     denominationRank,
     denominationBaseValue: denomination?.baseValue ?? 0,
