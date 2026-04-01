@@ -45,6 +45,22 @@ export const collectionRegistry: CollectionRegistryEntry[] = [
     culture: 'Mughal Empire',
     periodLabel: 'c. 1613 to 1619',
   },
+  {
+    id: 'princely-states',
+    slug: 'princely-states',
+    name: 'Princely States',
+    description:
+      'Regional issues from Indian princely states, spanning silver, copper, and mixed-metal coinage across local dynasties.',
+    longDescription:
+      'A survey of coinage from the princely states of India, bringing together region-specific issues with draft metadata for ruler, mint, denomination, price range, and provenance so the archive can be reviewed and refined collection-wide.',
+    sourceUrl:
+      'https://us-central1-indian-heritage-gallery.cloudfunctions.net/app/api/items/princely-states',
+    order: 3,
+    enabled: true,
+    heroEyebrow: 'Regional Coinage',
+    culture: 'Princely States of India',
+    periodLabel: 'c. 1700s to early 1900s',
+  },
 ];
 
 export function getCollectionRegistryEntry(slug: string) {

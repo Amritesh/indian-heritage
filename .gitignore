@@ -1,5 +1,7 @@
 node_modules
 .worktrees/
+__pycache__/
+*.py[cod]
 frontend/build/
 frontend/.env
 temp
