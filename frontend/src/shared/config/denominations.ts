@@ -30,20 +30,29 @@ export function resolveDenomination(value?: string | null) {
   }
 
   const normalizedValue = normalizeDenominationText(value);
-
-  for (const entry of SHARED_DENOMINATIONS) {
+  const candidateEntries = SHARED_DENOMINATIONS.flatMap((entry) => {
     const candidates = [entry.key, entry.label, ...(entry.aliases ?? [])];
 
-    for (const candidate of candidates) {
-      const normalizedCandidate = normalizeDenominationText(candidate);
+    return candidates.map((candidate) => ({
+      entry,
+      normalizedCandidate: normalizeDenominationText(candidate),
+    }));
+  });
 
-      if (
-        normalizedCandidate === normalizedValue ||
-        normalizedValue.includes(normalizedCandidate)
-      ) {
-        return entry;
-      }
+  for (const candidate of candidateEntries) {
+    if (candidate.normalizedCandidate === normalizedValue) {
+      return candidate.entry;
     }
+  }
+
+  const matchingEntries = candidateEntries.filter((candidate) =>
+    normalizedValue.includes(candidate.normalizedCandidate),
+  );
+
+  matchingEntries.sort((a, b) => b.normalizedCandidate.length - a.normalizedCandidate.length);
+
+  if (matchingEntries.length > 0) {
+    return matchingEntries[0].entry;
   }
 
   return null;
