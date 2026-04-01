@@ -4,6 +4,7 @@ import {
   getDocs,
   query,
   limit as limitQuery,
+  orderBy,
   where,
   doc,
   QueryConstraint,
