@@ -32,7 +32,7 @@ export type ItemRecord = {
   estimatedPriceMin: number;
   estimatedPriceMax: number;
   estimatedPriceAvg: number;
-  weightGrams: number;
+  weightGrams: number | null;
   sortYear: number;
   metadata: {
     type?: string;

@@ -127,8 +127,8 @@ export function derivePriceRange(priceText?: string | null) {
 }
 
 export function deriveWeightGrams(weightText?: string | null) {
-  const [weightGrams = 0] = parseNumericValues(weightText);
-  return weightGrams;
+  const [weightGrams] = parseNumericValues(weightText);
+  return weightGrams ?? null;
 }
 
 export function normalizeItem(rawItem: RawItem, collectionSlug: string, timestamp: string): FirestoreItemInput {
@@ -217,7 +217,7 @@ export function normalizeItem(rawItem: RawItem, collectionSlug: string, timestam
       confidence: rawItem.metadata.confidence,
     },
     pageNumber: rawItem.page,
-    denominationSystem: denomination ? 'shared' : '',
+    denominationSystem: denomination ? 'shared-indic' : '',
     denominationKey: denomination?.key ?? '',
     denominationRank,
     denominationBaseValue: denomination?.baseValue ?? 0,
@@ -226,7 +226,7 @@ export function normalizeItem(rawItem: RawItem, collectionSlug: string, timestam
     estimatedPriceMin: priceRange.estimatedPriceMin,
     estimatedPriceMax: priceRange.estimatedPriceMax,
     estimatedPriceAvg: priceRange.estimatedPriceAvg,
-    weightGrams: deriveWeightGrams(rawItem.metadata.weight_estimate || rawItem.display_labels.join(' ')),
+    weightGrams: deriveWeightGrams(rawItem.metadata.weight_estimate),
     sortYear: yearRange.sortYearStart,
     sortTitle: rawItem.title.toLowerCase(),
     published: true,
