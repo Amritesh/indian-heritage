@@ -31,6 +31,16 @@ describe('normalizeItem', () => {
     expect(normalized.imageUrl).toContain('firebasestorage.googleapis.com');
     expect(normalized.metadata.rulerOrIssuer).toBe('Jahangir');
     expect(normalized.metadata.confidence).toBe('92');
+    expect(normalized.denominationSystem).toBe('shared');
+    expect(normalized.denominationKey).toBe('rupee');
+    expect(normalized.denominationRank).toBe(10);
+    expect(normalized.denominationBaseValue).toBe(1);
+    expect(normalized.sortYearStart).toBe(1618);
+    expect(normalized.sortYearEnd).toBe(1619);
+    expect(normalized.estimatedPriceMin).toBe(4500);
+    expect(normalized.estimatedPriceMax).toBe(7500);
+    expect(normalized.estimatedPriceAvg).toBe(6000);
+    expect(normalized.weightGrams).toBe(11.4);
     expect(normalized.searchKeywords).toContain('jahangir');
   });
 
@@ -55,7 +65,11 @@ describe('normalizeItem', () => {
 
     const normalized = normalizeItem(rawItem, 'mughals', '2026-04-01T00:00:00.000Z');
 
+    expect(normalized.estimatedPriceMin).toBe(2000);
+    expect(normalized.estimatedPriceMax).toBe(3500);
     expect(normalized.estimatedPriceAvg).toBe(2750);
+    expect(normalized.sortYearStart).toBe(1668);
+    expect(normalized.sortYearEnd).toBe(1669);
     expect(normalized.sortYear).toBe(1668);
   });
 });

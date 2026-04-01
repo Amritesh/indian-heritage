@@ -23,7 +23,16 @@ export type ItemRecord = {
   pageNumber: number;
   searchText: string;
   searchKeywords: string[];
+  denominationSystem: string;
+  denominationKey: string;
+  denominationRank: number;
+  denominationBaseValue: number;
+  sortYearStart: number;
+  sortYearEnd: number;
+  estimatedPriceMin: number;
+  estimatedPriceMax: number;
   estimatedPriceAvg: number;
+  weightGrams: number;
   sortYear: number;
   metadata: {
     type?: string;
