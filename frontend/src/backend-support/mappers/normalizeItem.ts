@@ -32,8 +32,55 @@ function parseNumericValues(text?: string | null) {
     .filter((value) => Number.isFinite(value) && value > 0) ?? [];
 }
 
+function expandYearRange(startText: string, endText: string) {
+  const start = Number(startText);
+  const end = Number(endText);
+
+  if (!Number.isFinite(start) || !Number.isFinite(end)) {
+    return null;
+  }
+
+  if (endText.length < startText.length) {
+    const prefix = startText.slice(0, startText.length - endText.length);
+    return [start, Number(`${prefix}${endText}`)] as const;
+  }
+
+  return [start, end] as const;
+}
+
+function extractAdYearRange(normalized: string) {
+  const parenthesizedRangeMatch = normalized.match(
+    /\((?:[^)]*\b(1[5-9]\d{2}|20\d{2})\s*(?:-|–|—)\s*(\d{2,4})\s*AD[^)]*)\)/i,
+  );
+  if (parenthesizedRangeMatch) {
+    return expandYearRange(parenthesizedRangeMatch[1], parenthesizedRangeMatch[2]);
+  }
+
+  const adRangeMatch = normalized.match(/\b(1[5-9]\d{2}|20\d{2})\s*(?:-|–|—)\s*(\d{2,4})\s*AD\b/i);
+  if (adRangeMatch) {
+    return expandYearRange(adRangeMatch[1], adRangeMatch[2]);
+  }
+
+  const adMatch = normalized.match(/\b(1[5-9]\d{2}|20\d{2})\b(?=[^)]*(?:\bAD\b|$))/i);
+  if (adMatch) {
+    const year = Number(adMatch[1]);
+    return [year, year] as const;
+  }
+
+  return null;
+}
+
 export function deriveYearRange(dateText?: string | null) {
   const normalized = String(dateText ?? '');
+  const adRange = extractAdYearRange(normalized);
+  if (adRange) {
+    const [start, end] = adRange;
+    return {
+      sortYearStart: Math.min(start, end),
+      sortYearEnd: Math.max(start, end),
+    };
+  }
+
   const explicitRangeMatch = normalized.match(
     /\b(1[5-9]\d{2}|20\d{2}|\d{3,4})\b\s*(?:-|–|—|to)\s*\b(1[5-9]\d{2}|20\d{2}|\d{3,4})\b/i,
   );
@@ -45,12 +92,6 @@ export function deriveYearRange(dateText?: string | null) {
       sortYearStart: Math.min(start, end),
       sortYearEnd: Math.max(start, end),
     };
-  }
-
-  const adMatch = normalized.match(/\b(1[5-9]\d{2}|20\d{2})\b/);
-  if (adMatch) {
-    const year = Number(adMatch[1]);
-    return { sortYearStart: year, sortYearEnd: year };
   }
 
   const allYears = normalized.match(/\b(\d{3,4})\b/g) ?? [];
@@ -101,6 +142,7 @@ export function normalizeItem(rawItem: RawItem, collectionSlug: string, timestam
   const denomination = resolveDenomination(rawItem.metadata.denomination);
   const yearRange = deriveYearRange(rawItem.metadata.year_or_period || rawItem.period);
   const priceRange = derivePriceRange(rawItem.metadata.estimated_price_inr);
+  const denominationRank = denomination?.rank ?? 9999;
   const materials = uniqueStrings(rawItem.materials);
   const notes = uniqueStrings(rawItem.notes);
   const searchFields = [
@@ -177,7 +219,7 @@ export function normalizeItem(rawItem: RawItem, collectionSlug: string, timestam
     pageNumber: rawItem.page,
     denominationSystem: denomination ? 'shared' : '',
     denominationKey: denomination?.key ?? '',
-    denominationRank: denomination?.rank ?? 0,
+    denominationRank,
     denominationBaseValue: denomination?.baseValue ?? 0,
     sortYearStart: yearRange.sortYearStart,
     sortYearEnd: yearRange.sortYearEnd,

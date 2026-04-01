@@ -72,4 +72,31 @@ describe('normalizeItem', () => {
     expect(normalized.sortYearEnd).toBe(1669);
     expect(normalized.sortYear).toBe(1668);
   });
+
+  it('prefers AD shorthand ranges and sorts unknown denominations last', () => {
+    const rawItem = rawItemSchema.parse({
+      id: 'coin-3',
+      title: 'Silver Token',
+      description: 'Silver token with mixed period notation.',
+      image: 'gs://indian-heritage-gallery-bucket/images/mughals-auto/coin_3.png',
+      notes: [],
+      period: 'AH 991 (1582-83 AD)',
+      region: 'Patna',
+      materials: ['Silver'],
+      metadata: {
+        denomination: 'Mystery Token',
+        ruler_or_issuer: 'Jahangir',
+        mint_or_place: 'Patna',
+      },
+      page: 3,
+    });
+
+    const normalized = normalizeItem(rawItem, 'mughals', '2026-04-01T00:00:00.000Z');
+
+    expect(normalized.denominationKey).toBe('');
+    expect(normalized.denominationRank).toBe(9999);
+    expect(normalized.sortYearStart).toBe(1582);
+    expect(normalized.sortYearEnd).toBe(1583);
+    expect(normalized.sortYear).toBe(1582);
+  });
 });
