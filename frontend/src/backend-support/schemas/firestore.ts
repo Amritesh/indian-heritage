@@ -35,7 +35,7 @@ export const firestoreItemSchema = z.object({
   denominationRank: z.number(),
   denominationBaseValue: z.number(),
   sortYearStart: z.number(),
-  sortYearEnd: z.number(),
+  sortYearEnd: z.number().nullable(),
   estimatedPriceMin: z.number(),
   estimatedPriceMax: z.number(),
   estimatedPriceAvg: z.number(),

@@ -93,6 +93,7 @@ describe('normalizeItem', () => {
 
     const normalized = normalizeItem(rawItem, 'mughals', '2026-04-01T00:00:00.000Z');
 
+    expect(normalized.denominationSystem).toBe('shared-indic');
     expect(normalized.denominationKey).toBe('');
     expect(normalized.denominationRank).toBe(9999);
     expect(normalized.sortYearStart).toBe(1582);
@@ -123,5 +124,7 @@ describe('normalizeItem', () => {
     const normalized = normalizeItem(rawItem, 'mughals', '2026-04-01T00:00:00.000Z');
 
     expect(normalized.weightGrams).toBe(11.4);
+    expect(normalized.sortYearStart).toBe(1688);
+    expect(normalized.sortYearEnd).toBeNull();
   });
 });
