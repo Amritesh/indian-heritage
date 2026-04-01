@@ -8,6 +8,7 @@ const mocks = vi.hoisted(() => ({
   getDocs: vi.fn(),
   getFirestoreOrThrow: vi.fn(),
   getLatestIngestRun: vi.fn(),
+  useAuth: vi.fn(),
 }));
 
 vi.mock('@/entities/ingest/api/ingestProgressService', () => ({
@@ -16,6 +17,10 @@ vi.mock('@/entities/ingest/api/ingestProgressService', () => ({
 
 vi.mock('@/shared/services/firestore', () => ({
   getFirestoreOrThrow: mocks.getFirestoreOrThrow,
+}));
+
+vi.mock('@/features/auth/context/AuthContext', () => ({
+  useAuth: mocks.useAuth,
 }));
 
 vi.mock('firebase/firestore', () => ({
@@ -47,6 +52,9 @@ function renderPage() {
 describe('AdminDashboardPage', () => {
   it('shows the latest ingest summary card', async () => {
     mocks.getFirestoreOrThrow.mockReturnValue({});
+    mocks.useAuth.mockReturnValue({
+      userProfile: { displayName: 'Anand Curator' },
+    });
     mocks.getLatestIngestRun.mockResolvedValue({
       id: 'run-1',
       collectionSlug: 'princely-states',
