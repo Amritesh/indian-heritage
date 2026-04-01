@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { searchItems } from '@/entities/item/api/itemService';
 import { SearchResults } from '@/features/search/components/SearchResults';
@@ -9,13 +10,22 @@ import { ErrorState } from '@/shared/ui/ErrorState';
 import { ItemSkeletonGrid } from '@/shared/ui/Skeletons';
 
 export function SearchPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const paramTerm = searchParams.get('q') ?? '';
+  const paramTag = searchParams.get('tag') ?? '';
   const [term, setTerm] = useState('');
+  const [tag, setTag] = useState('');
   const debouncedTerm = useDebouncedValue(term, 300);
-  const shouldSearch = debouncedTerm.trim().length >= 2;
+  const shouldSearch = debouncedTerm.trim().length >= 2 || tag.trim().length > 0;
+
+  useEffect(() => {
+    setTerm(paramTerm);
+    setTag(paramTag);
+  }, [paramTerm, paramTag]);
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: queryKeys.search(debouncedTerm),
-    queryFn: () => searchItems(debouncedTerm),
+    queryKey: queryKeys.search(debouncedTerm, undefined, tag),
+    queryFn: () => searchItems(debouncedTerm, undefined, tag),
     enabled: shouldSearch,
   });
 
@@ -38,7 +48,16 @@ export function SearchPage() {
             <input
               className="w-full bg-transparent border-none focus:ring-0 text-lg font-body px-4 py-3 placeholder:text-outline-variant"
               value={term}
-              onChange={(e) => setTerm(e.target.value)}
+              onChange={(e) => {
+                const next = e.target.value;
+                setTerm(next);
+                const nextParams = new URLSearchParams(searchParams);
+                if (next) nextParams.set('q', next);
+                else nextParams.delete('q');
+                if (tag) nextParams.set('tag', tag);
+                else nextParams.delete('tag');
+                setSearchParams(nextParams);
+              }}
               placeholder="Search by Era, Ruler, or Mint..."
               type="search"
             />
@@ -57,6 +76,23 @@ export function SearchPage() {
           icon="search"
         />
       )}
+      {tag && (
+        <div className="mb-4 flex items-center gap-3">
+          <span className="metadata-label">Filtered tag</span>
+          <button
+            className="archival-chip"
+            onClick={() => {
+              setTag('');
+              const nextParams = new URLSearchParams(searchParams);
+              nextParams.delete('tag');
+              setSearchParams(nextParams);
+            }}
+          >
+            {tag}
+            <span className="material-symbols-outlined text-[14px] ml-2">close</span>
+          </button>
+        </div>
+      )}
       {isLoading && <ItemSkeletonGrid />}
       {isError && <ErrorState message={(error as Error).message} />}
       {shouldSearch && data && (
@@ -69,7 +105,7 @@ export function SearchPage() {
               </h2>
             </div>
           )}
-          <SearchResults items={data} term={debouncedTerm} />
+          <SearchResults items={data} term={debouncedTerm} tag={tag} />
         </>
       )}
     </div>

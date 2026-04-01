@@ -1,12 +1,22 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ItemRecord } from '@/entities/item/model/types';
 import { ImageWithFallback } from '@/shared/ui/ImageWithFallback';
 
 type ItemCardProps = {
   item: ItemRecord;
+  tagHrefBuilder?: (tag: string) => string;
 };
 
-export function ItemCard({ item }: ItemCardProps) {
+export function ItemCard({ item, tagHrefBuilder }: ItemCardProps) {
+  const navigate = useNavigate();
+
+  function handleTagClick(event: React.MouseEvent, tag: string) {
+    event.preventDefault();
+    event.stopPropagation();
+    const href = tagHrefBuilder ? tagHrefBuilder(tag) : `/search?tag=${encodeURIComponent(tag)}`;
+    navigate(href);
+  }
+
   return (
     <article className="bg-surface-container-high rounded-xl overflow-hidden shadow-sm group hover:shadow-card transition-all duration-500">
       <Link to={`/items/${item.id}`} className="block">
@@ -38,9 +48,14 @@ export function ItemCard({ item }: ItemCardProps) {
 
           <div className="flex flex-wrap gap-2">
             {item.tags.slice(0, 3).map((tag) => (
-              <span key={tag} className="archival-chip">
+              <button
+                key={tag}
+                type="button"
+                className="archival-chip"
+                onClick={(event) => handleTagClick(event, tag)}
+              >
                 {tag}
-              </span>
+              </button>
             ))}
           </div>
 

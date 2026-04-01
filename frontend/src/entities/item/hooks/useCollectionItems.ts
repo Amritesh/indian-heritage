@@ -10,11 +10,12 @@ export function useCollectionItems(queryConfig: CollectionItemQuery) {
       queryConfig.sort ?? 'featured',
       queryConfig.material ?? '',
       queryConfig.search ?? '',
+      queryConfig.tag ?? '',
     ],
     queryFn: ({ pageParam }) =>
       getCollectionItemsPage(queryConfig, pageParam ?? null),
-    initialPageParam: null as Parameters<typeof getCollectionItemsPage>[1],
-    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.cursor : undefined),
+    initialPageParam: 0 as Parameters<typeof getCollectionItemsPage>[1],
+    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.cursor ?? undefined : undefined),
     enabled: Boolean(queryConfig.collectionSlug),
     select: (data) => ({
       pages: data.pages,

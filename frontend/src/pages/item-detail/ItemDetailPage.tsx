@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useItem } from '@/entities/item/hooks/useItem';
 import { RelatedItems } from '@/features/item-details/components/RelatedItems';
 import { EmptyState } from '@/shared/ui/EmptyState';
@@ -9,6 +9,7 @@ import { MetadataList } from '@/shared/ui/MetadataList';
 
 export function ItemDetailPage() {
   const { itemId = '' } = useParams();
+  const navigate = useNavigate();
   const { data: item, isLoading, isError, error } = useItem(itemId);
 
   if (isLoading) return <DetailSkeleton />;
@@ -113,7 +114,14 @@ export function ItemDetailPage() {
           {/* Tags */}
           <div className="flex flex-wrap gap-2">
             {item.tags.map((tag) => (
-              <span key={tag} className="archival-chip">{tag}</span>
+              <button
+                key={tag}
+                type="button"
+                className="archival-chip"
+                onClick={() => navigate(`/collections/${item.collectionSlug}?tag=${encodeURIComponent(tag)}`)}
+              >
+                {tag}
+              </button>
             ))}
           </div>
 

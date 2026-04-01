@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useCollection } from '@/entities/collection/hooks/useCollections';
 import { useCollectionItems } from '@/entities/item/hooks/useCollectionItems';
 import { ItemSort } from '@/entities/item/model/types';
@@ -14,6 +14,7 @@ import { formatCurrency } from '@/shared/lib/formatters';
 
 export function CollectionDetailPage() {
   const { slug = '' } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const {
     data: collection,
     isLoading: isCollectionLoading,
@@ -25,6 +26,7 @@ export function CollectionDetailPage() {
   const [material, setMaterial] = useState('');
   const [sort, setSort] = useState<ItemSort>('featured');
   const debouncedSearch = useDebouncedValue(search);
+  const activeTag = searchParams.get('tag') ?? '';
 
   const {
     data,
@@ -38,6 +40,7 @@ export function CollectionDetailPage() {
     search: debouncedSearch,
     material,
     sort,
+    tag: activeTag,
   });
 
   const items = data?.items ?? [];
@@ -150,13 +153,32 @@ export function CollectionDetailPage() {
         sort={sort}
         onSortChange={setSort}
       />
+      {activeTag && (
+        <div className="mb-6 flex items-center gap-3">
+          <span className="metadata-label">Filtered tag</span>
+          <button
+            className="archival-chip"
+            onClick={() => {
+              const nextParams = new URLSearchParams(searchParams);
+              nextParams.delete('tag');
+              setSearchParams(nextParams);
+            }}
+          >
+            {activeTag}
+            <span className="material-symbols-outlined text-[14px] ml-2">close</span>
+          </button>
+        </div>
+      )}
 
       {isItemsLoading && <ItemSkeletonGrid />}
       {isItemsError && <ErrorState message={(itemsError as Error).message} />}
 
       {items.length > 0 && (
         <>
-          <ItemGrid items={items} />
+          <ItemGrid
+            items={items}
+            tagHrefBuilder={(tag) => `/collections/${slug}?tag=${encodeURIComponent(tag)}`}
+          />
 
           {/* Pagination footer */}
           <div className="mt-10 flex flex-col items-center gap-4">

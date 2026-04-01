@@ -62,6 +62,7 @@ export function CollectionFilters({
           <option value="year_desc">Year (newest first)</option>
           <option value="price_asc">Price (low to high)</option>
           <option value="price_desc">Price (high to low)</option>
+          <option value="denomination_asc">Denomination (low to high)</option>
           <option value="recent">Recently imported</option>
         </select>
       </label>
