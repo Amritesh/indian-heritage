@@ -19,5 +19,6 @@ describe('resolveDenomination', () => {
 
   it('returns null for unknown denominations', () => {
     expect(resolveDenomination('mystery coin')).toBeNull();
+    expect(resolveDenomination('spice')).toBeNull();
   });
 });

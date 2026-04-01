@@ -7,7 +7,15 @@ export type DenominationEntry = {
 };
 
 function normalizeDenominationText(value: string) {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, '');
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 export const SHARED_DENOMINATIONS: DenominationEntry[] = [
@@ -46,7 +54,9 @@ export function resolveDenomination(value?: string | null) {
   }
 
   const matchingEntries = candidateEntries.filter((candidate) =>
-    normalizedValue.includes(candidate.normalizedCandidate),
+    new RegExp(
+      `(^| )${escapeRegExp(candidate.normalizedCandidate)}( |$)`,
+    ).test(normalizedValue),
   );
 
   matchingEntries.sort((a, b) => b.normalizedCandidate.length - a.normalizedCandidate.length);
