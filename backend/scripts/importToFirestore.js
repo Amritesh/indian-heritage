@@ -101,22 +101,117 @@ function slugify(text) {
     .replace(/^-|-$/g, '');
 }
 
-function extractYear(period) {
-  if (!period) return 0;
-  // Match 4-digit CE years (1000–2100), prefer ones in parentheses like "(1618-1619 AD)"
-  const parenMatch = String(period).match(/\((\d{3,4})[-–\/]/);
-  if (parenMatch) return parseInt(parenMatch[1], 10);
-  const allYears = String(period).match(/\b(1[0-9]{3}|20[0-9]{2})\b/g);
-  if (allYears) return parseInt(allYears[0], 10);
-  return 0;
+function parseNumericValues(text) {
+  return String(text || '')
+    .match(/\d[\d,]*(?:\.\d+)?/g)
+    ?.map((value) => Number(value.replace(/,/g, '')))
+    .filter((value) => Number.isFinite(value) && value > 0) ?? [];
 }
 
-function parsePriceRange(priceStr) {
-  if (!priceStr) return 0;
-  const nums = String(priceStr).replace(/,/g, '').match(/\d+/g);
-  if (!nums || nums.length === 0) return 0;
-  const vals = nums.map(Number);
-  return Math.round(vals.reduce((s, v) => s + v, 0) / vals.length);
+function expandYearRange(startText, endText) {
+  const start = Number(startText);
+  const end = Number(endText);
+  if (!Number.isFinite(start) || !Number.isFinite(end)) return null;
+  if (String(endText).length < String(startText).length) {
+    const prefix = String(startText).slice(0, String(startText).length - String(endText).length);
+    return [start, Number(`${prefix}${endText}`)];
+  }
+  return [start, end];
+}
+
+function filterHistoricalYears(values) {
+  return Array.from(new Set(values.filter((year) => year >= 500 && year <= 2100)));
+}
+
+function extractAdYearRange(text) {
+  const normalized = String(text || '');
+  const parenthesizedSegments = normalized.match(/\([^)]*\)/g) || [];
+  for (const segment of parenthesizedSegments) {
+    if (!/\b(AD|CE)\b/i.test(segment)) continue;
+    const rangeMatch = segment.match(/\b(1[5-9]\d{2}|20\d{2})\b\s*(?:-|–|—|to)\s*\b(\d{2,4})\b/i);
+    if (rangeMatch) return expandYearRange(rangeMatch[1], rangeMatch[2]);
+    const yearMatch = segment.match(/\b(1[5-9]\d{2}|20\d{2})\b/i);
+    if (yearMatch) return [Number(yearMatch[1]), Number(yearMatch[1])];
+  }
+  const adRangeMatch = normalized.match(
+    /(?:\b(AD|CE)\b\s*)?\b(1[5-9]\d{2}|20\d{2})\b\s*(?:-|–|—|to)\s*\b(\d{2,4})\b(?:\s*\b(AD|CE)\b)?/i,
+  );
+  if (adRangeMatch && (adRangeMatch[1] || adRangeMatch[4] || /\b(AD|CE)\b/i.test(normalized))) {
+    return expandYearRange(adRangeMatch[2], adRangeMatch[3]);
+  }
+  return null;
+}
+
+function deriveYearRange(period) {
+  const adRange = extractAdYearRange(period);
+  if (adRange) {
+    const years = filterHistoricalYears(adRange);
+    if (years.length === 1) return { sortYearStart: years[0], sortYearEnd: null };
+    if (years.length >= 2) return { sortYearStart: Math.min(...years), sortYearEnd: Math.max(...years) };
+    return { sortYearStart: 0, sortYearEnd: null };
+  }
+
+  if (/\b(AD|CE)\b/i.test(String(period || ''))) {
+    return { sortYearStart: 0, sortYearEnd: null };
+  }
+
+  const explicitRangeMatch = String(period || '').match(
+    /\b(1[5-9]\d{2}|20\d{2}|\d{3,4})\b\s*(?:-|–|—|to)\s*\b(1[5-9]\d{2}|20\d{2}|\d{3,4})\b/i,
+  );
+  if (explicitRangeMatch) {
+    const years = filterHistoricalYears([Number(explicitRangeMatch[1]), Number(explicitRangeMatch[2])]);
+    if (years.length === 1) return { sortYearStart: years[0], sortYearEnd: null };
+    if (years.length >= 2) return { sortYearStart: Math.min(...years), sortYearEnd: Math.max(...years) };
+  }
+
+  const allYears = filterHistoricalYears(
+    (String(period || '').match(/\b(\d{3,4})\b/g) || []).map((value) => Number(value)),
+  );
+  if (allYears.length > 0) {
+    const start = Math.min(...allYears);
+    const end = Math.max(...allYears);
+    return { sortYearStart: start, sortYearEnd: start === end ? null : end };
+  }
+
+  return { sortYearStart: 0, sortYearEnd: null };
+}
+
+function derivePriceRange(priceText) {
+  const matches = parseNumericValues(priceText);
+  if (matches.length === 0) return { estimatedPriceMin: 0, estimatedPriceMax: 0, estimatedPriceAvg: 0 };
+  const estimatedPriceMin = Math.min(...matches);
+  const estimatedPriceMax = Math.max(...matches);
+  return {
+    estimatedPriceMin,
+    estimatedPriceMax,
+    estimatedPriceAvg: matches.length === 1 ? matches[0] : Math.round((estimatedPriceMin + estimatedPriceMax) / 2),
+  };
+}
+
+function deriveWeightGrams(weightText) {
+  const [weightGrams] = parseNumericValues(weightText);
+  return weightGrams ?? null;
+}
+
+function resolveDenomination(value) {
+  const normalized = String(value || '').toLowerCase();
+  if (!normalized) return null;
+  if (normalized.includes('1/2 rupee') || normalized.includes('half rupee')) {
+    return { key: 'half-rupee', rank: 9, baseValue: 0.5 };
+  }
+  if (normalized.includes('rupee')) return { key: 'rupee', rank: 10, baseValue: 1 };
+  if (normalized.includes('8 anna')) return { key: 'eight-anna', rank: 8, baseValue: 8 / 16 };
+  if (normalized.includes('4 anna')) return { key: 'four-anna', rank: 7, baseValue: 4 / 16 };
+  if (normalized.includes('2 anna')) return { key: 'two-anna', rank: 6, baseValue: 2 / 16 };
+  if (normalized.includes('1/2 anna') || normalized.includes('half anna')) {
+    return { key: 'half-anna', rank: 4, baseValue: 1 / 32 };
+  }
+  if (normalized.includes('anna')) return { key: 'anna', rank: 5, baseValue: 1 / 16 };
+  if (normalized.includes('paisa')) return { key: 'paisa', rank: 3, baseValue: 1 / 64 };
+  if (normalized.includes('pice') || normalized.includes('pie')) return { key: 'pice', rank: 2, baseValue: 1 / 192 };
+  if (normalized.includes('dam') || normalized.includes('daam')) return { key: 'dam', rank: 1, baseValue: 1 / 512 };
+  if (normalized.includes('mohur')) return { key: 'mohur', rank: 11, baseValue: 1 };
+  return null;
 }
 
 function buildSearchText(item, meta, collectionName) {
@@ -171,6 +266,9 @@ function transformItem(rawItem, collectionConfig, collectionDocId, pageNumber) {
 
   const imageUrl = gsUrlToHttps(rawItem.image || '');
   const collectionName = collectionConfig.displayName;
+  const denomination = resolveDenomination(meta.denomination);
+  const yearRange = deriveYearRange(rawItem.period || meta.year_or_period || '');
+  const priceRange = derivePriceRange(meta.estimatedPriceInr);
 
   return {
     id: rawItem.id || `${collectionConfig.slug}-item-${pageNumber}`,
@@ -202,8 +300,17 @@ function transformItem(rawItem, collectionConfig, collectionDocId, pageNumber) {
     searchText: buildSearchText(rawItem, meta, collectionName),
     searchKeywords: buildTags(rawItem, meta, collectionConfig.culture),
     metadata: meta,
-    estimatedPriceAvg: parsePriceRange(meta.estimatedPriceInr),
-    sortYear: extractYear(rawItem.period || meta.year_or_period || ''),
+    denominationSystem: 'shared-indic',
+    denominationKey: denomination?.key ?? null,
+    denominationRank: denomination?.rank ?? 9999,
+    denominationBaseValue: denomination?.baseValue ?? null,
+    sortYearStart: yearRange.sortYearStart,
+    sortYearEnd: yearRange.sortYearEnd,
+    estimatedPriceMin: priceRange.estimatedPriceMin,
+    estimatedPriceMax: priceRange.estimatedPriceMax,
+    estimatedPriceAvg: priceRange.estimatedPriceAvg,
+    weightGrams: deriveWeightGrams(meta.weightEstimate),
+    sortYear: yearRange.sortYearStart,
     published: true,
     importedAt: admin.firestore.FieldValue.serverTimestamp(),
   };
@@ -271,7 +378,7 @@ async function main() {
     let totalWorth = 0;
     rawItems.forEach((item) => {
       (item.materials || []).forEach((m) => m && m !== 'Unknown' && materials.add(m));
-      totalWorth += parsePriceRange(item.metadata?.estimated_price_inr);
+      totalWorth += derivePriceRange(item.metadata?.estimated_price_inr).estimatedPriceAvg;
     });
 
     const heroImageUrl = gsUrlToHttps(`gs://indian-heritage-gallery-bucket/${config.heroImagePath}`);
