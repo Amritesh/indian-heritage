@@ -61,6 +61,15 @@ Return ONLY valid JSON in this exact format:
 }"""
 
 
+def _parse_analysis_payload(payload_text: str):
+    try:
+        return json.loads(payload_text)
+    except json.JSONDecodeError:
+        decoder = json.JSONDecoder()
+        parsed, _ = decoder.raw_decode(payload_text.lstrip())
+        return parsed
+
+
 @tool("analyze_coin")
 def analyze_coin(image_path: str) -> str:
     """Takes a single coin image file path and analyzes it using Gemini vision. Returns detailed numismatic metadata as a JSON string including ruler, year, mint, denomination, material, condition, price estimate, and more."""
@@ -92,7 +101,7 @@ def analyze_coin(image_path: str) -> str:
         },
     )
 
-    analysis = json.loads(response.text)
+    analysis = _parse_analysis_payload(response.text)
     if isinstance(analysis, list):
         analysis = next((item for item in analysis if isinstance(item, dict)), {})
     if not isinstance(analysis, dict):
