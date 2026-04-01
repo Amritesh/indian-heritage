@@ -618,3 +618,43 @@ exports.processImageWithOpenAI = functions
       return res.status(500).json({ error: e.message || String(e) });
     }
   });
+
+exports.refreshCollectionStats = functions.pubsub
+  .schedule('0 3 * * *')
+  .timeZone('Asia/Kolkata')
+  .onRun(async () => {
+    const firestore = admin.firestore();
+    const collectionsSnap = await firestore.collection('collections').get();
+    const batch = firestore.batch();
+
+    for (const docSnap of collectionsSnap.docs) {
+      const slug = docSnap.id;
+      const itemsSnap = await firestore
+        .collection('items')
+        .where('collectionSlug', '==', slug)
+        .where('published', '==', true)
+        .get();
+
+      let totalWorth = 0;
+      const materials = new Set();
+      itemsSnap.forEach((itemDoc) => {
+        const data = itemDoc.data();
+        totalWorth += Number(data.estimatedPriceAvg || 0);
+        (data.materials || []).forEach((m) => m && materials.add(m));
+      });
+
+      batch.set(
+        docSnap.ref,
+        {
+          itemCount: itemsSnap.size,
+          filterableMaterials: Array.from(materials).sort(),
+          estimatedWorth: totalWorth,
+          lastSyncedAt: new Date().toISOString(),
+        },
+        { merge: true },
+      );
+    }
+
+    await batch.commit();
+    return null;
+  });
