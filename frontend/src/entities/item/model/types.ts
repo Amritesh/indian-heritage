@@ -24,11 +24,11 @@ export type ItemRecord = {
   searchText: string;
   searchKeywords: string[];
   denominationSystem: string;
-  denominationKey: string;
+  denominationKey: string | null;
   denominationRank: number;
-  denominationBaseValue: number;
+  denominationBaseValue: number | null;
   sortYearStart: number;
-  sortYearEnd: number;
+  sortYearEnd: number | null;
   estimatedPriceMin: number;
   estimatedPriceMax: number;
   estimatedPriceAvg: number;
