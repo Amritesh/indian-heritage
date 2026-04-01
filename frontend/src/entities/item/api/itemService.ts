@@ -4,15 +4,11 @@ import {
   getDocs,
   query,
   limit as limitQuery,
-  orderBy,
   where,
   doc,
-  startAfter,
-  QueryDocumentSnapshot,
-  DocumentData,
   QueryConstraint,
 } from 'firebase/firestore';
-import { CollectionItemQuery, ItemRecord } from '@/entities/item/model/types';
+import { CollectionItemQuery, ItemRecord, ItemSort } from '@/entities/item/model/types';
 import { scoreSearchResults } from '@/shared/lib/search';
 import { getFirestoreOrThrow } from '@/shared/services/firestore';
 import { gsUrlToHttps } from '@/shared/lib/formatters';
@@ -57,6 +53,8 @@ function mapItemSnapshot(data: Record<string, unknown>): ItemRecord {
     estimatedPriceAvg: Number(data.estimatedPriceAvg ?? 0),
     weightGrams: data.weightGrams == null ? null : Number(data.weightGrams),
     sortYear: Number(data.sortYear ?? 0),
+    importedAt: normalizeTimestamp(data.importedAt),
+    updatedAt: normalizeTimestamp(data.updatedAt),
     searchText: String(data.searchText ?? ''),
     searchKeywords: Array.isArray(data.searchKeywords) ? (data.searchKeywords as string[]) : [],
     metadata:
@@ -84,9 +82,51 @@ export async function getItemById(itemId: string) {
 
 export type ItemPage = {
   items: ItemRecord[];
-  cursor: QueryDocumentSnapshot<DocumentData> | null;
+  cursor: number | null;
   hasMore: boolean;
 };
+
+function sortItems(items: ItemRecord[], sort: ItemSort) {
+  const list = [...items];
+  if (sort === 'denomination_asc') {
+    return list.sort((a, b) =>
+      a.denominationRank - b.denominationRank
+      || (a.denominationBaseValue ?? 0) - (b.denominationBaseValue ?? 0)
+      || a.title.localeCompare(b.title),
+    );
+  }
+  if (sort === 'price_asc') return list.sort((a, b) => a.estimatedPriceAvg - b.estimatedPriceAvg);
+  if (sort === 'price_desc') return list.sort((a, b) => b.estimatedPriceAvg - a.estimatedPriceAvg);
+  if (sort === 'year_asc') return list.sort((a, b) => a.sortYearStart - b.sortYearStart);
+  if (sort === 'year_desc') return list.sort((a, b) => b.sortYearStart - a.sortYearStart);
+  if (sort === 'recent') {
+    return list.sort((a, b) => String(b.updatedAt ?? b.importedAt ?? '').localeCompare(String(a.updatedAt ?? a.importedAt ?? '')));
+  }
+  if (sort === 'title') return list.sort((a, b) => a.title.localeCompare(b.title));
+  return list.sort((a, b) => a.pageNumber - b.pageNumber);
+}
+
+function normalizeTimestamp(value: unknown) {
+  if (!value) return undefined;
+  if (typeof value === 'string') return value;
+  if (typeof value === 'number') return new Date(value).toISOString();
+  if (typeof value === 'object' && value !== null && 'seconds' in value) {
+    const seconds = Number((value as { seconds?: number }).seconds ?? 0);
+    const nanos = Number((value as { nanoseconds?: number }).nanoseconds ?? 0);
+    return new Date(seconds * 1000 + Math.floor(nanos / 1e6)).toISOString();
+  }
+  return String(value);
+}
+
+function normalizeTag(value: string) {
+  return value.trim().toLowerCase();
+}
+
+function matchesTag(item: ItemRecord, tag: string) {
+  const normalized = normalizeTag(tag);
+  if (!normalized) return true;
+  return item.tags.some((t) => normalizeTag(t) === normalized);
+}
 
 async function fetchItemsFromApi(collectionSlug: string): Promise<ItemRecord[]> {
   const entry = getCollectionRegistryEntry(collectionSlug);
@@ -105,108 +145,61 @@ async function fetchItemsFromApi(collectionSlug: string): Promise<ItemRecord[]> 
 
 export async function getCollectionItemsPage(
   params: CollectionItemQuery,
-  cursor?: QueryDocumentSnapshot<DocumentData> | null,
+  cursor?: number | null,
 ): Promise<ItemPage> {
+  const pageSize = params.limit ?? DEFAULT_PAGE_SIZE;
+  const pageIndex = cursor ?? 0;
+  const normalizedSearch = params.search?.trim().toLowerCase() ?? '';
+
   if (!firestore) {
-    const allItems = await fetchItemsFromApi(params.collectionSlug);
-    let items = allItems;
-
+    let allItems = await fetchItemsFromApi(params.collectionSlug);
     if (params.material) {
-      items = items.filter((i) => i.materials.includes(params.material!));
+      allItems = allItems.filter((i) => i.materials.includes(params.material!));
     }
-
-    if (params.search) {
-      items = scoreSearchResults(items, params.search);
+    if (params.tag) {
+      allItems = allItems.filter((i) => matchesTag(i, params.tag!));
     }
-
-    // Basic pagination for fallback
-    const pageSize = params.limit ?? DEFAULT_PAGE_SIZE;
-    // Note: We don't have a real cursor for the API fallback
-    return {
-      items: items.slice(0, pageSize),
-      cursor: null,
-      hasMore: items.length > pageSize,
-    };
+    if (normalizedSearch) {
+      const scored = scoreSearchResults(allItems, normalizedSearch);
+      allItems = params.sort && params.sort !== 'featured' ? sortItems(scored, params.sort) : scored;
+    } else {
+      allItems = sortItems(allItems, params.sort ?? 'featured');
+    }
+    const start = pageIndex * pageSize;
+    const items = allItems.slice(start, start + pageSize);
+    const hasMore = start + pageSize < allItems.length;
+    return { items, cursor: hasMore ? pageIndex + 1 : null, hasMore };
   }
 
   const db = getFirestoreOrThrow();
-  const pageSize = params.limit ?? DEFAULT_PAGE_SIZE;
-  const normalizedSearch = params.search?.trim().toLowerCase() ?? '';
-
-  // For search, scan the full collection and score/filter in memory
-  if (normalizedSearch) {
-    const allItems = await getAllCollectionItemsForSearch(params.collectionSlug, params.material);
-    const scored = scoreSearchResults(allItems, normalizedSearch);
-    return { items: scored, cursor: null, hasMore: false };
-  }
-
   const constraints: QueryConstraint[] = [
     where('collectionSlug', '==', params.collectionSlug),
     where('published', '==', true),
   ];
-
   if (params.material) {
     constraints.push(where('materials', 'array-contains', params.material));
   }
 
-  if (params.sort === 'title') {
-    constraints.push(orderBy('title', 'asc'));
-  } else if (params.sort === 'recent') {
-    constraints.push(orderBy('importedAt', 'desc'));
-  } else if (params.sort === 'price_asc') {
-    constraints.push(orderBy('estimatedPriceAvg', 'asc'));
-  } else if (params.sort === 'price_desc') {
-    constraints.push(orderBy('estimatedPriceAvg', 'desc'));
-  } else if (params.sort === 'year_asc') {
-    constraints.push(orderBy('sortYear', 'asc'));
-  } else if (params.sort === 'year_desc') {
-    constraints.push(orderBy('sortYear', 'desc'));
+  const snapshot = await getDocs(
+    query(collection(db, 'items'), ...constraints, limitQuery(COLLECTION_SCAN_LIMIT)),
+  );
+  let allItems = snapshot.docs.map((d) => mapItemSnapshot(d.data()));
+
+  if (params.tag) {
+    allItems = allItems.filter((i) => matchesTag(i, params.tag!));
+  }
+
+  if (normalizedSearch) {
+    const scored = scoreSearchResults(allItems, normalizedSearch);
+    allItems = params.sort && params.sort !== 'featured' ? sortItems(scored, params.sort) : scored;
   } else {
-    constraints.push(orderBy('pageNumber', 'asc'));
+    allItems = sortItems(allItems, params.sort ?? 'featured');
   }
 
-  if (cursor) {
-    constraints.push(startAfter(cursor));
-  }
-
-  // Fetch one extra to know if there's a next page
-  constraints.push(limitQuery(pageSize + 1));
-
-  let snapshot;
-  try {
-    snapshot = await getDocs(query(collection(db, 'items'), ...constraints));
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    // Index still building — fall back to pageNumber order and sort client-side
-    if (msg.includes('index') || msg.includes('Index')) {
-      const fallbackConstraints = [
-        where('collectionSlug', '==', params.collectionSlug),
-        where('published', '==', true),
-        ...(params.material ? [where('materials', 'array-contains', params.material)] : []),
-        orderBy('pageNumber', 'asc'),
-        limitQuery(COLLECTION_SCAN_LIMIT),
-      ];
-      const fallbackSnap = await getDocs(query(collection(db, 'items'), ...fallbackConstraints));
-      let allItems = fallbackSnap.docs.map((d) => mapItemSnapshot(d.data()));
-      if (params.sort === 'price_asc') allItems.sort((a, b) => a.estimatedPriceAvg - b.estimatedPriceAvg);
-      else if (params.sort === 'price_desc') allItems.sort((a, b) => b.estimatedPriceAvg - a.estimatedPriceAvg);
-      else if (params.sort === 'year_asc') allItems.sort((a, b) => a.sortYear - b.sortYear);
-      else if (params.sort === 'year_desc') allItems.sort((a, b) => b.sortYear - a.sortYear);
-      const page = cursor ? allItems.slice(pageSize) : allItems.slice(0, pageSize);
-      return { items: page, cursor: null, hasMore: allItems.length > pageSize };
-    }
-    throw err;
-  }
-
-  const docs = snapshot.docs;
-  const hasMore = docs.length > pageSize;
-  const pageDocs = hasMore ? docs.slice(0, pageSize) : docs;
-
-  return {
-    items: pageDocs.map((d) => mapItemSnapshot(d.data())),
-    cursor: pageDocs.length > 0 ? pageDocs[pageDocs.length - 1] : null,
-    hasMore,
-  };
+  const start = pageIndex * pageSize;
+  const items = allItems.slice(start, start + pageSize);
+  const hasMore = start + pageSize < allItems.length;
+  return { items, cursor: hasMore ? pageIndex + 1 : null, hasMore };
 }
 
 // Legacy single-call version (kept for backward compatibility with hooks)
@@ -259,9 +252,10 @@ export async function getRelatedItems(item: ItemRecord) {
     .slice(0, 3);
 }
 
-export async function searchItems(term: string, collectionSlug?: string) {
+export async function searchItems(term: string, collectionSlug?: string, tag?: string) {
   const normalizedTerm = term.trim().toLowerCase();
-  if (normalizedTerm.length < 2) return [];
+  const hasTag = Boolean(tag && tag.trim());
+  if (normalizedTerm.length < 2 && !hasTag) return [];
 
   if (!firestore) {
     // Basic search across all fallback-eligible collections
@@ -270,8 +264,11 @@ export async function searchItems(term: string, collectionSlug?: string) {
       : collectionRegistry.filter(c => c.enabled).map(c => c.slug);
     
     const results = await Promise.all(collectionsToSearch.map(fetchItemsFromApi));
-    const allItems = results.flat();
-    return scoreSearchResults(allItems, normalizedTerm);
+    let allItems = results.flat();
+    if (hasTag) {
+      allItems = allItems.filter((i) => matchesTag(i, tag!));
+    }
+    return normalizedTerm ? scoreSearchResults(allItems, normalizedTerm) : allItems;
   }
 
   const db = getFirestoreOrThrow();
@@ -285,6 +282,9 @@ export async function searchItems(term: string, collectionSlug?: string) {
   const snapshot = await getDocs(
     query(collection(db, 'items'), ...constraints, limitQuery(GLOBAL_SEARCH_SCAN_LIMIT)),
   );
-  const items = snapshot.docs.map((d) => mapItemSnapshot(d.data()));
-  return scoreSearchResults(items, normalizedTerm);
+  let items = snapshot.docs.map((d) => mapItemSnapshot(d.data()));
+  if (hasTag) {
+    items = items.filter((i) => matchesTag(i, tag!));
+  }
+  return normalizedTerm ? scoreSearchResults(items, normalizedTerm) : items;
 }

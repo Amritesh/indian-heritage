@@ -34,6 +34,8 @@ export type ItemRecord = {
   estimatedPriceAvg: number;
   weightGrams: number | null;
   sortYear: number;
+  importedAt?: string;
+  updatedAt?: string;
   metadata: {
     type?: string;
     denomination?: string;
@@ -47,7 +49,15 @@ export type ItemRecord = {
   };
 };
 
-export type ItemSort = 'featured' | 'title' | 'recent' | 'price_asc' | 'price_desc' | 'year_asc' | 'year_desc';
+export type ItemSort =
+  | 'featured'
+  | 'title'
+  | 'recent'
+  | 'price_asc'
+  | 'price_desc'
+  | 'year_asc'
+  | 'year_desc'
+  | 'denomination_asc';
 
 export type CollectionItemQuery = {
   collectionSlug: string;
@@ -55,4 +65,5 @@ export type CollectionItemQuery = {
   sort?: ItemSort;
   material?: string;
   search?: string;
+  tag?: string;
 };

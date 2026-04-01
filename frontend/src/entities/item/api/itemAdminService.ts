@@ -47,6 +47,8 @@ function mapItemSnapshot(data: Record<string, unknown>): ItemRecord {
     estimatedPriceAvg: Number(data.estimatedPriceAvg ?? 0),
     weightGrams: data.weightGrams == null ? null : Number(data.weightGrams),
     sortYear: Number(data.sortYear ?? 0),
+    importedAt: normalizeTimestamp(data.importedAt),
+    updatedAt: normalizeTimestamp(data.updatedAt),
     searchText: String(data.searchText ?? ''),
     searchKeywords: Array.isArray(data.searchKeywords) ? (data.searchKeywords as string[]) : [],
     metadata:
@@ -54,6 +56,18 @@ function mapItemSnapshot(data: Record<string, unknown>): ItemRecord {
         ? (data.metadata as ItemRecord['metadata'])
         : {},
   };
+}
+
+function normalizeTimestamp(value: unknown) {
+  if (!value) return undefined;
+  if (typeof value === 'string') return value;
+  if (typeof value === 'number') return new Date(value).toISOString();
+  if (typeof value === 'object' && value !== null && 'seconds' in value) {
+    const seconds = Number((value as { seconds?: number }).seconds ?? 0);
+    const nanos = Number((value as { nanoseconds?: number }).nanoseconds ?? 0);
+    return new Date(seconds * 1000 + Math.floor(nanos / 1e6)).toISOString();
+  }
+  return String(value);
 }
 
 export type AdminItemQuery = {
