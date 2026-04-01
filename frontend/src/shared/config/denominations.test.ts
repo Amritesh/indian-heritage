@@ -17,6 +17,10 @@ describe('resolveDenomination', () => {
     expect(resolveDenomination('eight anna')?.key).toBe('eight-anna');
   });
 
+  it('prefers the longest matching denomination phrase', () => {
+    expect(resolveDenomination('half rupee coin')?.key).toBe('half-rupee');
+  });
+
   it('returns null for unknown denominations', () => {
     expect(resolveDenomination('mystery coin')).toBeNull();
     expect(resolveDenomination('spice')).toBeNull();
