@@ -10,6 +10,13 @@ describe('resolveDenomination', () => {
     expect(resolveDenomination('half-rupee')?.key).toBe('half-rupee');
   });
 
+  it('resolves anna fraction denominations', () => {
+    expect(resolveDenomination('half anna')?.key).toBe('half-anna');
+    expect(resolveDenomination('two anna')?.key).toBe('two-anna');
+    expect(resolveDenomination('four anna')?.key).toBe('four-anna');
+    expect(resolveDenomination('eight anna')?.key).toBe('eight-anna');
+  });
+
   it('returns null for unknown denominations', () => {
     expect(resolveDenomination('mystery coin')).toBeNull();
   });
