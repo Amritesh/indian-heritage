@@ -1,6 +1,7 @@
 import { FirestoreItemInput, firestoreItemSchema } from '../schemas/firestore';
 import { RawItem } from '../schemas/source';
 import { getCollectionRegistryEntry } from '../../shared/config/collections';
+import { resolveDenomination } from '../../shared/config/denominations';
 import { buildFirebaseMediaUrl, parseGsUrl } from '../../shared/lib/storage';
 
 function normalizeText(value?: string | null) {
@@ -24,30 +25,69 @@ function buildKeywords(values: string[]) {
   return Array.from(new Set(tokens)).sort();
 }
 
-function deriveEstimatedPriceAvg(priceText?: string | null) {
-  const matches = String(priceText ?? '')
-    .match(/\d[\d,]*/g)
+function parseNumericValues(text?: string | null) {
+  return String(text ?? '')
+    .match(/\d[\d,]*(?:\.\d+)?/g)
     ?.map((value) => Number(value.replace(/,/g, '')))
     .filter((value) => Number.isFinite(value) && value > 0) ?? [];
-
-  if (matches.length === 0) return 0;
-  if (matches.length === 1) return matches[0];
-  return Math.round((matches[0] + matches[1]) / 2);
 }
 
-function deriveSortYear(dateText?: string | null) {
+export function deriveYearRange(dateText?: string | null) {
   const normalized = String(dateText ?? '');
+  const explicitRangeMatch = normalized.match(
+    /\b(1[5-9]\d{2}|20\d{2}|\d{3,4})\b\s*(?:-|–|—|to)\s*\b(1[5-9]\d{2}|20\d{2}|\d{3,4})\b/i,
+  );
+
+  if (explicitRangeMatch) {
+    const start = Number(explicitRangeMatch[1]);
+    const end = Number(explicitRangeMatch[2]);
+    return {
+      sortYearStart: Math.min(start, end),
+      sortYearEnd: Math.max(start, end),
+    };
+  }
+
   const adMatch = normalized.match(/\b(1[5-9]\d{2}|20\d{2})\b/);
   if (adMatch) {
-    return Number(adMatch[1]);
+    const year = Number(adMatch[1]);
+    return { sortYearStart: year, sortYearEnd: year };
   }
 
-  const fallbackMatch = normalized.match(/\b(\d{3,4})\b/);
-  if (fallbackMatch) {
-    return Number(fallbackMatch[1]);
+  const allYears = normalized.match(/\b(\d{3,4})\b/g) ?? [];
+  if (allYears.length > 0) {
+    const years = allYears.map((value) => Number(value));
+    const start = years[years.length - 2] ?? years[0];
+    const end = years[years.length - 1] ?? start;
+    return {
+      sortYearStart: Math.min(start, end),
+      sortYearEnd: Math.max(start, end),
+    };
   }
 
-  return 0;
+  return { sortYearStart: 0, sortYearEnd: 0 };
+}
+
+export function derivePriceRange(priceText?: string | null) {
+  const matches = parseNumericValues(priceText);
+
+  if (matches.length === 0) {
+    return { estimatedPriceMin: 0, estimatedPriceMax: 0, estimatedPriceAvg: 0 };
+  }
+
+  const estimatedPriceMin = Math.min(...matches);
+  const estimatedPriceMax = Math.max(...matches);
+
+  return {
+    estimatedPriceMin,
+    estimatedPriceMax,
+    estimatedPriceAvg:
+      matches.length === 1 ? matches[0] : Math.round((estimatedPriceMin + estimatedPriceMax) / 2),
+  };
+}
+
+export function deriveWeightGrams(weightText?: string | null) {
+  const [weightGrams = 0] = parseNumericValues(weightText);
+  return weightGrams;
 }
 
 export function normalizeItem(rawItem: RawItem, collectionSlug: string, timestamp: string): FirestoreItemInput {
@@ -58,6 +98,9 @@ export function normalizeItem(rawItem: RawItem, collectionSlug: string, timestam
 
   const storage = parseGsUrl(rawItem.image);
   const imageUrl = buildFirebaseMediaUrl(rawItem.image);
+  const denomination = resolveDenomination(rawItem.metadata.denomination);
+  const yearRange = deriveYearRange(rawItem.metadata.year_or_period || rawItem.period);
+  const priceRange = derivePriceRange(rawItem.metadata.estimated_price_inr);
   const materials = uniqueStrings(rawItem.materials);
   const notes = uniqueStrings(rawItem.notes);
   const searchFields = [
@@ -132,8 +175,17 @@ export function normalizeItem(rawItem: RawItem, collectionSlug: string, timestam
       confidence: rawItem.metadata.confidence,
     },
     pageNumber: rawItem.page,
-    estimatedPriceAvg: deriveEstimatedPriceAvg(rawItem.metadata.estimated_price_inr),
-    sortYear: deriveSortYear(rawItem.metadata.year_or_period || rawItem.period),
+    denominationSystem: denomination ? 'shared' : '',
+    denominationKey: denomination?.key ?? '',
+    denominationRank: denomination?.rank ?? 0,
+    denominationBaseValue: denomination?.baseValue ?? 0,
+    sortYearStart: yearRange.sortYearStart,
+    sortYearEnd: yearRange.sortYearEnd,
+    estimatedPriceMin: priceRange.estimatedPriceMin,
+    estimatedPriceMax: priceRange.estimatedPriceMax,
+    estimatedPriceAvg: priceRange.estimatedPriceAvg,
+    weightGrams: deriveWeightGrams(rawItem.metadata.weight_estimate || rawItem.display_labels.join(' ')),
+    sortYear: yearRange.sortYearStart,
     sortTitle: rawItem.title.toLowerCase(),
     published: true,
     sourceUrl: registryEntry.sourceUrl,
