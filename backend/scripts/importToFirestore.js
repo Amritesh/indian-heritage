@@ -50,12 +50,27 @@ const COLLECTION_CONFIGS = {
     heroImagePath: 'images/british-india-1-1/page-1.png',
     sortOrder: 2,
   },
+  'princely-states': {
+    slug: 'princely-states',
+    name: 'Princely States',
+    displayName: 'Princely States',
+    description:
+      'A broad archive of princely state coinage across the subcontinent, preserving ruler, mint, denomination, material, and estimated collector value.',
+    longDescription:
+      'The Princely States issued a remarkable diversity of coinage under local rulers across the Indian subcontinent. This collection brings together silver, copper, bronze, and gold issues from Hyderabad, Mysore, Travancore, Gwalior, and many other states, combining visual identification with structured metadata and estimated market value for each piece.',
+    heroEyebrow: 'Indian Numismatic Heritage',
+    culture: 'Princely States of India',
+    periodLabel: 'c. 16th–20th century',
+    heroImagePath: 'images/princely-states/page-5/coin_1.png',
+    sortOrder: 3,
+  },
 };
 
 // Map of data file → collection slug
 const DATA_FILE_MAP = {
   'mughals.json': 'mughals',
   'british.json': 'british',
+  'princely-states.json': 'princely-states',
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
