@@ -47,6 +47,12 @@ export function AboutPage() {
               'Client-side search with weighted scoring today. The abstraction layer is designed for future Algolia or Meilisearch integration.',
           },
           {
+            icon: 'timeline',
+            title: 'Conversion Charts',
+            description:
+              'Denomination sorting uses a shared ladder (paisa → anna → rupee → mohur). Charts are archival tools for consistent browsing, not strict economic equivalences across eras.',
+          },
+          {
             icon: 'verified_user',
             title: 'Secure by Default',
             description:
