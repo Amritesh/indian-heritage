@@ -33,4 +33,29 @@ describe('normalizeItem', () => {
     expect(normalized.metadata.confidence).toBe('92');
     expect(normalized.searchKeywords).toContain('jahangir');
   });
+
+  it('derives numeric fields used by Firestore sorting', () => {
+    const rawItem = rawItemSchema.parse({
+      id: 'coin-2',
+      title: 'Silver Rupee - Aurangzeb',
+      description: 'Silver Rupee issued by Aurangzeb. Mint: Patna.',
+      image: 'gs://indian-heritage-gallery-bucket/images/mughals-auto/coin_2.png',
+      notes: ['Catalogued from pair'],
+      period: 'AH 1079 (c. 1668-1669 AD)',
+      region: 'Patna',
+      materials: ['Silver'],
+      metadata: {
+        denomination: 'Silver Rupee',
+        ruler_or_issuer: 'Aurangzeb',
+        mint_or_place: 'Patna',
+        estimated_price_inr: '2,000 - 3,500',
+      },
+      page: 2,
+    });
+
+    const normalized = normalizeItem(rawItem, 'mughals', '2026-04-01T00:00:00.000Z');
+
+    expect(normalized.estimatedPriceAvg).toBe(2750);
+    expect(normalized.sortYear).toBe(1668);
+  });
 });

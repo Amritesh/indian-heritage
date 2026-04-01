@@ -61,6 +61,15 @@ Return ONLY valid JSON in this exact format:
 _output_dir = ""
 
 
+def _parse_detection_payload(payload_text: str):
+    try:
+        return json.loads(payload_text)
+    except json.JSONDecodeError:
+        decoder = json.JSONDecoder()
+        parsed, _ = decoder.raw_decode(payload_text.lstrip())
+        return parsed
+
+
 def create_tool(output_dir: str = ""):
     """Create the segment_coins tool with the given output directory."""
     global _output_dir
@@ -104,7 +113,7 @@ def segment_coins(image_path: str) -> str:
         },
     )
 
-    detection = json.loads(response.text)
+    detection = _parse_detection_payload(response.text)
     coins = detection.get("coins", [])
 
     if not coins:
