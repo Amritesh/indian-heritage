@@ -42,6 +42,8 @@ export const firestoreItemSchema = z.object({
     confidence: z.string().optional(),
   }),
   pageNumber: z.number(),
+  estimatedPriceAvg: z.number(),
+  sortYear: z.number(),
   sortTitle: z.string(),
   published: z.boolean(),
   sourceUrl: z.string(),

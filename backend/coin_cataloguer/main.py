@@ -407,19 +407,37 @@ def save_catalogue_result(*, result, image_path, output_dir):
     os.makedirs(save_dir, exist_ok=True)
     catalogue_path = os.path.join(save_dir, "catalogue.json")
 
-    if isinstance(result, (list, dict)):
-        catalogue_data = result
+    def _parse_candidate(value):
+        if isinstance(value, (list, dict)):
+            return value
+        if value is None:
+            return None
+        try:
+            return json.loads(str(value))
+        except (json.JSONDecodeError, TypeError):
+            return None
+
+    catalogue_data = _parse_candidate(result)
+
+    if catalogue_data is None:
+        for task_output in reversed(getattr(result, "tasks_output", []) or []):
+            catalogue_data = _parse_candidate(getattr(task_output, "json_dict", None))
+            if catalogue_data is None:
+                catalogue_data = _parse_candidate(getattr(task_output, "raw", None))
+            if catalogue_data is None:
+                continue
+            try:
+                get_catalogue_entries(catalogue_data)
+                break
+            except ValueError:
+                catalogue_data = None
+
+    if catalogue_data is not None:
         with open(catalogue_path, "w", encoding="utf-8") as f:
             json.dump(catalogue_data, f, indent=2, ensure_ascii=False)
     else:
-        catalogue_data = None
-        try:
-            catalogue_data = json.loads(str(result))
-            with open(catalogue_path, "w", encoding="utf-8") as f:
-                json.dump(catalogue_data, f, indent=2, ensure_ascii=False)
-        except (json.JSONDecodeError, TypeError):
-            with open(catalogue_path, "w", encoding="utf-8") as f:
-                f.write(str(result))
+        with open(catalogue_path, "w", encoding="utf-8") as f:
+            f.write(str(result))
 
     return {
         "catalogue_path": catalogue_path,

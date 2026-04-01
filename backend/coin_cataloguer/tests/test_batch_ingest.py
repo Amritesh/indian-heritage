@@ -1,5 +1,6 @@
 from copy import deepcopy
 from types import SimpleNamespace
+import json
 import sys
 
 import pytest
@@ -257,6 +258,55 @@ def test_process_page_job_fails_when_upload_mode_has_no_entries(monkeypatch):
     assert first_upload is True
 
 
+def test_process_page_job_retries_transient_cataloguer_failures(monkeypatch):
+    attempts = []
+    upload_calls = []
+    outcomes = iter(
+        [
+            RuntimeError("Google Gemini API error: 500 - Internal error encountered."),
+            {
+                "catalogue_path": "/tmp/catalogue.json",
+                "catalogue_data": [{"image_path": "/tmp/coin.png"}],
+                "save_dir": "/tmp",
+            },
+        ]
+    )
+
+    def fake_run_cataloguer_for_image(**kwargs):
+        attempts.append(kwargs["image_path"])
+        outcome = next(outcomes)
+        if isinstance(outcome, Exception):
+            raise outcome
+        return outcome
+
+    monkeypatch.setattr(batch_ingest, "run_cataloguer_for_image", fake_run_cataloguer_for_image)
+    monkeypatch.setattr(batch_ingest.os.path, "isfile", lambda path: True)
+
+    def fake_upload_to_firebase(*args, **kwargs):
+        upload_calls.append(kwargs["clear_collection"])
+        return {"collection_id": "princely-states", "items_uploaded": 1, "items_total": 1}
+
+    monkeypatch.setattr(batch_ingest, "upload_to_firebase", fake_upload_to_firebase)
+
+    page_record, first_upload = batch_ingest.process_page_job(
+        job={
+            "source": {"folder": "princeley-states-1-1"},
+            "pageNumber": 5,
+            "imagePath": "/repo/temp/images/princeley-states-1-1/page-5.png",
+            "outputDir": "/repo/temp/output/princely-states/princeley-states-1-1/page-05",
+        },
+        collection_name="princely-states",
+        args=SimpleNamespace(upload=True, clear_first=True),
+        first_upload=True,
+    )
+
+    assert page_record["status"] == "completed"
+    assert page_record["itemsUploaded"] == 1
+    assert first_upload is False
+    assert upload_calls == [True]
+    assert len(attempts) == 2
+
+
 def test_process_page_job_fails_when_unstructured_catalogue_has_no_entries(monkeypatch):
     monkeypatch.setattr(
         batch_ingest,
@@ -439,6 +489,26 @@ def test_save_catalogue_result_preserves_native_dict_result(tmp_path):
 
     assert result["catalogue_data"] == source
     assert result["catalogue_path"].endswith("catalogue.json")
+
+
+def test_save_catalogue_result_prefers_catalogue_task_output_over_final_sync_text(tmp_path):
+    source = [{"image_path": "/tmp/coin.png", "ruler_or_issuer": "Akbar"}]
+    result = SimpleNamespace(
+        raw="Sync complete for 1 collection(s)",
+        tasks_output=[
+            SimpleNamespace(raw='{"total_coins_detected": 1}', json_dict={"total_coins_detected": 1}),
+            SimpleNamespace(raw=json.dumps(source), json_dict=None),
+            SimpleNamespace(raw="Sync complete for 1 collection(s)", json_dict=None),
+        ],
+    )
+
+    saved = save_catalogue_result(
+        result=result,
+        image_path="/repo/temp/images/page-5.png",
+        output_dir=str(tmp_path),
+    )
+
+    assert saved["catalogue_data"] == source
 
 
 def test_main_writes_running_page_snapshot_before_completion(monkeypatch):

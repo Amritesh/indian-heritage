@@ -15,6 +15,7 @@ from .main import _find_env_path, _init_firebase, get_catalogue_entries, run_cat
 
 _PROGRESS_DATABASE = None
 _PROGRESS_DATABASE_LOADED = False
+_CATALOGUER_MAX_ATTEMPTS = 3
 
 
 def build_princely_states_plan(images_root):
@@ -166,11 +167,24 @@ def process_page_job(*, job, collection_name, args, first_upload):
         if not os.path.isfile(job["imagePath"]):
             raise FileNotFoundError(f"Image not found: {job['imagePath']}")
 
-        result = run_cataloguer_for_image(
-            image_path=job["imagePath"],
-            output_dir=job["outputDir"],
-            collection_name=collection_name,
-        )
+        result = None
+        last_error = None
+        for _ in range(_CATALOGUER_MAX_ATTEMPTS):
+            try:
+                result = run_cataloguer_for_image(
+                    image_path=job["imagePath"],
+                    output_dir=job["outputDir"],
+                    collection_name=collection_name,
+                )
+                last_error = None
+                break
+            except FileNotFoundError:
+                raise
+            except Exception as exc:
+                last_error = exc
+        if last_error is not None or result is None:
+            raise last_error or RuntimeError("Cataloguer did not return a result.")
+
         page_record["cataloguePath"] = result["catalogue_path"]
 
         coins = get_catalogue_entries(result["catalogue_data"])

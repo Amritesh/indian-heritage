@@ -24,6 +24,32 @@ function buildKeywords(values: string[]) {
   return Array.from(new Set(tokens)).sort();
 }
 
+function deriveEstimatedPriceAvg(priceText?: string | null) {
+  const matches = String(priceText ?? '')
+    .match(/\d[\d,]*/g)
+    ?.map((value) => Number(value.replace(/,/g, '')))
+    .filter((value) => Number.isFinite(value) && value > 0) ?? [];
+
+  if (matches.length === 0) return 0;
+  if (matches.length === 1) return matches[0];
+  return Math.round((matches[0] + matches[1]) / 2);
+}
+
+function deriveSortYear(dateText?: string | null) {
+  const normalized = String(dateText ?? '');
+  const adMatch = normalized.match(/\b(1[5-9]\d{2}|20\d{2})\b/);
+  if (adMatch) {
+    return Number(adMatch[1]);
+  }
+
+  const fallbackMatch = normalized.match(/\b(\d{3,4})\b/);
+  if (fallbackMatch) {
+    return Number(fallbackMatch[1]);
+  }
+
+  return 0;
+}
+
 export function normalizeItem(rawItem: RawItem, collectionSlug: string, timestamp: string): FirestoreItemInput {
   const registryEntry = getCollectionRegistryEntry(collectionSlug);
   if (!registryEntry) {
@@ -106,6 +132,8 @@ export function normalizeItem(rawItem: RawItem, collectionSlug: string, timestam
       confidence: rawItem.metadata.confidence,
     },
     pageNumber: rawItem.page,
+    estimatedPriceAvg: deriveEstimatedPriceAvg(rawItem.metadata.estimated_price_inr),
+    sortYear: deriveSortYear(rawItem.metadata.year_or_period || rawItem.period),
     sortTitle: rawItem.title.toLowerCase(),
     published: true,
     sourceUrl: registryEntry.sourceUrl,
