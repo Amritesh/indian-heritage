@@ -3,11 +3,13 @@ node_modules
 __pycache__/
 *.py[cod]
 frontend/build/
+frontend/dist/
 frontend/.env
 temp
 .firebase/
 firebase-debug.log
 backend/.env
+backend/.venv/
 *.json
 !package.json
 !firebase.json
@@ -15,3 +17,5 @@ backend/.env
 !package-lock.json
 !builder.config.json
 !.yarnrc.yml
+*__pycache__*
+*.tsbuildinfo
