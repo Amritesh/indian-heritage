@@ -11,6 +11,13 @@
 const fs = require('fs');
 const path = require('path');
 const admin = require('firebase-admin');
+const {
+  buildCanonicalKeywords,
+  buildCanonicalTags,
+  canonicalizeMint,
+  canonicalizeRulerOrIssuer,
+  resolveDenomination,
+} = require('./catalogNormalization');
 
 // ── Config ────────────────────────────────────────────────────────────────────
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
@@ -64,6 +71,20 @@ const COLLECTION_CONFIGS = {
     heroImagePath: 'images/princely-states/page-5/coin_1.png',
     sortOrder: 3,
   },
+  sultanate: {
+    slug: 'sultanate',
+    name: 'Sultanate',
+    displayName: 'Delhi Sultanate',
+    description:
+      'A structured archive of Sultanate coinage across Delhi, Bengal, Bahmani, and related polities, normalized for collector-friendly browsing and sorting.',
+    longDescription:
+      'The Sultanate collection documents front-view coin issues from the Delhi Sultanate and related successor states, preserving ruler, mint, denomination, material, and estimated value with stable public tags and sorting metadata for collectors.',
+    heroEyebrow: 'Sultanate Numismatics',
+    culture: 'Delhi Sultanate',
+    periodLabel: 'c. 1193–1545 CE',
+    heroImagePath: 'images/sultanate/page-7/coin_1.png',
+    sortOrder: 4,
+  },
 };
 
 // Map of data file → collection slug
@@ -71,6 +92,7 @@ const DATA_FILE_MAP = {
   'mughals.json': 'mughals',
   'british.json': 'british',
   'princely-states.json': 'princely-states',
+  'sultanate.json': 'sultanate',
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -102,10 +124,30 @@ function slugify(text) {
 }
 
 function parseNumericValues(text) {
-  return String(text || '')
-    .match(/\d[\d,]*(?:\.\d+)?/g)
-    ?.map((value) => Number(value.replace(/,/g, '')))
-    .filter((value) => Number.isFinite(value) && value > 0) ?? [];
+  return Array.from(
+    String(text || '').matchAll(/(\d[\d,]*(?:\.\d+)?)\s*(k|thousand|lakh|lac|crore|cr|million|mn)?/gi),
+  )
+    .map((match) => {
+      const numericValue = Number(match[1].replace(/,/g, ''));
+      const suffix = String(match[2] || '').toLowerCase();
+      if (!Number.isFinite(numericValue) || numericValue <= 0) {
+        return null;
+      }
+
+      const multiplier =
+        suffix === 'k' || suffix === 'thousand'
+          ? 1000
+          : suffix === 'lakh' || suffix === 'lac'
+            ? 100000
+            : suffix === 'crore' || suffix === 'cr'
+              ? 10000000
+              : suffix === 'million' || suffix === 'mn'
+                ? 1000000
+                : 1;
+
+      return numericValue * multiplier;
+    })
+    .filter((value) => Number.isFinite(value) && value > 0);
 }
 
 function expandYearRange(startText, endText) {
@@ -193,27 +235,6 @@ function deriveWeightGrams(weightText) {
   return weightGrams ?? null;
 }
 
-function resolveDenomination(value) {
-  const normalized = String(value || '').toLowerCase();
-  if (!normalized) return null;
-  if (normalized.includes('1/2 rupee') || normalized.includes('half rupee')) {
-    return { key: 'half-rupee', rank: 9, baseValue: 0.5 };
-  }
-  if (normalized.includes('rupee')) return { key: 'rupee', rank: 10, baseValue: 1 };
-  if (normalized.includes('8 anna')) return { key: 'eight-anna', rank: 8, baseValue: 8 / 16 };
-  if (normalized.includes('4 anna')) return { key: 'four-anna', rank: 7, baseValue: 4 / 16 };
-  if (normalized.includes('2 anna')) return { key: 'two-anna', rank: 6, baseValue: 2 / 16 };
-  if (normalized.includes('1/2 anna') || normalized.includes('half anna')) {
-    return { key: 'half-anna', rank: 4, baseValue: 1 / 32 };
-  }
-  if (normalized.includes('anna')) return { key: 'anna', rank: 5, baseValue: 1 / 16 };
-  if (normalized.includes('paisa')) return { key: 'paisa', rank: 3, baseValue: 1 / 64 };
-  if (normalized.includes('pice') || normalized.includes('pie')) return { key: 'pice', rank: 2, baseValue: 1 / 192 };
-  if (normalized.includes('dam') || normalized.includes('daam')) return { key: 'dam', rank: 1, baseValue: 1 / 512 };
-  if (normalized.includes('mohur')) return { key: 'mohur', rank: 11, baseValue: 1 };
-  return null;
-}
-
 function buildSearchText(item, meta, collectionName) {
   return [
     item.title,
@@ -236,27 +257,24 @@ function buildSearchText(item, meta, collectionName) {
 }
 
 function buildTags(item, meta, culture) {
-  const tags = new Set();
-  if (culture) tags.add(slugify(culture));
-  (item.materials || []).forEach((m) => tags.add(slugify(m)));
-  if (meta.denomination) tags.add(slugify(meta.denomination));
-  if (meta.rulerOrIssuer) {
-    meta.rulerOrIssuer
-      .split(/[\s,]+/)
-      .slice(0, 2)
-      .forEach((w) => w.length > 2 && tags.add(slugify(w)));
-  }
-  if (item.region) tags.add(slugify(item.region));
-  return [...tags].filter(Boolean).slice(0, 8);
+  return buildCanonicalTags({
+    culture,
+    rulerOrIssuer: meta.rulerOrIssuer,
+    denomination: meta.denomination,
+    mintOrPlace: meta.mintOrPlace || item.region,
+    materials: item.materials || [],
+  });
 }
 
 function transformItem(rawItem, collectionConfig, collectionDocId, pageNumber) {
   const rawMeta = rawItem.metadata || {};
+  const canonicalRuler = canonicalizeRulerOrIssuer(rawMeta.ruler_or_issuer || '');
+  const canonicalMint = canonicalizeMint(rawMeta.mint_or_place || rawItem.region || '');
   const meta = {
     type: rawMeta.type || 'coin',
     denomination: rawMeta.denomination || '',
-    rulerOrIssuer: rawMeta.ruler_or_issuer || '',
-    mintOrPlace: rawMeta.mint_or_place || rawItem.region || '',
+    rulerOrIssuer: canonicalRuler || rawMeta.ruler_or_issuer || '',
+    mintOrPlace: canonicalMint || rawMeta.mint_or_place || rawItem.region || '',
     seriesOrCatalog: rawMeta.series_or_catalog || '',
     weightEstimate: rawMeta.weight_estimate || '',
     condition: rawMeta.condition || '',
@@ -269,6 +287,7 @@ function transformItem(rawItem, collectionConfig, collectionDocId, pageNumber) {
   const denomination = resolveDenomination(meta.denomination);
   const yearRange = deriveYearRange(rawItem.period || meta.year_or_period || '');
   const priceRange = derivePriceRange(meta.estimatedPriceInr);
+  const canonicalTags = buildTags(rawItem, meta, collectionConfig.culture);
 
   return {
     id: rawItem.id || `${collectionConfig.slug}-item-${pageNumber}`,
@@ -282,7 +301,7 @@ function transformItem(rawItem, collectionConfig, collectionDocId, pageNumber) {
     period: rawItem.period || meta.year_or_period || '',
     dateText: rawItem.period || '',
     culture: collectionConfig.culture,
-    location: meta.mintOrPlace || rawItem.region || '',
+    location: canonicalMint || meta.mintOrPlace || rawItem.region || '',
     description: rawItem.description || '',
     shortDescription: rawItem.description
       ? rawItem.description.substring(0, 160).trim()
@@ -294,11 +313,14 @@ function transformItem(rawItem, collectionConfig, collectionDocId, pageNumber) {
     materials: Array.isArray(rawItem.materials) && rawItem.materials.length > 0
       ? rawItem.materials
       : ['Unknown'],
-    tags: buildTags(rawItem, meta, collectionConfig.culture),
+    tags: canonicalTags,
     notes: Array.isArray(rawItem.notes) ? rawItem.notes : [],
     pageNumber,
     searchText: buildSearchText(rawItem, meta, collectionName),
-    searchKeywords: buildTags(rawItem, meta, collectionConfig.culture),
+    searchKeywords: buildCanonicalKeywords([
+      buildSearchText(rawItem, meta, collectionName),
+      ...canonicalTags,
+    ]),
     metadata: meta,
     denominationSystem: 'shared-indic',
     denominationKey: denomination?.key ?? null,
@@ -457,7 +479,20 @@ async function main() {
   console.log('═══════════════════════════════════════════════════════\n');
 }
 
-main().catch((err) => {
-  console.error('\n❌ Import failed:', err.message || err);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error('\n❌ Import failed:', err.message || err);
+    process.exit(1);
+  });
+}
+
+module.exports = {
+  COLLECTION_CONFIGS,
+  DATA_DIR,
+  DATA_FILE_MAP,
+  buildCollectionData: null,
+  derivePriceRange,
+  deriveWeightGrams,
+  deriveYearRange,
+  transformItem,
+};

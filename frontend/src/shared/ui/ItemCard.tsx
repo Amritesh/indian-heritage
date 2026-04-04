@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/features/auth/context/AuthContext';
 import { ItemRecord } from '@/entities/item/model/types';
 import { ImageWithFallback } from '@/shared/ui/ImageWithFallback';
 
@@ -9,6 +10,7 @@ type ItemCardProps = {
 
 export function ItemCard({ item, tagHrefBuilder }: ItemCardProps) {
   const navigate = useNavigate();
+  const { isAdmin } = useAuth();
 
   function handleTagClick(event: React.MouseEvent, tag: string) {
     event.preventDefault();
@@ -18,7 +20,17 @@ export function ItemCard({ item, tagHrefBuilder }: ItemCardProps) {
   }
 
   return (
-    <article className="bg-surface-container-high rounded-xl overflow-hidden shadow-sm group hover:shadow-card transition-all duration-500">
+    <article className="relative bg-surface-container-high rounded-xl overflow-hidden shadow-sm group hover:shadow-card transition-all duration-500">
+      {isAdmin && (
+        <Link
+          to={`/admin/items/${item.id}/edit`}
+          className="absolute left-3 top-3 z-10 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-surface-container-lowest/95 px-3 py-2 text-[11px] font-label font-bold uppercase tracking-widest text-primary shadow-sm transition-colors hover:bg-surface-container-lowest"
+          aria-label={`Edit ${item.title}`}
+        >
+          <span className="material-symbols-outlined text-sm">edit</span>
+          Edit
+        </Link>
+      )}
       <Link to={`/items/${item.id}`} className="block">
         <div className="h-56 relative overflow-hidden bg-surface-container-lowest">
           <ImageWithFallback

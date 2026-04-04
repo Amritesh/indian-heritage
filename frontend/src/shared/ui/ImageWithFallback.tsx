@@ -10,7 +10,7 @@ export function ImageWithFallback({
   alt,
   className,
   wrapperClassName,
-  objectFit = 'cover',
+  objectFit = 'contain',
   ...props
 }: ImageWithFallbackProps) {
   const [failed, setFailed] = useState(false);

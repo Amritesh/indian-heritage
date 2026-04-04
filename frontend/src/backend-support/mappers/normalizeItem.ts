@@ -2,6 +2,12 @@ import { FirestoreItemInput, firestoreItemSchema } from '../schemas/firestore';
 import { RawItem } from '../schemas/source';
 import { getCollectionRegistryEntry } from '../../shared/config/collections';
 import { resolveDenomination } from '../../shared/config/denominations';
+import {
+  buildCanonicalKeywords,
+  buildCanonicalTags,
+  canonicalizeMint,
+  canonicalizeRulerOrIssuer,
+} from '../../shared/lib/catalogNormalization';
 import { buildFirebaseMediaUrl, parseGsUrl } from '../../shared/lib/storage';
 
 function normalizeText(value?: string | null) {
@@ -14,22 +20,33 @@ function uniqueStrings(values: Array<string | undefined | null>) {
   );
 }
 
-function buildKeywords(values: string[]) {
-  const tokens = values
-    .join(' ')
-    .toLowerCase()
-    .replace(/[^a-z0-9\s]+/g, ' ')
-    .split(/\s+/)
-    .filter((value) => value.length >= 2);
-
-  return Array.from(new Set(tokens)).sort();
-}
-
 function parseNumericValues(text?: string | null) {
-  return String(text ?? '')
-    .match(/\d[\d,]*(?:\.\d+)?/g)
-    ?.map((value) => Number(value.replace(/,/g, '')))
-    .filter((value) => Number.isFinite(value) && value > 0) ?? [];
+  const matches = String(text ?? '').matchAll(
+    /(\d[\d,]*(?:\.\d+)?)\s*(k|thousand|lakh|lac|crore|cr|million|mn)?/gi,
+  );
+
+  return Array.from(matches)
+    .map((match) => {
+      const numericValue = Number(match[1].replace(/,/g, ''));
+      const suffix = String(match[2] ?? '').toLowerCase();
+      if (!Number.isFinite(numericValue) || numericValue <= 0) {
+        return null;
+      }
+
+      const multiplier =
+        suffix === 'k' || suffix === 'thousand'
+          ? 1_000
+          : suffix === 'lakh' || suffix === 'lac'
+            ? 100_000
+            : suffix === 'crore' || suffix === 'cr'
+              ? 10_000_000
+              : suffix === 'million' || suffix === 'mn'
+                ? 1_000_000
+                : 1;
+
+      return numericValue * multiplier;
+    })
+    .filter((value): value is number => value != null && Number.isFinite(value) && value > 0);
 }
 
 function expandYearRange(startText: string, endText: string) {
@@ -194,19 +211,22 @@ export function normalizeItem(rawItem: RawItem, collectionSlug: string, timestam
     ...notes,
   ];
 
-  const subtitle = normalizeText(rawItem.metadata.ruler_or_issuer)
+  const canonicalRuler = canonicalizeRulerOrIssuer(rawItem.metadata.ruler_or_issuer);
+  const canonicalMint = canonicalizeMint(rawItem.metadata.mint_or_place || rawItem.region);
+  const subtitle = canonicalRuler
     || normalizeText(rawItem.metadata.denomination)
     || registryEntry.culture;
   const shortDescription =
     normalizeText(rawItem.description).split('. ').slice(0, 2).join('. ').trim()
     || normalizeText(rawItem.description);
-  const tags = uniqueStrings([
-    rawItem.metadata.material,
-    rawItem.metadata.denomination,
-    rawItem.metadata.ruler_or_issuer,
-    rawItem.metadata.mint_or_place,
-    registryEntry.culture,
-  ]);
+  const tags = buildCanonicalTags({
+    culture: registryEntry.culture,
+    rulerOrIssuer: canonicalRuler || rawItem.metadata.ruler_or_issuer,
+    denomination: rawItem.metadata.denomination,
+    mintOrPlace: canonicalMint || rawItem.metadata.mint_or_place,
+    materials,
+  });
+  const searchKeywords = buildCanonicalKeywords([...searchFields, ...tags]);
 
   const primaryMedia = storage
     ? {
@@ -228,7 +248,7 @@ export function normalizeItem(rawItem: RawItem, collectionSlug: string, timestam
     period: rawItem.period || rawItem.metadata.year_or_period || '',
     dateText: rawItem.metadata.year_or_period || rawItem.period || '',
     culture: registryEntry.culture,
-    location: rawItem.region || rawItem.metadata.mint_or_place || '',
+    location: canonicalMint || rawItem.region || rawItem.metadata.mint_or_place || '',
     description: rawItem.description,
     shortDescription,
     imageUrl,
@@ -239,12 +259,12 @@ export function normalizeItem(rawItem: RawItem, collectionSlug: string, timestam
     tags,
     notes,
     searchText: searchFields.join(' ').toLowerCase(),
-    searchKeywords: buildKeywords(searchFields),
+    searchKeywords,
     metadata: {
       type: rawItem.metadata.type,
       denomination: rawItem.metadata.denomination,
-      rulerOrIssuer: rawItem.metadata.ruler_or_issuer,
-      mintOrPlace: rawItem.metadata.mint_or_place,
+      rulerOrIssuer: canonicalRuler || rawItem.metadata.ruler_or_issuer,
+      mintOrPlace: canonicalMint || rawItem.metadata.mint_or_place,
       seriesOrCatalog: rawItem.metadata.series_or_catalog,
       weightEstimate: rawItem.metadata.weight_estimate,
       condition: rawItem.metadata.condition,
