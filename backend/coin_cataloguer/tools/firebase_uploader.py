@@ -1,5 +1,8 @@
 """
-Custom CrewAI tool that uploads coin catalogue data and images to Firebase.
+Legacy CrewAI tool that uploads coin catalogue data and images to Firebase.
+
+AHG now treats Supabase as the source of truth for metadata/search and keeps
+Firebase primarily for media storage plus transitional compatibility payloads.
 """
 
 import json
@@ -59,7 +62,12 @@ def create_tool(collection_name: str = "coin-catalogue"):
 
 @tool("upload_to_firebase")
 def upload_to_firebase(catalogue_json: str) -> str:
-    """Uploads a coin catalogue JSON string and associated coin images to Firebase. Images go to Firebase Storage, metadata goes to Realtime Database. Input should be a JSON string with 'catalogue' (list of coin objects) and 'collection_name' fields."""
+    """Uploads a coin catalogue JSON string into the legacy Firebase-compatible bridge.
+
+    Images go to Firebase Storage. Metadata is written only for transitional
+    compatibility with older flows; the canonical archive metadata source of
+    truth is now Supabase.
+    """
     try:
         data = json.loads(catalogue_json)
     except json.JSONDecodeError:

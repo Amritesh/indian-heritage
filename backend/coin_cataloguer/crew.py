@@ -1,8 +1,12 @@
 """
-CrewAI crew definition with three agents:
-1. Image Cutter      - segments coins from a composite image
+CrewAI crew definition with two agents:
+1. Image Cutter       - segments coins from a composite image
 2. Numismatist Expert - identifies and catalogues each coin
-3. Collection Syncer  - updates Firestore collection stats after upload
+
+Collection syncing is handled deterministically by the import/repair scripts and
+the post-run upload flow in ``main.py``. Keeping sync out of the Crew avoids a
+race where the agent tries to update collection stats before the local data file
+exists for a new collection bootstrap.
 """
 
 import json
@@ -12,7 +16,6 @@ from crewai import Agent, Crew, LLM, Process, Task
 from crewai_tools import SerperDevTool
 
 from .tools.coin_analyzer import analyze_coin
-from .tools.collection_sync import sync_collection_stats
 from .tools.image_segmenter import create_tool as create_segment_tool
 
 
@@ -32,7 +35,9 @@ def _build_catalogue_task_description(search_enabled: bool):
             "value' or similar queries based on what you see).\n"
             "3. Cross-reference the visual analysis with web search results to produce the "
             "most accurate identification possible.\n"
-            "4. Compile a complete catalogue entry for each coin.\n\n"
+            "4. Compile a complete catalogue entry for each coin.\n"
+            "5. Keep the output consistent with the Supabase-backed archive pipeline: "
+            "metadata is canonicalized into Supabase, while source images remain in Firebase Storage.\n\n"
             "Process EVERY coin image. Do not skip any.\n\n"
             "Your final output must be a valid JSON array where each element has these fields:\n"
             "- image_path, ruler_or_issuer, year_or_period, mint_or_place, denomination,\n"
@@ -45,7 +50,9 @@ def _build_catalogue_task_description(search_enabled: bool):
         "1. Use the analyze_coin tool to get an initial visual identification.\n"
         "2. Refine that identification from the visible legends, symbols, denomination, "
         "and historical context in the image itself.\n"
-        "3. Compile a complete catalogue entry for each coin.\n\n"
+        "3. Compile a complete catalogue entry for each coin.\n"
+        "4. Keep the output consistent with the Supabase-backed archive pipeline: "
+        "metadata is canonicalized into Supabase, while source images remain in Firebase Storage.\n\n"
         "Process EVERY coin image. Do not skip any.\n\n"
         "Your final output must be a valid JSON array where each element has these fields:\n"
         "- image_path, ruler_or_issuer, year_or_period, mint_or_place, denomination,\n"
@@ -71,7 +78,6 @@ def create_crew(image_path: str, output_dir: str, collection_name: str = "coin-c
     analyze_tool = analyze_coin
     search_enabled = _serper_search_enabled()
     search_tool = SerperDevTool() if search_enabled else None
-    sync_tool = sync_collection_stats
 
     # --- Agent 1: Image Cutter ---
     image_cutter = Agent(
@@ -87,25 +93,6 @@ def create_crew(image_path: str, output_dir: str, collection_name: str = "coin-c
             "You use advanced vision AI to detect precise bounding boxes and crop each coin cleanly."
         ),
         tools=[segment_tool],
-        llm=gemini_llm,
-        verbose=True,
-        allow_delegation=False,
-    )
-
-    # --- Agent 3: Collection Syncer ---
-    collection_syncer = Agent(
-        role="Collection Data Syncer",
-        goal=(
-            "After coins have been catalogued and uploaded, sync the collection's aggregated "
-            "stats — item count, materials, estimated worth, sort fields — to Firestore so the "
-            "frontend reflects the latest data."
-        ),
-        backstory=(
-            "You are a meticulous data pipeline engineer responsible for keeping the heritage "
-            "gallery's Firestore database in sync after every cataloguing run. You run the sync "
-            "tool once and report the result."
-        ),
-        tools=[sync_tool],
         llm=gemini_llm,
         verbose=True,
         allow_delegation=False,
@@ -163,28 +150,11 @@ def create_crew(image_path: str, output_dir: str, collection_name: str = "coin-c
         context=[segment_task],
     )
 
-    # --- Task 3: Sync collection stats to Firestore ---
-    sync_task = Task(
-        description=(
-            f"The coins have been segmented and catalogued. Now sync the collection stats "
-            f"for collection '{collection_name}' to Firestore.\n\n"
-            f"Use the sync_collection_stats tool with the collection name '{collection_name}'. "
-            "This will update itemCount, filterableMaterials, estimatedWorth, sortYear, and "
-            "estimatedPriceAvg on the Firestore collections document so the frontend is up to date."
-        ),
-        expected_output=(
-            "Confirmation that the collection stats have been successfully synced to Firestore, "
-            "including the number of items processed."
-        ),
-        agent=collection_syncer,
-        context=[catalogue_task],
-    )
-
-    tasks = [segment_task, catalogue_task, sync_task]
+    tasks = [segment_task, catalogue_task]
 
     # --- Crew ---
     crew = Crew(
-        agents=[image_cutter, numismatist, collection_syncer],
+        agents=[image_cutter, numismatist],
         tasks=tasks,
         process=Process.sequential,
         verbose=True,

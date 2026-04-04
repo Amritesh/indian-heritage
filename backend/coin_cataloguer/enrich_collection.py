@@ -69,6 +69,11 @@ def analyze_collection_items(*, collection_data, output_root: Path):
 
 
 def upload_enriched_collection(*, collection_name: str, enriched_items, images_root: Path, clear_collection: bool = True):
+    """Write enriched items through the legacy Firebase-compatible upload bridge.
+
+    Supabase is the archive metadata source of truth; this helper remains for
+    transitional compatibility with existing page/image enrichment workflows.
+    """
     grouped = {}
     for coin in enriched_items:
         grouped.setdefault((coin.get("source_batch", ""), coin.get("source_page_path", "")), []).append(coin)

@@ -12,6 +12,7 @@ import json
 import os
 import re
 import sys
+import time
 
 from dotenv import load_dotenv
 
@@ -274,6 +275,83 @@ def _clean_text(value, fallback=""):
     return text if text else fallback
 
 
+def _infer_stub_catalogue_entry(coin):
+    label = _clean_text(coin.get("label"), "Unknown coin")
+    crop_path = coin.get("path", "")
+    normalized = label.lower()
+
+    if "empty coin pocket" in normalized or normalized == "empty holder":
+        return {
+            "image_path": crop_path,
+            "ruler_or_issuer": "N/A",
+            "year_or_period": "N/A",
+            "mint_or_place": "N/A",
+            "denomination": "N/A",
+            "series_or_catalog": "N/A",
+            "material": "N/A",
+            "condition": "N/A",
+            "obverse_description": "Empty coin pocket",
+            "reverse_description": "Empty coin pocket",
+            "weight_estimate": "N/A",
+            "estimated_price_inr": "0",
+            "notes": "This pocket is empty.",
+            "confidence": 0.1,
+        }
+
+    parts = [part.strip(" -") for part in re.split(r"\s+-\s+|,\s+", label) if part.strip(" -")]
+    authority = parts[0] if parts else ""
+    ruler = parts[1] if len(parts) > 1 else label
+
+    denomination = "Unknown"
+    if "gold tanka" in normalized:
+        denomination = "Gold Tanka"
+    elif "silver tanka" in normalized:
+        denomination = "Silver Tanka"
+    elif "silver rupee" in normalized or "rupee" in normalized:
+        denomination = "Silver Tanka (Rupee)"
+    elif "copper" in normalized:
+        denomination = "Copper Coin"
+    elif "coin" in normalized:
+        denomination = "Coin"
+
+    material = "Unknown"
+    if "gold" in normalized:
+        material = "Gold"
+    elif "silver" in normalized:
+        material = "Silver"
+    elif "copper" in normalized:
+        material = "Copper"
+
+    series = authority or "Unclassified Sultanate issue"
+    note_parts = [f"Fallback entry derived from segmentation label: {label}."]
+    if authority:
+        note_parts.append(f"Likely authority or polity: {authority}.")
+
+    cleaned_ruler = (
+        ruler.replace("coin in 2x2 cardboard holder", "")
+        .replace("coin in 2x2 holder", "")
+        .replace("cardboard holder", "")
+        .strip()
+    )
+
+    return {
+        "image_path": crop_path,
+        "ruler_or_issuer": cleaned_ruler or "Unknown",
+        "year_or_period": "",
+        "mint_or_place": authority.replace("Saltant", "Sultanate").replace("Saltanat", "Sultanate").strip(),
+        "denomination": denomination,
+        "series_or_catalog": series,
+        "material": material,
+        "condition": "Unverified",
+        "obverse_description": label,
+        "reverse_description": "",
+        "weight_estimate": "",
+        "estimated_price_inr": "",
+        "notes": " ".join(note_parts),
+        "confidence": 0.25,
+    }
+
+
 def build_review_flags(coin):
     flags = []
     price = coin.get("estimated_price_inr")
@@ -446,22 +524,70 @@ def save_catalogue_result(*, result, image_path, output_dir):
     }
 
 
+def _run_deterministic_cataloguer(*, image_path, output_dir):
+    from .tools.coin_analyzer import analyze_coin
+    from .tools.image_segmenter import create_tool as create_segment_tool
+
+    segment_tool = create_segment_tool(output_dir=output_dir)
+    raw_segments = segment_tool.run(image_path)
+    segment_data = json.loads(raw_segments)
+    coins = segment_data.get("coins", [])
+    if not coins:
+        raise RuntimeError(f"No segmented coins returned for {image_path}")
+
+    catalogue = []
+    for coin in coins:
+        crop_path = coin.get("path", "")
+        if not crop_path:
+            continue
+
+        last_error = None
+        for attempt in range(3):
+            try:
+                analysis = json.loads(analyze_coin.func(crop_path))
+                if isinstance(analysis, dict):
+                    analysis["image_path"] = crop_path
+                    catalogue.append(analysis)
+                    break
+            except Exception as exc:  # pragma: no cover - network/model fallback
+                last_error = exc
+                if attempt < 2:
+                    time.sleep(2 * (attempt + 1))
+        else:
+            print(f"  Falling back to label-derived stub for {crop_path}: {last_error}")
+            catalogue.append(_infer_stub_catalogue_entry(coin))
+
+    return save_catalogue_result(result=catalogue, image_path=image_path, output_dir=output_dir)
+
+
 def run_cataloguer_for_image(*, image_path, output_dir, collection_name):
     from .crew import create_crew
 
-    crew = create_crew(
-        image_path=image_path,
-        output_dir=output_dir,
-        collection_name=collection_name,
-    )
-    result = crew.kickoff()
-    return save_catalogue_result(result=result, image_path=image_path, output_dir=output_dir)
+    if os.environ.get("FORCE_DETERMINISTIC_CATALOGUER", "").strip().lower() in {"1", "true", "yes", "on"}:
+        print("  Using deterministic cataloguer path.")
+        return _run_deterministic_cataloguer(image_path=image_path, output_dir=output_dir)
+
+    try:
+        crew = create_crew(
+            image_path=image_path,
+            output_dir=output_dir,
+            collection_name=collection_name,
+        )
+        result = crew.kickoff()
+        return save_catalogue_result(result=result, image_path=image_path, output_dir=output_dir)
+    except Exception as exc:
+        print(f"  Crew pipeline failed, falling back to deterministic analysis: {exc}")
+        return _run_deterministic_cataloguer(image_path=image_path, output_dir=output_dir)
 
 
 def upload_to_firebase(catalogue, collection_name, source_page_path="", clear_collection=False):
-    """Upload catalogue data and images to Firebase matching the frontend's expected format.
+    """Legacy compatibility upload for Firebase-backed media and transitional metadata.
 
-    Frontend expects:
+    AHG now treats Supabase as the source of truth for archive metadata and search.
+    This helper remains so existing ingestion flows can still write Firebase Storage
+    media paths and legacy collection snapshots during the transition.
+
+    Legacy snapshot format:
       collections/{id}           -> { id, title, category, image (gs://), ... }
       collection_details/{id}    -> { album_title, items: [{ id, page, title, image (gs://),
                                      period, region, materials[], notes[], display_labels[],
@@ -592,12 +718,12 @@ def main():
     parser.add_argument(
         "--collection",
         default="coin-catalogue",
-        help="Collection name for Firebase upload (default: coin-catalogue)",
+        help="Collection slug for the legacy Firebase-compatible upload path (default: coin-catalogue)",
     )
     parser.add_argument(
         "--upload",
         action="store_true",
-        help="Upload catalogue and images to Firebase after processing",
+        help="Upload catalogue output through the legacy Firebase-compatible bridge after processing",
     )
     parser.add_argument(
         "--clear",
@@ -649,10 +775,10 @@ def main():
     print()
     print(f"  Catalogue saved to: {catalogue_path}")
 
-    # --- Firebase upload (deterministic, not agent-driven) ---
+    # --- Legacy Firebase-compatible upload (deterministic, not agent-driven) ---
     if args.upload:
         print()
-        print("  Uploading to Firebase...")
+        print("  Uploading through legacy Firebase-compatible bridge...")
 
         upload_succeeded = False
         try:
@@ -674,7 +800,7 @@ def main():
                 print(f"  Collection total: {upload_result['items_total']}")
                 print(f"  DB path: collections/{upload_result['collection_id']}")
             else:
-                print("  Upload failed. Check Firebase credentials.")
+                print("  Upload failed. Check Firebase credentials and bridge configuration.")
                 upload_succeeded = False
 
         if not upload_succeeded:

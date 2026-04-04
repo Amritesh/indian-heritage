@@ -4,6 +4,7 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import admin from 'firebase-admin';
 import { collectionRegistry } from '../src/shared/config/collections';
+import { loadWorkspaceEnv } from './lib/loadEnv';
 
 const TARGET_SLUGS = ['mughals', 'british', 'princely-states', 'sultanate'] as const;
 
@@ -30,29 +31,6 @@ type FirebaseArchiveSnapshot = {
     publishedItems: number;
   };
 };
-
-function loadLocalEnvFile() {
-  const envPath = path.resolve(projectRoot, 'frontend', '.env');
-  if (!fs.existsSync(envPath)) {
-    return;
-  }
-
-  const lines = fs.readFileSync(envPath, 'utf8').split(/\r?\n/);
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-
-    const separatorIndex = trimmed.indexOf('=');
-    if (separatorIndex === -1) continue;
-
-    const key = trimmed.slice(0, separatorIndex).trim();
-    const value = trimmed.slice(separatorIndex + 1).trim();
-
-    if (key && !process.env[key]) {
-      process.env[key] = value;
-    }
-  }
-}
 
 function resolveServiceAccountPath() {
   const explicitPath = process.env.FIREBASE_SERVICE_ACCOUNT_KEY_PATH;
@@ -179,7 +157,7 @@ async function fetchCollectionSnapshot(firestore: ReturnType<typeof admin.firest
 }
 
 async function main() {
-  loadLocalEnvFile();
+  loadWorkspaceEnv(projectRoot);
   initializeAdmin();
   const firestore = admin.firestore();
 

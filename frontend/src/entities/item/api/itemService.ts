@@ -312,17 +312,17 @@ export async function getRelatedItems(item: ItemRecord) {
     .slice(0, 3);
 }
 
-export async function searchItems(term: string, collectionSlug?: string, tag?: string) {
+export async function searchItems(term: string, collectionSlug?: string, tag?: string, sort: ItemSort = 'featured') {
   const normalizedTerm = term.trim().toLowerCase();
   const hasTag = Boolean(tag && tag.trim());
   if (normalizedTerm.length < 2 && !hasTag) return [];
 
   if (hasSupabaseEnv) {
-    let allItems = await searchItemsFromSupabase(collectionSlug);
+    let allItems = await searchItemsFromSupabase(normalizedTerm, collectionSlug);
     if (hasTag) {
       allItems = allItems.filter((i) => matchesTag(i, tag!));
     }
-    return normalizedTerm ? scoreSearchResults(allItems, normalizedTerm) : allItems;
+    return sort === 'featured' ? allItems : sortItems(allItems, sort);
   }
 
   if (!firestore) {
@@ -336,7 +336,8 @@ export async function searchItems(term: string, collectionSlug?: string, tag?: s
     if (hasTag) {
       allItems = allItems.filter((i) => matchesTag(i, tag!));
     }
-    return normalizedTerm ? scoreSearchResults(allItems, normalizedTerm) : allItems;
+    const ranked = normalizedTerm ? scoreSearchResults(allItems, normalizedTerm) : allItems;
+    return sort === 'featured' ? ranked : sortItems(ranked, sort);
   }
 
   const db = getFirestoreOrThrow();
@@ -354,5 +355,6 @@ export async function searchItems(term: string, collectionSlug?: string, tag?: s
   if (hasTag) {
     items = items.filter((i) => matchesTag(i, tag!));
   }
-  return normalizedTerm ? scoreSearchResults(items, normalizedTerm) : items;
+  const ranked = normalizedTerm ? scoreSearchResults(items, normalizedTerm) : items;
+  return sort === 'featured' ? ranked : sortItems(ranked, sort);
 }

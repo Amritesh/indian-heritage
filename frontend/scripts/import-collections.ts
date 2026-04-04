@@ -3,6 +3,7 @@ import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import admin from 'firebase-admin';
+import { loadWorkspaceEnv } from './lib/loadEnv';
 import { normalizeCollection } from '../src/backend-support/mappers/normalizeCollection';
 import { normalizeItem } from '../src/backend-support/mappers/normalizeItem';
 import { rawCollectionSchema } from '../src/backend-support/schemas/source';
@@ -11,29 +12,7 @@ import { collectionRegistry } from '../src/shared/config/collections';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '../..');
-
-function loadLocalEnvFile() {
-  const envPath = path.resolve(projectRoot, 'frontend', '.env');
-  if (!fs.existsSync(envPath)) {
-    return;
-  }
-
-  const lines = fs.readFileSync(envPath, 'utf8').split(/\r?\n/);
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-
-    const separatorIndex = trimmed.indexOf('=');
-    if (separatorIndex === -1) continue;
-
-    const key = trimmed.slice(0, separatorIndex).trim();
-    const value = trimmed.slice(separatorIndex + 1).trim();
-
-    if (key && !process.env[key]) {
-      process.env[key] = value;
-    }
-  }
-}
+const migrationSnapshotDir = path.resolve(projectRoot, 'backend-support', 'snapshots', 'firebase-archive');
 
 function resolveServiceAccountPath() {
   const explicitPath = process.env.FIREBASE_SERVICE_ACCOUNT_KEY_PATH;
@@ -114,16 +93,37 @@ async function importCollection(slug: string) {
     'utf8',
   );
 
+  fs.mkdirSync(migrationSnapshotDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(migrationSnapshotDir, `${slug}.json`),
+    `${JSON.stringify(
+      {
+        exportedAt: timestamp,
+        source: 'firebase-firestore',
+        collection: normalizedCollection,
+        items: normalizedItems,
+        counts: {
+          items: normalizedItems.length,
+          publishedItems: normalizedItems.filter((item) => Boolean(item.published)).length,
+        },
+      },
+      null,
+      2,
+    )}\n`,
+    'utf8',
+  );
+
   return {
     slug,
     importedCollection: normalizedCollection.id,
     importedItems: normalizedItems.length,
     snapshotFile: path.join(snapshotDir, `${slug}.json`),
+    migrationSnapshotFile: path.join(migrationSnapshotDir, `${slug}.json`),
   };
 }
 
 async function main() {
-  loadLocalEnvFile();
+  loadWorkspaceEnv(projectRoot);
   const target = process.argv[2];
   const slugs = target ? [target] : collectionRegistry.filter((entry) => entry.enabled).map((entry) => entry.slug);
 
