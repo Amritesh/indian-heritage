@@ -1,0 +1,43 @@
+{
+  "rulers": {
+    "akbar": "Akbar",
+    "akbar great": "Akbar",
+    "jalal ud din muhammad akbar": "Akbar",
+    "muhammad akbar ii": "Akbar II",
+    "muhammad bin tughluq": "Muhammad bin Tughlaq",
+    "ram singh ii": "Ram Singh II",
+    "george v": "George V",
+    "george vi": "George VI",
+    "queen victoria": "Queen Victoria",
+    "victoria empress": "Queen Victoria",
+    "empress india": "Queen Victoria",
+    "victoria queen": "Queen Victoria",
+    "edward vii": "Edward VII",
+    "mir mahbub ali khan": "Mir Mahbub Ali Khan",
+    "mir mahbub ali khan ii nizam hyderabad": "Mir Mahbub Ali Khan",
+    "mir mahbub ali khan ii hyderabad": "Mir Mahbub Ali Khan",
+    "mir mahbub ali khan asaf jah vi": "Mir Mahbub Ali Khan",
+    "shah jahan i": "Shah Jahan I",
+    "aurangzeb": "Aurangzeb"
+  },
+  "authorities": {
+    "british india": "British India",
+    "mughal empire": "Mughal Empire",
+    "princely states of india": "Princely States of India",
+    "delhi sultanate": "Delhi Sultanate",
+    "east india company": "East India Company",
+    "sikh empire": "Sikh Empire",
+    "hyderabad state": "Hyderabad State"
+  },
+  "mints": {
+    "bombay mint": "Bombay",
+    "calcutta mint": "Calcutta",
+    "madras mint": "Madras",
+    "patna mint": "Patna",
+    "delhi mint": "Delhi",
+    "hadrat delhi": "Delhi",
+    "hazrat delhi": "Delhi",
+    "lahore mint": "Lahore",
+    "agra mint": "Agra"
+  }
+}
