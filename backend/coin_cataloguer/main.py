@@ -5,6 +5,9 @@ Usage:
     python -m coin_cataloguer.main --image /path/to/coins.jpg
     python -m coin_cataloguer.main --image /path/to/coins.jpg --output ./my_output --upload
     python -m coin_cataloguer.main --image /path/to/coins.jpg --collection "mughal-coins"
+
+Metadata is Supabase-first. Firebase Storage is used for media assets and
+legacy compatibility uploads only.
 """
 
 import argparse
@@ -580,12 +583,20 @@ def run_cataloguer_for_image(*, image_path, output_dir, collection_name):
         return _run_deterministic_cataloguer(image_path=image_path, output_dir=output_dir)
 
 
-def upload_to_firebase(catalogue, collection_name, source_page_path="", clear_collection=False):
-    """Legacy compatibility upload for Firebase-backed media and transitional metadata.
+def upload_to_firebase(
+    catalogue,
+    collection_name,
+    source_page_path="",
+    clear_collection=False,
+    source_batch="",
+    ingestion_mode="independent-page",
+):
+    """Legacy compatibility upload for Firebase-backed media and transitional snapshots.
 
-    AHG now treats Supabase as the source of truth for archive metadata and search.
-    This helper remains so existing ingestion flows can still write Firebase Storage
-    media paths and legacy collection snapshots during the transition.
+    AHG now treats Supabase as the source of truth for archive metadata, search,
+    and canonical collections. This helper remains so existing ingestion flows can
+    still write Firebase Storage media paths and legacy collection snapshots during
+    the transition.
 
     Legacy snapshot format:
       collections/{id}           -> { id, title, category, image (gs://), ... }
@@ -653,8 +664,8 @@ def upload_to_firebase(catalogue, collection_name, source_page_path="", clear_co
             collection_name=collection_name,
             item_index=idx,
             source_page_path=source_page_path,
-            source_batch=os.path.basename(os.path.dirname(source_page_path)) if source_page_path else "",
-            ingestion_mode="independent-page",
+            source_batch=source_batch or (os.path.basename(os.path.dirname(source_page_path)) if source_page_path else ""),
+            ingestion_mode=ingestion_mode,
             gs_url=gs_url,
         )
         item["id"], sequence = _ensure_unique_item_id(collection_name, item, used_ids, sequence)
@@ -718,17 +729,17 @@ def main():
     parser.add_argument(
         "--collection",
         default="coin-catalogue",
-        help="Collection slug for the legacy Firebase-compatible upload path (default: coin-catalogue)",
+        help="Collection slug for the archive record; Firebase Storage media still uses the compatibility bridge (default: coin-catalogue)",
     )
     parser.add_argument(
         "--upload",
         action="store_true",
-        help="Upload catalogue output through the legacy Firebase-compatible bridge after processing",
+        help="Upload Firebase Storage media and legacy compatibility snapshots after processing; metadata remains Supabase-first",
     )
     parser.add_argument(
         "--clear",
         action="store_true",
-        help="Clear existing collection items before uploading (use with --upload)",
+        help="Clear existing legacy collection items before uploading media/snapshots (use with --upload)",
     )
     args = parser.parse_args()
 
@@ -761,6 +772,7 @@ def main():
     print(f"  Output:     {output_dir or 'auto (next to image)'}")
     print(f"  Collection: {args.collection}")
     print(f"  Upload:     {'Yes' if args.upload else 'No'}")
+    print("  Storage:    Supabase metadata + Firebase Storage media")
     print("=" * 60)
     print()
 
@@ -778,7 +790,7 @@ def main():
     # --- Legacy Firebase-compatible upload (deterministic, not agent-driven) ---
     if args.upload:
         print()
-        print("  Uploading through legacy Firebase-compatible bridge...")
+        print("  Uploading Firebase Storage media through the legacy compatibility bridge...")
 
         upload_succeeded = False
         try:

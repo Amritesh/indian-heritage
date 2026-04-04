@@ -8,11 +8,11 @@ import json
 import os
 from pathlib import Path
 
-from crewai.tools import tool
 from google import genai
+from ._tool_compat import tool
 
 
-ANALYSIS_PROMPT = """You are a world-renowned numismatist specializing in Indian coinage,
+BASE_ANALYSIS_PROMPT = """You are a world-renowned numismatist specializing in Indian coinage,
 from ancient punch-marked coins through Mughal, Sultanate, British India, Princely States,
 and modern Republic of India coins.
 
@@ -61,6 +61,32 @@ Return ONLY valid JSON in this exact format:
 }"""
 
 
+def _load_reference_context(reference_context: str | None = None):
+    if reference_context and reference_context.strip():
+        return reference_context.strip()
+
+    reference_path = os.environ.get("AHG_REFERENCE_CONTEXT_FILE", "").strip()
+    if reference_path and os.path.isfile(reference_path):
+        with open(reference_path, "r", encoding="utf-8") as file_obj:
+            return file_obj.read().strip()
+
+    return os.environ.get("AHG_REFERENCE_CONTEXT", "").strip()
+
+
+def _build_analysis_prompt(reference_context: str | None = None):
+    context = _load_reference_context(reference_context)
+    if not context:
+        return BASE_ANALYSIS_PROMPT
+
+    return (
+        f"{BASE_ANALYSIS_PROMPT}\n\n"
+        "Reference archive context:\n"
+        "Use the following collection notes, canonical rulers/mints, and denomination hints as"
+        " supporting evidence when they match the visible coin. Do not force a match if the image disagrees.\n"
+        f"{context}\n"
+    )
+
+
 def _parse_analysis_payload(payload_text: str):
     try:
         return json.loads(payload_text)
@@ -91,7 +117,7 @@ def analyze_coin(image_path: str) -> str:
             {
                 "role": "user",
                 "parts": [
-                    {"text": ANALYSIS_PROMPT},
+                    {"text": _build_analysis_prompt()},
                     {"inline_data": {"mime_type": mime, "data": base64.b64encode(image_bytes).decode("utf-8")}},
                 ],
             }
@@ -109,3 +135,42 @@ def analyze_coin(image_path: str) -> str:
     analysis["image_path"] = image_path
 
     return json.dumps(analysis, indent=2)
+
+
+def analyze_coin_image(image_path: str, reference_context: str | None = None):
+    """Reference-aware helper for ingest scripts and future upload APIs."""
+    image_path = image_path.strip().strip("'\"")
+
+    if not os.path.isfile(image_path):
+        raise FileNotFoundError(f"Image file not found: {image_path}")
+
+    with open(image_path, "rb") as file_obj:
+        image_bytes = file_obj.read()
+
+    ext = Path(image_path).suffix.lower()
+    mime = "image/png" if ext == ".png" else "image/jpeg"
+
+    client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+    response = client.models.generate_content(
+        model="gemini-flash-latest",
+        contents=[
+            {
+                "role": "user",
+                "parts": [
+                    {"text": _build_analysis_prompt(reference_context)},
+                    {"inline_data": {"mime_type": mime, "data": base64.b64encode(image_bytes).decode("utf-8")}},
+                ],
+            }
+        ],
+        config={
+            "response_mime_type": "application/json",
+        },
+    )
+
+    analysis = _parse_analysis_payload(response.text)
+    if isinstance(analysis, list):
+        analysis = next((item for item in analysis if isinstance(item, dict)), {})
+    if not isinstance(analysis, dict):
+        analysis = {"notes": f"Unexpected analyzer output: {analysis}", "confidence": "Low"}
+    analysis["image_path"] = image_path
+    return analysis

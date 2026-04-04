@@ -5,8 +5,11 @@ import { fileURLToPath } from 'node:url';
 import admin from 'firebase-admin';
 import { collectionRegistry } from '../src/shared/config/collections';
 import { loadWorkspaceEnv } from './lib/loadEnv';
+import { titleizeSlug } from './lib/archiveSnapshot';
 
-const TARGET_SLUGS = ['mughals', 'british', 'princely-states', 'sultanate'] as const;
+const TARGET_SLUGS = collectionRegistry
+  .filter((entry) => entry.enabled)
+  .map((entry) => entry.slug);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -111,9 +114,6 @@ function writeSnapshotFile(slug: string, snapshot: FirebaseArchiveSnapshot) {
 
 async function fetchCollectionSnapshot(firestore: ReturnType<typeof admin.firestore>, slug: string) {
   const registryEntry = collectionRegistry.find((entry) => entry.slug === slug);
-  if (!registryEntry) {
-    throw new Error(`Collection "${slug}" is not registered.`);
-  }
 
   const bySlug = await firestore.collection('collections').where('slug', '==', slug).limit(1).get();
   const byId = bySlug.empty ? await firestore.collection('collections').doc(slug).get() : null;
@@ -137,9 +137,9 @@ async function fetchCollectionSnapshot(firestore: ReturnType<typeof admin.firest
   const collection = serializeValue({
     ...data,
     slug,
-    id: String(data.id ?? registryEntry.id ?? slug),
-    name: String(data.name ?? registryEntry.name),
-    displayName: String(data.displayName ?? data.name ?? registryEntry.name),
+    id: String(data.id ?? registryEntry?.id ?? slug),
+    name: String(data.name ?? data.title ?? registryEntry?.name ?? titleizeSlug(slug)),
+    displayName: String(data.displayName ?? data.name ?? data.title ?? registryEntry?.name ?? titleizeSlug(slug)),
   }) as Record<string, SerializableValue>;
 
   const publishedItems = items.filter((item) => Boolean(item.published)).length;

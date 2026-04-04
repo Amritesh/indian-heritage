@@ -220,7 +220,7 @@ def process_page_job(*, job, collection_name, args, first_upload):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Batch ingest independent-page coin folders into the Supabase-first archive pipeline"
+        description="Batch ingest independent-page coin folders into the Supabase-first archive pipeline, with Firebase Storage media compatibility when needed"
     )
     parser.add_argument(
         "--images-root",
@@ -240,12 +240,12 @@ def main():
     parser.add_argument(
         "--upload",
         action="store_true",
-        help="Upload the resulting catalogue entries through the legacy Firebase-compatible bridge",
+        help="Upload Firebase Storage media and legacy compatibility snapshots; metadata remains Supabase-first",
     )
     parser.add_argument(
         "--clear-first",
         action="store_true",
-        help="Clear the collection before the first upload only",
+        help="Clear the collection before the first Firebase Storage upload only",
     )
     args = parser.parse_args()
 

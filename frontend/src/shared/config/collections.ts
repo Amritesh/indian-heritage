@@ -61,6 +61,38 @@ export const collectionRegistry: CollectionRegistryEntry[] = [
     culture: 'Princely States of India',
     periodLabel: 'c. 1700s to early 1900s',
   },
+  {
+    id: 'sultanate',
+    slug: 'sultanate',
+    name: 'Sultanate',
+    description:
+      'Front-view coin issues from the Delhi Sultanate and related successor states with normalized rulers, denominations, and mint metadata.',
+    longDescription:
+      'A structured survey of Sultanate coinage spanning Delhi, Bengal, Bahmani, and related traditions, prepared for collector-friendly sorting, tagging, and archival comparison.',
+    sourceUrl:
+      'https://us-central1-indian-heritage-gallery.cloudfunctions.net/app/api/items/sultanate',
+    order: 4,
+    enabled: true,
+    heroEyebrow: 'Sultanate Coinage',
+    culture: 'Delhi Sultanate',
+    periodLabel: 'c. 1193 to 1545',
+  },
+  {
+    id: 'indian-foreign-rulers-1-1',
+    slug: 'indian-foreign-rulers',
+    name: 'Indian Foreign Rulers',
+    description:
+      'Portuguese, Danish, Dutch, French, and related foreign-ruled Indian coinage with annotated reference pages.',
+    longDescription:
+      'A structured archive of foreign-ruler coinage from India, including Portuguese India, Danish India, Dutch VOC, and Indo-French issues, normalized for archive browsing, paired-page ingest, and future comparison.',
+    sourceUrl:
+      'https://us-central1-indian-heritage-gallery.cloudfunctions.net/app/api/items/indian-foreign-rulers',
+    order: 5,
+    enabled: true,
+    heroEyebrow: 'European Colonial India',
+    culture: 'Foreign Rulers in India',
+    periodLabel: 'c. 1498 to 1961',
+  },
 ];
 
 export function getCollectionRegistryEntry(slug: string) {
