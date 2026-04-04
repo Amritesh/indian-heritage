@@ -3,6 +3,8 @@ Legacy CrewAI tool that uploads coin catalogue data and images to Firebase.
 
 AHG now treats Supabase as the source of truth for metadata/search and keeps
 Firebase primarily for media storage plus transitional compatibility payloads.
+This bridge should be treated as media-centric, not as the canonical archive
+writer.
 """
 
 import json
@@ -11,7 +13,7 @@ import uuid
 from datetime import datetime, timezone
 
 import firebase_admin
-from crewai.tools import tool
+from ._tool_compat import tool
 from firebase_admin import credentials, db, storage
 
 

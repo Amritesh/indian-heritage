@@ -10,7 +10,7 @@ import re
 import subprocess
 import sys
 
-from crewai.tools import tool
+from ._tool_compat import tool
 
 
 def _project_root() -> str:

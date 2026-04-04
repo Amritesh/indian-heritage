@@ -7,6 +7,9 @@ Collection syncing is handled deterministically by the import/repair scripts and
 the post-run upload flow in ``main.py``. Keeping sync out of the Crew avoids a
 race where the agent tries to update collection stats before the local data file
 exists for a new collection bootstrap.
+
+Supabase is the metadata source of truth. Firebase Storage is used for media
+assets and transitional compatibility payloads only.
 """
 
 import json
@@ -33,11 +36,15 @@ def _build_catalogue_task_description(search_enabled: bool):
             "2. Use the SerperDevTool to search the web for additional details about the "
             "identified coin (e.g., search for 'Mughal Emperor Akbar silver rupee Agra mint "
             "value' or similar queries based on what you see).\n"
-            "3. Cross-reference the visual analysis with web search results to produce the "
-            "most accurate identification possible.\n"
+            "3. Cross-reference the visual analysis with web search results and the archive "
+            "reference context from the source page, legends, mint marks, denomination, and "
+            "collection context to produce the most accurate identification possible.\n"
             "4. Compile a complete catalogue entry for each coin.\n"
             "5. Keep the output consistent with the Supabase-backed archive pipeline: "
             "metadata is canonicalized into Supabase, while source images remain in Firebase Storage.\n\n"
+            "6. If an item looks like a later user-uploaded photograph, dealer listing, mixed lot, "
+            "or other non-archive source, say so explicitly in the notes and lower confidence "
+            "instead of guessing.\n\n"
             "Process EVERY coin image. Do not skip any.\n\n"
             "Your final output must be a valid JSON array where each element has these fields:\n"
             "- image_path, ruler_or_issuer, year_or_period, mint_or_place, denomination,\n"
@@ -49,10 +56,14 @@ def _build_catalogue_task_description(search_enabled: bool):
         "For each cropped coin image from the segmentation step:\n\n"
         "1. Use the analyze_coin tool to get an initial visual identification.\n"
         "2. Refine that identification from the visible legends, symbols, denomination, "
-        "and historical context in the image itself.\n"
+        "historical context in the image itself, and the archive reference context that "
+        "comes from the source page or collection batch.\n"
         "3. Compile a complete catalogue entry for each coin.\n"
         "4. Keep the output consistent with the Supabase-backed archive pipeline: "
         "metadata is canonicalized into Supabase, while source images remain in Firebase Storage.\n\n"
+        "5. If an item looks like a later user-uploaded photograph, dealer listing, mixed lot, "
+        "or other non-archive source, say so explicitly in the notes and lower confidence "
+        "instead of guessing.\n\n"
         "Process EVERY coin image. Do not skip any.\n\n"
         "Your final output must be a valid JSON array where each element has these fields:\n"
         "- image_path, ruler_or_issuer, year_or_period, mint_or_place, denomination,\n"
@@ -113,7 +124,9 @@ def create_crew(image_path: str, output_dir: str, collection_name: str = "coin-c
             "You are equally versed in Sultanate, Mughal, Maratha, British India, and Princely "
             "States coinages. You can identify coins by their legends (Devanagari, Persian, "
             "English), portraits, symbols, and mint marks. You also know current market values "
-            "and have access to online numismatic databases for cross-referencing."
+            "and have access to online numismatic databases for cross-referencing. You work from "
+            "archive reference context, so be careful to distinguish true archival source material "
+            "from later user-uploaded images, dealer photos, or mixed lots."
         ),
         tools=[tool for tool in [analyze_tool, search_tool] if tool is not None],
         llm=gemini_llm,

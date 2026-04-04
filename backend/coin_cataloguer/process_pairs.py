@@ -17,19 +17,24 @@ from dotenv import load_dotenv
 from PIL import Image
 
 from .main import upload_to_firebase
-from .tools.coin_analyzer import analyze_coin
+from .tools.coin_analyzer import analyze_coin_image
 from .tools.image_segmenter import create_tool as create_segment_tool
 
 
-def _parse_pairs(raw_pairs: str) -> List[Tuple[int, int]]:
+def _parse_pairs(raw_pairs: str) -> List[Tuple[int, int | None]]:
     pairs = []
     for chunk in [part.strip() for part in raw_pairs.split(",") if part.strip()]:
+        if ":" not in chunk:
+            pairs.append((int(chunk), None))
+            continue
         left, right = chunk.split(":", 1)
         pairs.append((int(left), int(right)))
     return pairs
 
 
-def _pair_output_dir(base_dir: str, front_page: int, back_page: int) -> str:
+def _pair_output_dir(base_dir: str, front_page: int, back_page: int | None) -> str:
+    if back_page is None:
+        return os.path.join(base_dir, "paired_output", f"page-{front_page}")
     return os.path.join(base_dir, "paired_output", f"page-{front_page:02d}-{back_page:02d}")
 
 
@@ -122,7 +127,7 @@ def _analyze_paired_coins(front_page_path: str, back_page_path: str, base_output
             combined_path = os.path.join(combined_dir, f"coin_{global_idx}.png")
             _stitch_pair(front_coin["path"], back_coin["path"], combined_path)
 
-            analysis = json.loads(analyze_coin.run(combined_path))
+            analysis = analyze_coin_image(combined_path, reference_context=_load_reference_context(base_output_dir))
             analysis["source_pages"] = [front_num, back_num]
             analysis["source_images"] = {
                 "obverse_page": front_page_path,
@@ -137,6 +142,47 @@ def _analyze_paired_coins(front_page_path: str, back_page_path: str, base_output
         json.dump(results, f, indent=2, ensure_ascii=False)
 
     return results
+
+
+def _analyze_single_page_coins(page_path: str, base_output_dir: str):
+    page_num = int(os.path.splitext(os.path.basename(page_path))[0].split("-")[-1])
+    pair_dir = _pair_output_dir(base_output_dir, page_num, None)
+    os.makedirs(pair_dir, exist_ok=True)
+
+    page_dir = os.path.join(pair_dir, "page")
+    coins = _load_segmented_page(page_path, page_dir)
+    if not coins:
+        return []
+
+    reference_context = _load_reference_context(base_output_dir)
+    results = []
+    for idx, coin in enumerate(sorted(coins, key=lambda item: item["bbox"]["x"]), start=1):
+        analysis = analyze_coin_image(coin["path"], reference_context=reference_context)
+        analysis["source_pages"] = [page_num]
+        analysis["source_images"] = {
+            "page": page_path,
+            "crop": coin["path"],
+        }
+        analysis["pairing_mode"] = "single-page"
+        analysis["image_path"] = coin["path"]
+        results.append(analysis)
+
+    with open(os.path.join(pair_dir, "catalogue.json"), "w", encoding="utf-8") as f:
+        json.dump(results, f, indent=2, ensure_ascii=False)
+
+    return results
+
+
+def _load_reference_context(base_dir: str):
+    candidates = [
+        os.path.join(base_dir, "reference-context.md"),
+        os.path.join(base_dir, "reference-context.txt"),
+    ]
+    for candidate in candidates:
+        if os.path.isfile(candidate):
+            with open(candidate, "r", encoding="utf-8") as file_obj:
+                return file_obj.read().strip()
+    return ""
 
 
 def main():
@@ -162,10 +208,33 @@ def main():
     first_upload = True
     for front_page, back_page in page_pairs:
         front_page_path = os.path.join(base_dir, f"page-{front_page}.png")
-        back_page_path = os.path.join(base_dir, f"page-{back_page}.png")
 
         if not os.path.isfile(front_page_path):
             raise SystemExit(f"Error: Image not found: {front_page_path}")
+        if back_page is None:
+            print("=" * 60)
+            print(f"  PROCESSING SINGLE PAGE: page-{front_page}")
+            print("=" * 60)
+            pair_results = _analyze_single_page_coins(front_page_path, base_dir)
+            print(f"  Single-page coins analyzed: {len(pair_results)}")
+            all_results.extend(pair_results)
+
+            if args.upload and pair_results:
+                upload_result = upload_to_firebase(
+                    pair_results,
+                    args.collection,
+                    source_page_path=f"page-{front_page}.png",
+                    clear_collection=(args.clear and first_upload),
+                    source_batch=os.path.basename(base_dir),
+                    ingestion_mode="single-page",
+                )
+                first_upload = False
+                if upload_result:
+                    print(f"  Uploaded {upload_result['items_uploaded']} items")
+                    print(f"  Collection total: {upload_result['items_total']}")
+            continue
+
+        back_page_path = os.path.join(base_dir, f"page-{back_page}.png")
         if not os.path.isfile(back_page_path):
             raise SystemExit(f"Error: Image not found: {back_page_path}")
 
@@ -184,6 +253,8 @@ def main():
                 args.collection,
                 source_page_path=f"page-{front_page}-{back_page}.png",
                 clear_collection=(args.clear and first_upload),
+                source_batch=os.path.basename(base_dir),
+                ingestion_mode="paired-pages",
             )
             first_upload = False
             if upload_result:

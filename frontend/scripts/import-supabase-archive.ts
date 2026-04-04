@@ -3,7 +3,8 @@ import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import { loadWorkspaceEnv } from './lib/loadEnv';
-import { buildCanonicalTags, canonicalizeAuthority, canonicalizeMint, canonicalizeRulerOrIssuer, slugifyTag } from '../src/shared/lib/catalogNormalization';
+import { normalizePairedOutputCatalogue } from './lib/archiveSnapshot';
+import { buildCanonicalTags, canonicalizeAuthority, canonicalizeLocalAuthority, canonicalizeMint, canonicalizeRulerOrIssuer, slugifyTag } from '../src/shared/lib/catalogNormalization';
 import { buildItemSimilarityRelations } from '../src/shared/lib/archiveRelations';
 import { parseGsUrl } from '../src/shared/lib/storage';
 import { deriveYearRange } from '../src/backend-support/mappers/normalizeItem';
@@ -88,7 +89,7 @@ type SnapshotItem = {
 
 type FirebaseArchiveSnapshot = {
   exportedAt: string;
-  source: 'firebase-firestore';
+  source: 'firebase-firestore' | 'paired-output';
   collection: {
     id?: string;
     slug: string;
@@ -392,8 +393,24 @@ function parseSnapshotItem(value: unknown): SnapshotItem {
   };
 }
 
-function readSnapshotFile(filePath: string): FirebaseArchiveSnapshot {
-  const parsed = JSON.parse(fs.readFileSync(filePath, 'utf8')) as FirebaseArchiveSnapshot;
+function isFirebaseArchiveSnapshot(value: unknown): value is FirebaseArchiveSnapshot {
+  return value !== null
+    && typeof value === 'object'
+    && !Array.isArray(value)
+    && 'collection' in value
+    && typeof (value as { collection?: { slug?: unknown } }).collection?.slug === 'string'
+    && Array.isArray((value as { items?: unknown[] }).items);
+}
+
+function readSnapshotFile(filePath: string, collectionSlug?: string): FirebaseArchiveSnapshot {
+  const parsed = JSON.parse(fs.readFileSync(filePath, 'utf8')) as unknown;
+  if (!isFirebaseArchiveSnapshot(parsed)) {
+    return normalizePairedOutputCatalogue(parsed, {
+      collectionSlug,
+      sourcePath: filePath,
+    });
+  }
+
   return {
     ...parsed,
     items: Array.isArray(parsed.items) ? parsed.items.map(parseSnapshotItem) : [],
@@ -461,7 +478,7 @@ function buildCollectionRow(snapshot: FirebaseArchiveSnapshot): CollectionRow {
 }
 
 function buildConceptIdentity(snapshot: FirebaseArchiveSnapshot, item: SnapshotItem) {
-  const authority = canonicalizeAuthority(snapshot.collection.culture || item.culture || '') || 'unknown-authority';
+  const authority = canonicalizeLocalAuthority(item.metadata?.rulerOrIssuer || '') || canonicalizeAuthority(snapshot.collection.culture || item.culture || '') || 'unknown-authority';
   const issuer = canonicalizeRulerOrIssuer(item.metadata?.rulerOrIssuer || '') || 'unknown-issuer';
   const mint = canonicalizeMint(item.metadata?.mintOrPlace || item.location || '') || 'unknown-mint';
   const denomination = asString(item.metadata?.denomination || 'unknown-denomination');
@@ -648,12 +665,14 @@ function buildEntityRow(entityType: string, label: string): EntityRow {
 }
 
 function buildEntityCandidates(snapshot: FirebaseArchiveSnapshot, item: SnapshotItem) {
-  const authority = canonicalizeAuthority(snapshot.collection.culture ?? item.culture ?? '');
+  const collectionAuthority = canonicalizeAuthority(snapshot.collection.culture ?? item.culture ?? '');
+  const localAuthority = canonicalizeLocalAuthority(item.metadata?.rulerOrIssuer ?? '');
   const issuer = canonicalizeRulerOrIssuer(item.metadata?.rulerOrIssuer ?? '');
   const mint = canonicalizeMint(item.metadata?.mintOrPlace ?? item.location ?? '');
 
   return [
-    authority ? { entityType: 'authority', label: authority, relationType: 'issued_under' } : null,
+    collectionAuthority ? { entityType: 'authority', label: collectionAuthority, relationType: 'issued_under' } : null,
+    localAuthority && localAuthority !== collectionAuthority ? { entityType: 'authority', label: localAuthority, relationType: 'issued_under_local' } : null,
     issuer ? { entityType: 'person', label: issuer, relationType: 'issued_by' } : null,
     mint ? { entityType: 'mint', label: mint, relationType: 'minted_at' } : null,
   ]
@@ -965,8 +984,33 @@ async function resolveDomainId() {
   return rows[0]?.id ?? null;
 }
 
-async function importSnapshot(filePath: string) {
-  const snapshot = readSnapshotFile(filePath);
+function parseMainArgs(argv: string[]) {
+  let target: string | undefined;
+  let collectionSlug: string | undefined;
+
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index];
+    if (arg === '--collection') {
+      collectionSlug = argv[index + 1];
+      index += 1;
+      continue;
+    }
+
+    if (arg.startsWith('--collection=')) {
+      collectionSlug = arg.slice('--collection='.length);
+      continue;
+    }
+
+    if (!arg.startsWith('-') && !target) {
+      target = arg;
+    }
+  }
+
+  return { target, collectionSlug };
+}
+
+async function importSnapshot(filePath: string, collectionSlug?: string) {
+  const snapshot = readSnapshotFile(filePath, collectionSlug);
   const payload = buildMigrationPayload(snapshot);
   const domainId = await resolveDomainId();
 
@@ -1236,14 +1280,15 @@ async function importSnapshot(filePath: string) {
 
 async function main() {
   loadWorkspaceEnv(projectRoot);
-  const files = resolveSnapshotInputs(process.argv[2]);
+  const { target, collectionSlug } = parseMainArgs(process.argv.slice(2));
+  const files = resolveSnapshotInputs(target);
   if (files.length === 0) {
     throw new Error(`No Firebase archive snapshots found under ${defaultSnapshotDir}.`);
   }
 
   const summaries = [];
   for (const filePath of files) {
-    summaries.push(await importSnapshot(filePath));
+    summaries.push(await importSnapshot(filePath, collectionSlug));
   }
 
   console.log(JSON.stringify({

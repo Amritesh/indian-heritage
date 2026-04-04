@@ -8,9 +8,9 @@ import json
 import os
 from pathlib import Path
 
-from crewai.tools import tool
 from google import genai
 from PIL import Image
+from ._tool_compat import tool
 
 
 DETECTION_PROMPT = """You are an expert image analyst specializing in numismatic album pages.
