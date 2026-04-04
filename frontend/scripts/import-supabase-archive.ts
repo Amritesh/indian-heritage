@@ -2,7 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
+import { loadWorkspaceEnv } from './lib/loadEnv';
 import { buildCanonicalTags, canonicalizeAuthority, canonicalizeMint, canonicalizeRulerOrIssuer, slugifyTag } from '../src/shared/lib/catalogNormalization';
+import { buildItemSimilarityRelations } from '../src/shared/lib/archiveRelations';
 import { parseGsUrl } from '../src/shared/lib/storage';
 import { deriveYearRange } from '../src/backend-support/mappers/normalizeItem';
 
@@ -235,6 +237,16 @@ type RecordReferenceRow = {
   metadata: Record<string, unknown>;
 };
 
+type RecordRelationRow = {
+  source_kind: string;
+  source_id: string;
+  related_kind: string;
+  related_id: string;
+  relation_type: string;
+  score: number;
+  reason: string;
+};
+
 type NumismaticTypeProfileRow = {
   conceptual_item_id: string;
   object_type: string | null;
@@ -302,28 +314,12 @@ type MigrationPayloadBundle = {
   entities: EntityRow[];
   record_entities: RecordEntityRow[];
   record_references: RecordReferenceRow[];
+  record_relations: RecordRelationRow[];
   numismatic_type_profiles: NumismaticTypeProfileRow[];
   numismatic_item_profiles: NumismaticItemProfileRow[];
   item_private_profiles: PrivateProfileRow[];
   warnings: string[];
 };
-
-function loadLocalEnvFile() {
-  const envPath = path.resolve(projectRoot, 'frontend', '.env');
-  if (!fs.existsSync(envPath)) return;
-
-  for (const line of fs.readFileSync(envPath, 'utf8').split(/\r?\n/)) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-    const separatorIndex = trimmed.indexOf('=');
-    if (separatorIndex === -1) continue;
-    const key = trimmed.slice(0, separatorIndex).trim();
-    const value = trimmed.slice(separatorIndex + 1).trim();
-    if (key && !process.env[key]) {
-      process.env[key] = value;
-    }
-  }
-}
 
 function asString(value: unknown, fallback = '') {
   return value == null ? fallback : String(value);
@@ -591,11 +587,11 @@ function buildMediaRows(snapshot: SnapshotItem, itemCanonicalId: string): MediaA
   const seen = new Set<string>();
 
   return mediaList
-    .map((media, index) => {
+    .flatMap((media, index) => {
       const storagePath = resolveStoragePath(media);
-      if (!storagePath || seen.has(storagePath)) return null;
+      if (!storagePath || seen.has(storagePath)) return [];
       seen.add(storagePath);
-      return {
+      return [{
         target_kind: 'item',
         target_id: itemCanonicalId,
         storage_provider: 'firebase-storage',
@@ -610,9 +606,8 @@ function buildMediaRows(snapshot: SnapshotItem, itemCanonicalId: string): MediaA
         metadata: {
           source: 'firebase-archive',
         },
-      } satisfies MediaAssetRow;
+      } satisfies MediaAssetRow];
     })
-    .filter((row): row is MediaAssetRow => row != null);
 }
 
 function buildTagRows(tags: string[]) {
@@ -628,10 +623,16 @@ function buildTagRows(tags: string[]) {
   } satisfies TagRow));
 }
 
+function isPlaceholderEntityLabel(label: string) {
+  const normalized = slugifyTag(label);
+  return !normalized || ['unknown', 'n-a', 'na', 'unclear', 'unreadable', 'none'].includes(normalized);
+}
+
 function buildEntityRow(entityType: string, label: string): EntityRow {
-  const slug = slugifyTag(label);
+  const baseSlug = slugifyTag(label);
+  const slug = slugifyTag(`${entityType} ${label}`);
   return {
-    canonical_id: `ahg:entity:${entityType}:${slug}`,
+    canonical_id: `ahg:entity:${entityType}:${baseSlug}`,
     entity_type: entityType,
     slug,
     preferred_label: label,
@@ -655,7 +656,9 @@ function buildEntityCandidates(snapshot: FirebaseArchiveSnapshot, item: Snapshot
     authority ? { entityType: 'authority', label: authority, relationType: 'issued_under' } : null,
     issuer ? { entityType: 'person', label: issuer, relationType: 'issued_by' } : null,
     mint ? { entityType: 'mint', label: mint, relationType: 'minted_at' } : null,
-  ].filter((entry): entry is { entityType: string; label: string; relationType: string } => entry != null);
+  ]
+    .filter((entry): entry is { entityType: string; label: string; relationType: string } => entry != null)
+    .filter((entry) => !isPlaceholderEntityLabel(entry.label));
 }
 
 function buildPrivateProfileRow(snapshot: SnapshotItem, itemCanonicalId: string) {
@@ -674,7 +677,7 @@ function buildPrivateProfileRow(snapshot: SnapshotItem, itemCanonicalId: string)
     estimated_value_max: asNullableNumber(privateProfile.estimatedValueMax),
     estimated_value_avg: asNullableNumber(privateProfile.estimatedValueAvg),
     acquisition_source: privateProfile.acquisitionSource ?? null,
-    acquisition_date: privateProfile.acquisitionDate ?? null,
+    acquisition_date: normalizeIsoDate(privateProfile.acquisitionDate),
     internal_notes: privateProfile.internalNotes ?? null,
     private_tags: toArrayOfStrings(privateProfile.privateTags),
     private_attributes: {
@@ -682,6 +685,16 @@ function buildPrivateProfileRow(snapshot: SnapshotItem, itemCanonicalId: string)
       source: 'firebase-archive',
     },
   } satisfies PrivateProfileRow;
+}
+
+function normalizeIsoDate(value: unknown) {
+  const raw = asString(value).trim();
+  if (!raw) return null;
+  const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/;
+  if (isoDatePattern.test(raw)) return raw;
+  const parsed = new Date(raw);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return parsed.toISOString().slice(0, 10);
 }
 
 function buildMigrationPayload(snapshot: FirebaseArchiveSnapshot): MigrationPayloadBundle {
@@ -694,6 +707,7 @@ function buildMigrationPayload(snapshot: FirebaseArchiveSnapshot): MigrationPayl
   const recordTags: RecordTagRow[] = [];
   const recordEntities: RecordEntityRow[] = [];
   const recordReferences: RecordReferenceRow[] = [];
+  const recordRelations: RecordRelationRow[] = [];
   const numismaticTypeProfiles = new Map<string, NumismaticTypeProfileRow>();
   const numismaticItemProfiles: NumismaticItemProfileRow[] = [];
   const privateProfiles: PrivateProfileRow[] = [];
@@ -806,6 +820,30 @@ function buildMigrationPayload(snapshot: FirebaseArchiveSnapshot): MigrationPayl
     }
   });
 
+  buildItemSimilarityRelations(
+    items.map((item) => ({
+      id: item.canonical_id,
+      conceptualItemId: item.conceptual_item_id,
+      collectionId: item.collection_id,
+      title: item.title,
+      rulerOrIssuer: String(item.attributes.rulerOrIssuer ?? ''),
+      mintOrPlace: String(item.attributes.mintOrPlace ?? ''),
+      denomination: String(item.attributes.denomination ?? ''),
+      materials: Array.isArray(item.attributes.materials) ? (item.attributes.materials as string[]) : [],
+      publicTags: Array.isArray(item.attributes.publicTags) ? (item.attributes.publicTags as string[]) : [],
+    })),
+  ).forEach((relation) => {
+    recordRelations.push({
+      source_kind: 'item',
+      source_id: relation.sourceId,
+      related_kind: 'item',
+      related_id: relation.relatedId,
+      relation_type: relation.relationType,
+      score: relation.score,
+      reason: relation.reason,
+    });
+  });
+
   return {
     collection: collectionRow,
     conceptual_items: Array.from(concepts.values()),
@@ -816,6 +854,7 @@ function buildMigrationPayload(snapshot: FirebaseArchiveSnapshot): MigrationPayl
     entities: Array.from(entities.values()),
     record_entities: recordEntities,
     record_references: recordReferences,
+    record_relations: recordRelations,
     numismatic_type_profiles: Array.from(numismaticTypeProfiles.values()),
     numismatic_item_profiles: numismaticItemProfiles,
     item_private_profiles: privateProfiles,
@@ -873,11 +912,49 @@ async function supabaseRequest<T>(pathName: string, options: { method?: string; 
 
 async function supabaseUpsert<T extends Record<string, unknown>>(table: string, rows: T[], onConflict: string) {
   if (rows.length === 0) return [] as Array<T & { id?: string }>;
-  return supabaseRequest<Array<T & { id?: string }>>(table, {
-    method: 'POST',
-    query: { on_conflict: onConflict },
-    body: rows,
+
+  const chunkSize = 500;
+  const results: Array<T & { id?: string }> = [];
+  for (let index = 0; index < rows.length; index += chunkSize) {
+    const chunk = rows.slice(index, index + chunkSize);
+    const response = await supabaseRequest<Array<T & { id?: string }>>(table, {
+      method: 'POST',
+      query: { on_conflict: onConflict },
+      body: chunk,
+    });
+    results.push(...response);
+  }
+
+  return results;
+}
+
+function dedupeRowsByKey<T>(rows: T[], buildKey: (row: T) => string) {
+  const seen = new Set<string>();
+  const deduped: T[] = [];
+
+  rows.forEach((row) => {
+    const key = buildKey(row);
+    if (!key || seen.has(key)) return;
+    seen.add(key);
+    deduped.push(row);
   });
+
+  return deduped;
+}
+
+async function supabaseDeleteByIds(table: string, idColumn: string, ids: string[], query?: Record<string, string | number | boolean | null | undefined>) {
+  if (ids.length === 0) return;
+
+  const chunkSize = 150;
+  for (let index = 0; index < ids.length; index += chunkSize) {
+    await supabaseRequest(table, {
+      method: 'DELETE',
+      query: {
+        ...(query ?? {}),
+        [idColumn]: `in.(${ids.slice(index, index + chunkSize).join(',')})`,
+      },
+    });
+  }
 }
 
 async function resolveDomainId() {
@@ -912,6 +989,7 @@ async function importSnapshot(filePath: string) {
         entities: payload.entities.length,
         recordEntities: payload.record_entities.length,
         recordReferences: payload.record_references.length,
+        recordRelations: payload.record_relations.length,
         numismaticTypeProfiles: payload.numismatic_type_profiles.length,
         numismaticItemProfiles: payload.numismatic_item_profiles.length,
         itemPrivateProfiles: payload.item_private_profiles.length,
@@ -958,37 +1036,146 @@ async function importSnapshot(filePath: string) {
     'target_kind,target_id,storage_path',
   );
 
+  const mappedRecordTags = dedupeRowsByKey(
+    payload.record_tags
+      .map((row) => {
+        const recordId = itemIdByCanonicalId.get(row.record_id);
+        const tagId = tagIdByCanonicalId.get(row.tag_id);
+        if (!recordId || !tagId) {
+          return null;
+        }
+        return {
+          ...row,
+          record_id: recordId,
+          tag_id: tagId,
+        };
+      })
+      .filter((row): row is {
+        record_kind: string;
+        record_id: string;
+        tag_id: string;
+        is_primary: boolean;
+      } => row != null),
+    (row) => `${row.record_kind}:${row.record_id}:${row.tag_id}`,
+  );
+
   const recordTagRows = await supabaseUpsert(
     'record_tags',
-    payload.record_tags.map((row) => ({
-      ...row,
-      record_id: itemIdByCanonicalId.get(row.record_id) ?? row.record_id,
-      tag_id: tagIdByCanonicalId.get(row.tag_id) ?? row.tag_id,
-    })),
+    mappedRecordTags,
     'record_kind,record_id,tag_id',
+  );
+
+  const mappedRecordEntities = dedupeRowsByKey(
+    payload.record_entities
+      .map((row) => {
+        const recordId = row.record_kind === 'conceptual_item'
+          ? conceptualIdByCanonicalId.get(row.record_id)
+          : itemIdByCanonicalId.get(row.record_id);
+        const entityId = entityIdByCanonicalId.get(row.entity_id);
+        if (!recordId || !entityId) {
+          return null;
+        }
+        return {
+          ...row,
+          record_id: recordId,
+          entity_id: entityId,
+        };
+      })
+      .filter((row): row is {
+        record_kind: string;
+        record_id: string;
+        entity_id: string;
+        relation_type: string;
+        is_primary: boolean;
+        confidence: number | null;
+        source: string;
+      } => row != null),
+    (row) => `${row.record_kind}:${row.record_id}:${row.entity_id}:${row.relation_type}`,
   );
 
   const recordEntityRows = await supabaseUpsert(
     'record_entities',
-    payload.record_entities.map((row) => ({
-      ...row,
-      record_id: row.record_kind === 'conceptual_item'
-        ? conceptualIdByCanonicalId.get(row.record_id) ?? row.record_id
-        : itemIdByCanonicalId.get(row.record_id) ?? row.record_id,
-      entity_id: entityIdByCanonicalId.get(row.entity_id) ?? row.entity_id,
-    })),
+    mappedRecordEntities,
     'record_kind,record_id,entity_id,relation_type',
+  );
+
+  const mappedRecordReferences = dedupeRowsByKey(
+    payload.record_references
+      .map((row) => {
+        const recordId = row.record_kind === 'conceptual_item'
+          ? conceptualIdByCanonicalId.get(row.record_id)
+          : itemIdByCanonicalId.get(row.record_id);
+        if (!recordId) {
+          return null;
+        }
+        return {
+          ...row,
+          record_id: recordId,
+        };
+      })
+      .filter((row): row is {
+        record_kind: string;
+        record_id: string;
+        reference_type: string;
+        reference_system: string | null;
+        reference_code: string | null;
+        citation_text: string | null;
+        url: string | null;
+        is_primary: boolean;
+        metadata: Record<string, unknown>;
+      } => row != null),
+    (row) => [
+      row.record_kind,
+      row.record_id,
+      row.reference_type,
+      row.reference_system ?? '',
+      row.reference_code ?? '',
+      row.url ?? '',
+    ].join(':'),
+  );
+
+  await supabaseDeleteByIds(
+    'record_references',
+    'record_id',
+    Array.from(new Set(mappedRecordReferences.map((row) => row.record_id))),
+    { record_kind: 'eq.conceptual_item' },
   );
 
   const recordReferenceRows = await supabaseUpsert(
     'record_references',
-    payload.record_references.map((row) => ({
-      ...row,
-      record_id: row.record_kind === 'conceptual_item'
-        ? conceptualIdByCanonicalId.get(row.record_id) ?? row.record_id
-        : itemIdByCanonicalId.get(row.record_id) ?? row.record_id,
-    })),
-    'record_kind,record_id,reference_type,reference_code',
+    mappedRecordReferences,
+    'id',
+  );
+
+  const mappedRecordRelations = dedupeRowsByKey(
+    payload.record_relations
+      .map((row) => {
+        const sourceId = itemIdByCanonicalId.get(row.source_id);
+        const relatedId = itemIdByCanonicalId.get(row.related_id);
+        if (!sourceId || !relatedId || sourceId === relatedId) {
+          return null;
+        }
+        return {
+          ...row,
+          source_id: sourceId,
+          related_id: relatedId,
+        };
+      })
+      .filter((row): row is RecordRelationRow => row != null),
+    (row) => [row.source_kind, row.source_id, row.related_kind, row.related_id, row.relation_type].join(':'),
+  );
+
+  await supabaseDeleteByIds(
+    'record_relations',
+    'source_id',
+    Array.from(new Set(mappedRecordRelations.map((row) => row.source_id))),
+    { source_kind: 'eq.item' },
+  );
+
+  const recordRelationRows = await supabaseUpsert(
+    'record_relations',
+    mappedRecordRelations,
+    'source_kind,source_id,related_kind,related_id,relation_type',
   );
 
   const numismaticTypeProfileRows = await supabaseUpsert(
@@ -1038,6 +1225,7 @@ async function importSnapshot(filePath: string) {
       entities: entityRows.length,
       recordEntities: recordEntityRows.length,
       recordReferences: recordReferenceRows.length,
+      recordRelations: recordRelationRows.length,
       numismaticTypeProfiles: numismaticTypeProfileRows.length,
       numismaticItemProfiles: numismaticItemProfileRows.length,
       itemPrivateProfiles: privateProfileRows.length,
@@ -1047,7 +1235,7 @@ async function importSnapshot(filePath: string) {
 }
 
 async function main() {
-  loadLocalEnvFile();
+  loadWorkspaceEnv(projectRoot);
   const files = resolveSnapshotInputs(process.argv[2]);
   if (files.length === 0) {
     throw new Error(`No Firebase archive snapshots found under ${defaultSnapshotDir}.`);

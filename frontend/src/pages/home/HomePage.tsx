@@ -1,14 +1,20 @@
 import { useQuery } from '@tanstack/react-query';
 import { collection, getCountFromServer, getDocs, query, where, Query, DocumentData } from 'firebase/firestore';
+import { getArchivePublicStatsFromSupabase, formatArchiveWorth } from '@/entities/archive/api/archiveStatsService';
 import { FeaturedHighlights } from '@/features/home/components/FeaturedHighlights';
 import { HomeSpotlight } from '@/features/home/components/HomeSpotlight';
 import { HeroBanner } from '@/shared/ui/HeroBanner';
-import { formatCurrency } from '@/shared/lib/formatters';
+import { hasSupabaseEnv } from '@/shared/config/supabase';
 import { getFirestoreOrThrow } from '@/shared/services/firestore';
 import { firestore } from '@/shared/config/firebase';
 import { collectionRegistry } from '@/shared/config/collections';
 
 async function getArchiveStats() {
+  if (hasSupabaseEnv) {
+    const supabaseStats = await getArchivePublicStatsFromSupabase();
+    if (supabaseStats) return supabaseStats;
+  }
+
   if (!firestore) {
     // Fallback stats from registry
     return {
@@ -72,7 +78,7 @@ export function HomePage() {
       icon: 'category',
     },
     {
-      value: isLoading ? '…' : (stats?.totalWorth ? formatCurrency(stats.totalWorth) : '—'),
+      value: isLoading ? '…' : formatArchiveWorth(stats?.totalWorth),
       label: 'Est. Worth',
       icon: 'payments',
     },

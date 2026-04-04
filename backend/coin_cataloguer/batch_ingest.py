@@ -201,7 +201,7 @@ def process_page_job(*, job, collection_name, args, first_upload):
                 clear_collection=(args.clear_first and first_upload),
             )
             if upload_result is None:
-                raise RuntimeError("Upload to Firebase returned None.")
+                raise RuntimeError("Legacy Firebase-compatible upload returned None.")
             first_upload = False
 
         page_record["status"] = "completed"
@@ -219,7 +219,9 @@ def process_page_job(*, job, collection_name, args, first_upload):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Batch ingest independent-page coin folders")
+    parser = argparse.ArgumentParser(
+        description="Batch ingest independent-page coin folders into the Supabase-first archive pipeline"
+    )
     parser.add_argument(
         "--images-root",
         required=True,
@@ -238,7 +240,7 @@ def main():
     parser.add_argument(
         "--upload",
         action="store_true",
-        help="Upload the resulting catalogue entries to Firebase",
+        help="Upload the resulting catalogue entries through the legacy Firebase-compatible bridge",
     )
     parser.add_argument(
         "--clear-first",

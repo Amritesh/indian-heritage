@@ -10,12 +10,18 @@ import {
   Query,
   DocumentData,
 } from 'firebase/firestore';
+import { getArchiveAdminStatsFromSupabase, formatArchiveWorth } from '@/entities/archive/api/archiveStatsService';
 import { getFirestoreOrThrow } from '@/shared/services/firestore';
+import { hasSupabaseEnv } from '@/shared/config/supabase';
 import { useAuth } from '@/features/auth/context/AuthContext';
-import { formatCurrency } from '@/shared/lib/formatters';
 import { getLatestIngestRun } from '@/entities/ingest/api/ingestProgressService';
 
 async function getDashboardStats() {
+  if (hasSupabaseEnv) {
+    const supabaseStats = await getArchiveAdminStatsFromSupabase();
+    if (supabaseStats) return supabaseStats;
+  }
+
   const db = getFirestoreOrThrow();
 
   const publishedQuery: Query<DocumentData> = query(
@@ -83,7 +89,7 @@ export function AdminDashboardPage() {
     },
     {
       label: 'Est. Archive Worth',
-      value: data?.totalWorth != null ? formatCurrency(data.totalWorth) : undefined,
+      value: formatArchiveWorth(data?.totalWorth),
       isText: true,
       icon: 'payments',
       color: 'text-primary',

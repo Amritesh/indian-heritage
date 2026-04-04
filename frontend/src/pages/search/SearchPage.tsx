@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { searchItems } from '@/entities/item/api/itemService';
+import { ItemSort } from '@/entities/item/model/types';
 import { SearchResults } from '@/features/search/components/SearchResults';
 import { useDebouncedValue } from '@/shared/hooks/useDebouncedValue';
 import { queryKeys } from '@/shared/lib/queryKeys';
@@ -13,21 +14,39 @@ export function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const paramTerm = searchParams.get('q') ?? '';
   const paramTag = searchParams.get('tag') ?? '';
+  const paramSort = (searchParams.get('sort') as ItemSort | null) ?? 'featured';
   const [term, setTerm] = useState('');
   const [tag, setTag] = useState('');
+  const [sort, setSort] = useState<ItemSort>('featured');
   const debouncedTerm = useDebouncedValue(term, 300);
   const shouldSearch = debouncedTerm.trim().length >= 2 || tag.trim().length > 0;
 
   useEffect(() => {
     setTerm(paramTerm);
     setTag(paramTag);
-  }, [paramTerm, paramTag]);
+    setSort(paramSort);
+  }, [paramTerm, paramTag, paramSort]);
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: queryKeys.search(debouncedTerm, undefined, tag),
-    queryFn: () => searchItems(debouncedTerm, undefined, tag),
+    queryKey: queryKeys.search(debouncedTerm, undefined, tag, sort),
+    queryFn: () => searchItems(debouncedTerm, undefined, tag, sort),
     enabled: shouldSearch,
   });
+
+  const updateSearchParams = (next: { q?: string; tag?: string; sort?: ItemSort }) => {
+    const nextParams = new URLSearchParams(searchParams);
+    const nextTerm = next.q ?? term;
+    const nextTag = next.tag ?? tag;
+    const nextSort = next.sort ?? sort;
+
+    if (nextTerm) nextParams.set('q', nextTerm);
+    else nextParams.delete('q');
+    if (nextTag) nextParams.set('tag', nextTag);
+    else nextParams.delete('tag');
+    if (nextSort && nextSort !== 'featured') nextParams.set('sort', nextSort);
+    else nextParams.delete('sort');
+    setSearchParams(nextParams);
+  };
 
   return (
     <div className="page-shell">
@@ -51,16 +70,29 @@ export function SearchPage() {
               onChange={(e) => {
                 const next = e.target.value;
                 setTerm(next);
-                const nextParams = new URLSearchParams(searchParams);
-                if (next) nextParams.set('q', next);
-                else nextParams.delete('q');
-                if (tag) nextParams.set('tag', tag);
-                else nextParams.delete('tag');
-                setSearchParams(nextParams);
+                updateSearchParams({ q: next });
               }}
               placeholder="Search by Era, Ruler, or Mint..."
               type="search"
             />
+            <select
+              className="mr-3 rounded-lg border border-outline-variant/20 bg-surface px-3 py-2 text-sm text-on-surface"
+              value={sort}
+              onChange={(event) => {
+                const nextSort = event.target.value as ItemSort;
+                setSort(nextSort);
+                updateSearchParams({ sort: nextSort });
+              }}
+            >
+              <option value="featured">Best match</option>
+              <option value="title">Title</option>
+              <option value="recent">Recently added</option>
+              <option value="year_asc">Year: oldest first</option>
+              <option value="year_desc">Year: newest first</option>
+              <option value="price_desc">Estimated price: high to low</option>
+              <option value="price_asc">Estimated price: low to high</option>
+              <option value="denomination_asc">Denomination</option>
+            </select>
             <span className="hidden md:inline text-xs font-label text-outline uppercase tracking-widest mr-4">
               Cmd + K
             </span>
@@ -83,9 +115,7 @@ export function SearchPage() {
             className="archival-chip"
             onClick={() => {
               setTag('');
-              const nextParams = new URLSearchParams(searchParams);
-              nextParams.delete('tag');
-              setSearchParams(nextParams);
+              updateSearchParams({ tag: '' });
             }}
           >
             {tag}
@@ -103,6 +133,9 @@ export function SearchPage() {
               <h2 className="font-headline text-xl font-semibold text-on-surface">
                 {data.length} result{data.length !== 1 ? 's' : ''} found
               </h2>
+              <span className="text-xs uppercase tracking-wider text-outline">
+                Sorted by {sort === 'featured' ? 'best match' : sort.replace('_', ' ')}
+              </span>
             </div>
           )}
           <SearchResults items={data} term={debouncedTerm} tag={tag} />

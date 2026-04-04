@@ -2,7 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
+import { loadWorkspaceEnv } from './lib/loadEnv';
 import { buildCanonicalTags, canonicalizeAuthority, canonicalizeMint, canonicalizeRulerOrIssuer, slugifyTag } from '../src/shared/lib/catalogNormalization';
+import { deriveYearRange } from '../src/backend-support/mappers/normalizeItem';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,6 +21,8 @@ type FirebaseArchiveSnapshot = {
   };
   items: Array<{
     id: string;
+    period?: string;
+    dateText?: string;
     culture?: string;
     location?: string;
     materials?: string[];
@@ -46,22 +50,6 @@ type CountMismatch = {
   firebase: number;
   supabase: number;
 };
-
-function loadLocalEnvFile() {
-  const envPath = path.resolve(projectRoot, 'frontend', '.env');
-  if (!fs.existsSync(envPath)) return;
-  for (const line of fs.readFileSync(envPath, 'utf8').split(/\r?\n/)) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-    const separatorIndex = trimmed.indexOf('=');
-    if (separatorIndex === -1) continue;
-    const key = trimmed.slice(0, separatorIndex).trim();
-    const value = trimmed.slice(separatorIndex + 1).trim();
-    if (key && !process.env[key]) {
-      process.env[key] = value;
-    }
-  }
-}
 
 function resolveSnapshotFiles(target?: string) {
   if (!target) {
@@ -103,33 +91,48 @@ function buildPublicTags(snapshot: FirebaseArchiveSnapshot, item: FirebaseArchiv
   ]);
 }
 
-function buildEntityKeys(snapshot: FirebaseArchiveSnapshot, item: FirebaseArchiveSnapshot['items'][number]) {
-  return uniqueStrings([
-    canonicalizeAuthority(snapshot.collection.culture ?? item.culture),
-    canonicalizeRulerOrIssuer(item.metadata?.rulerOrIssuer),
-    canonicalizeMint(item.metadata?.mintOrPlace ?? item.location),
-  ]);
+function buildConceptCanonicalId(snapshot: FirebaseArchiveSnapshot, item: FirebaseArchiveSnapshot['items'][number]) {
+  const authority = canonicalizeAuthority(snapshot.collection.culture || item.culture || '') || 'unknown-authority';
+  const issuer = canonicalizeRulerOrIssuer(item.metadata?.rulerOrIssuer || '') || 'unknown-issuer';
+  const mint = canonicalizeMint(item.metadata?.mintOrPlace || item.location || '') || 'unknown-mint';
+  const denomination = String(item.metadata?.denomination || 'unknown-denomination');
+  const { sortYearStart, sortYearEnd } = deriveYearRange(item.dateText || item.period || '');
+  const conceptSlug = slugifyTag([authority, issuer, denomination, mint, sortYearStart || '', sortYearEnd || ''].filter(Boolean).join(' '));
+  return `ahg:type:coin:${snapshot.collection.slug}:${conceptSlug}`;
+}
+
+function isPlaceholderEntityLabel(label: string | null | undefined) {
+  const normalized = slugifyTag(label ?? '');
+  return !normalized || ['unknown', 'n-a', 'na', 'unclear', 'unreadable', 'none'].includes(normalized);
+}
+
+function buildEntityCandidates(snapshot: FirebaseArchiveSnapshot, item: FirebaseArchiveSnapshot['items'][number]) {
+  const authority = canonicalizeAuthority(snapshot.collection.culture ?? item.culture ?? '');
+  const issuer = canonicalizeRulerOrIssuer(item.metadata?.rulerOrIssuer ?? '');
+  const mint = canonicalizeMint(item.metadata?.mintOrPlace ?? item.location ?? '');
+
+  return [
+    authority ? { entityType: 'authority', label: authority, relationType: 'issued_under' } : null,
+    issuer ? { entityType: 'person', label: issuer, relationType: 'issued_by' } : null,
+    mint ? { entityType: 'mint', label: mint, relationType: 'minted_at' } : null,
+  ]
+    .filter((entry): entry is { entityType: string; label: string; relationType: string } => entry != null)
+    .filter((entry) => !isPlaceholderEntityLabel(entry.label));
 }
 
 function countFirebaseSnapshot(snapshot: FirebaseArchiveSnapshot): CountSnapshot {
   const conceptuals = new Set<string>();
   const tags = new Set<string>();
   const entities = new Set<string>();
+  const recordTags = new Set<string>();
+  const recordEntities = new Set<string>();
+  const references = new Set<string>();
   let mediaAssets = 0;
-  let recordTags = 0;
-  let recordEntities = 0;
-  let references = 0;
   let privateProfiles = 0;
 
   snapshot.items.forEach((item) => {
-    conceptuals.add(
-      slugifyTag([
-        canonicalizeAuthority(snapshot.collection.culture ?? item.culture ?? '') || 'unknown-authority',
-        canonicalizeRulerOrIssuer(item.metadata?.rulerOrIssuer ?? '') || 'unknown-issuer',
-        item.metadata?.denomination ?? 'unknown-denomination',
-        canonicalizeMint(item.metadata?.mintOrPlace ?? item.location ?? '') || 'unknown-mint',
-      ].join(' ')),
-    );
+    const conceptCanonicalId = buildConceptCanonicalId(snapshot, item);
+    conceptuals.add(conceptCanonicalId);
 
     const mediaSet = new Set<string>();
     if (item.primaryMedia?.storagePath || item.primaryMedia?.gsUrl) {
@@ -143,15 +146,20 @@ function countFirebaseSnapshot(snapshot: FirebaseArchiveSnapshot): CountSnapshot
     mediaAssets += mediaSet.size;
 
     const publicTags = buildPublicTags(snapshot, item);
-    publicTags.forEach((tag) => tags.add(`ahg:tag:${slugifyTag(tag)}`));
-    recordTags += publicTags.length;
+    publicTags.forEach((tag) => {
+      const tagCanonicalId = `ahg:tag:${slugifyTag(tag)}`;
+      tags.add(tagCanonicalId);
+      recordTags.add(`item:${item.id}:${tagCanonicalId}`);
+    });
 
-    const entityKeys = buildEntityKeys(snapshot, item);
-    entityKeys.forEach((key) => entities.add(key));
-    recordEntities += entityKeys.length;
+    buildEntityCandidates(snapshot, item).forEach((entity) => {
+      const entityCanonicalId = `ahg:entity:${entity.entityType}:${slugifyTag(entity.label)}`;
+      entities.add(entityCanonicalId);
+      recordEntities.add(`conceptual_item:${conceptCanonicalId}:${entityCanonicalId}:${entity.relationType}`);
+    });
 
     if (item.metadata?.seriesOrCatalog) {
-      references += 1;
+      references.add(`conceptual_item:${conceptCanonicalId}:catalogue:legacy:${item.metadata.seriesOrCatalog}`);
     }
 
     if (item.privateProfile && (item.privateProfile.ownerUserId || item.privateProfile.owner_user_id)) {
@@ -165,10 +173,10 @@ function countFirebaseSnapshot(snapshot: FirebaseArchiveSnapshot): CountSnapshot
     items: snapshot.items.length,
     media_assets: mediaAssets,
     tags: tags.size,
-    record_tags: recordTags,
+    record_tags: recordTags.size,
     entities: entities.size,
-    record_entities: recordEntities,
-    record_references: references,
+    record_entities: recordEntities.size,
+    record_references: references.size,
     numismatic_type_profiles: conceptuals.size,
     numismatic_item_profiles: snapshot.items.length,
     item_private_profiles: privateProfiles,
@@ -185,6 +193,9 @@ export function compareCollectionCounts(firebaseCounts: CountMap, supabaseCounts
     const metrics = new Set([...Object.keys(firebase), ...Object.keys(supabase)]);
 
     for (const metric of metrics) {
+      if (collectionSlug !== '__all__' && (metric === 'tags' || metric === 'entities')) {
+        continue;
+      }
       const firebaseValue = Number(firebase[metric] ?? 0);
       const supabaseValue = Number(supabase[metric] ?? 0);
       if (firebaseValue !== supabaseValue) {
@@ -232,6 +243,33 @@ async function supabaseRequest<T>(table: string, query?: Record<string, string |
   return await response.json() as T[];
 }
 
+function chunkValues<T>(values: T[], size = 150) {
+  const chunks: T[][] = [];
+  for (let index = 0; index < values.length; index += size) {
+    chunks.push(values.slice(index, index + size));
+  }
+  return chunks;
+}
+
+async function supabaseRequestByIds<T>(
+  table: string,
+  idColumn: string,
+  ids: string[],
+  query?: Record<string, string | number | boolean | null | undefined>,
+) {
+  if (ids.length === 0) return [] as T[];
+
+  const results: T[] = [];
+  for (const chunk of chunkValues(ids)) {
+    const rows = await supabaseRequest<T>(table, {
+      ...(query ?? {}),
+      [idColumn]: `in.(${chunk.join(',')})`,
+    });
+    results.push(...rows);
+  }
+  return results;
+}
+
 async function countSupabaseCollection(slug: string): Promise<CountSnapshot> {
   const collectionRows = await supabaseRequest<{ id: string }>('collections', {
     select: 'id',
@@ -261,14 +299,12 @@ async function countSupabaseCollection(slug: string): Promise<CountSnapshot> {
     collection_id: `eq.${collectionId}`,
   });
   const conceptualIds = conceptualItems.map((row) => row.id);
-  const conceptualIn = conceptualIds.length ? `in.(${conceptualIds.join(',')})` : null;
 
   const items = await supabaseRequest<{ id: string }>('items', {
     select: 'id',
     collection_id: `eq.${collectionId}`,
   });
   const itemIds = items.map((row) => row.id);
-  const itemIn = itemIds.length ? `in.(${itemIds.join(',')})` : null;
 
   const [
     mediaAssets,
@@ -279,13 +315,13 @@ async function countSupabaseCollection(slug: string): Promise<CountSnapshot> {
     numismaticItemProfiles,
     privateProfiles,
   ] = await Promise.all([
-    itemIn ? supabaseRequest<{ id: string }>('media_assets', { select: 'id', target_kind: 'eq.item', target_id: itemIn }) : Promise.resolve([]),
-    itemIn ? supabaseRequest<{ id: string }>('record_tags', { select: 'id', record_kind: 'eq.item', record_id: itemIn }) : Promise.resolve([]),
-    conceptualIn ? supabaseRequest<{ id: string }>('record_entities', { select: 'id', record_kind: 'eq.conceptual_item', record_id: conceptualIn }) : Promise.resolve([]),
-    conceptualIn ? supabaseRequest<{ id: string }>('record_references', { select: 'id', record_kind: 'eq.conceptual_item', record_id: conceptualIn }) : Promise.resolve([]),
-    conceptualIn ? supabaseRequest<{ conceptual_item_id: string }>('numismatic_type_profiles', { select: 'conceptual_item_id', conceptual_item_id: conceptualIn }) : Promise.resolve([]),
-    itemIn ? supabaseRequest<{ item_id: string }>('numismatic_item_profiles', { select: 'item_id', item_id: itemIn }) : Promise.resolve([]),
-    itemIn ? supabaseRequest<{ id: string }>('item_private_profiles', { select: 'id', item_id: itemIn }) : Promise.resolve([]),
+    supabaseRequestByIds<{ id: string }>('media_assets', 'target_id', itemIds, { select: 'id', target_kind: 'eq.item' }),
+    supabaseRequestByIds<{ id: string }>('record_tags', 'record_id', itemIds, { select: 'id', record_kind: 'eq.item' }),
+    supabaseRequestByIds<{ id: string }>('record_entities', 'record_id', conceptualIds, { select: 'id', record_kind: 'eq.conceptual_item' }),
+    supabaseRequestByIds<{ id: string }>('record_references', 'record_id', conceptualIds, { select: 'id', record_kind: 'eq.conceptual_item' }),
+    supabaseRequestByIds<{ conceptual_item_id: string }>('numismatic_type_profiles', 'conceptual_item_id', conceptualIds, { select: 'conceptual_item_id' }),
+    supabaseRequestByIds<{ item_id: string }>('numismatic_item_profiles', 'item_id', itemIds, { select: 'item_id' }),
+    supabaseRequestByIds<{ id: string }>('item_private_profiles', 'item_id', itemIds, { select: 'id' }),
   ]);
 
   return {
@@ -334,7 +370,7 @@ async function buildFirebaseCounts(snapshotFiles: string[]) {
 
     snapshot.items.forEach((item) => {
       buildPublicTags(snapshot, item).forEach((tag) => globalTags.add(`ahg:tag:${slugifyTag(tag)}`));
-      buildEntityKeys(snapshot, item).forEach((key) => globalEntities.add(key));
+      buildEntityCandidates(snapshot, item).forEach((entity) => globalEntities.add(`ahg:entity:${entity.entityType}:${slugifyTag(entity.label)}`));
     });
   }
 
@@ -389,7 +425,7 @@ async function buildSupabaseCounts(snapshotFiles: string[]) {
 }
 
 async function main() {
-  loadLocalEnvFile();
+  loadWorkspaceEnv(projectRoot);
   const snapshotFiles = resolveSnapshotFiles(process.argv[2]);
   if (snapshotFiles.length === 0) {
     throw new Error(`No Firebase archive snapshots found under ${defaultSnapshotDir}.`);

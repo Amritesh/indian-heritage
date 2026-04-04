@@ -19,6 +19,6 @@ export const queryKeys = {
   item: (itemId: string) => ['item', itemId] as const,
   privateItem: (itemId: string) => ['private-item', itemId] as const,
   relatedItems: (itemId: string) => ['related-items', itemId] as const,
-  search: (term: string, collectionSlug?: string, tag?: string) =>
-    ['search', collectionSlug ?? 'all', term, tag ?? ''] as const,
+  search: (term: string, collectionSlug?: string, tag?: string, sort = 'featured') =>
+    ['search', collectionSlug ?? 'all', term, tag ?? '', sort] as const,
 };
