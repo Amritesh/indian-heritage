@@ -5,6 +5,7 @@ import {
   buildPublicTags,
   canonicalizeAuthority,
   canonicalizeEntityLabel,
+  canonicalizeLocalAuthority,
   canonicalizeMint,
   canonicalizeRuler,
   canonicalizeRulerOrIssuer,
@@ -23,6 +24,8 @@ describe('catalogCanonicalization', () => {
     expect(canonicalizeEntityLabel('Mughal Empire')).toBe('Mughal Empire');
     expect(canonicalizeAuthority('British India')).toBe('British India');
     expect(canonicalizeMint('Bombay Mint')).toBe('Bombay');
+    expect(canonicalizeMint('Azimabad (Patna)')).toBe('Patna');
+    expect(canonicalizeMint('Calcutta (Kolkata), India')).toBe('Calcutta');
   });
 
   it('builds canonical public tags and keeps them deduplicated', () => {
@@ -47,9 +50,16 @@ describe('catalogCanonicalization', () => {
   });
 
   it('prefers the local issuer fragment for composite ruler strings when aliases do not match', () => {
-    expect(canonicalizeRulerOrIssuer('X in the name of Queen Victoria')).toBe('X');
+    expect(canonicalizeRulerOrIssuer('Xyz in the name of Queen Victoria')).toBe('Xyz');
     expect(
       canonicalizeRulerOrIssuer('Ram Singh II (Jaipur State) in the name of Queen Victoria'),
     ).toBe('Ram Singh II');
+  });
+
+  it('derives local authorities without misclassifying them as rulers', () => {
+    expect(canonicalizeRulerOrIssuer('Raja Rajagopala Tondiman / Pudukkottai Princely State')).toBe('Rajagopala Tondiman');
+    expect(canonicalizeLocalAuthority('Raja Rajagopala Tondiman / Pudukkottai Princely State')).toBe('Pudukkottai State');
+    expect(canonicalizeRulerOrIssuer('Sikh Empire (issued in the name of Guru Nanak and Guru Gobind Singh)')).toBe('');
+    expect(canonicalizeLocalAuthority('Sikh Empire (issued in the name of Guru Nanak and Guru Gobind Singh)')).toBe('Sikh Empire');
   });
 });

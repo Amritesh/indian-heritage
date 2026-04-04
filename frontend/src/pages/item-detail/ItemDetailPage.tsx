@@ -1,4 +1,5 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '@/features/auth/context/AuthContext';
 import { useItem } from '@/entities/item/hooks/useItem';
 import { RelatedItems } from '@/features/item-details/components/RelatedItems';
 import { EmptyState } from '@/shared/ui/EmptyState';
@@ -10,6 +11,7 @@ import { MetadataList } from '@/shared/ui/MetadataList';
 export function ItemDetailPage() {
   const { itemId = '' } = useParams();
   const navigate = useNavigate();
+  const { isAdmin } = useAuth();
   const { data: item, isLoading, isError, error } = useItem(itemId);
 
   if (isLoading) return <DetailSkeleton />;
@@ -103,9 +105,21 @@ export function ItemDetailPage() {
 
           {/* Title */}
           <div>
-            <h1 className="font-headline text-3xl md:text-4xl font-bold text-on-surface leading-tight">
-              {item.title}
-            </h1>
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <h1 className="font-headline text-3xl md:text-4xl font-bold text-on-surface leading-tight">
+                {item.title}
+              </h1>
+              {isAdmin && (
+                <Link
+                  to={`/admin/items/${item.id}/edit`}
+                  className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 font-label text-[11px] font-bold uppercase tracking-widest text-primary transition-colors hover:bg-primary/15"
+                  aria-label={`Edit item ${item.title}`}
+                >
+                  <span className="material-symbols-outlined text-sm">edit</span>
+                  Edit Item
+                </Link>
+              )}
+            </div>
             {item.subtitle && (
               <p className="mt-2 font-body text-lg text-on-surface-variant italic">{item.subtitle}</p>
             )}

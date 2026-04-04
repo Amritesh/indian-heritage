@@ -8,7 +8,6 @@ export function useCollectionItems(queryConfig: CollectionItemQuery) {
       'collection-items',
       queryConfig.collectionSlug,
       queryConfig.sort ?? 'featured',
-      queryConfig.material ?? '',
       queryConfig.search ?? '',
       queryConfig.tag ?? '',
     ],

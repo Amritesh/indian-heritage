@@ -19,6 +19,30 @@ function normalizeWhitespace(value) {
   return String(value || '').replace(/\s+/g, ' ').trim();
 }
 
+const polityOnlyLabels = new Set([
+  'bahmani',
+  'delhi',
+  'hyderabad',
+  'indore',
+  'kutch',
+  'pratapgarh',
+  'sikh',
+  'suri',
+  'turk',
+]);
+
+function stripTrailingQualifierPhrases(value) {
+  return String(value || '')
+    .replace(/\b(?:modern day|modern-day|now)\b.*$/i, ' ')
+    .replace(/\b(?:based on|identified by|identifiable by|as inscribed|holder mentions|absence of|note:)\b.*$/i, ' ')
+    .replace(/\b(?:regional mint|regional issue|regional issues)\b.*$/i, ' ')
+    .replace(/\b(?:coin in holder|coin in 2x2 holder|coin in 2x2 cardboard holder)\b.*$/i, ' ')
+    .replace(/\b(?:unable to determine|uncertain mint|no mint mark visible|no mint mark)\b.*$/i, ' ')
+    .trim();
+}
+
+const genericMintGeoTokens = new Set(['india', 'gujarat', 'bihar', 'holder']);
+
 function isBlankEntityToken(value) {
   return value === '' || value === 'unknown' || value === 'none' || value === 'n' || value === 'n a';
 }
@@ -52,6 +76,15 @@ function normalizeEntityKey(value) {
       .replace(/\b(princely state|state|british india|british raj|british empire|mughal empire|mughal emperor|empire|dynasty|sultanate|kingdom)\b/g, ' ')
       .replace(/\s+/g, ' '),
   );
+}
+
+function hasPolityLanguage(value) {
+  return /\b(state|empire|sultanate|kingdom|company|confederacy|presidency|princely)\b/.test(String(value || '').toLowerCase());
+}
+
+function isLikelyPolityLabel(value) {
+  const normalized = normalizeEntityKey(value);
+  return hasPolityLanguage(value) || polityOnlyLabels.has(normalized);
 }
 
 function titleCaseWords(value) {
@@ -115,12 +148,57 @@ function buildRulerCandidates(value) {
   return Array.from(candidates);
 }
 
+function buildAuthorityCandidates(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return [];
+
+  const candidates = new Set();
+  const addCandidate = (candidate) => {
+    const cleaned = normalizeAuthorityKey(stripTrailingQualifierPhrases(candidate));
+    if (cleaned) candidates.add(cleaned);
+  };
+
+  addCandidate(raw);
+  for (const match of raw.matchAll(/\(([^)]*)\)/g)) {
+    addCandidate(match[1]);
+  }
+  for (const fragment of raw.split(/\s*[/;]\s*|\s*,\s*/g)) {
+    addCandidate(fragment);
+  }
+  return Array.from(candidates);
+}
+
+function buildMintCandidates(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return [];
+
+  const candidates = new Set();
+  const addCandidate = (candidate) => {
+    const cleaned = stripTrailingQualifierPhrases(candidate);
+    const normalized = normalizeEntityKey(cleaned);
+    if (normalized) candidates.add(normalized);
+  };
+
+  addCandidate(raw);
+  addCandidate(raw.replace(/\([^)]*\)/g, ' '));
+  for (const match of raw.matchAll(/\(([^)]*)\)/g)) {
+    addCandidate(match[1]);
+  }
+  for (const fragment of raw.split(/\s*[/;]\s*|\s*,\s*|\s+\bor\b\s+/i)) {
+    addCandidate(fragment);
+  }
+  return Array.from(candidates);
+}
+
 function canonicalizeRulerOrIssuer(value) {
   const candidates = buildRulerCandidates(value);
   if (candidates.length === 0) return '';
 
   const localIssuerFragment = extractLocalIssuerFragment(value);
-  if (localIssuerFragment && !isBlankEntityToken(localIssuerFragment)) {
+  if (localIssuerFragment && isLikelyPolityLabel(localIssuerFragment)) {
+    return '';
+  }
+  if (localIssuerFragment && !isBlankEntityToken(localIssuerFragment) && !isLikelyPolityLabel(localIssuerFragment)) {
     return resolveEntityAlias(localIssuerFragment, entityAliases.rulers);
   }
 
@@ -128,6 +206,7 @@ function canonicalizeRulerOrIssuer(value) {
     if (
       isBlankEntityToken(candidate)
       || candidate.length < 2
+      || isLikelyPolityLabel(candidate)
     ) {
       continue;
     }
@@ -137,7 +216,10 @@ function canonicalizeRulerOrIssuer(value) {
 
   const fallback = candidates
     .filter((candidate) => !['unknown', 'none', 'n a', 'n'].includes(candidate) && candidate.length >= 2)
-    .sort((a, b) => a.split(' ').length - b.split(' ').length || a.length - b.length)[0];
+    .filter((candidate) => !entityAliases.authorities[candidate])
+    .filter((candidate) => !entityAliases.mints[candidate])
+    .filter((candidate) => !isLikelyPolityLabel(candidate))
+    .sort((a, b) => b.split(' ').length - a.split(' ').length || b.length - a.length)[0];
   return fallback ? resolveEntityAlias(fallback, entityAliases.rulers) : '';
 }
 
@@ -147,8 +229,34 @@ function canonicalizeAuthority(value) {
   return entityAliases.authorities[normalized] || titleCaseWords(normalized);
 }
 
+function canonicalizeLocalAuthority(value) {
+  const candidates = buildAuthorityCandidates(value);
+  if (candidates.length === 0) return '';
+
+  for (const candidate of candidates) {
+    if (entityAliases.authorities[candidate]) return entityAliases.authorities[candidate];
+  }
+
+  const polityCandidate = candidates.find((candidate) => isLikelyPolityLabel(candidate));
+  return polityCandidate ? titleCaseWords(polityCandidate) : '';
+}
+
 function canonicalizeMint(value) {
-  return resolveEntityAlias(value, entityAliases.mints);
+  let fallback = '';
+  const candidates = buildMintCandidates(value);
+  for (const candidate of candidates) {
+    if (!candidate || isBlankEntityToken(candidate) || candidate.length < 2) {
+      continue;
+    }
+    if (entityAliases.mints[candidate]) return entityAliases.mints[candidate];
+    if (!/\b(likely|unable|various|regional|unknown|uncertain)\b/i.test(candidate)) {
+      const titled = titleCaseWords(candidate);
+      if (!fallback && !/\bIndia\b/.test(titled) && !genericMintGeoTokens.has(candidate)) {
+        fallback = titled;
+      }
+    }
+  }
+  return fallback;
 }
 
 function normalizeDenominationText(value) {
@@ -189,6 +297,7 @@ function resolveDenomination(value) {
 function buildCanonicalTags({ culture, rulerOrIssuer, denomination, mintOrPlace, materials }) {
   const tags = [
     canonicalizeAuthority(culture),
+    canonicalizeLocalAuthority(rulerOrIssuer),
     canonicalizeRulerOrIssuer(rulerOrIssuer),
     canonicalizeMint(mintOrPlace),
     normalizeWhitespace(denomination),
@@ -212,6 +321,7 @@ module.exports = {
   buildCanonicalKeywords,
   buildCanonicalTags,
   canonicalizeAuthority,
+  canonicalizeLocalAuthority,
   canonicalizeMint,
   canonicalizeRulerOrIssuer,
   normalizeEntityKey,

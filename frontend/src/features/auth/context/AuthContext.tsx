@@ -21,6 +21,12 @@ type AuthState = {
   refreshProfile: () => Promise<void>;
 };
 
+const PRIVILEGED_ADMIN_EMAIL = 'thenectorgod@gmail.com';
+
+export function isPrivilegedAdminEmail(email?: string | null) {
+  return email?.trim().toLowerCase() === PRIVILEGED_ADMIN_EMAIL;
+}
+
 const AuthContext = createContext<AuthState>({
   firebaseUser: null,
   userProfile: null,
@@ -84,9 +90,12 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }, []);
 
   const isAuthenticated = !!firebaseUser;
-  const isAdmin = userProfile?.role === 'admin';
+  const isAdmin = userProfile?.role === 'admin' || isPrivilegedAdminEmail(firebaseUser?.email);
   const isEditor = userProfile?.role === 'editor' || isAdmin;
-  const needsOnboarding = isAuthenticated && !userProfile?.onboardingCompleted;
+  const needsOnboarding =
+    isAuthenticated &&
+    !isPrivilegedAdminEmail(firebaseUser?.email) &&
+    !userProfile?.onboardingCompleted;
 
   return (
     <AuthContext.Provider

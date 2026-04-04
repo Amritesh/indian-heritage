@@ -33,7 +33,7 @@ describe('normalizeItem', () => {
     expect(normalized.metadata.confidence).toBe('92');
     expect(normalized.denominationSystem).toBe('shared-indic');
     expect(normalized.denominationKey).toBe('rupee');
-    expect(normalized.denominationRank).toBe(10);
+    expect(normalized.denominationRank).toBe(18);
     expect(normalized.denominationBaseValue).toBe(1);
     expect(normalized.sortYearStart).toBe(1618);
     expect(normalized.sortYearEnd).toBe(1619);
@@ -42,6 +42,8 @@ describe('normalizeItem', () => {
     expect(normalized.estimatedPriceAvg).toBe(6000);
     expect(normalized.weightGrams).toBeNull();
     expect(normalized.searchKeywords).toContain('jahangir');
+    expect(normalized.tags).toContain('Mughal Empire');
+    expect(normalized.tags).toContain('Jahangir');
   });
 
   it('derives numeric fields used by Firestore sorting', () => {
@@ -126,5 +128,33 @@ describe('normalizeItem', () => {
     expect(normalized.weightGrams).toBe(11.4);
     expect(normalized.sortYearStart).toBe(1688);
     expect(normalized.sortYearEnd).toBeNull();
+  });
+
+  it('canonicalizes british ruler variants into stable tags and metadata', () => {
+    const rawItem = rawItemSchema.parse({
+      id: 'coin-5',
+      title: 'One Rupee - George V',
+      description: 'British India rupee.',
+      image: 'gs://indian-heritage-gallery-bucket/images/british/coin_5.png',
+      notes: [],
+      period: '1918 AD',
+      region: 'Bombay Mint',
+      materials: ['Silver'],
+      metadata: {
+        denomination: 'One Rupee',
+        ruler_or_issuer: 'George V, King Emperor',
+        mint_or_place: 'Bombay Mint',
+        estimated_price_inr: '2,500 - 3,000',
+      },
+      page: 5,
+    });
+
+    const normalized = normalizeItem(rawItem, 'british', '2026-04-03T00:00:00.000Z');
+
+    expect(normalized.metadata.rulerOrIssuer).toBe('George V');
+    expect(normalized.metadata.mintOrPlace).toBe('Bombay');
+    expect(normalized.tags).toContain('George V');
+    expect(normalized.denominationKey).toBe('rupee');
+    expect(normalized.estimatedPriceAvg).toBe(2750);
   });
 });

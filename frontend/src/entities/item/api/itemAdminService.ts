@@ -1,5 +1,6 @@
 import {
   collection,
+  getDoc,
   getDocs,
   doc,
   setDoc,
@@ -13,6 +14,9 @@ import {
 } from 'firebase/firestore';
 import { ItemRecord } from '@/entities/item/model/types';
 import { getFirestoreOrThrow } from '@/shared/services/firestore';
+import { buildAdminItemPayload } from '@/entities/item/lib/buildAdminItemPayload';
+
+export const deriveAdminItemDocumentFields = buildAdminItemPayload;
 
 function mapItemSnapshot(data: Record<string, unknown>): ItemRecord {
   return {
@@ -134,17 +138,13 @@ export type ItemFormData = {
 export async function createItem(data: ItemFormData): Promise<string> {
   const db = getFirestoreOrThrow();
   const docRef = doc(collection(db, 'items'));
-  const searchText = [data.title, data.subtitle, data.description, data.culture, data.period, ...data.materials, ...data.tags]
-    .join(' ')
-    .toLowerCase();
+  const derived = buildAdminItemPayload(data);
 
   await setDoc(docRef, {
-    ...data,
+    ...derived,
     id: docRef.id,
     published: false,
     pageNumber: 0,
-    searchText,
-    searchKeywords: data.tags,
     primaryMedia: null,
     gallery: [],
     importedAt: serverTimestamp(),
@@ -156,11 +156,39 @@ export async function createItem(data: ItemFormData): Promise<string> {
 
 export async function updateItem(id: string, data: Partial<ItemFormData>): Promise<void> {
   const db = getFirestoreOrThrow();
-  const updates: Record<string, unknown> = { ...data, updatedAt: serverTimestamp() };
-
-  if (data.title || data.description) {
-    // Caller should pass full text fields if they want searchText updated
+  const snapshot = await getDoc(doc(db, 'items', id));
+  if (!snapshot.exists()) {
+    throw new Error(`Item "${id}" not found`);
   }
+  const existing = mapItemSnapshot(snapshot.data());
+  const { metadata: dataMetadata, ...dataRest } = data;
+  const merged = {
+    title: existing.title,
+    subtitle: existing.subtitle,
+    description: existing.description,
+    shortDescription: existing.shortDescription,
+    period: existing.period,
+    dateText: existing.dateText,
+    culture: existing.culture,
+    location: existing.location,
+    imageUrl: existing.imageUrl,
+    imageAlt: existing.imageAlt,
+    materials: existing.materials,
+    tags: existing.tags,
+    notes: existing.notes,
+    collectionId: existing.collectionId,
+    collectionSlug: existing.collectionSlug,
+    collectionName: existing.collectionName,
+    ...dataRest,
+    metadata: {
+      ...existing.metadata,
+      ...(dataMetadata ?? {}),
+    },
+  };
+  const updates: Record<string, unknown> = {
+    ...buildAdminItemPayload(merged),
+    updatedAt: serverTimestamp(),
+  };
 
   await updateDoc(doc(db, 'items', id), updates);
 }

@@ -14,6 +14,40 @@ function normalizeWhitespace(value: string) {
   return value.replace(/\s+/g, ' ').trim();
 }
 
+const polityOnlyLabels = new Set([
+  'bahmani',
+  'delhi',
+  'hyderabad',
+  'indore',
+  'kutch',
+  'pratapgarh',
+  'sikh',
+  'suri',
+  'turk',
+]);
+
+function stripTrailingQualifierPhrases(value: string) {
+  return value
+    .replace(/\b(?:modern day|modern-day|now)\b.*$/i, ' ')
+    .replace(/\b(?:based on|identified by|identifiable by|as inscribed|holder mentions|absence of|note:)\b.*$/i, ' ')
+    .replace(/\b(?:regional mint|regional issue|regional issues)\b.*$/i, ' ')
+    .replace(/\b(?:coin in holder|coin in 2x2 holder|coin in 2x2 cardboard holder)\b.*$/i, ' ')
+    .replace(/\b(?:unable to determine|uncertain mint|no mint mark visible|no mint mark)\b.*$/i, ' ')
+    .trim();
+}
+
+const genericMintGeoTokens = new Set(['india', 'gujarat', 'bihar', 'holder']);
+
+function hasPolityLanguage(value?: string | null) {
+  const raw = String(value ?? '').toLowerCase();
+  return /\b(state|empire|sultanate|kingdom|company|confederacy|presidency|princely)\b/.test(raw);
+}
+
+function isLikelyPolityLabel(value?: string | null) {
+  const normalized = normalizeEntityKey(value);
+  return hasPolityLanguage(value) || polityOnlyLabels.has(normalized);
+}
+
 export function normalizeEntityKey(value?: string | null) {
   return normalizeWhitespace(
     String(value ?? '')
@@ -102,6 +136,58 @@ function extractLocalIssuerFragment(value?: string | null) {
   return normalizeEntityKey(raw.slice(0, markerMatch.index));
 }
 
+function buildAuthorityCandidates(value?: string | null) {
+  const raw = String(value ?? '').trim();
+  if (!raw) return [];
+
+  const candidates = new Set<string>();
+  const addCandidate = (candidate: string) => {
+    const cleaned = normalizeAuthorityKey(stripTrailingQualifierPhrases(candidate));
+    if (cleaned) {
+      candidates.add(cleaned);
+    }
+  };
+
+  addCandidate(raw);
+
+  for (const match of raw.matchAll(/\(([^)]*)\)/g)) {
+    addCandidate(match[1]);
+  }
+
+  for (const fragment of raw.split(/\s*[/;]\s*|\s*,\s*/g)) {
+    addCandidate(fragment);
+  }
+
+  return [...candidates];
+}
+
+function buildMintCandidates(value?: string | null) {
+  const raw = String(value ?? '').trim();
+  if (!raw) return [];
+
+  const candidates = new Set<string>();
+  const addCandidate = (candidate: string) => {
+    const cleaned = stripTrailingQualifierPhrases(candidate);
+    const normalized = normalizeEntityKey(cleaned);
+    if (normalized) {
+      candidates.add(normalized);
+    }
+  };
+
+  addCandidate(raw);
+  addCandidate(raw.replace(/\([^)]*\)/g, ' '));
+
+  for (const match of raw.matchAll(/\(([^)]*)\)/g)) {
+    addCandidate(match[1]);
+  }
+
+  for (const fragment of raw.split(/\s*[/;]\s*|\s*,\s*|\s+\bor\b\s+/i)) {
+    addCandidate(fragment);
+  }
+
+  return [...candidates];
+}
+
 function buildRulerCandidates(value?: string | null) {
   const raw = String(value ?? '').trim();
   if (!raw) {
@@ -144,12 +230,18 @@ export function canonicalizeRuler(value?: string | null) {
   }
 
   const localIssuerFragment = extractLocalIssuerFragment(value);
-  if (localIssuerFragment && !isBlankEntityToken(localIssuerFragment)) {
+  if (localIssuerFragment && isLikelyPolityLabel(localIssuerFragment)) {
+    return '';
+  }
+  if (localIssuerFragment && !isBlankEntityToken(localIssuerFragment) && !isLikelyPolityLabel(localIssuerFragment)) {
     return canonicalizeEntityLabel(localIssuerFragment);
   }
 
   for (const candidate of candidates) {
     if (isBlankEntityToken(candidate) || candidate.length < 2) {
+      continue;
+    }
+    if (isLikelyPolityLabel(candidate)) {
       continue;
     }
 
@@ -161,7 +253,10 @@ export function canonicalizeRuler(value?: string | null) {
 
   const fallback = [...candidates]
     .filter((candidate) => !isBlankEntityToken(candidate) && candidate.length >= 2)
-    .sort((a, b) => a.split(' ').length - b.split(' ').length || a.length - b.length)[0];
+    .filter((candidate) => !aliases.authorities[candidate])
+    .filter((candidate) => !aliases.mints[candidate])
+    .filter((candidate) => !isLikelyPolityLabel(candidate))
+    .sort((a, b) => b.split(' ').length - a.split(' ').length || b.length - a.length)[0];
   return fallback ? canonicalizeEntityLabel(fallback) : '';
 }
 
@@ -178,13 +273,44 @@ export function canonicalizeAuthority(value?: string | null) {
   return resolveAlias(normalized, aliases.authorities) || titleCaseWords(normalized);
 }
 
-export function canonicalizeMint(value?: string | null) {
-  const normalized = normalizeEntityKey(value);
-  if (!normalized || isBlankEntityToken(normalized) || normalized.length < 2) {
+export function canonicalizeLocalAuthority(value?: string | null) {
+  const candidates = buildAuthorityCandidates(value);
+  if (candidates.length === 0) {
     return '';
   }
 
-  return resolveAlias(normalized, aliases.mints) || titleCaseWords(normalized);
+  for (const candidate of candidates) {
+    const canonical = resolveAlias(candidate, aliases.authorities);
+    if (canonical) {
+      return canonical;
+    }
+  }
+
+  const polityCandidate = candidates.find((candidate) => isLikelyPolityLabel(candidate));
+  return polityCandidate ? titleCaseWords(polityCandidate) : '';
+}
+
+export function canonicalizeMint(value?: string | null) {
+  let fallback = '';
+  const candidates = buildMintCandidates(value);
+  for (const candidate of candidates) {
+    if (!candidate || isBlankEntityToken(candidate) || candidate.length < 2) {
+      continue;
+    }
+
+    const canonical = resolveAlias(candidate, aliases.mints);
+    if (canonical) {
+      return canonical;
+    }
+
+    if (!/\b(likely|unable|various|regional|unknown|uncertain)\b/i.test(candidate)) {
+      const titled = titleCaseWords(candidate);
+      if (!fallback && !/\bIndia\b/.test(titled) && !genericMintGeoTokens.has(candidate)) {
+        fallback = titled;
+      }
+    }
+  }
+  return fallback;
 }
 
 function normalizePublicTagValue(value?: string | null) {
@@ -214,6 +340,7 @@ export function buildPublicTags({
 }: PublicTagInput) {
   const tags = [
     canonicalizeAuthority(authority ?? culture),
+    canonicalizeLocalAuthority(ruler ?? rulerOrIssuer),
     canonicalizeRuler(ruler ?? rulerOrIssuer),
     canonicalizeMint(mint ?? mintOrPlace),
     normalizePublicTagValue(denomination),

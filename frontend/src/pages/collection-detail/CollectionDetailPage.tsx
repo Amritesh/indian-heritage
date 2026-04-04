@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useCollection } from '@/entities/collection/hooks/useCollections';
 import { useCollectionItems } from '@/entities/item/hooks/useCollectionItems';
@@ -23,7 +23,6 @@ export function CollectionDetailPage() {
   } = useCollection(slug);
 
   const [search, setSearch] = useState('');
-  const [material, setMaterial] = useState('');
   const [sort, setSort] = useState<ItemSort>('featured');
   const debouncedSearch = useDebouncedValue(search);
   const activeTag = searchParams.get('tag') ?? '';
@@ -38,7 +37,6 @@ export function CollectionDetailPage() {
   } = useCollectionItems({
     collectionSlug: slug,
     search: debouncedSearch,
-    material,
     sort,
     tag: activeTag,
   });
@@ -46,11 +44,6 @@ export function CollectionDetailPage() {
   const items = data?.items ?? [];
   const hasMore = data?.hasMore ?? false;
   const totalLoaded = data?.totalLoaded ?? 0;
-
-  const materials = useMemo(
-    () => collection?.filterableMaterials ?? [],
-    [collection?.filterableMaterials],
-  );
 
   const worthLabel = formatCurrency(collection?.estimatedWorth);
 
@@ -147,9 +140,6 @@ export function CollectionDetailPage() {
       <CollectionFilters
         searchValue={search}
         onSearchChange={setSearch}
-        material={material}
-        materials={materials}
-        onMaterialChange={setMaterial}
         sort={sort}
         onSortChange={setSort}
       />
