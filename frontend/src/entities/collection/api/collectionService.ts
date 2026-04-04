@@ -11,6 +11,8 @@ import { getFirestoreOrThrow } from '@/shared/services/firestore';
 import { gsUrlToHttps } from '@/shared/lib/formatters';
 import { firestore } from '@/shared/config/firebase';
 import { collectionRegistry } from '@/shared/config/collections';
+import { hasSupabaseEnv } from '@/shared/config/supabase';
+import { getCollectionBySlugFromSupabase, getCollectionsFromSupabase } from './collectionService.supabase';
 
 function mapCollectionSnapshot(data: Record<string, unknown>): CollectionRecord {
   return {
@@ -39,6 +41,13 @@ function mapCollectionSnapshot(data: Record<string, unknown>): CollectionRecord 
 }
 
 export async function getCollections(): Promise<CollectionRecord[]> {
+  if (hasSupabaseEnv) {
+    const supabaseCollections = await getCollectionsFromSupabase();
+    if (supabaseCollections.length > 0) {
+      return supabaseCollections;
+    }
+  }
+
   if (!firestore) {
     // Fallback to registry if Firebase is not configured
     return collectionRegistry
@@ -77,6 +86,13 @@ export async function getCollections(): Promise<CollectionRecord[]> {
 }
 
 export async function getCollectionBySlug(slug: string): Promise<CollectionRecord | null> {
+  if (hasSupabaseEnv) {
+    const supabaseCollection = await getCollectionBySlugFromSupabase(slug);
+    if (supabaseCollection) {
+      return supabaseCollection;
+    }
+  }
+
   if (!firestore) {
     const entry = collectionRegistry.find((e) => e.slug === slug);
     if (!entry || !entry.enabled) return null;

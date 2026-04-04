@@ -15,7 +15,11 @@
     "deploy:firebase": "node ./scripts/deploy-firebase.cjs",
     "import:collections": "npm run import:collections --workspace frontend",
     "import:british": "npm run import:british --workspace frontend",
-    "import:mughals": "npm run import:mughals --workspace frontend"
+    "import:mughals": "npm run import:mughals --workspace frontend",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:db:reset": "supabase db reset",
+    "supabase:link": "supabase link --project-ref rwdjasxvkupweowgrrwl"
   },
   "devDependencies": {
     "firebase-tools": "^15.12.0",

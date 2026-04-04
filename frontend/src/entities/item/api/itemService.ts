@@ -15,6 +15,13 @@ import { getFirestoreOrThrow } from '@/shared/services/firestore';
 import { gsUrlToHttps } from '@/shared/lib/formatters';
 import { firestore } from '@/shared/config/firebase';
 import { getCollectionRegistryEntry, collectionRegistry } from '@/shared/config/collections';
+import { hasSupabaseEnv } from '@/shared/config/supabase';
+import {
+  getCollectionItemsBySlugFromSupabase,
+  getItemByIdFromSupabase,
+  getRelatedItemsFromSupabase,
+  searchItemsFromSupabase,
+} from './itemService.supabase';
 
 const COLLECTION_SCAN_LIMIT = 2000;
 const RELATED_ITEMS_LIMIT = 4;
@@ -65,7 +72,14 @@ function mapItemSnapshot(data: Record<string, unknown>): ItemRecord {
   };
 }
 
-export async function getItemById(itemId: string) {
+export async function getItemById(itemId: string, options?: { includePrivate?: boolean }) {
+  if (hasSupabaseEnv) {
+    const supabaseItem = await getItemByIdFromSupabase(itemId, options);
+    if (supabaseItem) {
+      return supabaseItem;
+    }
+  }
+
   if (!firestore) {
     // When Firebase is missing, we check all collections' APIs for this item
     // This is slow but better than crashing on the detail page
@@ -87,8 +101,17 @@ export type ItemPage = {
   hasMore: boolean;
 };
 
-function sortItems(items: ItemRecord[], sort: ItemSort) {
+export function sortItems(items: ItemRecord[], sort: ItemSort) {
   const list = [...items];
+  const compareNumericWithUnknownLast = (aValue: number | null | undefined, bValue: number | null | undefined, direction: 'asc' | 'desc') => {
+    const aKnown = Number.isFinite(aValue) && Number(aValue) > 0;
+    const bKnown = Number.isFinite(bValue) && Number(bValue) > 0;
+    if (aKnown && !bKnown) return -1;
+    if (!aKnown && bKnown) return 1;
+    if (!aKnown && !bKnown) return 0;
+    return direction === 'asc' ? Number(aValue) - Number(bValue) : Number(bValue) - Number(aValue);
+  };
+
   if (sort === 'denomination_asc') {
     return list.sort((a, b) =>
       a.denominationRank - b.denominationRank
@@ -96,10 +119,30 @@ function sortItems(items: ItemRecord[], sort: ItemSort) {
       || a.title.localeCompare(b.title),
     );
   }
-  if (sort === 'price_asc') return list.sort((a, b) => a.estimatedPriceAvg - b.estimatedPriceAvg);
-  if (sort === 'price_desc') return list.sort((a, b) => b.estimatedPriceAvg - a.estimatedPriceAvg);
-  if (sort === 'year_asc') return list.sort((a, b) => a.sortYearStart - b.sortYearStart);
-  if (sort === 'year_desc') return list.sort((a, b) => b.sortYearStart - a.sortYearStart);
+  if (sort === 'price_asc') {
+    return list.sort((a, b) =>
+      compareNumericWithUnknownLast(a.estimatedPriceAvg, b.estimatedPriceAvg, 'asc')
+      || a.title.localeCompare(b.title),
+    );
+  }
+  if (sort === 'price_desc') {
+    return list.sort((a, b) =>
+      compareNumericWithUnknownLast(a.estimatedPriceAvg, b.estimatedPriceAvg, 'desc')
+      || a.title.localeCompare(b.title),
+    );
+  }
+  if (sort === 'year_asc') {
+    return list.sort((a, b) =>
+      compareNumericWithUnknownLast(a.sortYearStart, b.sortYearStart, 'asc')
+      || a.title.localeCompare(b.title),
+    );
+  }
+  if (sort === 'year_desc') {
+    return list.sort((a, b) =>
+      compareNumericWithUnknownLast(a.sortYearStart, b.sortYearStart, 'desc')
+      || a.title.localeCompare(b.title),
+    );
+  }
   if (sort === 'recent') {
     return list.sort((a, b) => String(b.updatedAt ?? b.importedAt ?? '').localeCompare(String(a.updatedAt ?? a.importedAt ?? '')));
   }
@@ -126,7 +169,8 @@ function normalizeTag(value: string) {
 function matchesTag(item: ItemRecord, tag: string) {
   const normalized = normalizeTag(tag);
   if (!normalized) return true;
-  return item.tags.some((t) => normalizeTag(t) === normalized);
+  return [...item.tags, ...(item.publicTags ?? []), ...(item.entityBadges ?? [])]
+    .some((t) => normalizeTag(t) === normalized);
 }
 
 async function fetchItemsFromApi(collectionSlug: string): Promise<ItemRecord[]> {
@@ -152,11 +196,25 @@ export async function getCollectionItemsPage(
   const pageIndex = cursor ?? 0;
   const normalizedSearch = params.search?.trim().toLowerCase() ?? '';
 
+  if (hasSupabaseEnv) {
+    let allItems = await getCollectionItemsBySlugFromSupabase(params.collectionSlug);
+    if (params.tag) {
+      allItems = allItems.filter((i) => matchesTag(i, params.tag!));
+    }
+    if (normalizedSearch) {
+      const scored = scoreSearchResults(allItems, normalizedSearch);
+      allItems = params.sort && params.sort !== 'featured' ? sortItems(scored, params.sort) : scored;
+    } else {
+      allItems = sortItems(allItems, params.sort ?? 'featured');
+    }
+    const start = pageIndex * pageSize;
+    const items = allItems.slice(start, start + pageSize);
+    const hasMore = start + pageSize < allItems.length;
+    return { items, cursor: hasMore ? pageIndex + 1 : null, hasMore };
+  }
+
   if (!firestore) {
     let allItems = await fetchItemsFromApi(params.collectionSlug);
-    if (params.material) {
-      allItems = allItems.filter((i) => i.materials.includes(params.material!));
-    }
     if (params.tag) {
       allItems = allItems.filter((i) => matchesTag(i, params.tag!));
     }
@@ -177,9 +235,6 @@ export async function getCollectionItemsPage(
     where('collectionSlug', '==', params.collectionSlug),
     where('published', '==', true),
   ];
-  if (params.material) {
-    constraints.push(where('materials', 'array-contains', params.material));
-  }
 
   const snapshot = await getDocs(
     query(collection(db, 'items'), ...constraints, limitQuery(COLLECTION_SCAN_LIMIT)),
@@ -209,15 +264,12 @@ export async function getCollectionItems(params: CollectionItemQuery): Promise<I
   return page.items;
 }
 
-async function getAllCollectionItemsForSearch(collectionSlug: string, material?: string) {
+async function getAllCollectionItemsForSearch(collectionSlug: string) {
   const db = getFirestoreOrThrow();
   const constraints: QueryConstraint[] = [
     where('collectionSlug', '==', collectionSlug),
     where('published', '==', true),
   ];
-  if (material) {
-    constraints.push(where('materials', 'array-contains', material));
-  }
   const snapshot = await getDocs(
     query(
       collection(db, 'items'),
@@ -230,6 +282,13 @@ async function getAllCollectionItemsForSearch(collectionSlug: string, material?:
 }
 
 export async function getRelatedItems(item: ItemRecord) {
+  if (hasSupabaseEnv) {
+    const relatedItems = await getRelatedItemsFromSupabase(item.id);
+    if (relatedItems.length > 0) {
+      return relatedItems.slice(0, 3);
+    }
+  }
+
   if (!firestore) {
     const allItems = await fetchItemsFromApi(item.collectionSlug);
     return allItems
@@ -257,6 +316,14 @@ export async function searchItems(term: string, collectionSlug?: string, tag?: s
   const normalizedTerm = term.trim().toLowerCase();
   const hasTag = Boolean(tag && tag.trim());
   if (normalizedTerm.length < 2 && !hasTag) return [];
+
+  if (hasSupabaseEnv) {
+    let allItems = await searchItemsFromSupabase(collectionSlug);
+    if (hasTag) {
+      allItems = allItems.filter((i) => matchesTag(i, tag!));
+    }
+    return normalizedTerm ? scoreSearchResults(allItems, normalizedTerm) : allItems;
+  }
 
   if (!firestore) {
     // Basic search across all fallback-eligible collections

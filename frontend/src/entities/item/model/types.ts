@@ -2,6 +2,9 @@ import { MediaRecord } from '@/entities/media/model/types';
 
 export type ItemRecord = {
   id: string;
+  canonicalId?: string;
+  domainId?: string;
+  domainSlug?: string;
   collectionId: string;
   collectionSlug: string;
   collectionName: string;
@@ -19,6 +22,9 @@ export type ItemRecord = {
   gallery: MediaRecord[];
   materials: string[];
   tags: string[];
+  publicTags?: string[];
+  entityBadges?: string[];
+  relatedReasons?: string[];
   notes: string[];
   pageNumber: number;
   searchText: string;
@@ -47,6 +53,22 @@ export type ItemRecord = {
     estimatedPriceInr?: string;
     confidence?: string;
   };
+  visibility?: string;
+  reviewStatus?: string;
+  itemType?: string;
+  privateProfile?: {
+    yearBought?: number | null;
+    purchasePrice?: number | null;
+    purchaseCurrency?: string | null;
+    estimatedValueMin?: number | null;
+    estimatedValueMax?: number | null;
+    estimatedValueAvg?: number | null;
+    acquisitionSource?: string | null;
+    acquisitionDate?: string | null;
+    internalNotes?: string | null;
+    privateTags?: string[];
+    privateAttributes?: Record<string, unknown>;
+  } | null;
 };
 
 export type ItemSort =
@@ -63,7 +85,6 @@ export type CollectionItemQuery = {
   collectionSlug: string;
   limit?: number;
   sort?: ItemSort;
-  material?: string;
   search?: string;
   tag?: string;
 };

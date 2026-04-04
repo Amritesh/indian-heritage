@@ -1,5 +1,6 @@
 export type CollectionRecord = {
   id: string;
+  canonicalId?: string;
   slug: string;
   name: string;
   displayName: string;
@@ -18,4 +19,7 @@ export type CollectionRecord = {
   status: string;
   enabled: boolean;
   lastSyncedAt?: string | null;
+  domainId?: string;
+  domainSlug?: string;
+  domainName?: string;
 };
