@@ -903,30 +903,47 @@ async function supabaseRequest<T>(pathName: string, options: { method?: string; 
   const { url, key } = getSupabaseCredentials();
   if (!url || !key) throw new Error('Supabase write environment is not configured.');
 
-  const requestUrl = new URL(`${url}/rest/v1/${pathName}`);
-  Object.entries(options.query ?? {}).forEach(([queryKey, queryValue]) => {
-    if (queryValue != null) {
-      requestUrl.searchParams.set(queryKey, String(queryValue));
+  const maxAttempts = 4;
+  let lastError: unknown;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      const requestUrl = new URL(`${url}/rest/v1/${pathName}`);
+      Object.entries(options.query ?? {}).forEach(([queryKey, queryValue]) => {
+        if (queryValue != null) {
+          requestUrl.searchParams.set(queryKey, String(queryValue));
+        }
+      });
+
+      const response = await fetch(requestUrl.toString(), {
+        method: options.method ?? 'GET',
+        headers: {
+          apikey: key,
+          Authorization: `Bearer ${key}`,
+          'Content-Type': 'application/json',
+          Prefer: 'resolution=merge-duplicates,return=representation',
+        },
+        body: options.body == null ? undefined : JSON.stringify(options.body),
+      });
+
+      if (!response.ok) {
+        if ((response.status >= 500 || response.status === 429) && attempt < maxAttempts) {
+          await new Promise((resolve) => setTimeout(resolve, 500 * attempt));
+          continue;
+        }
+        throw new Error(`Supabase request failed for ${pathName}: ${response.status} ${response.statusText}`);
+      }
+
+      if (response.status === 204) return [] as T;
+      return await response.json() as T;
+    } catch (error) {
+      lastError = error;
+      if (attempt >= maxAttempts) break;
+      await new Promise((resolve) => setTimeout(resolve, 500 * attempt));
     }
-  });
-
-  const response = await fetch(requestUrl.toString(), {
-    method: options.method ?? 'GET',
-    headers: {
-      apikey: key,
-      Authorization: `Bearer ${key}`,
-      'Content-Type': 'application/json',
-      Prefer: 'resolution=merge-duplicates,return=representation',
-    },
-    body: options.body == null ? undefined : JSON.stringify(options.body),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Supabase request failed for ${pathName}: ${response.status} ${response.statusText}`);
   }
 
-  if (response.status === 204) return [] as T;
-  return await response.json() as T;
+  throw lastError instanceof Error ? lastError : new Error(`Supabase request failed for ${pathName}`);
 }
 
 async function supabaseUpsert<T extends Record<string, unknown>>(table: string, rows: T[], onConflict: string) {
@@ -974,6 +991,41 @@ async function supabaseDeleteByIds(table: string, idColumn: string, ids: string[
       },
     });
   }
+}
+
+async function resetCollectionImportState(collectionId: string) {
+  const conceptualRows = await supabaseRequest<Array<{ id: string }>>('conceptual_items', {
+    query: { select: 'id', collection_id: `eq.${collectionId}` },
+  });
+  const itemRows = await supabaseRequest<Array<{ id: string }>>('items', {
+    query: { select: 'id', collection_id: `eq.${collectionId}` },
+  });
+
+  const conceptualIds = conceptualRows.map((row) => String(row.id)).filter(Boolean);
+  const itemIds = itemRows.map((row) => String(row.id)).filter(Boolean);
+
+  await supabaseDeleteByIds('record_relations', 'source_id', itemIds, { source_kind: 'eq.item' });
+  await supabaseDeleteByIds('record_relations', 'related_id', itemIds, { related_kind: 'eq.item' });
+  await supabaseDeleteByIds('record_tags', 'record_id', itemIds, { record_kind: 'eq.item' });
+  await supabaseDeleteByIds('record_entities', 'record_id', itemIds, { record_kind: 'eq.item' });
+  await supabaseDeleteByIds('media_assets', 'target_id', itemIds, { target_kind: 'eq.item' });
+  await supabaseDeleteByIds('numismatic_item_profiles', 'item_id', itemIds);
+  await supabaseDeleteByIds('item_private_profiles', 'item_id', itemIds);
+  await supabaseDeleteByIds('measurements', 'item_id', itemIds);
+  await supabaseDeleteByIds('provenance_events', 'item_id', itemIds);
+  await supabaseDeleteByIds('discovery_contexts', 'item_id', itemIds);
+  await supabaseDeleteByIds('item_sides', 'target_id', itemIds, { target_kind: 'eq.item' });
+  await supabaseDeleteByIds('item_symbols', 'target_id', itemIds, { target_kind: 'eq.item' });
+
+  await supabaseDeleteByIds('record_entities', 'record_id', conceptualIds, { record_kind: 'eq.conceptual_item' });
+  await supabaseDeleteByIds('record_references', 'record_id', conceptualIds, { record_kind: 'eq.conceptual_item' });
+  await supabaseDeleteByIds('numismatic_type_profiles', 'conceptual_item_id', conceptualIds);
+  await supabaseDeleteByIds('discovery_contexts', 'conceptual_item_id', conceptualIds);
+  await supabaseDeleteByIds('item_sides', 'target_id', conceptualIds, { target_kind: 'eq.conceptual_item' });
+  await supabaseDeleteByIds('item_symbols', 'target_id', conceptualIds, { target_kind: 'eq.conceptual_item' });
+
+  await supabaseDeleteByIds('items', 'collection_id', [collectionId]);
+  await supabaseDeleteByIds('conceptual_items', 'collection_id', [collectionId]);
 }
 
 async function resolveDomainId() {
@@ -1045,6 +1097,8 @@ async function importSnapshot(filePath: string, collectionSlug?: string) {
   const collectionRows = await supabaseUpsert('collections', [{ ...payload.collection, domain_id: domainId }], 'canonical_id');
   const collectionId = String(collectionRows[0]?.id ?? '');
   if (!collectionId) throw new Error(`Supabase did not return a collection id for ${snapshot.collection.slug}.`);
+
+  await resetCollectionImportState(collectionId);
 
   const conceptualRows = await supabaseUpsert(
     'conceptual_items',
