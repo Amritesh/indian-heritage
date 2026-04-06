@@ -4,6 +4,8 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import { loadWorkspaceEnv } from './lib/loadEnv';
 import { normalizePairedOutputCatalogue } from './lib/archiveSnapshot';
+import { shouldSkipLegacyPlaceholderSnapshot } from './lib/snapshotFiltering';
+import { parsePriceRangeInr } from './lib/priceParsing';
 import { buildCanonicalTags, canonicalizeAuthority, canonicalizeLocalAuthority, canonicalizeMint, canonicalizeRulerOrIssuer, slugifyTag } from '../src/shared/lib/catalogNormalization';
 import { buildItemSimilarityRelations } from '../src/shared/lib/archiveRelations';
 import { parseGsUrl } from '../src/shared/lib/storage';
@@ -50,6 +52,7 @@ type SnapshotItem = {
   entityBadges?: string[];
   relatedReasons?: string[];
   notes?: string[];
+  displayLabels?: string[];
   pageNumber?: number;
   sortYearStart?: number;
   sortYearEnd?: number | null;
@@ -376,6 +379,7 @@ function parseSnapshotItem(value: unknown): SnapshotItem {
     entityBadges: toArrayOfStrings(item.entityBadges),
     relatedReasons: toArrayOfStrings(item.relatedReasons),
     notes: toArrayOfStrings(item.notes),
+    displayLabels: toArrayOfStrings(item.displayLabels ?? item.display_labels),
     pageNumber: asNullableNumber(item.pageNumber) ?? undefined,
     sortYearStart: asNullableNumber(item.sortYearStart) ?? undefined,
     sortYearEnd: asNullableNumber(item.sortYearEnd) ?? undefined,
@@ -418,16 +422,25 @@ function readSnapshotFile(filePath: string, collectionSlug?: string): FirebaseAr
 }
 
 function resolveSnapshotInputs(target?: string) {
+  const filterEntries = (entries: string[], baseDir?: string) => {
+    const filePaths = entries.map((entry) => baseDir ? path.join(baseDir, entry) : entry);
+    return filePaths.filter((filePath) => {
+      const parsed = JSON.parse(fs.readFileSync(filePath, 'utf8')) as unknown;
+      if (!isFirebaseArchiveSnapshot(parsed)) return true;
+      return !shouldSkipLegacyPlaceholderSnapshot(filePath, parsed, filePaths);
+    });
+  };
+
   if (!target) {
     return fs.existsSync(defaultSnapshotDir)
-      ? fs.readdirSync(defaultSnapshotDir).filter((entry) => entry.endsWith('.json')).map((entry) => path.join(defaultSnapshotDir, entry)).sort()
+      ? filterEntries(fs.readdirSync(defaultSnapshotDir).filter((entry) => entry.endsWith('.json')).sort(), defaultSnapshotDir)
       : [];
   }
 
   const resolved = path.resolve(process.cwd(), target);
   if (fs.existsSync(resolved) && fs.statSync(resolved).isFile()) return [resolved];
   if (fs.existsSync(resolved) && fs.statSync(resolved).isDirectory()) {
-    return fs.readdirSync(resolved).filter((entry) => entry.endsWith('.json')).map((entry) => path.join(resolved, entry)).sort();
+    return filterEntries(fs.readdirSync(resolved).filter((entry) => entry.endsWith('.json')).sort(), resolved);
   }
 
   const fallback = path.join(defaultSnapshotDir, `${target}.json`);
@@ -716,6 +729,17 @@ function normalizeIsoDate(value: unknown) {
   return parsed.toISOString().slice(0, 10);
 }
 
+function extractEstimatedPriceRange(item: SnapshotItem) {
+  const metadata = item.metadata as Record<string, unknown> | undefined;
+  const direct = metadata?.estimated_price_inr ?? metadata?.estimatedPriceInr ?? metadata?.estimatedPriceINR;
+  if (direct != null) {
+    return parsePriceRangeInr(direct);
+  }
+
+  const matched = (item.displayLabels ?? []).find((entry) => /₹|\d[\d,]*\s*-\s*\d[\d,]*/.test(String(entry)));
+  return parsePriceRangeInr(matched);
+}
+
 function buildMigrationPayload(snapshot: FirebaseArchiveSnapshot): MigrationPayloadBundle {
   const collectionRow = buildCollectionRow(snapshot);
   const concepts = new Map<string, ConceptualItemRow>();
@@ -784,6 +808,7 @@ function buildMigrationPayload(snapshot: FirebaseArchiveSnapshot): MigrationPayl
 
     const entityIdFor = (entityType: string, label: string | undefined) =>
       label ? buildEntityRow(entityType, label).canonical_id : null;
+    const estimatedPriceRange = extractEstimatedPriceRange(item);
 
     numismaticTypeProfiles.set(concept.canonical_id, {
       conceptual_item_id: concept.canonical_id,
@@ -823,8 +848,8 @@ function buildMigrationPayload(snapshot: FirebaseArchiveSnapshot): MigrationPayl
       authority_entity_id: entityIdFor('authority', conceptIdentity.authority),
       type_series: item.metadata?.seriesOrCatalog ?? null,
       catalogue_primary: item.metadata?.seriesOrCatalog ?? null,
-      estimated_public_price_min: null,
-      estimated_public_price_max: null,
+      estimated_public_price_min: estimatedPriceRange.min,
+      estimated_public_price_max: estimatedPriceRange.max,
       attributes: {
         source: 'firebase-archive',
         confidence: item.metadata?.confidence ?? null,

@@ -74,10 +74,7 @@ function mapItemSnapshot(data: Record<string, unknown>): ItemRecord {
 
 export async function getItemById(itemId: string, options?: { includePrivate?: boolean }) {
   if (hasSupabaseEnv) {
-    const supabaseItem = await getItemByIdFromSupabase(itemId, options);
-    if (supabaseItem) {
-      return supabaseItem;
-    }
+    return getItemByIdFromSupabase(itemId, options);
   }
 
   if (!firestore) {
@@ -99,6 +96,7 @@ export type ItemPage = {
   items: ItemRecord[];
   cursor: number | null;
   hasMore: boolean;
+  total: number;
 };
 
 export function sortItems(items: ItemRecord[], sort: ItemSort) {
@@ -210,7 +208,7 @@ export async function getCollectionItemsPage(
     const start = pageIndex * pageSize;
     const items = allItems.slice(start, start + pageSize);
     const hasMore = start + pageSize < allItems.length;
-    return { items, cursor: hasMore ? pageIndex + 1 : null, hasMore };
+    return { items, cursor: hasMore ? pageIndex + 1 : null, hasMore, total: allItems.length };
   }
 
   if (!firestore) {
@@ -227,7 +225,7 @@ export async function getCollectionItemsPage(
     const start = pageIndex * pageSize;
     const items = allItems.slice(start, start + pageSize);
     const hasMore = start + pageSize < allItems.length;
-    return { items, cursor: hasMore ? pageIndex + 1 : null, hasMore };
+    return { items, cursor: hasMore ? pageIndex + 1 : null, hasMore, total: allItems.length };
   }
 
   const db = getFirestoreOrThrow();
@@ -255,7 +253,7 @@ export async function getCollectionItemsPage(
   const start = pageIndex * pageSize;
   const items = allItems.slice(start, start + pageSize);
   const hasMore = start + pageSize < allItems.length;
-  return { items, cursor: hasMore ? pageIndex + 1 : null, hasMore };
+  return { items, cursor: hasMore ? pageIndex + 1 : null, hasMore, total: allItems.length };
 }
 
 // Legacy single-call version (kept for backward compatibility with hooks)
@@ -284,9 +282,7 @@ async function getAllCollectionItemsForSearch(collectionSlug: string) {
 export async function getRelatedItems(item: ItemRecord) {
   if (hasSupabaseEnv) {
     const relatedItems = await getRelatedItemsFromSupabase(item.id);
-    if (relatedItems.length > 0) {
-      return relatedItems.slice(0, 3);
-    }
+    return relatedItems.slice(0, 3);
   }
 
   if (!firestore) {

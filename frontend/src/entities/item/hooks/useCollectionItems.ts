@@ -22,6 +22,7 @@ export function useCollectionItems(queryConfig: CollectionItemQuery) {
       items: data.pages.flatMap((p) => p.items),
       hasMore: data.pages[data.pages.length - 1]?.hasMore ?? false,
       totalLoaded: data.pages.reduce((sum, p) => sum + p.items.length, 0),
+      totalMatches: data.pages[0]?.total ?? 0,
     }),
   });
 }

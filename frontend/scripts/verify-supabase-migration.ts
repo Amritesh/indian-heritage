@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { loadWorkspaceEnv } from './lib/loadEnv';
 import { buildCanonicalTags, canonicalizeAuthority, canonicalizeMint, canonicalizeRulerOrIssuer, slugifyTag } from '../src/shared/lib/catalogNormalization';
 import { deriveYearRange } from '../src/backend-support/mappers/normalizeItem';
+import { shouldSkipLegacyPlaceholderSnapshot } from './lib/snapshotFiltering';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -52,16 +53,33 @@ type CountMismatch = {
 };
 
 function resolveSnapshotFiles(target?: string) {
+  const filterFiles = (files: string[]) =>
+    files.filter((filePath) => {
+      const parsed = JSON.parse(fs.readFileSync(filePath, 'utf8')) as unknown;
+      if (!parsed || typeof parsed !== 'object') return true;
+      return !shouldSkipLegacyPlaceholderSnapshot(filePath, parsed as FirebaseArchiveSnapshot, files);
+    });
+
   if (!target) {
     return fs.existsSync(defaultSnapshotDir)
-      ? fs.readdirSync(defaultSnapshotDir).filter((entry) => entry.endsWith('.json')).map((entry) => path.join(defaultSnapshotDir, entry)).sort()
+      ? filterFiles(
+          fs.readdirSync(defaultSnapshotDir)
+            .filter((entry) => entry.endsWith('.json'))
+            .map((entry) => path.join(defaultSnapshotDir, entry))
+            .sort(),
+        )
       : [];
   }
 
   const resolved = path.resolve(process.cwd(), target);
   if (fs.existsSync(resolved) && fs.statSync(resolved).isFile()) return [resolved];
   if (fs.existsSync(resolved) && fs.statSync(resolved).isDirectory()) {
-    return fs.readdirSync(resolved).filter((entry) => entry.endsWith('.json')).map((entry) => path.join(resolved, entry)).sort();
+    return filterFiles(
+      fs.readdirSync(resolved)
+        .filter((entry) => entry.endsWith('.json'))
+        .map((entry) => path.join(resolved, entry))
+        .sort(),
+    );
   }
 
   const fallback = path.join(defaultSnapshotDir, `${target}.json`);

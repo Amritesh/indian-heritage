@@ -42,10 +42,7 @@ function mapCollectionSnapshot(data: Record<string, unknown>): CollectionRecord 
 
 export async function getCollections(): Promise<CollectionRecord[]> {
   if (hasSupabaseEnv) {
-    const supabaseCollections = await getCollectionsFromSupabase();
-    if (supabaseCollections.length > 0) {
-      return supabaseCollections;
-    }
+    return getCollectionsFromSupabase();
   }
 
   if (!firestore) {
@@ -87,10 +84,7 @@ export async function getCollections(): Promise<CollectionRecord[]> {
 
 export async function getCollectionBySlug(slug: string): Promise<CollectionRecord | null> {
   if (hasSupabaseEnv) {
-    const supabaseCollection = await getCollectionBySlugFromSupabase(slug);
-    if (supabaseCollection) {
-      return supabaseCollection;
-    }
+    return getCollectionBySlugFromSupabase(slug);
   }
 
   if (!firestore) {

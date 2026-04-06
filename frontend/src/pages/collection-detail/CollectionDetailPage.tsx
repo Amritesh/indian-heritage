@@ -44,6 +44,8 @@ export function CollectionDetailPage() {
   const items = data?.items ?? [];
   const hasMore = data?.hasMore ?? false;
   const totalLoaded = data?.totalLoaded ?? 0;
+  const totalMatches = data?.totalMatches ?? collection?.itemCount ?? 0;
+  const hasActiveFilters = Boolean(activeTag || debouncedSearch.trim());
 
   const worthLabel = formatCurrency(collection?.estimatedWorth);
 
@@ -174,7 +176,13 @@ export function CollectionDetailPage() {
           <div className="mt-10 flex flex-col items-center gap-4">
             <p className="text-sm text-on-surface-variant">
               Showing <span className="font-semibold text-on-surface">{totalLoaded}</span> of{' '}
-              <span className="font-semibold text-on-surface">{collection.itemCount}</span> artifacts
+              <span className="font-semibold text-on-surface">{totalMatches}</span> artifacts
+              {hasActiveFilters && totalMatches !== collection.itemCount ? (
+                <>
+                  {' '}from a collection of{' '}
+                  <span className="font-semibold text-on-surface">{collection.itemCount}</span>
+                </>
+              ) : null}
             </p>
 
             {hasMore && (
