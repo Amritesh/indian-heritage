@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 
 from google import genai
+from ._genai_retry import run_with_transient_retry
 from ._tool_compat import tool
 
 
@@ -111,20 +112,22 @@ def analyze_coin(image_path: str) -> str:
     mime = "image/png" if ext == ".png" else "image/jpeg"
 
     client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
-    response = client.models.generate_content(
-        model="gemini-flash-latest",
-        contents=[
-            {
-                "role": "user",
-                "parts": [
-                    {"text": _build_analysis_prompt()},
-                    {"inline_data": {"mime_type": mime, "data": base64.b64encode(image_bytes).decode("utf-8")}},
-                ],
-            }
-        ],
-        config={
-            "response_mime_type": "application/json",
-        },
+    response = run_with_transient_retry(
+        lambda: client.models.generate_content(
+            model="gemini-flash-latest",
+            contents=[
+                {
+                    "role": "user",
+                    "parts": [
+                        {"text": _build_analysis_prompt()},
+                        {"inline_data": {"mime_type": mime, "data": base64.b64encode(image_bytes).decode("utf-8")}},
+                    ],
+                }
+            ],
+            config={
+                "response_mime_type": "application/json",
+            },
+        )
     )
 
     analysis = _parse_analysis_payload(response.text)
@@ -151,20 +154,22 @@ def analyze_coin_image(image_path: str, reference_context: str | None = None):
     mime = "image/png" if ext == ".png" else "image/jpeg"
 
     client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
-    response = client.models.generate_content(
-        model="gemini-flash-latest",
-        contents=[
-            {
-                "role": "user",
-                "parts": [
-                    {"text": _build_analysis_prompt(reference_context)},
-                    {"inline_data": {"mime_type": mime, "data": base64.b64encode(image_bytes).decode("utf-8")}},
-                ],
-            }
-        ],
-        config={
-            "response_mime_type": "application/json",
-        },
+    response = run_with_transient_retry(
+        lambda: client.models.generate_content(
+            model="gemini-flash-latest",
+            contents=[
+                {
+                    "role": "user",
+                    "parts": [
+                        {"text": _build_analysis_prompt(reference_context)},
+                        {"inline_data": {"mime_type": mime, "data": base64.b64encode(image_bytes).decode("utf-8")}},
+                    ],
+                }
+            ],
+            config={
+                "response_mime_type": "application/json",
+            },
+        )
     )
 
     analysis = _parse_analysis_payload(response.text)

@@ -1,3 +1,4 @@
+from coin_cataloguer.tools._genai_retry import is_transient_genai_error, run_with_transient_retry
 from coin_cataloguer.tools.image_segmenter import _parse_detection_payload
 from coin_cataloguer.tools.coin_analyzer import _parse_analysis_payload
 
@@ -44,3 +45,24 @@ Trailing notes to ignore.
 
     assert parsed["ruler_or_issuer"] == "Akbar"
     assert parsed["estimated_price_inr"] == "5000 - 7000"
+
+
+def test_transient_retry_classifies_ssl_eof_errors():
+    error = RuntimeError("[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol")
+
+    assert is_transient_genai_error(error) is True
+
+
+def test_transient_retry_retries_until_success():
+    attempts = {"count": 0}
+
+    def flaky_call():
+        attempts["count"] += 1
+        if attempts["count"] < 3:
+            raise RuntimeError("ConnectError: [SSL: UNEXPECTED_EOF_WHILE_READING]")
+        return "ok"
+
+    result = run_with_transient_retry(flaky_call, attempts=3, base_delay_seconds=0)
+
+    assert result == "ok"
+    assert attempts["count"] == 3
