@@ -1,6 +1,7 @@
 from coin_cataloguer.tools._genai_retry import is_transient_genai_error, run_with_transient_retry
 from coin_cataloguer.tools.image_segmenter import _parse_detection_payload
 from coin_cataloguer.tools.coin_analyzer import _parse_analysis_payload
+import time
 
 
 def test_parse_detection_payload_accepts_trailing_text_after_json():
@@ -66,3 +67,26 @@ def test_transient_retry_retries_until_success():
 
     assert result == "ok"
     assert attempts["count"] == 3
+
+
+def test_transient_retry_times_out_and_retries():
+    attempts = {"count": 0}
+
+    def slow_call():
+        attempts["count"] += 1
+        time.sleep(0.05)
+        return "too-late"
+
+    try:
+        run_with_transient_retry(
+            slow_call,
+            attempts=2,
+            base_delay_seconds=0,
+            timeout_seconds=0.01,
+        )
+    except TimeoutError as error:
+        assert "timed out" in str(error).lower()
+    else:
+        raise AssertionError("Expected run_with_transient_retry to raise TimeoutError")
+
+    assert attempts["count"] == 2
