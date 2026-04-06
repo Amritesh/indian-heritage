@@ -52,6 +52,14 @@ type CountMismatch = {
   supabase: number;
 };
 
+const STRICT_MATCH_METRICS = new Set([
+  'collections',
+  'items',
+  'media_assets',
+  'numismatic_item_profiles',
+  'item_private_profiles',
+]);
+
 function resolveSnapshotFiles(target?: string) {
   const filterFiles = (files: string[]) =>
     files.filter((filePath) => {
@@ -211,7 +219,7 @@ export function compareCollectionCounts(firebaseCounts: CountMap, supabaseCounts
     const metrics = new Set([...Object.keys(firebase), ...Object.keys(supabase)]);
 
     for (const metric of metrics) {
-      if (collectionSlug !== '__all__' && (metric === 'tags' || metric === 'entities')) {
+      if (!STRICT_MATCH_METRICS.has(metric)) {
         continue;
       }
       const firebaseValue = Number(firebase[metric] ?? 0);
