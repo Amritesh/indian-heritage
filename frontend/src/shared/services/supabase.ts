@@ -1,6 +1,7 @@
 import { hasSupabaseEnv, supabaseConfig } from '@/shared/config/supabase';
 
 type QueryValue = string | number | boolean | null | undefined;
+const DEFAULT_SELECT_PAGE_SIZE = 1000;
 
 function buildHeaders() {
   return {
@@ -22,8 +23,12 @@ function buildUrl(path: string, query?: Record<string, QueryValue>) {
   return url.toString();
 }
 
-export async function supabaseSelect<T>(path: string, query?: Record<string, QueryValue>): Promise<T[]> {
-  if (!hasSupabaseEnv) return [];
+function hasExplicitWindow(query?: Record<string, QueryValue>) {
+  if (!query) return false;
+  return query.limit != null || query.offset != null;
+}
+
+async function supabaseSelectPage<T>(path: string, query?: Record<string, QueryValue>): Promise<T[]> {
   const response = await fetch(buildUrl(path, query), {
     headers: buildHeaders(),
   });
@@ -33,6 +38,29 @@ export async function supabaseSelect<T>(path: string, query?: Record<string, Que
   }
 
   return (await response.json()) as T[];
+}
+
+export async function supabaseSelect<T>(path: string, query?: Record<string, QueryValue>): Promise<T[]> {
+  if (!hasSupabaseEnv) return [];
+  if (hasExplicitWindow(query)) {
+    return supabaseSelectPage<T>(path, query);
+  }
+
+  const rows: T[] = [];
+  let offset = 0;
+
+  while (true) {
+    const batch = await supabaseSelectPage<T>(path, {
+      ...(query ?? {}),
+      limit: DEFAULT_SELECT_PAGE_SIZE,
+      offset,
+    });
+    rows.push(...batch);
+    if (batch.length < DEFAULT_SELECT_PAGE_SIZE) break;
+    offset += DEFAULT_SELECT_PAGE_SIZE;
+  }
+
+  return rows;
 }
 
 export async function supabaseMaybeSingle<T>(path: string, query?: Record<string, QueryValue>): Promise<T | null> {
