@@ -1,0 +1,28 @@
+{
+  "name": "anand-heritage-gallery",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Indian Heritage Gallery rebuilt as a Firebase-first archive",
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace frontend",
+    "build": "npm run build --workspace frontend",
+    "lint": "npm run lint --workspace frontend",
+    "test": "npm run test --workspace frontend",
+    "firebase:env": "node ./scripts/sync-firebase-web-env.cjs",
+    "deploy:firebase": "node ./scripts/deploy-firebase.cjs",
+    "import:collections": "npm run import:collections --workspace frontend",
+    "import:british": "npm run import:british --workspace frontend",
+    "import:mughals": "npm run import:mughals --workspace frontend",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:db:reset": "supabase db reset",
+    "supabase:link": "supabase link --project-ref rwdjasxvkupweowgrrwl"
+  },
+  "devDependencies": {
+    "firebase-tools": "^15.12.0",
+    "google-auth-library": "^10.6.2"
+  }
+}

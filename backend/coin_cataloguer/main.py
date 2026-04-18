@@ -1,0 +1,828 @@
+"""
+CLI entry point for the Coin Cataloguer CrewAI application.
+
+Usage:
+    python -m coin_cataloguer.main --image /path/to/coins.jpg
+    python -m coin_cataloguer.main --image /path/to/coins.jpg --output ./my_output --upload
+    python -m coin_cataloguer.main --image /path/to/coins.jpg --collection "mughal-coins"
+
+Metadata is Supabase-first. Firebase Storage is used for media assets and
+legacy compatibility uploads only.
+"""
+
+import argparse
+import json
+import os
+import re
+import sys
+import time
+
+from dotenv import load_dotenv
+
+
+STORAGE_BUCKET = "indian-heritage-gallery-bucket"
+DATABASE_URL = "https://indian-heritage-gallery-default-rtdb.firebaseio.com/"
+
+
+def _project_root():
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+
+def _find_env_path():
+    current = os.path.abspath(os.path.dirname(__file__))
+    seen = set()
+
+    while True:
+        if os.path.basename(current) == "backend":
+            candidate = os.path.join(current, ".env")
+            if os.path.isfile(candidate):
+                return candidate
+
+        parent = os.path.dirname(current)
+        if parent == current or parent in seen:
+            break
+        seen.add(current)
+        current = parent
+
+    return os.path.join(os.path.dirname(__file__), "..", ".env")
+
+
+def _titleize_collection_name(collection_name):
+    return collection_name.replace("-", " ").replace("_", " ").title()
+
+
+def _slugify(value):
+    return re.sub(r"[^a-z0-9]+", "-", str(value or "").lower()).strip("-")
+
+
+def _temp_data_file(collection_name):
+    return os.path.join(_project_root(), "temp", "data", f"{collection_name}.json")
+
+
+def _read_json_file(path):
+    if not os.path.isfile(path):
+        return None
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _write_json_file(path, data):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
+
+def _load_collection_meta_seed(collection_name):
+    collections_path = os.path.join(_project_root(), "temp", "data", "collections.json")
+    collections_data = _read_json_file(collections_path) or {}
+    entries = collections_data.get("collections", collections_data)
+    if isinstance(entries, list):
+        for entry in entries:
+            if isinstance(entry, dict) and entry.get("id") == collection_name:
+                return entry
+    elif isinstance(entries, dict):
+        direct = entries.get(collection_name)
+        if isinstance(direct, dict):
+            return direct
+        for entry in entries.values():
+            if isinstance(entry, dict) and entry.get("id") == collection_name:
+                return entry
+    return {}
+
+
+def _load_local_collection_detail(collection_name):
+    data = _read_json_file(_temp_data_file(collection_name))
+    if isinstance(data, dict) and isinstance(data.get("items"), list):
+        return data
+    return None
+
+
+def _normalize_existing_item(item):
+    if not isinstance(item, dict):
+        return None
+
+    metadata = item.get("metadata")
+    if not isinstance(metadata, dict):
+        metadata = {
+            "type": "coin",
+            "ruler_or_issuer": item.get("ruler_or_issuer", ""),
+            "year_or_period": item.get("year_or_period", item.get("period", "")),
+            "mint_or_place": item.get("mint_or_place", item.get("mint", item.get("region", ""))),
+            "denomination": item.get("denomination", ""),
+            "series_or_catalog": item.get("series_or_catalog", ""),
+            "material": item.get("material", ""),
+            "condition": item.get("condition", ""),
+            "weight_estimate": item.get("weight_estimate", ""),
+            "estimated_price_inr": item.get("estimated_price_inr", ""),
+            "confidence": item.get("confidence", ""),
+        }
+
+    metadata = dict(metadata)
+    metadata.setdefault("type", "coin")
+    metadata.setdefault("ruler_or_issuer", item.get("ruler_or_issuer", ""))
+    metadata.setdefault("year_or_period", item.get("year_or_period", item.get("period", "")))
+    metadata.setdefault("mint_or_place", item.get("mint_or_place", item.get("mint", item.get("region", ""))))
+    metadata.setdefault("denomination", item.get("denomination", ""))
+    metadata.setdefault("series_or_catalog", item.get("series_or_catalog", ""))
+    metadata.setdefault("material", item.get("material", ""))
+    metadata.setdefault("condition", item.get("condition", ""))
+    metadata.setdefault("weight_estimate", item.get("weight_estimate", ""))
+    metadata.setdefault("estimated_price_inr", item.get("estimated_price_inr", ""))
+    metadata.setdefault("confidence", item.get("confidence", ""))
+    metadata.setdefault("review_flags", [])
+    metadata.setdefault("source_batch", "")
+    metadata["source_page_path"] = _source_page_reference(
+        metadata.get("source_page_path") or item.get("source_page_path", "")
+    )
+    metadata.setdefault("ingestion_mode", "legacy")
+    if metadata.get("ingest_status") is None:
+        metadata.pop("ingest_status", None)
+
+    materials = item.get("materials")
+    material = metadata.get("material") or item.get("material") or ""
+    if not isinstance(materials, list) or not materials:
+        materials = [material] if material else ["Unknown"]
+
+    notes = item.get("notes")
+    if isinstance(notes, str):
+        notes = [notes]
+    if not isinstance(notes, list) or not notes:
+        notes = ["Auto-catalogued coin"]
+
+    return {
+        "id": item.get("id") or "",
+        "page": item.get("page"),
+        "title": item.get("title") or "Untitled Coin",
+        "period": item.get("period") or metadata.get("year_or_period") or None,
+        "region": item.get("region") or metadata.get("mint_or_place") or None,
+        "materials": materials,
+        "image": item.get("image", ""),
+        "notes": notes,
+        "display_labels": item.get("display_labels", []),
+        "description": item.get("description", ""),
+        "metadata": metadata,
+    }
+
+
+def _item_dedupe_key(item):
+    metadata = item.get("metadata") or {}
+    image = str(item.get("image", "") or "")
+    image_key = image.lower()
+    if image_key.startswith("gs://"):
+        image_key = image_key.split("?", 1)[0]
+    elif image_key:
+        image_key = os.path.basename(image_key)
+
+    fallback_parts = [
+        item.get("title", ""),
+        metadata.get("ruler_or_issuer", ""),
+        metadata.get("denomination", ""),
+        metadata.get("year_or_period", ""),
+        metadata.get("mint_or_place", ""),
+    ]
+    fallback_key = "|".join(_slugify(part) for part in fallback_parts if part)
+    return image_key or fallback_key or _slugify(item.get("id", ""))
+
+
+def _ensure_unique_item_id(collection_name, item, used_ids, sequence_start):
+    current_id = str(item.get("id", "") or "").strip()
+    if current_id and current_id not in used_ids and not current_id.startswith("page-"):
+        used_ids.add(current_id)
+        return current_id, sequence_start
+
+    next_sequence = sequence_start
+    while True:
+        # Check for 'coin-X' pattern which is used in existing mughals collection
+        candidate = f"coin-{next_sequence}"
+        if candidate not in used_ids:
+            used_ids.add(candidate)
+            return candidate, next_sequence + 1
+        
+        # Fallback to collection-item-X if coin-X is taken
+        candidate = f"{collection_name}-item-{next_sequence}"
+        if candidate not in used_ids:
+            used_ids.add(candidate)
+            return candidate, next_sequence + 1
+        
+        next_sequence += 1
+
+
+def _upsert_collection_meta(database, collection_meta):
+    collections_ref = database.child("collections")
+    current = collections_ref.get()
+
+    if isinstance(current, list):
+        updated = []
+        seen = False
+        for entry in current:
+            if not isinstance(entry, dict):
+                updated.append(entry)
+                continue
+            if entry.get("id") == collection_meta["id"]:
+                if not seen:
+                    updated.append(collection_meta)
+                    seen = True
+                continue
+            updated.append(entry)
+        if not seen:
+            updated.append(collection_meta)
+        collections_ref.set(updated)
+    else:
+        collections_ref.child(collection_meta["id"]).set(collection_meta)
+
+
+def _init_firebase():
+    """Initialize Firebase if needed, return (bucket, db_ref)."""
+    import firebase_admin
+    from firebase_admin import credentials, db, storage
+
+    if not firebase_admin._apps:
+        project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+        key_path = os.path.join(
+            project_root,
+            "indian-heritage-gallery-firebase-adminsdk-fbsvc-1c3ae1c07a.json",
+        )
+        env_key = os.environ.get("FIREBASE_SERVICE_ACCOUNT_KEY", "")
+        cred_path = env_key if env_key and os.path.isfile(env_key) else key_path
+
+        if not os.path.isfile(cred_path):
+            print(f"Error: Firebase service account key not found at {cred_path}")
+            return None, None
+
+        cred = credentials.Certificate(cred_path)
+        firebase_admin.initialize_app(
+            cred,
+            {
+                "databaseURL": DATABASE_URL,
+                "storageBucket": STORAGE_BUCKET,
+            },
+        )
+
+    return storage.bucket(), db.reference()
+
+
+def _is_missing_value(value):
+    return value is None or not str(value).strip()
+
+
+def _source_page_reference(source_page_path):
+    if not source_page_path:
+        return ""
+    return os.path.splitext(os.path.basename(str(source_page_path)))[0]
+
+
+def _clean_text(value, fallback=""):
+    if value is None:
+        return fallback
+    text = str(value).strip()
+    return text if text else fallback
+
+
+def _infer_stub_catalogue_entry(coin):
+    label = _clean_text(coin.get("label"), "Unknown coin")
+    crop_path = coin.get("path", "")
+    normalized = label.lower()
+
+    if "empty coin pocket" in normalized or normalized == "empty holder":
+        return {
+            "image_path": crop_path,
+            "ruler_or_issuer": "N/A",
+            "year_or_period": "N/A",
+            "mint_or_place": "N/A",
+            "denomination": "N/A",
+            "series_or_catalog": "N/A",
+            "material": "N/A",
+            "condition": "N/A",
+            "obverse_description": "Empty coin pocket",
+            "reverse_description": "Empty coin pocket",
+            "weight_estimate": "N/A",
+            "estimated_price_inr": "0",
+            "notes": "This pocket is empty.",
+            "confidence": 0.1,
+        }
+
+    parts = [part.strip(" -") for part in re.split(r"\s+-\s+|,\s+", label) if part.strip(" -")]
+    authority = parts[0] if parts else ""
+    ruler = parts[1] if len(parts) > 1 else label
+
+    denomination = "Unknown"
+    if "gold tanka" in normalized:
+        denomination = "Gold Tanka"
+    elif "silver tanka" in normalized:
+        denomination = "Silver Tanka"
+    elif "silver rupee" in normalized or "rupee" in normalized:
+        denomination = "Silver Tanka (Rupee)"
+    elif "copper" in normalized:
+        denomination = "Copper Coin"
+    elif "coin" in normalized:
+        denomination = "Coin"
+
+    material = "Unknown"
+    if "gold" in normalized:
+        material = "Gold"
+    elif "silver" in normalized:
+        material = "Silver"
+    elif "copper" in normalized:
+        material = "Copper"
+
+    series = authority or "Unclassified Sultanate issue"
+    note_parts = [f"Fallback entry derived from segmentation label: {label}."]
+    if authority:
+        note_parts.append(f"Likely authority or polity: {authority}.")
+
+    cleaned_ruler = (
+        ruler.replace("coin in 2x2 cardboard holder", "")
+        .replace("coin in 2x2 holder", "")
+        .replace("cardboard holder", "")
+        .strip()
+    )
+
+    return {
+        "image_path": crop_path,
+        "ruler_or_issuer": cleaned_ruler or "Unknown",
+        "year_or_period": "",
+        "mint_or_place": authority.replace("Saltant", "Sultanate").replace("Saltanat", "Sultanate").strip(),
+        "denomination": denomination,
+        "series_or_catalog": series,
+        "material": material,
+        "condition": "Unverified",
+        "obverse_description": label,
+        "reverse_description": "",
+        "weight_estimate": "",
+        "estimated_price_inr": "",
+        "notes": " ".join(note_parts),
+        "confidence": 0.25,
+    }
+
+
+def build_review_flags(coin):
+    flags = []
+    price = coin.get("estimated_price_inr")
+    mint = coin.get("mint_or_place")
+    ruler = coin.get("ruler_or_issuer")
+    confidence = coin.get("confidence")
+    confidence_text = str(confidence).strip().lower() if confidence is not None else ""
+
+    if _is_missing_value(price):
+        flags.append("missing_price")
+    if _is_missing_value(mint):
+        flags.append("missing_mint")
+    ruler_text = str(ruler).strip() if ruler is not None else ""
+    if not ruler_text or ruler_text.lower() == "unknown":
+        flags.append("missing_issuer")
+    if confidence_text in {"low", "low confidence"}:
+        flags.append("low_confidence")
+
+    return flags
+
+
+def build_uploaded_item(
+    *,
+    coin,
+    collection_name,
+    item_index,
+    source_page_path="",
+    source_batch="",
+    ingestion_mode="independent-page",
+    gs_url="",
+):
+    ruler = _clean_text(coin.get("ruler_or_issuer"), "Unknown")
+    denomination = _clean_text(coin.get("denomination"), "Unknown")
+    year = _clean_text(coin.get("year_or_period"), "")
+    mint = _clean_text(coin.get("mint_or_place"), "")
+    material = _clean_text(coin.get("material"), "")
+    condition = _clean_text(coin.get("condition"), "")
+    weight = _clean_text(coin.get("weight_estimate"), "")
+    price = _clean_text(coin.get("estimated_price_inr"), "")
+    catalog_ref = _clean_text(coin.get("series_or_catalog"), "")
+    review_flags = build_review_flags(coin)
+
+    display_labels = []
+    if weight:
+        display_labels.append(f"Wt: {weight}")
+    if condition:
+        display_labels.append(condition)
+    if price:
+        display_labels.append(f"₹{price}")
+
+    notes = []
+    obverse = _clean_text(coin.get("obverse_description"), "")
+    reverse = _clean_text(coin.get("reverse_description"), "")
+    if obverse:
+        notes.append(f"Obverse: {obverse}")
+    if reverse:
+        notes.append(f"Reverse: {reverse}")
+    extra_notes = _clean_text(coin.get("notes"), "")
+    if extra_notes:
+        notes.append(extra_notes)
+
+    parts = [f"{denomination} issued by {ruler}"]
+    if year:
+        parts.append(f"Period: {year}")
+    if mint:
+        parts.append(f"Mint: {mint}")
+    if catalog_ref:
+        parts.append(f"Catalog: {catalog_ref}")
+    description = ". ".join(parts) + "."
+
+    return {
+        "id": "",
+        "page": item_index,
+        "title": f"{denomination} - {ruler}",
+        "period": year or None,
+        "region": mint or None,
+        "materials": [material] if material else ["Unknown"],
+        "image": gs_url or coin.get("image_path", ""),
+        "notes": notes if notes else ["Auto-catalogued coin"],
+        "display_labels": display_labels,
+        "description": description,
+        "metadata": {
+            "type": "coin",
+            "ruler_or_issuer": ruler,
+            "year_or_period": year,
+            "mint_or_place": mint,
+            "denomination": denomination,
+            "series_or_catalog": catalog_ref,
+            "material": material,
+            "condition": condition,
+            "weight_estimate": weight,
+            "estimated_price_inr": price,
+            "confidence": coin.get("confidence", ""),
+            "ingest_status": "draft",
+            "review_flags": review_flags,
+            "source_batch": source_batch,
+            "source_page_path": _source_page_reference(source_page_path),
+            "ingestion_mode": ingestion_mode,
+        },
+    }
+
+
+def get_catalogue_entries(catalogue_data):
+    def _is_coin_like_entry(entry):
+        return isinstance(entry, dict) and any(
+            key in entry for key in ("image_path", "ruler_or_issuer", "denomination")
+        )
+
+    if isinstance(catalogue_data, list):
+        if not all(_is_coin_like_entry(entry) for entry in catalogue_data):
+            raise ValueError("catalogue payload must contain coin-like dict entries")
+        return catalogue_data
+    if isinstance(catalogue_data, dict) and "catalogue" in catalogue_data:
+        catalogue_entries = catalogue_data["catalogue"]
+        if not isinstance(catalogue_entries, list):
+            raise ValueError("catalogue payload must be a list")
+        if not all(_is_coin_like_entry(entry) for entry in catalogue_entries):
+            raise ValueError("catalogue payload must contain coin-like dict entries")
+        return catalogue_entries
+    if _is_coin_like_entry(catalogue_data):
+        return [catalogue_data]
+    if isinstance(catalogue_data, dict):
+        raise ValueError("catalogue payload must be a coin-like dict or a list of coins")
+    return []
+
+
+def save_catalogue_result(*, result, image_path, output_dir):
+    save_dir = os.path.abspath(output_dir) if output_dir else os.path.join(
+        os.path.dirname(image_path), "coins_output"
+    )
+    os.makedirs(save_dir, exist_ok=True)
+    catalogue_path = os.path.join(save_dir, "catalogue.json")
+
+    def _parse_candidate(value):
+        if isinstance(value, (list, dict)):
+            return value
+        if value is None:
+            return None
+        try:
+            return json.loads(str(value))
+        except (json.JSONDecodeError, TypeError):
+            return None
+
+    catalogue_data = _parse_candidate(result)
+
+    if catalogue_data is None:
+        for task_output in reversed(getattr(result, "tasks_output", []) or []):
+            catalogue_data = _parse_candidate(getattr(task_output, "json_dict", None))
+            if catalogue_data is None:
+                catalogue_data = _parse_candidate(getattr(task_output, "raw", None))
+            if catalogue_data is None:
+                continue
+            try:
+                get_catalogue_entries(catalogue_data)
+                break
+            except ValueError:
+                catalogue_data = None
+
+    if catalogue_data is not None:
+        with open(catalogue_path, "w", encoding="utf-8") as f:
+            json.dump(catalogue_data, f, indent=2, ensure_ascii=False)
+    else:
+        with open(catalogue_path, "w", encoding="utf-8") as f:
+            f.write(str(result))
+
+    return {
+        "catalogue_path": catalogue_path,
+        "catalogue_data": catalogue_data,
+        "save_dir": save_dir,
+    }
+
+
+def _run_deterministic_cataloguer(*, image_path, output_dir):
+    from .tools.coin_analyzer import analyze_coin
+    from .tools.image_segmenter import create_tool as create_segment_tool
+
+    segment_tool = create_segment_tool(output_dir=output_dir)
+    raw_segments = segment_tool.run(image_path)
+    segment_data = json.loads(raw_segments)
+    coins = segment_data.get("coins", [])
+    if not coins:
+        raise RuntimeError(f"No segmented coins returned for {image_path}")
+
+    catalogue = []
+    for coin in coins:
+        crop_path = coin.get("path", "")
+        if not crop_path:
+            continue
+
+        last_error = None
+        for attempt in range(3):
+            try:
+                analysis = json.loads(analyze_coin.func(crop_path))
+                if isinstance(analysis, dict):
+                    analysis["image_path"] = crop_path
+                    catalogue.append(analysis)
+                    break
+            except Exception as exc:  # pragma: no cover - network/model fallback
+                last_error = exc
+                if attempt < 2:
+                    time.sleep(2 * (attempt + 1))
+        else:
+            print(f"  Falling back to label-derived stub for {crop_path}: {last_error}")
+            catalogue.append(_infer_stub_catalogue_entry(coin))
+
+    return save_catalogue_result(result=catalogue, image_path=image_path, output_dir=output_dir)
+
+
+def run_cataloguer_for_image(*, image_path, output_dir, collection_name):
+    from .crew import create_crew
+
+    if os.environ.get("FORCE_DETERMINISTIC_CATALOGUER", "").strip().lower() in {"1", "true", "yes", "on"}:
+        print("  Using deterministic cataloguer path.")
+        return _run_deterministic_cataloguer(image_path=image_path, output_dir=output_dir)
+
+    try:
+        crew = create_crew(
+            image_path=image_path,
+            output_dir=output_dir,
+            collection_name=collection_name,
+        )
+        result = crew.kickoff()
+        return save_catalogue_result(result=result, image_path=image_path, output_dir=output_dir)
+    except Exception as exc:
+        print(f"  Crew pipeline failed, falling back to deterministic analysis: {exc}")
+        return _run_deterministic_cataloguer(image_path=image_path, output_dir=output_dir)
+
+
+def upload_to_firebase(
+    catalogue,
+    collection_name,
+    source_page_path="",
+    clear_collection=False,
+    source_batch="",
+    ingestion_mode="independent-page",
+):
+    """Legacy compatibility upload for Firebase-backed media and transitional snapshots.
+
+    AHG now treats Supabase as the source of truth for archive metadata, search,
+    and canonical collections. This helper remains so existing ingestion flows can
+    still write Firebase Storage media paths and legacy collection snapshots during
+    the transition.
+
+    Legacy snapshot format:
+      collections/{id}           -> { id, title, category, image (gs://), ... }
+      collection_details/{id}    -> { album_title, items: [{ id, page, title, image (gs://),
+                                     period, region, materials[], notes[], display_labels[],
+                                     description, metadata{} }, ...] }
+    """
+    bucket, database = _init_firebase()
+    if not bucket:
+        return None
+
+    collection_id = collection_name
+    
+    if clear_collection:
+        print(f"  CLEARING collection: {collection_id}")
+        existing_detail = {
+            "album_title": _titleize_collection_name(collection_name),
+            "items": [],
+        }
+    else:
+        existing_detail = _load_local_collection_detail(collection_name)
+        if not existing_detail:
+            remote_detail = database.child("collection_details").child(collection_id).get()
+            if isinstance(remote_detail, dict) and isinstance(remote_detail.get("items"), list):
+                existing_detail = remote_detail
+            else:
+                existing_detail = {
+                    "album_title": _titleize_collection_name(collection_name),
+                    "items": [],
+                }
+
+    existing_items = []
+    for existing_item in existing_detail.get("items", []):
+        normalized = _normalize_existing_item(existing_item)
+        if normalized:
+            existing_items.append(normalized)
+
+    used_ids = {item["id"] for item in existing_items if item.get("id")}
+    sequence = len(used_ids) + 1
+    merged_by_key = {_item_dedupe_key(item): item for item in existing_items}
+
+    page_stem = os.path.splitext(os.path.basename(source_page_path or ""))[0]
+    page_label = page_stem or "upload"
+
+    for idx, coin in enumerate(catalogue, 1):
+        image_path = coin.get("image_path", "")
+        gs_url = ""
+
+        # Upload image to Firebase Storage
+        if image_path and os.path.isfile(image_path):
+            blob_basename = os.path.basename(image_path)
+            blob_path = (
+                f"images/{collection_id}/{page_label}/{blob_basename}"
+                if page_stem
+                else f"images/{collection_id}/{blob_basename}"
+            )
+            blob = bucket.blob(blob_path)
+            blob.upload_from_filename(image_path, content_type="image/png")
+            # Store as gs:// URL - the frontend converts this to HTTP via getFirebaseStorageUrl()
+            gs_url = f"gs://{STORAGE_BUCKET}/{blob_path}"
+            print(f"  Uploaded: {os.path.basename(image_path)} -> {gs_url}")
+
+        item = build_uploaded_item(
+            coin=coin,
+            collection_name=collection_name,
+            item_index=idx,
+            source_page_path=source_page_path,
+            source_batch=source_batch or (os.path.basename(os.path.dirname(source_page_path)) if source_page_path else ""),
+            ingestion_mode=ingestion_mode,
+            gs_url=gs_url,
+        )
+        item["id"], sequence = _ensure_unique_item_id(collection_name, item, used_ids, sequence)
+        merged_by_key[_item_dedupe_key(item)] = item
+
+    items = list(merged_by_key.values())
+
+    for idx, item in enumerate(items, 1):
+        if item.get("page") in (None, "", 0):
+            item["page"] = idx
+
+    first_gs_url = next((item.get("image", "") for item in items if str(item.get("image", "")).startswith("gs://")), "")
+
+    # collection_details/{id} -> { album_title, items: [...] }
+    collection_detail = {
+        "album_title": existing_detail.get("album_title") or _titleize_collection_name(collection_name),
+        "items": items,
+    }
+
+    # collections/{id} -> top-level listing entry
+    meta_seed = _load_collection_meta_seed(collection_name)
+    collection_meta = {
+        "id": collection_id,
+        "title": meta_seed.get("title") or _titleize_collection_name(collection_name),
+        "category": meta_seed.get("category") or "Numismatics",
+        "assetValue": meta_seed.get("assetValue") or str(len(items)),
+        "volume": meta_seed.get("volume") or "1",
+        "era": meta_seed.get("era") or "",
+        "description": meta_seed.get("description") or f"Auto-catalogued coin collection ({len(items)} coins)",
+        "time": meta_seed.get("time"),
+        "pages": str(len(items)),
+        "image": meta_seed.get("image") or first_gs_url,
+        "items": [],
+    }
+
+    _upsert_collection_meta(database, collection_meta)
+    database.child("collection_details").child(collection_id).set(collection_detail)
+    _write_json_file(_temp_data_file(collection_name), collection_detail)
+
+    return {
+        "collection_id": collection_id,
+        "items_uploaded": len(catalogue),
+        "items_total": len(items),
+    }
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Coin Cataloguer - Segment and identify coins from an image using AI agents"
+    )
+    parser.add_argument(
+        "--image",
+        required=True,
+        help="Path to the input image containing multiple coins",
+    )
+    parser.add_argument(
+        "--output",
+        default="",
+        help="Output directory for cropped coin images (default: <image_dir>/coins_output)",
+    )
+    parser.add_argument(
+        "--collection",
+        default="coin-catalogue",
+        help="Collection slug for the archive record; Firebase Storage media still uses the compatibility bridge (default: coin-catalogue)",
+    )
+    parser.add_argument(
+        "--upload",
+        action="store_true",
+        help="Upload Firebase Storage media and legacy compatibility snapshots after processing; metadata remains Supabase-first",
+    )
+    parser.add_argument(
+        "--clear",
+        action="store_true",
+        help="Clear existing legacy collection items before uploading media/snapshots (use with --upload)",
+    )
+    args = parser.parse_args()
+
+    # Load environment variables from backend/.env
+    env_path = _find_env_path()
+    load_dotenv(env_path)
+
+    # Validate API keys
+    if not os.environ.get("GEMINI_API_KEY"):
+        print("Error: GEMINI_API_KEY not set. Add it to backend/.env")
+        sys.exit(1)
+
+    if not os.environ.get("SERPER_API_KEY"):
+        print("Warning: SERPER_API_KEY not set. Web search will not work.")
+        print("Add SERPER_API_KEY to backend/.env for full functionality.")
+        print("Get a free key at https://serper.dev\n")
+
+    # Validate image path
+    image_path = os.path.abspath(args.image)
+    if not os.path.isfile(image_path):
+        print(f"Error: Image not found: {image_path}")
+        sys.exit(1)
+
+    output_dir = os.path.abspath(args.output) if args.output else ""
+
+    print("=" * 60)
+    print("  COIN CATALOGUER - CrewAI Agents")
+    print("=" * 60)
+    print(f"  Image:      {image_path}")
+    print(f"  Output:     {output_dir or 'auto (next to image)'}")
+    print(f"  Collection: {args.collection}")
+    print(f"  Upload:     {'Yes' if args.upload else 'No'}")
+    print("  Storage:    Supabase metadata + Firebase Storage media")
+    print("=" * 60)
+    print()
+
+    result = run_cataloguer_for_image(
+        image_path=image_path,
+        output_dir=output_dir,
+        collection_name=args.collection,
+    )
+    catalogue_path = result["catalogue_path"]
+    catalogue_data = result["catalogue_data"]
+
+    print()
+    print(f"  Catalogue saved to: {catalogue_path}")
+
+    # --- Legacy Firebase-compatible upload (deterministic, not agent-driven) ---
+    if args.upload:
+        print()
+        print("  Uploading Firebase Storage media through the legacy compatibility bridge...")
+
+        upload_succeeded = False
+        try:
+            coins = get_catalogue_entries(catalogue_data)
+        except ValueError as exc:
+            print(f"  Warning: {exc}")
+            coins = []
+
+        if not coins:
+            print("  Warning: Could not parse catalogue for upload.")
+        else:
+            upload_result = upload_to_firebase(
+                coins, args.collection, source_page_path=image_path, clear_collection=args.clear
+            )
+            if upload_result:
+                upload_succeeded = True
+                print(f"  Collection ID: {upload_result['collection_id']}")
+                print(f"  Items uploaded: {upload_result['items_uploaded']}")
+                print(f"  Collection total: {upload_result['items_total']}")
+                print(f"  DB path: collections/{upload_result['collection_id']}")
+            else:
+                print("  Upload failed. Check Firebase credentials and bridge configuration.")
+                upload_succeeded = False
+
+        if not upload_succeeded:
+            sys.exit(1)
+
+    print()
+    print("=" * 60)
+    print("  DONE!")
+    print("=" * 60)
+
+
+if __name__ == "__main__":
+    main()
