@@ -95,54 +95,22 @@ test('getArchiveStats prefers Supabase when server config is available', async (
   );
 });
 
-test('getArchiveStats falls back to Firestore when Supabase server config is missing', async () => {
-  const firestore = {
-    collection(name) {
-      if (name === 'items') {
-        return {
-          where(field, operator, value) {
-            assert.equal(field, 'published');
-            assert.equal(operator, '==');
-            assert.equal(value, true);
-            return {
-              async get() {
-                return createFirestoreSnapshot([{ title: 'Silver Rupee' }, { title: 'Gold Mohur' }]);
-              },
-            };
-          },
-        };
-      }
-
-      if (name === 'collections') {
-        return {
-          async get() {
-            return createFirestoreSnapshot([
-              { estimatedWorth: 1000, filterableMaterials: ['Silver', 'Copper'] },
-              { estimatedWorth: 2400, filterableMaterials: ['Gold'] },
-            ]);
-          },
-        };
-      }
-
-      throw new Error(`Unexpected collection request: ${name}`);
-    },
-  };
-
-  const stats = await getArchiveStats({
-    env: {},
-    functionsConfig: {},
-    httpClient: {
-      async request() {
-        throw new Error('Supabase HTTP client should not be used without config');
+test('getArchiveStats rejects when Supabase server config is missing', async () => {
+  await assert.rejects(
+    () => getArchiveStats({
+      env: {},
+      functionsConfig: {},
+      httpClient: {
+        async request() {
+          throw new Error('Supabase HTTP client should not be used without config');
+        },
       },
-    },
-    firestore,
-  });
-
-  assert.deepEqual(stats, {
-    items: 2,
-    collections: 2,
-    materials: 3,
-    totalWorth: 3400,
-  });
+      firestore: {
+        collection() {
+          throw new Error('Firestore fallback should not be used');
+        },
+      },
+    }),
+    /Supabase archive configuration is required/i,
+  );
 });

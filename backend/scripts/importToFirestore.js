@@ -85,6 +85,20 @@ const COLLECTION_CONFIGS = {
     heroImagePath: 'images/sultanate/page-7/coin_1.png',
     sortOrder: 4,
   },
+  'early-coinage': {
+    slug: 'early-coinage',
+    name: 'Early Coinage',
+    displayName: 'Early Coinage',
+    description:
+      'A catalog of early Indian coinage, including Gupta-era and related issues, with item-level provenance and price metadata preserved for archival browsing.',
+    longDescription:
+      'The Early Coinage collection brings together the earliest pages of the archive into a searchable, price-aware public record. It preserves ruler, mint, denomination, material, and estimated value data so the collection can be explored alongside the rest of the numismatic archive.',
+    heroEyebrow: 'Ancient Indian Coinage',
+    culture: 'Early Indian Coinage',
+    periodLabel: 'c. 4th to 6th century CE',
+    sourceUrl: 'https://us-central1-indian-heritage-gallery.cloudfunctions.net/app/api/items/early-coinage',
+    sortOrder: 6,
+  },
 };
 
 // Map of data file → collection slug
@@ -93,6 +107,7 @@ const DATA_FILE_MAP = {
   'british.json': 'british',
   'princely-states.json': 'princely-states',
   'sultanate.json': 'sultanate',
+  'early-coinage.json': 'early-coinage',
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -107,11 +122,17 @@ function gsUrlToHttps(gsUrl) {
 }
 
 function parseArgs() {
-  const args = { collection: null, dryRun: false };
+  const args = { collection: null, dryRun: false, batchSize: 50 };
   const argv = process.argv.slice(2);
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === '--collection' && argv[i + 1]) args.collection = argv[++i];
     if (argv[i] === '--dry-run') args.dryRun = true;
+    if (argv[i] === '--batch-size' && argv[i + 1]) {
+      const value = Number(argv[++i]);
+      if (Number.isFinite(value) && value > 0) {
+        args.batchSize = Math.floor(value);
+      }
+    }
   }
   return args;
 }
@@ -346,6 +367,7 @@ async function main() {
   console.log('═══════════════════════════════════════════════════════');
   if (args.dryRun) console.log('  [DRY RUN — no data will be written]');
   if (args.collection) console.log(`  Collection filter: ${args.collection}`);
+  console.log(`  Batch size: ${args.batchSize}`);
   console.log();
 
   // Find service account key
@@ -403,7 +425,9 @@ async function main() {
       totalWorth += derivePriceRange(item.metadata?.estimated_price_inr).estimatedPriceAvg;
     });
 
-    const heroImageUrl = gsUrlToHttps(`gs://indian-heritage-gallery-bucket/${config.heroImagePath}`);
+    const heroImageUrl = config.heroImagePath
+      ? gsUrlToHttps(`gs://indian-heritage-gallery-bucket/${config.heroImagePath}`)
+      : '';
     // Use first item's image as hero fallback
     const firstImageUrl = rawItems[0]?.image ? gsUrlToHttps(rawItems[0].image) : '';
 
@@ -416,7 +440,7 @@ async function main() {
       heroEyebrow: config.heroEyebrow,
       culture: config.culture,
       periodLabel: config.periodLabel,
-      sourceUrl: '',
+      sourceUrl: config.sourceUrl || '',
       heroImage: heroImageUrl || firstImageUrl,
       thumbnailImage: heroImageUrl || firstImageUrl,
       itemCount: rawItems.length,
@@ -445,7 +469,7 @@ async function main() {
     totalCollections++;
 
     // Batch-write items (Firestore batch limit = 500)
-    const BATCH_SIZE = 400;
+    const BATCH_SIZE = args.batchSize;
     let batch = db.batch();
     let batchCount = 0;
     let itemsWritten = 0;

@@ -4,6 +4,7 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import { loadWorkspaceEnv } from './lib/loadEnv';
 import { normalizePairedOutputCatalogue } from './lib/archiveSnapshot';
+import { materializeCanonicalArchiveSnapshots, resolveArchiveSnapshotPaths } from './lib/archiveSnapshotSources';
 import { shouldSkipLegacyPlaceholderSnapshot } from './lib/snapshotFiltering';
 import { parsePriceRangeInr } from './lib/priceParsing';
 import { buildCanonicalTags, canonicalizeAuthority, canonicalizeLocalAuthority, canonicalizeMint, canonicalizeRulerOrIssuer, slugifyTag } from '../src/shared/lib/catalogNormalization';
@@ -22,7 +23,7 @@ const projectRoot = path.resolve(__dirname, '../..');
 const defaultSnapshotDir = path.resolve(projectRoot, 'backend-support', 'snapshots', 'firebase-archive');
 const defaultPayloadDir = path.resolve(projectRoot, 'backend-support', 'snapshots', 'supabase-import');
 
-type SnapshotMedia = {
+export type SnapshotMedia = {
   gsUrl?: string;
   storagePath?: string;
   downloadUrl?: string;
@@ -32,7 +33,7 @@ type SnapshotMedia = {
   height?: number | null;
 };
 
-type SnapshotItem = {
+export type SnapshotItem = {
   id: string;
   title?: string;
   subtitle?: string;
@@ -90,7 +91,7 @@ type SnapshotItem = {
   } | null;
 };
 
-type FirebaseArchiveSnapshot = {
+export type FirebaseArchiveSnapshot = {
   exportedAt: string;
   source: 'firebase-firestore' | 'paired-output';
   collection: {
@@ -308,7 +309,7 @@ type PrivateProfileRow = {
   private_attributes: Record<string, unknown>;
 };
 
-type MigrationPayloadBundle = {
+export type MigrationPayloadBundle = {
   collection: CollectionRow;
   conceptual_items: ConceptualItemRow[];
   items: ItemRow[];
@@ -406,11 +407,11 @@ function isFirebaseArchiveSnapshot(value: unknown): value is FirebaseArchiveSnap
     && Array.isArray((value as { items?: unknown[] }).items);
 }
 
-function readSnapshotFile(filePath: string, collectionSlug?: string): FirebaseArchiveSnapshot {
+export function readSnapshotFile(filePath: string, collectionSlug?: string): FirebaseArchiveSnapshot {
   const parsed = JSON.parse(fs.readFileSync(filePath, 'utf8')) as unknown;
   if (!isFirebaseArchiveSnapshot(parsed)) {
     return normalizePairedOutputCatalogue(parsed, {
-      collectionSlug,
+      collectionSlug: collectionSlug ?? path.basename(filePath, path.extname(filePath)),
       sourcePath: filePath,
     });
   }
@@ -419,32 +420,6 @@ function readSnapshotFile(filePath: string, collectionSlug?: string): FirebaseAr
     ...parsed,
     items: Array.isArray(parsed.items) ? parsed.items.map(parseSnapshotItem) : [],
   };
-}
-
-function resolveSnapshotInputs(target?: string) {
-  const filterEntries = (entries: string[], baseDir?: string) => {
-    const filePaths = entries.map((entry) => baseDir ? path.join(baseDir, entry) : entry);
-    return filePaths.filter((filePath) => {
-      const parsed = JSON.parse(fs.readFileSync(filePath, 'utf8')) as unknown;
-      if (!isFirebaseArchiveSnapshot(parsed)) return true;
-      return !shouldSkipLegacyPlaceholderSnapshot(filePath, parsed, filePaths);
-    });
-  };
-
-  if (!target) {
-    return fs.existsSync(defaultSnapshotDir)
-      ? filterEntries(fs.readdirSync(defaultSnapshotDir).filter((entry) => entry.endsWith('.json')).sort(), defaultSnapshotDir)
-      : [];
-  }
-
-  const resolved = path.resolve(process.cwd(), target);
-  if (fs.existsSync(resolved) && fs.statSync(resolved).isFile()) return [resolved];
-  if (fs.existsSync(resolved) && fs.statSync(resolved).isDirectory()) {
-    return filterEntries(fs.readdirSync(resolved).filter((entry) => entry.endsWith('.json')).sort(), resolved);
-  }
-
-  const fallback = path.join(defaultSnapshotDir, `${target}.json`);
-  return fs.existsSync(fallback) ? [fallback] : [];
 }
 
 function resolveStoragePath(media: SnapshotMedia | null | undefined) {
@@ -506,7 +481,7 @@ function buildConceptIdentity(snapshot: FirebaseArchiveSnapshot, item: SnapshotI
     sortYearStart,
     sortYearEnd,
     conceptSlug,
-    canonicalId: `ahg:type:coin:${snapshot.collection.slug}:${conceptSlug}`,
+    canonicalId: `ahg:type:coin:${conceptSlug}`,
   };
 }
 
@@ -555,12 +530,38 @@ function buildPublicTags(snapshot: FirebaseArchiveSnapshot, item: SnapshotItem) 
   ]);
 }
 
+function buildItemIdentitySeed(item: SnapshotItem) {
+  const storagePath = resolveStoragePath(item.primaryMedia);
+  if (storagePath) return storagePath;
+
+  const sourceRef = asString(item.sourceRawRef);
+  if (sourceRef) return sourceRef;
+
+  const sourceUrl = asString(item.sourceUrl);
+  if (sourceUrl) return sourceUrl;
+
+  const sourceBatch = asString(item.sourceBatch);
+  const sourcePageLabel = asString(item.sourcePageLabel);
+  if (sourceBatch || sourcePageLabel) {
+    return [sourceBatch, sourcePageLabel, item.id].filter(Boolean).join(':');
+  }
+
+  const pageNumber = item.pageNumber ?? null;
+  if (pageNumber != null) {
+    return `${item.id}:page-${pageNumber}`;
+  }
+
+  return item.id;
+}
+
 function buildItemRow(snapshot: FirebaseArchiveSnapshot, item: SnapshotItem, collectionCanonicalId: string): ItemRow {
   const concept = buildConceptIdentity(snapshot, item);
   const storagePath = resolveStoragePath(item.primaryMedia) || asString(item.imageUrl);
   const publicTags = buildPublicTags(snapshot, item);
   const { sortYearStart, sortYearEnd } = deriveYearRange(item.dateText || item.period || '');
-  const canonicalId = `ahg:item:coin:${snapshot.collection.slug}:${slugifyTag(item.id)}`;
+  const itemIdentitySeed = buildItemIdentitySeed(item);
+  const itemIdentitySlug = slugifyTag(itemIdentitySeed);
+  const canonicalId = `ahg:item:coin:${snapshot.collection.slug}:${itemIdentitySlug}`;
 
   return {
     canonical_id: canonicalId,
@@ -568,7 +569,7 @@ function buildItemRow(snapshot: FirebaseArchiveSnapshot, item: SnapshotItem, col
     collection_id: collectionCanonicalId,
     conceptual_item_id: concept.canonicalId,
     item_type: item.metadata?.type || 'coin',
-    slug: slugifyTag(`${snapshot.collection.slug} ${item.id}`),
+    slug: slugifyTag(`${snapshot.collection.slug} ${itemIdentitySeed}`),
     title: asString(item.title || concept.issuer || item.id),
     subtitle: asString(item.subtitle) || null,
     description: asString(item.description) || null,
@@ -600,7 +601,13 @@ function buildItemRow(snapshot: FirebaseArchiveSnapshot, item: SnapshotItem, col
       confidence: item.metadata?.confidence ?? '',
       weightGrams: item.weightGrams ?? null,
     },
-    sort_title: asString(item.title || concept.issuer || item.id),
+    sort_title: [
+      concept.authority,
+      concept.issuer,
+      concept.denomination,
+      concept.mint,
+      asString(item.title || item.id)
+    ].filter(Boolean).join(' ').toLowerCase(),
     sort_year_start: item.sortYearStart ?? sortYearStart,
     sort_year_end: item.sortYearEnd ?? sortYearEnd,
     review_status: 'published',
@@ -608,7 +615,7 @@ function buildItemRow(snapshot: FirebaseArchiveSnapshot, item: SnapshotItem, col
     source_page_number: item.pageNumber ?? null,
     source_page_label: item.sourcePageLabel ?? null,
     source_batch: item.sourceBatch ?? null,
-    source_reference: item.sourceRawRef || item.sourceUrl || null,
+      source_reference: item.sourceRawRef || storagePath || item.sourceUrl || null,
   };
 }
 
@@ -740,7 +747,7 @@ function extractEstimatedPriceRange(item: SnapshotItem) {
   return parsePriceRangeInr(matched);
 }
 
-function buildMigrationPayload(snapshot: FirebaseArchiveSnapshot): MigrationPayloadBundle {
+export function buildMigrationPayload(snapshot: FirebaseArchiveSnapshot): MigrationPayloadBundle {
   const collectionRow = buildCollectionRow(snapshot);
   const concepts = new Map<string, ConceptualItemRow>();
   const entities = new Map<string, EntityRow>();
@@ -956,7 +963,16 @@ async function supabaseRequest<T>(pathName: string, options: { method?: string; 
           await new Promise((resolve) => setTimeout(resolve, 500 * attempt));
           continue;
         }
-        throw new Error(`Supabase request failed for ${pathName}: ${response.status} ${response.statusText}`);
+        const responseText = await response.text();
+        const errorInfo = {
+          table: pathName,
+          status: response.status,
+          statusText: response.statusText,
+          onConflict: options.query?.on_conflict,
+          bodySample: Array.isArray(options.body) ? options.body.slice(0, 2) : options.body,
+          error: responseText,
+        };
+        throw new Error(`Supabase request failed: ${JSON.stringify(errorInfo, null, 2)}`);
       }
 
       if (response.status === 204) return [] as T;
@@ -1001,56 +1017,6 @@ function dedupeRowsByKey<T>(rows: T[], buildKey: (row: T) => string) {
   });
 
   return deduped;
-}
-
-async function supabaseDeleteByIds(table: string, idColumn: string, ids: string[], query?: Record<string, string | number | boolean | null | undefined>) {
-  if (ids.length === 0) return;
-
-  const chunkSize = 150;
-  for (let index = 0; index < ids.length; index += chunkSize) {
-    await supabaseRequest(table, {
-      method: 'DELETE',
-      query: {
-        ...(query ?? {}),
-        [idColumn]: `in.(${ids.slice(index, index + chunkSize).join(',')})`,
-      },
-    });
-  }
-}
-
-async function resetCollectionImportState(collectionId: string) {
-  const conceptualRows = await supabaseRequest<Array<{ id: string }>>('conceptual_items', {
-    query: { select: 'id', collection_id: `eq.${collectionId}` },
-  });
-  const itemRows = await supabaseRequest<Array<{ id: string }>>('items', {
-    query: { select: 'id', collection_id: `eq.${collectionId}` },
-  });
-
-  const conceptualIds = conceptualRows.map((row) => String(row.id)).filter(Boolean);
-  const itemIds = itemRows.map((row) => String(row.id)).filter(Boolean);
-
-  await supabaseDeleteByIds('record_relations', 'source_id', itemIds, { source_kind: 'eq.item' });
-  await supabaseDeleteByIds('record_relations', 'related_id', itemIds, { related_kind: 'eq.item' });
-  await supabaseDeleteByIds('record_tags', 'record_id', itemIds, { record_kind: 'eq.item' });
-  await supabaseDeleteByIds('record_entities', 'record_id', itemIds, { record_kind: 'eq.item' });
-  await supabaseDeleteByIds('media_assets', 'target_id', itemIds, { target_kind: 'eq.item' });
-  await supabaseDeleteByIds('numismatic_item_profiles', 'item_id', itemIds);
-  await supabaseDeleteByIds('item_private_profiles', 'item_id', itemIds);
-  await supabaseDeleteByIds('measurements', 'item_id', itemIds);
-  await supabaseDeleteByIds('provenance_events', 'item_id', itemIds);
-  await supabaseDeleteByIds('discovery_contexts', 'item_id', itemIds);
-  await supabaseDeleteByIds('item_sides', 'target_id', itemIds, { target_kind: 'eq.item' });
-  await supabaseDeleteByIds('item_symbols', 'target_id', itemIds, { target_kind: 'eq.item' });
-
-  await supabaseDeleteByIds('record_entities', 'record_id', conceptualIds, { record_kind: 'eq.conceptual_item' });
-  await supabaseDeleteByIds('record_references', 'record_id', conceptualIds, { record_kind: 'eq.conceptual_item' });
-  await supabaseDeleteByIds('numismatic_type_profiles', 'conceptual_item_id', conceptualIds);
-  await supabaseDeleteByIds('discovery_contexts', 'conceptual_item_id', conceptualIds);
-  await supabaseDeleteByIds('item_sides', 'target_id', conceptualIds, { target_kind: 'eq.conceptual_item' });
-  await supabaseDeleteByIds('item_symbols', 'target_id', conceptualIds, { target_kind: 'eq.conceptual_item' });
-
-  await supabaseDeleteByIds('items', 'collection_id', [collectionId]);
-  await supabaseDeleteByIds('conceptual_items', 'collection_id', [collectionId]);
 }
 
 async function resolveDomainId() {
@@ -1123,11 +1089,9 @@ async function importSnapshot(filePath: string, collectionSlug?: string) {
   const collectionId = String(collectionRows[0]?.id ?? '');
   if (!collectionId) throw new Error(`Supabase did not return a collection id for ${snapshot.collection.slug}.`);
 
-  await resetCollectionImportState(collectionId);
-
   const conceptualRows = await supabaseUpsert(
     'conceptual_items',
-    payload.conceptual_items.map((row) => ({ ...row, domain_id: domainId, collection_id: collectionId })),
+    payload.conceptual_items.map((row) => ({ ...row, domain_id: domainId })),
     'canonical_id',
   );
   const conceptualIdByCanonicalId = new Map(conceptualRows.map((row) => [String(row.canonical_id), String(row.id ?? '')]));
@@ -1257,17 +1221,10 @@ async function importSnapshot(filePath: string, collectionSlug?: string) {
     ].join(':'),
   );
 
-  await supabaseDeleteByIds(
-    'record_references',
-    'record_id',
-    Array.from(new Set(mappedRecordReferences.map((row) => row.record_id))),
-    { record_kind: 'eq.conceptual_item' },
-  );
-
   const recordReferenceRows = await supabaseUpsert(
     'record_references',
     mappedRecordReferences,
-    'id',
+    'record_kind,record_id,reference_type,reference_system,reference_code,url',
   );
 
   const mappedRecordRelations = dedupeRowsByKey(
@@ -1286,13 +1243,6 @@ async function importSnapshot(filePath: string, collectionSlug?: string) {
       })
       .filter((row): row is RecordRelationRow => row != null),
     (row) => [row.source_kind, row.source_id, row.related_kind, row.related_id, row.relation_type].join(':'),
-  );
-
-  await supabaseDeleteByIds(
-    'record_relations',
-    'source_id',
-    Array.from(new Set(mappedRecordRelations.map((row) => row.source_id))),
-    { source_kind: 'eq.item' },
   );
 
   const recordRelationRows = await supabaseUpsert(
@@ -1357,10 +1307,20 @@ async function importSnapshot(filePath: string, collectionSlug?: string) {
   };
 }
 
-async function main() {
+export async function runArchiveImport({
+  target,
+  collectionSlug,
+  snapshotFiles,
+}: {
+  target?: string;
+  collectionSlug?: string;
+  snapshotFiles?: string[];
+} = {}) {
   loadWorkspaceEnv(projectRoot);
-  const { target, collectionSlug } = parseMainArgs(process.argv.slice(2));
-  const files = resolveSnapshotInputs(target);
+  const files = snapshotFiles ?? materializeCanonicalArchiveSnapshots(
+    resolveArchiveSnapshotPaths({ target, projectRoot }),
+    { projectRoot },
+  ).map((entry) => entry.filePath);
   if (files.length === 0) {
     throw new Error(`No Firebase archive snapshots found under ${defaultSnapshotDir}.`);
   }
@@ -1370,12 +1330,17 @@ async function main() {
     summaries.push(await importSnapshot(filePath, collectionSlug));
   }
 
-  console.log(JSON.stringify({
+  return {
     importedAt: new Date().toISOString(),
     payloadDir: defaultPayloadDir,
     hasSupabaseWriteEnv: hasSupabaseWriteEnv(),
     summaries,
-  }, null, 2));
+  };
+}
+
+async function main() {
+  const { target, collectionSlug } = parseMainArgs(process.argv.slice(2));
+  console.log(JSON.stringify(await runArchiveImport({ target, collectionSlug }), null, 2));
 }
 
 if (import.meta.url === `file://${__filename}`) {

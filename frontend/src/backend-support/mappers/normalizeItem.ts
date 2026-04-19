@@ -66,62 +66,185 @@ function expandYearRange(startText: string, endText: string) {
 }
 
 function filterHistoricalYears(values: number[]) {
-  return Array.from(new Set(values.filter((year) => year >= 500 && year <= 2100)));
+  return Array.from(new Set(values.filter((year) => year !== 0 && year >= -2500 && year <= 2100)));
 }
 
-function extractAdYearRange(normalized: string) {
+function applyEra(year: number, era: string) {
+  return /^(BC|BCE)$/i.test(era) ? -Math.abs(year) : Math.abs(year);
+}
+
+function normalizeYearRange(start: number, end: number) {
+  const years = filterHistoricalYears([start, end]);
+  if (years.length === 0) {
+    return { sortYearStart: null, sortYearEnd: null };
+  }
+
+  if (years.length === 1) {
+    return { sortYearStart: years[0], sortYearEnd: null };
+  }
+
+  return {
+    sortYearStart: Math.min(...years),
+    sortYearEnd: Math.max(...years),
+  };
+}
+
+function parseEraYearRange(startText: string, endText: string, era: string) {
+  const expanded = expandYearRange(startText, endText);
+  if (!expanded) return null;
+  const [start, end] = expanded;
+  return [applyEra(start, era), applyEra(end, era)] as const;
+}
+
+function parseEraYear(yearText: string, era: string) {
+  const year = Number(yearText);
+  if (!Number.isFinite(year)) return null;
+  const signedYear = applyEra(year, era);
+  return [signedYear, signedYear] as const;
+}
+
+function extractEraYearRangeFromSegment(segment: string) {
+  const patterns: Array<RegExp> = [
+    /(?:c(?:irca)?\.?\s*)?\b(\d{1,4})\b\s*(?:-|–|—|to)\s*\b(\d{1,4})\b\s*(AD|CE|BC|BCE)\b/i,
+    /\b(AD|CE|BC|BCE)\b\s*(\d{1,4})\b\s*(?:-|–|—|to)\s*\b(\d{1,4})\b/i,
+    /(?:c(?:irca)?\.?\s*)?\b(\d{1,4})\b\s*(AD|CE|BC|BCE)\b/i,
+    /\b(AD|CE|BC|BCE)\b\s*(\d{1,4})\b/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = segment.match(pattern);
+    if (!match) continue;
+
+    if (match.length === 4 && /^\d/.test(match[1])) {
+      const parsedRange = parseEraYearRange(match[1], match[2], match[3]);
+      if (parsedRange) return parsedRange;
+    }
+
+    if (match.length === 4 && /^(AD|CE|BC|BCE)$/i.test(match[1])) {
+      const parsedRange = parseEraYearRange(match[2], match[3], match[1]);
+      if (parsedRange) return parsedRange;
+    }
+
+    if (match.length === 3 && /^\d/.test(match[1])) {
+      const parsedYear = parseEraYear(match[1], match[2]);
+      if (parsedYear) return parsedYear;
+    }
+
+    if (match.length === 3 && /^(AD|CE|BC|BCE)$/i.test(match[1])) {
+      const parsedYear = parseEraYear(match[2], match[1]);
+      if (parsedYear) return parsedYear;
+    }
+  }
+
+  return null;
+}
+
+function extractEraYearRange(normalized: string) {
   const parenthesizedSegments = normalized.match(/\([^)]*\)/g) ?? [];
   for (const segment of parenthesizedSegments) {
-    if (!/\b(AD|CE)\b/i.test(segment)) continue;
-    const rangeMatch = segment.match(/\b(1[5-9]\d{2}|20\d{2})\b\s*(?:-|–|—|to)\s*\b(\d{2,4})\b/i);
-    if (rangeMatch) {
-      return expandYearRange(rangeMatch[1], rangeMatch[2]);
-    }
-    const yearMatch = segment.match(/\b(1[5-9]\d{2}|20\d{2})\b/i);
-    if (yearMatch) {
-      const year = Number(yearMatch[1]);
-      return [year, year] as const;
-    }
+    const parsed = extractEraYearRangeFromSegment(segment);
+    if (parsed) return parsed;
   }
 
-  const adRangeMatch = normalized.match(
-    /(?:\b(AD|CE)\b\s*)?\b(1[5-9]\d{2}|20\d{2})\b\s*(?:-|–|—|to)\s*\b(\d{2,4})\b(?:\s*\b(AD|CE)\b)?/i,
+  return extractEraYearRangeFromSegment(normalized);
+}
+
+function expandCenturyRange(century: number, qualifier?: string | null, era?: string | null) {
+  const normalizedEra = String(era ?? 'AD').toUpperCase();
+  const isBc = normalizedEra === 'BC' || normalizedEra === 'BCE';
+
+  let start = isBc ? -(century * 100) + 1 : (century - 1) * 100 + 1;
+  let end = isBc
+    ? (century === 1 ? -1 : -((century - 1) * 100))
+    : century * 100;
+
+  const normalizedQualifier = String(qualifier ?? '').toLowerCase();
+  const span = end - start;
+  const quarter = Math.floor(span / 4);
+  if (normalizedQualifier === 'early') {
+    end = start + quarter;
+  } else if (normalizedQualifier === 'mid') {
+    start = start + quarter;
+    end = end - quarter;
+  } else if (normalizedQualifier === 'late') {
+    start = end - quarter;
+  }
+
+  return [start, end] as const;
+}
+
+function extractCenturyRange(normalized: string) {
+  const ordinalEraRangeMatch = normalized.match(
+    /(?:c(?:irca)?\.?\s*)?(\d{1,2})(?:st|nd|rd|th)\s*(BC|BCE|AD|CE)\s*(?:-|–|—|to)\s*(\d{1,2})(?:st|nd|rd|th)\s*(BC|BCE|AD|CE)/i,
   );
-  if (adRangeMatch && (adRangeMatch[1] || adRangeMatch[4] || /\b(AD|CE)\b/i.test(normalized))) {
-    return expandYearRange(adRangeMatch[2], adRangeMatch[3]);
+  if (ordinalEraRangeMatch) {
+    const startRange = expandCenturyRange(Number(ordinalEraRangeMatch[1]), null, ordinalEraRangeMatch[2]);
+    const endRange = expandCenturyRange(Number(ordinalEraRangeMatch[3]), null, ordinalEraRangeMatch[4]);
+    return [Math.min(...startRange, ...endRange), Math.max(...startRange, ...endRange)] as const;
   }
 
-  const adMatch = normalized.match(/\b(1[5-9]\d{2}|20\d{2})\b(?=[^)]*(?:\bAD\b|\bCE\b|$))/i);
-  if (adMatch && /\b(AD|CE)\b/i.test(normalized)) {
-    const year = Number(adMatch[1]);
-    return [year, year] as const;
+  const compactRangeMatch = normalized.match(
+    /(?:c(?:irca)?\.?\s*)?(early|mid|late)?\s*(\d{1,2})(?:st|nd|rd|th)\s*(?:-|–|—|to)\s*(early|mid|late)?\s*(\d{1,2})(?:st|nd|rd|th)\s*century\s*(BC|BCE|AD|CE)?/i,
+  );
+  if (compactRangeMatch) {
+    const era = compactRangeMatch[5] ?? 'AD';
+    const startRange = expandCenturyRange(Number(compactRangeMatch[2]), compactRangeMatch[1], era);
+    const endRange = expandCenturyRange(Number(compactRangeMatch[4]), compactRangeMatch[3], era);
+    return [Math.min(...startRange, ...endRange), Math.max(...startRange, ...endRange)] as const;
+  }
+
+  const repeatedRangeMatch = normalized.match(
+    /(?:c(?:irca)?\.?\s*)?(early|mid|late)?\s*(\d{1,2})(?:st|nd|rd|th)\s*century(?:\s*(BC|BCE|AD|CE))?\s*(?:-|–|—|to)\s*(early|mid|late)?\s*(\d{1,2})(?:st|nd|rd|th)\s*century(?:\s*(BC|BCE|AD|CE))?/i,
+  );
+  if (repeatedRangeMatch) {
+    const startEra = repeatedRangeMatch[3] ?? repeatedRangeMatch[6] ?? 'AD';
+    const endEra = repeatedRangeMatch[6] ?? repeatedRangeMatch[3] ?? 'AD';
+    const startRange = expandCenturyRange(Number(repeatedRangeMatch[2]), repeatedRangeMatch[1], startEra);
+    const endRange = expandCenturyRange(Number(repeatedRangeMatch[5]), repeatedRangeMatch[4], endEra);
+    return [Math.min(...startRange, ...endRange), Math.max(...startRange, ...endRange)] as const;
+  }
+
+  const singleCenturyMatch = normalized.match(
+    /(?:c(?:irca)?\.?\s*)?(early|mid|late)?\s*(\d{1,2})(?:st|nd|rd|th)\s*century\s*(BC|BCE|AD|CE)?/i,
+  );
+  if (singleCenturyMatch) {
+    return expandCenturyRange(Number(singleCenturyMatch[2]), singleCenturyMatch[1], singleCenturyMatch[3] ?? 'AD');
+  }
+
+  return null;
+}
+
+function extractDecadeRange(normalized: string) {
+  const decadeRangeMatch = normalized.match(/\b((?:1[0-9]|20)\d0)s\b\s*(?:-|–|—|to)\s*\b((?:1[0-9]|20)\d0)s\b/i);
+  if (decadeRangeMatch) {
+    return [Number(decadeRangeMatch[1]), Number(decadeRangeMatch[2]) + 9] as const;
   }
 
   return null;
 }
 
 export function deriveYearRange(dateText?: string | null) {
-  const normalized = String(dateText ?? '');
-  const adRange = extractAdYearRange(normalized);
-  if (adRange) {
-    const [start, end] = adRange;
-    const years = filterHistoricalYears([start, end]);
-    if (years.length === 0) {
-      return { sortYearStart: 0, sortYearEnd: null };
-    }
+  const normalized = String(dateText ?? '')
+    .replace(/\s+/g, ' ')
+    .trim();
 
-    if (years.length === 1) {
-      return { sortYearStart: years[0], sortYearEnd: null };
-    }
-
-    return {
-      sortYearStart: Math.min(...years),
-      sortYearEnd: Math.max(...years),
-    };
+  const eraRange = extractEraYearRange(normalized);
+  if (eraRange) {
+    return normalizeYearRange(eraRange[0], eraRange[1]);
   }
 
-  if (/\b(AD|CE)\b/i.test(normalized)) {
-    return { sortYearStart: 0, sortYearEnd: null };
+  const decadeRange = extractDecadeRange(normalized);
+  if (decadeRange) {
+    return normalizeYearRange(decadeRange[0], decadeRange[1]);
+  }
+
+  const centuryRange = extractCenturyRange(normalized);
+  if (centuryRange) {
+    return normalizeYearRange(centuryRange[0], centuryRange[1]);
+  }
+
+  if (/\b(AD|CE|BC|BCE)\b/i.test(normalized)) {
+    return { sortYearStart: null, sortYearEnd: null };
   }
 
   const explicitRangeMatch = normalized.match(
@@ -131,19 +254,7 @@ export function deriveYearRange(dateText?: string | null) {
   if (explicitRangeMatch) {
     const start = Number(explicitRangeMatch[1]);
     const end = Number(explicitRangeMatch[2]);
-    const years = filterHistoricalYears([start, end]);
-    if (years.length === 0) {
-      return { sortYearStart: 0, sortYearEnd: null };
-    }
-
-    if (years.length === 1) {
-      return { sortYearStart: years[0], sortYearEnd: null };
-    }
-
-    return {
-      sortYearStart: Math.min(...years),
-      sortYearEnd: Math.max(...years),
-    };
+    return normalizeYearRange(start, end);
   }
 
   const allYears = normalized.match(/\b(\d{3,4})\b/g) ?? [];

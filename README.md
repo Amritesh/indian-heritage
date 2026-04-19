@@ -119,7 +119,25 @@ Top-level `items` are intentional so item lookup, search, and future collections
 - collection filtering by `materials`
 - title, page, and imported-date sorting
 
-## Verification Checklist
+## Supabase Ingestion (CrewAI-style)
+
+The new Supabase-backed ingestion pipeline is organized into agents and tasks for robustness and idempotency.
+
+### Ingest one collection
+```bash
+npx tsx frontend/scripts/ingest-collection-crew.ts mughals
+```
+
+### Reprocess and Verify all collections
+```bash
+npx tsx frontend/scripts/reprocess-supabase-periods.ts
+```
+
+### How it works:
+1. **Collection Discovery Agent**: Finds source snapshots in `backend-support/snapshots`.
+2. **Metadata Normalization Agent**: Derives machine-sortable chronology (BC/AD) and deterministic sort titles.
+3. **Supabase Sync Agent**: Performs idempotent upserts. Shared entities like `tags` and `conceptual_items` are correctly handled without 409 conflicts.
+4. **Verification Agent**: Ensures data integrity and correct sorting.
 
 - app loads with Firebase web config from `frontend/.env`
 - `/collections` shows British and Mughals from Firestore

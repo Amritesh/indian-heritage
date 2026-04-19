@@ -16,6 +16,7 @@ const DATA_FILE_MAP = {
   mughals: 'mughals.json',
   'princely-states': 'princely-states.json',
   sultanate: 'sultanate.json',
+  'early-coinage': 'early-coinage.json',
 };
 
 function parseArgs() {

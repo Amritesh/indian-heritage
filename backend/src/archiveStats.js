@@ -223,11 +223,10 @@ async function getArchiveStats({
   httpClient = axios,
 } = {}) {
   const supabaseConfig = resolveSupabaseConfig({ env, functionsConfig });
-  if (supabaseConfig) {
-    return getArchiveStatsFromSupabase(supabaseConfig, httpClient);
+  if (!supabaseConfig) {
+    throw new Error('Supabase archive configuration is required for archive stats.');
   }
-
-  return getArchiveStatsFromFirestore(firestore);
+  return getArchiveStatsFromSupabase(supabaseConfig, httpClient);
 }
 
 module.exports = {

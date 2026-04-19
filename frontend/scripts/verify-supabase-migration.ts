@@ -3,9 +3,10 @@ import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import { loadWorkspaceEnv } from './lib/loadEnv';
+import { normalizePairedOutputCatalogue } from './lib/archiveSnapshot';
 import { buildCanonicalTags, canonicalizeAuthority, canonicalizeMint, canonicalizeRulerOrIssuer, slugifyTag } from '../src/shared/lib/catalogNormalization';
 import { deriveYearRange } from '../src/backend-support/mappers/normalizeItem';
-import { shouldSkipLegacyPlaceholderSnapshot } from './lib/snapshotFiltering';
+import { materializeCanonicalArchiveSnapshots, resolveArchiveSnapshotPaths } from './lib/archiveSnapshotSources';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -60,42 +61,25 @@ const STRICT_MATCH_METRICS = new Set([
   'item_private_profiles',
 ]);
 
-function resolveSnapshotFiles(target?: string) {
-  const filterFiles = (files: string[]) =>
-    files.filter((filePath) => {
-      const parsed = JSON.parse(fs.readFileSync(filePath, 'utf8')) as unknown;
-      if (!parsed || typeof parsed !== 'object') return true;
-      return !shouldSkipLegacyPlaceholderSnapshot(filePath, parsed as FirebaseArchiveSnapshot, files);
-    });
-
-  if (!target) {
-    return fs.existsSync(defaultSnapshotDir)
-      ? filterFiles(
-          fs.readdirSync(defaultSnapshotDir)
-            .filter((entry) => entry.endsWith('.json'))
-            .map((entry) => path.join(defaultSnapshotDir, entry))
-            .sort(),
-        )
-      : [];
-  }
-
-  const resolved = path.resolve(process.cwd(), target);
-  if (fs.existsSync(resolved) && fs.statSync(resolved).isFile()) return [resolved];
-  if (fs.existsSync(resolved) && fs.statSync(resolved).isDirectory()) {
-    return filterFiles(
-      fs.readdirSync(resolved)
-        .filter((entry) => entry.endsWith('.json'))
-        .map((entry) => path.join(resolved, entry))
-        .sort(),
-    );
-  }
-
-  const fallback = path.join(defaultSnapshotDir, `${target}.json`);
-  return fs.existsSync(fallback) ? [fallback] : [];
+function isFirebaseArchiveSnapshot(value: unknown): value is FirebaseArchiveSnapshot {
+  return value !== null
+    && typeof value === 'object'
+    && !Array.isArray(value)
+    && 'collection' in value
+    && typeof (value as { collection?: { slug?: unknown } }).collection?.slug === 'string'
+    && Array.isArray((value as { items?: unknown[] }).items);
 }
 
 function parseSnapshotFile(filePath: string) {
-  return JSON.parse(fs.readFileSync(filePath, 'utf8')) as FirebaseArchiveSnapshot;
+  const parsed = JSON.parse(fs.readFileSync(filePath, 'utf8')) as unknown;
+  if (isFirebaseArchiveSnapshot(parsed)) {
+    return parsed;
+  }
+
+  return normalizePairedOutputCatalogue(parsed, {
+    collectionSlug: path.basename(filePath, path.extname(filePath)),
+    sourcePath: filePath,
+  }) as FirebaseArchiveSnapshot;
 }
 
 function uniqueStrings(values: Array<string | null | undefined>) {
@@ -450,27 +434,40 @@ async function buildSupabaseCounts(snapshotFiles: string[]) {
   return counts;
 }
 
-async function main() {
+export async function runArchiveVerification({
+  target,
+  snapshotFiles,
+}: {
+  target?: string;
+  snapshotFiles?: string[];
+} = {}) {
   loadWorkspaceEnv(projectRoot);
-  const snapshotFiles = resolveSnapshotFiles(process.argv[2]);
-  if (snapshotFiles.length === 0) {
+  const files = snapshotFiles ?? materializeCanonicalArchiveSnapshots(
+    resolveArchiveSnapshotPaths({ target, projectRoot }),
+    { projectRoot },
+  ).map((entry) => entry.filePath);
+  if (files.length === 0) {
     throw new Error(`No Firebase archive snapshots found under ${defaultSnapshotDir}.`);
   }
 
-  const firebaseCounts = await buildFirebaseCounts(snapshotFiles);
-  const supabaseCounts = await buildSupabaseCounts(snapshotFiles);
+  const firebaseCounts = await buildFirebaseCounts(files);
+  const supabaseCounts = await buildSupabaseCounts(files);
   const mismatches = hasSupabaseEnv() ? compareCollectionCounts(firebaseCounts, supabaseCounts) : [];
 
-  console.log(JSON.stringify({
+  return {
     checkedAt: new Date().toISOString(),
     hasSupabaseEnv: hasSupabaseEnv(),
-    snapshotFiles,
+    snapshotFiles: files,
     firebaseCounts,
     supabaseCounts,
     mismatches,
-  }, null, 2));
+  };
+}
 
-  if (hasSupabaseEnv() && mismatches.length > 0) {
+async function main() {
+  const result = await runArchiveVerification({ target: process.argv[2] });
+  console.log(JSON.stringify(result, null, 2));
+  if (result.hasSupabaseEnv && result.mismatches.length > 0) {
     process.exitCode = 1;
   }
 }

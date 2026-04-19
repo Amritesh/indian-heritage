@@ -164,7 +164,7 @@ export async function getCollectionItemsFromSupabase(collectionId: string): Prom
       collection_id: `eq.${collectionId}`,
       review_status: 'eq.published',
       visibility: 'eq.public',
-      order: 'sort_title.asc',
+      order: 'sort_year_start.asc.nullslast,sort_title.asc',
     }),
     getCollectionLiteById(collectionId),
   ]);
@@ -262,7 +262,7 @@ export async function getRelatedItemsFromSupabase(itemId: string): Promise<ItemR
       id: `neq.${itemId}`,
       review_status: 'eq.published',
       visibility: 'eq.public',
-      order: 'sort_title.asc',
+      order: 'sort_year_start.asc.nullslast,sort_title.asc',
       limit: 6,
     });
 

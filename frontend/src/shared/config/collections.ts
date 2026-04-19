@@ -93,6 +93,22 @@ export const collectionRegistry: CollectionRegistryEntry[] = [
     culture: 'Foreign Rulers in India',
     periodLabel: 'c. 1498 to 1961',
   },
+  {
+    id: 'early-coinage',
+    slug: 'early-coinage',
+    name: 'Early Coinage',
+    description:
+      'Early Indian coinage, including Gupta-era and related issues, with archival provenance and estimated value metadata.',
+    longDescription:
+      'A curated archive of early Indian coinage that keeps provenance, ruler, mint, denomination, and estimated value fields intact for browsing and search.',
+    sourceUrl:
+      'https://us-central1-indian-heritage-gallery.cloudfunctions.net/app/api/items/early-coinage',
+    order: 6,
+    enabled: true,
+    heroEyebrow: 'Ancient Indian Coinage',
+    culture: 'Early Indian Coinage',
+    periodLabel: 'c. 4th to 6th century CE',
+  },
 ];
 
 export function getCollectionRegistryEntry(slug: string) {

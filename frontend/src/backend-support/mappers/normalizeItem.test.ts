@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeItem } from '@/backend-support/mappers/normalizeItem';
+import { deriveYearRange, normalizeItem } from '@/backend-support/mappers/normalizeItem';
 import { rawItemSchema } from '@/backend-support/schemas/source';
 
 describe('normalizeItem', () => {
@@ -156,5 +156,47 @@ describe('normalizeItem', () => {
     expect(normalized.tags).toContain('George V');
     expect(normalized.denominationKey).toBe('rupee');
     expect(normalized.estimatedPriceAvg).toBe(2750);
+  });
+
+  it('parses ancient AD ranges with circa prefixes', () => {
+    expect(deriveYearRange('c. 415-455 AD')).toEqual({
+      sortYearStart: 415,
+      sortYearEnd: 455,
+    });
+  });
+
+  it('parses parenthesized medieval AD ranges that accompany AH dates', () => {
+    expect(deriveYearRange('AH 720-725 (1320-1325 AD)')).toEqual({
+      sortYearStart: 1320,
+      sortYearEnd: 1325,
+    });
+  });
+
+  it('parses century-based BC ranges into signed sortable years', () => {
+    expect(deriveYearRange('Late 2nd Century BC - 1st Century BC')).toEqual({
+      sortYearStart: -124,
+      sortYearEnd: -1,
+    });
+  });
+
+  it('parses fuzzy century labels without explicit AD markers', () => {
+    expect(deriveYearRange('Late 18th to 19th Century')).toEqual({
+      sortYearStart: 1776,
+      sortYearEnd: 1900,
+    });
+  });
+
+  it('parses explicit decade hints embedded in approximate notes', () => {
+    expect(deriveYearRange('VS 194x (Vikram Samvat 1940s / approx. 1880s-1890s)')).toEqual({
+      sortYearStart: 1880,
+      sortYearEnd: 1899,
+    });
+  });
+
+  it('parses ordinal BC shorthand ranges that omit the word century', () => {
+    expect(deriveYearRange('3rd BC - 2nd BC')).toEqual({
+      sortYearStart: -299,
+      sortYearEnd: -100,
+    });
   });
 });

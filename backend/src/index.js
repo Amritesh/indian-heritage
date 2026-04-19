@@ -16,6 +16,11 @@ const https = require('https');
 const { HttpsAgent } = require('agentkeepalive');
 require('dotenv').config();
 const { getArchiveStats } = require('./archiveStats');
+const {
+  getPublicCollections,
+  getPublicCollectionBySlug,
+  getPublicItemsByCollectionSlug,
+} = require('./archivePublicData');
 
 /* ------------------------------
    Firebase Admin & DB
@@ -572,8 +577,12 @@ app.get('/api/archive-stats', async (_req, res) => {
 
 app.get('/api/collections', async (_req, res) => {
   try {
-    const snapshot = await db.ref('collections').once('value');
-    res.json({ collections: snapshot.val() || [] });
+    const collections = await getPublicCollections({
+      env: process.env,
+      functionsConfig: typeof functions.config === 'function' ? functions.config() : {},
+      httpClient: axios,
+    });
+    res.json({ collections });
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: 'Failed to fetch collections' });
@@ -582,9 +591,12 @@ app.get('/api/collections', async (_req, res) => {
 
 app.get('/api/collections/:id', async (req, res) => {
   try {
-    const id = req.params.id;
-    const snapshot = await db.ref(`collection_details/${id}`).once('value');
-    const collection = snapshot.val();
+    const collection = await getPublicCollectionBySlug({
+      env: process.env,
+      functionsConfig: typeof functions.config === 'function' ? functions.config() : {},
+      httpClient: axios,
+      slug: req.params.id,
+    });
     if (!collection) return res.status(404).json({ error: 'Collection not found' });
     res.json({ collection });
   } catch (e) {
@@ -595,11 +607,14 @@ app.get('/api/collections/:id', async (req, res) => {
 
 app.get('/api/items/:id', async (req, res) => {
   try {
-    const id = req.params.id;
-    const snapshot = await db.ref(`collection_details/${id}`).once('value');
-    const itemCollection = snapshot.val();
-    if (!itemCollection) return res.status(404).json({ error: 'Item collection not found' });
-    res.json({ itemCollection });
+    const items = await getPublicItemsByCollectionSlug({
+      env: process.env,
+      functionsConfig: typeof functions.config === 'function' ? functions.config() : {},
+      httpClient: axios,
+      slug: req.params.id,
+    });
+    if (!items) return res.status(404).json({ error: 'Item collection not found' });
+    res.json(items);
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: 'Failed to fetch item collection' });
