@@ -11,6 +11,7 @@ Usage:
 import argparse
 import json
 import os
+import re
 from typing import List, Tuple
 
 from dotenv import load_dotenv
@@ -24,11 +25,13 @@ from .tools.image_segmenter import create_tool as create_segment_tool
 def _parse_pairs(raw_pairs: str) -> List[Tuple[int, int | None]]:
     pairs = []
     for chunk in [part.strip() for part in raw_pairs.split(",") if part.strip()]:
-        if ":" not in chunk:
-            pairs.append((int(chunk), None))
+        match = re.fullmatch(r"(\d+)\s*[:./-]\s*(\d+)", chunk)
+        if match:
+            pairs.append((int(match.group(1)), int(match.group(2))))
             continue
-        left, right = chunk.split(":", 1)
-        pairs.append((int(left), int(right)))
+        if not chunk.isdigit():
+            raise ValueError(f"Invalid page pair '{chunk}'. Use N:M for pairs or N for a single page.")
+        pairs.append((int(chunk), None))
     return pairs
 
 

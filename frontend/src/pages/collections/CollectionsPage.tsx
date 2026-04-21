@@ -21,7 +21,7 @@ export function CollectionsPage() {
       <SectionHeader
         eyebrow="Collection Registry"
         title="Available archive collections"
-        description="British India and Mughal collections are currently active. The architecture supports adding future collections without code changes."
+        description="Explore British India, Mughal, and Foreign Ruler collections, preserved with museum-grade metadata and scholarly detail. More collections are being added as the archive grows."
       />
 
       {isLoading && <CollectionSkeletonGrid />}

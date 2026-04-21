@@ -9,6 +9,15 @@ def test_parse_pairs_accepts_paired_and_single_pages():
     ]
 
 
+def test_parse_pairs_accepts_common_pair_separators():
+    assert process_pairs._parse_pairs("16:17,19.20,21-22,24/25") == [
+        (16, 17),
+        (19, 20),
+        (21, 22),
+        (24, 25),
+    ]
+
+
 def test_pair_output_dir_handles_single_page():
     assert process_pairs._pair_output_dir("/tmp/album", 14, None) == "/tmp/album/paired_output/page-14"
 

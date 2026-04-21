@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { searchItems } from '@/entities/item/api/itemService';
@@ -12,20 +11,11 @@ import { ItemSkeletonGrid } from '@/shared/ui/Skeletons';
 
 export function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const paramTerm = searchParams.get('q') ?? '';
-  const paramTag = searchParams.get('tag') ?? '';
-  const paramSort = (searchParams.get('sort') as ItemSort | null) ?? 'featured';
-  const [term, setTerm] = useState('');
-  const [tag, setTag] = useState('');
-  const [sort, setSort] = useState<ItemSort>('featured');
+  const term = searchParams.get('q') ?? '';
+  const tag = searchParams.get('tag') ?? '';
+  const sort = (searchParams.get('sort') as ItemSort | null) ?? 'featured';
   const debouncedTerm = useDebouncedValue(term, 300);
   const shouldSearch = debouncedTerm.trim().length >= 2 || tag.trim().length > 0;
-
-  useEffect(() => {
-    setTerm(paramTerm);
-    setTag(paramTag);
-    setSort(paramSort);
-  }, [paramTerm, paramTag, paramSort]);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: queryKeys.search(debouncedTerm, undefined, tag, sort),
@@ -35,17 +25,23 @@ export function SearchPage() {
 
   const updateSearchParams = (next: { q?: string; tag?: string; sort?: ItemSort }) => {
     const nextParams = new URLSearchParams(searchParams);
-    const nextTerm = next.q ?? term;
-    const nextTag = next.tag ?? tag;
-    const nextSort = next.sort ?? sort;
+    
+    if ('q' in next) {
+      if (next.q) nextParams.set('q', next.q);
+      else nextParams.delete('q');
+    }
+    
+    if ('tag' in next) {
+      if (next.tag) nextParams.set('tag', next.tag);
+      else nextParams.delete('tag');
+    }
 
-    if (nextTerm) nextParams.set('q', nextTerm);
-    else nextParams.delete('q');
-    if (nextTag) nextParams.set('tag', nextTag);
-    else nextParams.delete('tag');
-    if (nextSort && nextSort !== 'featured') nextParams.set('sort', nextSort);
-    else nextParams.delete('sort');
-    setSearchParams(nextParams);
+    if ('sort' in next) {
+      if (next.sort && next.sort !== 'featured') nextParams.set('sort', next.sort);
+      else nextParams.delete('sort');
+    }
+
+    setSearchParams(nextParams, { replace: true });
   };
 
   return (
@@ -68,9 +64,7 @@ export function SearchPage() {
               className="w-full bg-transparent border-none focus:ring-0 text-lg font-body px-4 py-3 placeholder:text-outline-variant"
               value={term}
               onChange={(e) => {
-                const next = e.target.value;
-                setTerm(next);
-                updateSearchParams({ q: next });
+                updateSearchParams({ q: e.target.value });
               }}
               placeholder="Search by Era, Ruler, or Mint..."
               type="search"
@@ -79,9 +73,7 @@ export function SearchPage() {
               className="mr-3 rounded-lg border border-outline-variant/20 bg-surface px-3 py-2 text-sm text-on-surface"
               value={sort}
               onChange={(event) => {
-                const nextSort = event.target.value as ItemSort;
-                setSort(nextSort);
-                updateSearchParams({ sort: nextSort });
+                updateSearchParams({ sort: event.target.value as ItemSort });
               }}
             >
               <option value="featured">Best match</option>
@@ -114,7 +106,6 @@ export function SearchPage() {
           <button
             className="archival-chip"
             onClick={() => {
-              setTag('');
               updateSearchParams({ tag: '' });
             }}
           >

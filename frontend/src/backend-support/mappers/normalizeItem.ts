@@ -70,7 +70,15 @@ function filterHistoricalYears(values: number[]) {
 }
 
 function applyEra(year: number, era: string) {
-  return /^(BC|BCE)$/i.test(era) ? -Math.abs(year) : Math.abs(year);
+  const normalizedEra = era.toUpperCase();
+  if (/^(BC|BCE)$/.test(normalizedEra)) {
+    return -Math.abs(year);
+  }
+  if (normalizedEra === 'AH') {
+    // Hijri to Gregorian approximation: AD = AH * (32/33) + 622
+    return Math.floor((year * 32) / 33) + 622;
+  }
+  return Math.abs(year);
 }
 
 function normalizeYearRange(start: number, end: number) {
@@ -104,35 +112,40 @@ function parseEraYear(yearText: string, era: string) {
 }
 
 function extractEraYearRangeFromSegment(segment: string) {
-  const patterns: Array<RegExp> = [
-    /(?:c(?:irca)?\.?\s*)?\b(\d{1,4})\b\s*(?:-|–|—|to)\s*\b(\d{1,4})\b\s*(AD|CE|BC|BCE)\b/i,
-    /\b(AD|CE|BC|BCE)\b\s*(\d{1,4})\b\s*(?:-|–|—|to)\s*\b(\d{1,4})\b/i,
-    /(?:c(?:irca)?\.?\s*)?\b(\d{1,4})\b\s*(AD|CE|BC|BCE)\b/i,
-    /\b(AD|CE|BC|BCE)\b\s*(\d{1,4})\b/i,
+  // We prefer AD/CE/BC/BCE over AH for accuracy if both are present
+  const patterns: Array<{ regex: RegExp; handler: (match: RegExpMatchArray) => readonly [number, number] | null }> = [
+    {
+      // Range with eras on both ends: 100 BC - 100 AD
+      regex: /\b(\d{1,4})\b\s*(BC|BCE|AD|CE|AH)\b\s*(?:-|–|—|to)\s*\b(\d{1,4})\b\s*(BC|BCE|AD|CE|AH)\b/i,
+      handler: (m) => [applyEra(Number(m[1]), m[2]), applyEra(Number(m[3]), m[4])] as const,
+    },
+    {
+      // Range with era at end: 500-400 BC
+      regex: /(?:c(?:irca)?\.?\s*)?\b(\d{1,4})\b\s*(?:-|–|—|to)\s*\b(\d{1,4})\b\s*(AD|CE|BC|BCE|AH)\b/i,
+      handler: (m) => parseEraYearRange(m[1], m[2], m[3]),
+    },
+    {
+      // Range with era at start: AD 1600-1700
+      regex: /\b(AD|CE|BC|BCE|AH)\b\s*(\d{1,4})\b\s*(?:-|–|—|to)\s*\b(\d{1,4})\b/i,
+      handler: (m) => parseEraYearRange(m[2], m[3], m[1]),
+    },
+    {
+      // Single year with era
+      regex: /(?:c(?:irca)?\.?\s*)?\b(\d{1,4})\b\s*(AD|CE|BC|BCE|AH)\b/i,
+      handler: (m) => parseEraYear(m[1], m[2]),
+    },
+    {
+      // Single year with era at start
+      regex: /\b(AD|CE|BC|BCE|AH)\b\s*(\d{1,4})\b/i,
+      handler: (m) => parseEraYear(m[2], m[1]),
+    },
   ];
 
-  for (const pattern of patterns) {
-    const match = segment.match(pattern);
-    if (!match) continue;
-
-    if (match.length === 4 && /^\d/.test(match[1])) {
-      const parsedRange = parseEraYearRange(match[1], match[2], match[3]);
-      if (parsedRange) return parsedRange;
-    }
-
-    if (match.length === 4 && /^(AD|CE|BC|BCE)$/i.test(match[1])) {
-      const parsedRange = parseEraYearRange(match[2], match[3], match[1]);
-      if (parsedRange) return parsedRange;
-    }
-
-    if (match.length === 3 && /^\d/.test(match[1])) {
-      const parsedYear = parseEraYear(match[1], match[2]);
-      if (parsedYear) return parsedYear;
-    }
-
-    if (match.length === 3 && /^(AD|CE|BC|BCE)$/i.test(match[1])) {
-      const parsedYear = parseEraYear(match[2], match[1]);
-      if (parsedYear) return parsedYear;
+  for (const { regex, handler } of patterns) {
+    const match = segment.match(regex);
+    if (match) {
+      const result = handler(match);
+      if (result) return result;
     }
   }
 

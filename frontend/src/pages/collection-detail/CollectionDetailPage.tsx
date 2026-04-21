@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useCollection } from '@/entities/collection/hooks/useCollections';
 import { useCollectionItems } from '@/entities/item/hooks/useCollectionItems';
@@ -22,10 +21,30 @@ export function CollectionDetailPage() {
     error: collectionError,
   } = useCollection(slug);
 
-  const [search, setSearch] = useState('');
-  const [sort, setSort] = useState<ItemSort>('featured');
-  const debouncedSearch = useDebouncedValue(search);
+  const search = searchParams.get('q') ?? '';
+  const sort = (searchParams.get('sort') as ItemSort) ?? 'featured';
   const activeTag = searchParams.get('tag') ?? '';
+  const debouncedSearch = useDebouncedValue(search);
+
+  const setSearch = (value: string) => {
+    const nextParams = new URLSearchParams(searchParams);
+    if (value) {
+      nextParams.set('q', value);
+    } else {
+      nextParams.delete('q');
+    }
+    setSearchParams(nextParams, { replace: true });
+  };
+
+  const setSort = (value: ItemSort) => {
+    const nextParams = new URLSearchParams(searchParams);
+    if (value && value !== 'featured') {
+      nextParams.set('sort', value);
+    } else {
+      nextParams.delete('sort');
+    }
+    setSearchParams(nextParams, { replace: true });
+  };
 
   const {
     data,

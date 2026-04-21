@@ -55,4 +55,51 @@ describe('resolveArchiveSnapshotPaths', () => {
       },
     ]);
   });
+
+  it('resolves paired output catalogues by collection slug', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ahg-snapshot-sources-'));
+    tempRoots.push(root);
+
+    const pairedOutputDir = path.join(root, 'temp', 'images', 'regular-1-1', 'paired_output');
+    writeJson(path.join(pairedOutputDir, 'catalogue_all.json'), []);
+
+    const resolved = resolveArchiveSnapshotPaths({
+      target: 'regular-1-1',
+      projectRoot: root,
+    });
+
+    expect(resolved).toEqual([
+      {
+        collectionSlug: 'regular-1-1',
+        filePath: path.join(pairedOutputDir, 'catalogue_all.json'),
+      },
+    ]);
+  });
+
+  it('can materialize a source batch under a different collection slug', async () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ahg-snapshot-sources-'));
+    tempRoots.push(root);
+
+    const sourceDir = path.join(root, 'temp', 'data');
+    writeJson(path.join(sourceDir, 'regular-1-1.json'), {
+      album_title: 'Regular 1 1',
+      items: [],
+    });
+
+    const { materializeCanonicalArchiveSnapshots } = await import('./archiveSnapshotSources');
+    const materialized = materializeCanonicalArchiveSnapshots(
+      [{ collectionSlug: 'regular-1-1', filePath: path.join(sourceDir, 'regular-1-1.json') }],
+      { projectRoot: root, collectionSlugOverride: 'regular' },
+    );
+
+    expect(materialized).toEqual([
+      {
+        collectionSlug: 'regular',
+        filePath: path.join(root, 'backend-support', 'snapshots', 'firebase-archive', 'regular.json'),
+      },
+    ]);
+
+    const snapshot = JSON.parse(fs.readFileSync(materialized[0].filePath, 'utf8'));
+    expect(snapshot.collection.slug).toBe('regular');
+  });
 });

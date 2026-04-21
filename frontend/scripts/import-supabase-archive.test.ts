@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildMigrationPayload } from './import-supabase-archive';
+import { buildMigrationPayload, parseArchiveImportArgs } from './import-supabase-archive';
 
 describe('buildMigrationPayload', () => {
   it('creates unique item identities when source snapshots reuse local item ids across batches', () => {
@@ -65,5 +65,101 @@ describe('buildMigrationPayload', () => {
       'images/mughals-auto/coin_1.png',
       'images/mughals-auto2/coin_1.png',
     ]);
+  });
+
+  it('never emits sort_year_end < sort_year_start when explicit AD start collides with AH-derived end', () => {
+    // Reproduces mughals-mughals-item-50: explicit 1713 AD start anchor blended with
+    // "c. 1713 AD (AH 1124-1125)" whose AH conversion derives an end of 1712.
+    const payload = buildMigrationPayload({
+      exportedAt: '2026-04-19T00:00:00.000Z',
+      source: 'firebase-firestore',
+      collection: {
+        slug: 'mughals',
+        name: 'Mughals',
+        displayName: 'Mughals',
+        description: '',
+        longDescription: '',
+        culture: 'Mughal Empire',
+        periodLabel: 'c. 1700s',
+        heroImage: '',
+        sortOrder: 1,
+      },
+      items: [
+        {
+          id: 'mughals-item-50',
+          title: 'Regnal Year 1 rupee — Farrukhsiyar',
+          period: '',
+          dateText: 'c. 1713 AD (Regnal Year 1 / AH 1124-1125)',
+          location: 'Shahjahanabad',
+          description: 'explicit-and-derived collision case',
+          sortYearStart: 1713,
+          metadata: {
+            type: 'coin',
+            denomination: 'Rupee',
+            rulerOrIssuer: 'Farrukhsiyar',
+            mintOrPlace: 'Shahjahanabad',
+          },
+        },
+      ],
+    } as any);
+
+    const row = payload.items[0];
+    expect(row.sort_year_start).not.toBeNull();
+    expect(row.sort_year_end).not.toBeNull();
+    // Invariant: end must never be strictly less than start.
+    expect((row.sort_year_end as number) >= (row.sort_year_start as number)).toBe(true);
+  });
+
+  it('preserves a coherent multi-year range when both anchors are explicit', () => {
+    const payload = buildMigrationPayload({
+      exportedAt: '2026-04-19T00:00:00.000Z',
+      source: 'firebase-firestore',
+      collection: {
+        slug: 'mughals',
+        name: 'Mughals',
+        displayName: 'Mughals',
+        description: '',
+        longDescription: '',
+        culture: 'Mughal Empire',
+        periodLabel: '1605-1627',
+        heroImage: '',
+        sortOrder: 1,
+      },
+      items: [
+        {
+          id: 'mughals-item-jahangir',
+          title: 'Jahangir mohur',
+          period: '1605-1627 AD',
+          dateText: '1605-1627 AD',
+          location: 'Agra',
+          description: '',
+          sortYearStart: 1605,
+          sortYearEnd: 1627,
+          metadata: { type: 'coin', denomination: 'Mohur', rulerOrIssuer: 'Jahangir' },
+        },
+      ],
+    } as any);
+
+    const row = payload.items[0];
+    expect(row.sort_year_start).toBe(1605);
+    expect(row.sort_year_end).toBe(1627);
+  });
+});
+
+describe('parseArchiveImportArgs', () => {
+  it('parses replacement cleanup before ingesting a collection', () => {
+    expect(parseArchiveImportArgs(['regular-1-1', '--replace'])).toEqual({
+      target: 'regular-1-1',
+      collectionSlug: undefined,
+      replace: true,
+    });
+  });
+
+  it('parses explicit collection slug and replace flag together', () => {
+    expect(parseArchiveImportArgs(['temp/images/regular-1-1/paired_output/catalogue_all.json', '--collection', 'regular-1-1', '--replace'])).toEqual({
+      target: 'temp/images/regular-1-1/paired_output/catalogue_all.json',
+      collectionSlug: 'regular-1-1',
+      replace: true,
+    });
   });
 });

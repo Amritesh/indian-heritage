@@ -8,8 +8,8 @@ import {
  * Performs ordered idempotent upserts to Supabase.
  */
 export class SupabaseSyncAgent {
-  async sync(collectionSlug?: string, target?: string) {
+  async sync(collectionSlug?: string, target?: string, options: { replace?: boolean } = {}) {
     console.log(`[SyncAgent] Syncing collection: ${collectionSlug || 'all'}...`);
-    return runArchiveImport({ collectionSlug, target });
+    return runArchiveImport({ collectionSlug, target, replace: options.replace ?? false });
   }
 }

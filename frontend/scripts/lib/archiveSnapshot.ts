@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { collectionRegistry } from '../../src/shared/config/collections';
 
 export type ArchiveSnapshotMedia = {
   gsUrl?: string;
@@ -259,6 +260,9 @@ function normalizePairedOutputItem(value: unknown, index: number): ArchiveSnapsh
 
 function deriveCollectionName(raw: Record<string, unknown>, collectionSlug: string) {
   const collection: Record<string, unknown> = isRecord(raw.collection) ? raw.collection : {};
+  const registryEntry = collectionRegistry.find((entry) => entry.slug === collectionSlug || entry.id === collectionSlug);
+  if (registryEntry?.name) return registryEntry.name;
+
   const fallback = titleize(collectionSlug);
   const fromRoot = asString(raw.collectionName ?? raw.collection_name ?? raw.album_title, '');
   const fromCollection = asString(collection.displayName ?? collection.name ?? collection.title, '');

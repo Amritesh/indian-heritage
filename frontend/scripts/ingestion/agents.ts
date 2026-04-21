@@ -16,6 +16,8 @@ export interface IngestContext {
   projectRoot: string;
   target?: string;
   collectionSlug?: string;
+  replace?: boolean;
+  deploy?: boolean;
 }
 
 /**
@@ -30,10 +32,11 @@ export class CollectionDiscoveryAgent {
       projectRoot: ctx.projectRoot 
     });
     const snapshots = materializeCanonicalArchiveSnapshots(snapshotPaths, { 
-      projectRoot: ctx.projectRoot 
+      projectRoot: ctx.projectRoot,
+      collectionSlugOverride: ctx.collectionSlug,
     });
     
-    if (ctx.collectionSlug) {
+    if (ctx.collectionSlug && !ctx.target) {
       return snapshots.filter(s => s.collectionSlug === ctx.collectionSlug);
     }
     return snapshots;

@@ -4,6 +4,7 @@ import { MediaRecord } from '@/entities/media/model/types';
 import { ItemRecord } from '@/entities/item/model/types';
 import { scoreSearchResults } from '@/shared/lib/search';
 import { supabaseMaybeSingle, supabaseSelect } from '@/shared/services/supabase';
+import { buildFirebaseMediaUrl } from '@/shared/lib/storage';
 
 const ITEM_SELECT =
   'id,canonical_id,collection_id,domain_id,conceptual_item_id,item_type,title,subtitle,description,short_description,era_label,date_start,date_end,display_date,country_code,primary_image_path,primary_image_alt,attributes,sort_title,sort_year_start,sort_year_end,review_status,visibility,source_page_number,source_page_label,source_batch,source_reference';
@@ -114,7 +115,7 @@ async function getMediaMap(itemIds: string[]) {
     const media: MediaRecord = {
       gsUrl: row.storage_path.startsWith('gs://') ? row.storage_path : '',
       storagePath: row.storage_path,
-      downloadUrl: row.public_url ?? row.storage_path,
+      downloadUrl: row.public_url || (row.storage_path.startsWith('gs://') ? buildFirebaseMediaUrl(row.storage_path) : row.storage_path),
       alt: row.alt_text ?? '',
       caption: row.caption ?? undefined,
     };

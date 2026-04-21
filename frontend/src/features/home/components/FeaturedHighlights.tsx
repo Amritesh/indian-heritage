@@ -13,7 +13,7 @@ export function FeaturedHighlights() {
       <SectionHeader
         eyebrow="Featured Collections"
         title="Curated archives of Indian heritage"
-        description="Explore British India colonial coinage and Mughal imperial silver, preserved with museum-grade metadata and scholarly detail."
+        description="Explore British India colonial coinage, Mughal imperial silver, and Foreign Ruler issues, preserved with museum-grade metadata and scholarly detail."
         action={
           <Link to="/collections" className="btn-ghost flex items-center gap-2">
             Browse all

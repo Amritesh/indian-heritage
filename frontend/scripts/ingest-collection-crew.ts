@@ -1,5 +1,6 @@
 import path from 'node:path';
 import process from 'node:process';
+import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { CollectionDiscoveryAgent, MetadataNormalizationAgent, VerificationAgent, IngestContext } from './ingestion/agents';
 import { SupabaseSyncAgent } from './ingestion/sync-agent';
@@ -36,7 +37,7 @@ class IngestionCrew {
       // Task 2: Sync (which includes normalization and Supabase upserts)
       // Note: For now, the sync agent wraps the existing robust import logic
       // but we could split it further into discrete agent steps.
-      const syncResult = await this.syncAgent.sync(snapshot.collectionSlug, ctx.target);
+      const syncResult = await this.syncAgent.sync(ctx.collectionSlug ?? snapshot.collectionSlug, ctx.target, { replace: ctx.replace });
       results.push(syncResult);
     }
 
@@ -47,6 +48,13 @@ class IngestionCrew {
     console.log('\n--- Ingestion Crew Task Summary ---');
     console.log(`Collections Processed: ${snapshots.length}`);
     console.log(`Verification: ${verificationReport.mismatches.length} mismatches found.`);
+
+    if (ctx.deploy) {
+      if (verificationReport.mismatches.length > 0) {
+        throw new Error('Deploy skipped because verification reported mismatches.');
+      }
+      runDeploySync();
+    }
     
     return {
       results,
@@ -55,16 +63,64 @@ class IngestionCrew {
   }
 }
 
+function parseArgs(argv: string[]) {
+  let target: string | undefined;
+  let collectionSlug: string | undefined;
+  let replace = false;
+  let deploy = false;
+
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index];
+    if (arg === '--replace' || arg === '--replace-collection') {
+      replace = true;
+      continue;
+    }
+    if (arg === '--deploy') {
+      deploy = true;
+      continue;
+    }
+    if (arg === '--collection') {
+      collectionSlug = argv[index + 1];
+      index += 1;
+      continue;
+    }
+    if (arg.startsWith('--collection=')) {
+      collectionSlug = arg.slice('--collection='.length);
+      continue;
+    }
+    if (!arg.startsWith('-') && !target) {
+      target = arg;
+    }
+  }
+
+  return { target, collectionSlug, replace, deploy };
+}
+
+function runDeploySync() {
+  console.log('[DeployAgent] Verification passed. Syncing environment and deploying live version...');
+  const result = spawnSync(process.execPath, [path.join(projectRoot, 'scripts', 'deploy-firebase.cjs')], {
+    cwd: projectRoot,
+    env: process.env,
+    stdio: 'inherit',
+  });
+
+  if (result.status !== 0) {
+    throw new Error('Deploy failed.');
+  }
+}
+
 async function main() {
   loadWorkspaceEnv(projectRoot);
   
-  const args = process.argv.slice(2);
-  const collectionSlug = args.find(a => !a.startsWith('-'));
+  const args = parseArgs(process.argv.slice(2));
   
   const crew = new IngestionCrew();
   await crew.run({
     projectRoot,
-    collectionSlug
+    target: args.target,
+    collectionSlug: args.collectionSlug,
+    replace: args.replace,
+    deploy: args.deploy,
   });
 }
 

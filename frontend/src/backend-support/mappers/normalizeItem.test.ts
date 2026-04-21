@@ -199,4 +199,28 @@ describe('normalizeItem', () => {
       sortYearEnd: -100,
     });
   });
+
+  it('handles AH dates by converting to AD', () => {
+    expect(deriveYearRange('AH 1028')).toEqual({
+      sortYearStart: 1618,
+      sortYearEnd: null,
+    });
+  });
+
+  it('handles mixed BC/AD ranges', () => {
+    expect(deriveYearRange('100 BC - 100 AD')).toEqual({
+      sortYearStart: -100,
+      sortYearEnd: 100,
+    });
+  });
+
+  it('does not produce an end year that is earlier than the start year', () => {
+    // Regression for a Mughal snapshot that fed "c. 1713 AD (Regnal Year 1 / AH 1124-1125)"
+    // and derived [1711, 1712] via AH conversion while the explicit start was 1713.
+    const r = deriveYearRange('c. 1713 AD (Regnal Year 1 / AH 1124-1125)');
+    expect(r.sortYearStart).not.toBeNull();
+    if (r.sortYearStart != null && r.sortYearEnd != null) {
+      expect(r.sortYearEnd).toBeGreaterThanOrEqual(r.sortYearStart);
+    }
+  });
 });

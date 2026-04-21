@@ -109,6 +109,21 @@ export const collectionRegistry: CollectionRegistryEntry[] = [
     culture: 'Early Indian Coinage',
     periodLabel: 'c. 4th to 6th century CE',
   },
+  {
+    id: 'regular-1-1',
+    slug: 'regular',
+    name: 'Regular',
+    description: 'Post-independence regular circulation coins of India.',
+    longDescription:
+      'A structured survey of Republic of India regular circulation coinage, including year-wise and mint-wise issues, normalized for archival browsing.',
+    sourceUrl:
+      'https://us-central1-indian-heritage-gallery.cloudfunctions.net/app/api/items/regular',
+    order: 7,
+    enabled: true,
+    heroEyebrow: 'Republic of India',
+    culture: 'Post Independence',
+    periodLabel: '1950 - Present',
+  },
 ];
 
 export function getCollectionRegistryEntry(slug: string) {

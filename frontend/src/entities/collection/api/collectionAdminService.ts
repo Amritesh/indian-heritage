@@ -9,6 +9,8 @@ import {
   orderBy,
 } from 'firebase/firestore';
 import { CollectionRecord } from '@/entities/collection/model/types';
+import { getCollectionsFromSupabase } from '@/entities/collection/api/collectionService.supabase';
+import { hasSupabaseEnv } from '@/shared/config/supabase';
 import { getFirestoreOrThrow } from '@/shared/services/firestore';
 
 function mapCollectionSnapshot(data: Record<string, unknown>): CollectionRecord {
@@ -36,6 +38,10 @@ function mapCollectionSnapshot(data: Record<string, unknown>): CollectionRecord 
 }
 
 export async function getAllCollectionsAdmin(): Promise<CollectionRecord[]> {
+  if (hasSupabaseEnv) {
+    return getCollectionsFromSupabase();
+  }
+
   const db = getFirestoreOrThrow();
   const snapshot = await getDocs(query(collection(db, 'collections'), orderBy('sortOrder', 'asc')));
   return snapshot.docs.map((d) => mapCollectionSnapshot(d.data()));

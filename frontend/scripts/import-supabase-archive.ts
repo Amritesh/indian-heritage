@@ -559,6 +559,19 @@ function buildItemRow(snapshot: FirebaseArchiveSnapshot, item: SnapshotItem, col
   const storagePath = resolveStoragePath(item.primaryMedia) || asString(item.imageUrl);
   const publicTags = buildPublicTags(snapshot, item);
   const { sortYearStart, sortYearEnd } = deriveYearRange(item.dateText || item.period || '');
+  // Compose explicit snapshot anchors with derived era anchors, then enforce end >= start.
+  // Mixing an explicit AD year (e.g. "1713 AD") with an independently-derived AH end
+  // (e.g. AH 1125 -> 1712 AD) used to leak inverted ranges into Supabase; we widen instead.
+  const composedStartRaw = item.sortYearStart ?? sortYearStart;
+  const composedEndRaw = item.sortYearEnd ?? sortYearEnd;
+  const hasStart = typeof composedStartRaw === 'number' && Number.isFinite(composedStartRaw);
+  const hasEnd = typeof composedEndRaw === 'number' && Number.isFinite(composedEndRaw);
+  const composedStart = hasStart && hasEnd
+    ? Math.min(composedStartRaw as number, composedEndRaw as number)
+    : (composedStartRaw ?? null);
+  const composedEnd = hasStart && hasEnd
+    ? Math.max(composedStartRaw as number, composedEndRaw as number)
+    : (composedEndRaw ?? null);
   const itemIdentitySeed = buildItemIdentitySeed(item);
   const itemIdentitySlug = slugifyTag(itemIdentitySeed);
   const canonicalId = `ahg:item:coin:${snapshot.collection.slug}:${itemIdentitySlug}`;
@@ -608,8 +621,8 @@ function buildItemRow(snapshot: FirebaseArchiveSnapshot, item: SnapshotItem, col
       concept.mint,
       asString(item.title || item.id)
     ].filter(Boolean).join(' ').toLowerCase(),
-    sort_year_start: item.sortYearStart ?? sortYearStart,
-    sort_year_end: item.sortYearEnd ?? sortYearEnd,
+    sort_year_start: composedStart,
+    sort_year_end: composedEnd,
     review_status: 'published',
     visibility: 'public',
     source_page_number: item.pageNumber ?? null,
@@ -987,7 +1000,7 @@ async function supabaseRequest<T>(pathName: string, options: { method?: string; 
   throw lastError instanceof Error ? lastError : new Error(`Supabase request failed for ${pathName}`);
 }
 
-async function supabaseUpsert<T extends Record<string, unknown>>(table: string, rows: T[], onConflict: string) {
+async function supabaseUpsert<T extends Record<string, unknown>>(table: string, rows: T[], onConflict?: string) {
   if (rows.length === 0) return [] as Array<T & { id?: string }>;
 
   const chunkSize = 500;
@@ -996,7 +1009,7 @@ async function supabaseUpsert<T extends Record<string, unknown>>(table: string, 
     const chunk = rows.slice(index, index + chunkSize);
     const response = await supabaseRequest<Array<T & { id?: string }>>(table, {
       method: 'POST',
-      query: { on_conflict: onConflict },
+      query: onConflict ? { on_conflict: onConflict } : undefined,
       body: chunk,
     });
     results.push(...response);
@@ -1027,12 +1040,18 @@ async function resolveDomainId() {
   return rows[0]?.id ?? null;
 }
 
-function parseMainArgs(argv: string[]) {
+export function parseArchiveImportArgs(argv: string[]) {
   let target: string | undefined;
   let collectionSlug: string | undefined;
+  let replace = false;
 
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
+    if (arg === '--replace' || arg === '--replace-collection') {
+      replace = true;
+      continue;
+    }
+
     if (arg === '--collection') {
       collectionSlug = argv[index + 1];
       index += 1;
@@ -1049,10 +1068,111 @@ function parseMainArgs(argv: string[]) {
     }
   }
 
-  return { target, collectionSlug };
+  return { target, collectionSlug, replace };
 }
 
-async function importSnapshot(filePath: string, collectionSlug?: string) {
+async function supabaseDelete(table: string, query: Record<string, string | number | boolean | null | undefined>) {
+  return supabaseRequest<[]>(table, {
+    method: 'DELETE',
+    query,
+  });
+}
+
+function toInFilter(values: string[]) {
+  return `in.(${values.join(',')})`;
+}
+
+async function deleteByIds(table: string, column: string, ids: string[], extraQuery: Record<string, string | number | boolean | null | undefined> = {}) {
+  for (let index = 0; index < ids.length; index += 150) {
+    const chunk = ids.slice(index, index + 150);
+    if (chunk.length === 0) continue;
+    await supabaseDelete(table, {
+      ...extraQuery,
+      [column]: toInFilter(chunk),
+    });
+  }
+}
+
+async function selectByIds<T>(table: string, column: string, ids: string[], query: Record<string, string | number | boolean | null | undefined> = {}) {
+  const rows: T[] = [];
+  for (let index = 0; index < ids.length; index += 150) {
+    const chunk = ids.slice(index, index + 150);
+    if (chunk.length === 0) continue;
+    rows.push(...await supabaseRequest<T[]>(table, {
+      ...query,
+      [column]: toInFilter(chunk),
+    }));
+  }
+  return rows;
+}
+
+async function replaceSupabaseCollectionData(collectionSlug: string) {
+  if (!hasSupabaseWriteEnv()) {
+    return { status: 'skipped', reason: 'Supabase write environment is not configured.' };
+  }
+
+  const collectionRows = await supabaseRequest<Array<{ id: string }>>('collections', {
+    query: { select: 'id', slug: `eq.${collectionSlug}`, limit: 1 },
+  });
+  const collectionId = collectionRows[0]?.id;
+  if (!collectionId) {
+    return { status: 'skipped', reason: `Collection ${collectionSlug} does not exist in Supabase.` };
+  }
+
+  const [itemRows, conceptualRows] = await Promise.all([
+    supabaseRequest<Array<{ id: string; conceptual_item_id: string | null }>>('items', {
+      query: { select: 'id,conceptual_item_id', collection_id: `eq.${collectionId}` },
+    }),
+    supabaseRequest<Array<{ id: string }>>('conceptual_items', {
+      query: { select: 'id', collection_id: `eq.${collectionId}` },
+    }),
+  ]);
+
+  const itemIds = itemRows.map((row) => row.id).filter(Boolean);
+  const conceptualIds = conceptualRows.map((row) => row.id).filter(Boolean);
+
+  await Promise.all([
+    deleteByIds('media_assets', 'target_id', itemIds, { target_kind: 'eq.item' }),
+    deleteByIds('record_tags', 'record_id', itemIds, { record_kind: 'eq.item' }),
+    deleteByIds('record_entities', 'record_id', itemIds, { record_kind: 'eq.item' }),
+    deleteByIds('record_references', 'record_id', itemIds, { record_kind: 'eq.item' }),
+    deleteByIds('record_relations', 'source_id', itemIds, { source_kind: 'eq.item' }),
+    deleteByIds('record_relations', 'related_id', itemIds, { related_kind: 'eq.item' }),
+    deleteByIds('item_sides', 'target_id', itemIds, { target_kind: 'eq.item' }),
+    deleteByIds('item_symbols', 'target_id', itemIds, { target_kind: 'eq.item' }),
+  ]);
+
+  await deleteByIds('items', 'id', itemIds);
+
+  const externalConceptRefs = await selectByIds<{ conceptual_item_id: string | null }>(
+    'items',
+    'conceptual_item_id',
+    conceptualIds,
+    { select: 'conceptual_item_id' },
+  );
+  const externallyReferencedConceptIds = new Set(
+    externalConceptRefs.map((row) => row.conceptual_item_id).filter((id): id is string => Boolean(id)),
+  );
+  const removableConceptIds = conceptualIds.filter((id) => !externallyReferencedConceptIds.has(id));
+
+  await Promise.all([
+    deleteByIds('record_entities', 'record_id', removableConceptIds, { record_kind: 'eq.conceptual_item' }),
+    deleteByIds('record_references', 'record_id', removableConceptIds, { record_kind: 'eq.conceptual_item' }),
+    deleteByIds('numismatic_type_profiles', 'conceptual_item_id', removableConceptIds),
+  ]);
+  await deleteByIds('conceptual_items', 'id', removableConceptIds);
+
+  return {
+    status: 'applied',
+    collectionSlug,
+    collectionId,
+    deletedItems: itemIds.length,
+    deletedConceptualItems: removableConceptIds.length,
+    preservedConceptualItems: conceptualIds.length - removableConceptIds.length,
+  };
+}
+
+async function importSnapshot(filePath: string, collectionSlug?: string, options: { replace?: boolean } = {}) {
   const snapshot = readSnapshotFile(filePath, collectionSlug);
   const payload = buildMigrationPayload(snapshot);
   const domainId = await resolveDomainId();
@@ -1085,14 +1205,16 @@ async function importSnapshot(filePath: string, collectionSlug?: string) {
     };
   }
 
+  const replaceSummary = options.replace ? await replaceSupabaseCollectionData(snapshot.collection.slug) : null;
+
   const collectionRows = await supabaseUpsert('collections', [{ ...payload.collection, domain_id: domainId }], 'canonical_id');
   const collectionId = String(collectionRows[0]?.id ?? '');
   if (!collectionId) throw new Error(`Supabase did not return a collection id for ${snapshot.collection.slug}.`);
 
   const conceptualRows = await supabaseUpsert(
     'conceptual_items',
-    payload.conceptual_items.map((row) => ({ ...row, domain_id: domainId })),
-    'canonical_id',
+    payload.conceptual_items.map((row) => ({ ...row, domain_id: domainId, collection_id: collectionId })),
+    'slug',
   );
   const conceptualIdByCanonicalId = new Map(conceptualRows.map((row) => [String(row.canonical_id), String(row.id ?? '')]));
 
@@ -1108,10 +1230,10 @@ async function importSnapshot(filePath: string, collectionSlug?: string) {
   );
   const itemIdByCanonicalId = new Map(itemRows.map((row) => [String(row.canonical_id), String(row.id ?? '')]));
 
-  const tagRows = await supabaseUpsert('tags', payload.tags, 'canonical_id');
+  const tagRows = await supabaseUpsert('tags', payload.tags, 'slug');
   const tagIdByCanonicalId = new Map(tagRows.map((row) => [String(row.canonical_id), String(row.id ?? '')]));
 
-  const entityRows = await supabaseUpsert('entities', payload.entities, 'canonical_id');
+  const entityRows = await supabaseUpsert('entities', payload.entities, 'slug');
   const entityIdByCanonicalId = new Map(entityRows.map((row) => [String(row.canonical_id), String(row.id ?? '')]));
 
   const mediaRows = await supabaseUpsert(
@@ -1221,10 +1343,15 @@ async function importSnapshot(filePath: string, collectionSlug?: string) {
     ].join(':'),
   );
 
+  await deleteByIds(
+    'record_references',
+    'record_id',
+    Array.from(new Set(mappedRecordReferences.map((row) => row.record_id))),
+  );
+
   const recordReferenceRows = await supabaseUpsert(
     'record_references',
     mappedRecordReferences,
-    'record_kind,record_id,reference_type,reference_system,reference_code,url',
   );
 
   const mappedRecordRelations = dedupeRowsByKey(
@@ -1304,6 +1431,7 @@ async function importSnapshot(filePath: string, collectionSlug?: string) {
       itemPrivateProfiles: privateProfileRows.length,
     },
     warnings: payload.warnings,
+    replaceSummary,
   };
 }
 
@@ -1311,15 +1439,17 @@ export async function runArchiveImport({
   target,
   collectionSlug,
   snapshotFiles,
+  replace = false,
 }: {
   target?: string;
   collectionSlug?: string;
   snapshotFiles?: string[];
+  replace?: boolean;
 } = {}) {
   loadWorkspaceEnv(projectRoot);
   const files = snapshotFiles ?? materializeCanonicalArchiveSnapshots(
     resolveArchiveSnapshotPaths({ target, projectRoot }),
-    { projectRoot },
+    { projectRoot, collectionSlugOverride: collectionSlug },
   ).map((entry) => entry.filePath);
   if (files.length === 0) {
     throw new Error(`No Firebase archive snapshots found under ${defaultSnapshotDir}.`);
@@ -1327,7 +1457,7 @@ export async function runArchiveImport({
 
   const summaries = [];
   for (const filePath of files) {
-    summaries.push(await importSnapshot(filePath, collectionSlug));
+    summaries.push(await importSnapshot(filePath, collectionSlug, { replace }));
   }
 
   return {
@@ -1339,11 +1469,11 @@ export async function runArchiveImport({
 }
 
 async function main() {
-  const { target, collectionSlug } = parseMainArgs(process.argv.slice(2));
-  console.log(JSON.stringify(await runArchiveImport({ target, collectionSlug }), null, 2));
+  const { target, collectionSlug, replace } = parseArchiveImportArgs(process.argv.slice(2));
+  console.log(JSON.stringify(await runArchiveImport({ target, collectionSlug, replace }), null, 2));
 }
 
-if (import.meta.url === `file://${__filename}`) {
+if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
   main().catch((error) => {
     if (error instanceof Error) {
       console.error(JSON.stringify({ name: error.name, message: error.message, stack: error.stack }, null, 2));

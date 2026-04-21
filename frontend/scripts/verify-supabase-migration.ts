@@ -472,7 +472,7 @@ async function main() {
   }
 }
 
-if (import.meta.url === `file://${__filename}`) {
+if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
   main().catch((error) => {
     if (error instanceof Error) {
       console.error(JSON.stringify({ name: error.name, message: error.message, stack: error.stack }, null, 2));

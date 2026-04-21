@@ -6,6 +6,7 @@ const projectRoot = path.resolve(__dirname, '..');
 const firebasercPath = path.join(projectRoot, '.firebaserc');
 const defaultServiceAccountFile = 'indian-heritage-gallery-firebase-adminsdk-fbsvc-1c3ae1c07a.json';
 const frontendEnvPath = path.join(projectRoot, 'frontend', '.env');
+const backendEnvPath = path.join(projectRoot, 'backend', '.env');
 
 function parseEnvFile(filePath) {
   if (!fs.existsSync(filePath)) {
@@ -138,15 +139,65 @@ function toEnvFile(config, serviceAccountPath, envFilePath = frontendEnvPath) {
   return `${preservedLines.join('\n')}\n`;
 }
 
+function readEnvMap(filePath) {
+  return new Map(
+    parseEnvFile(filePath)
+      .filter((entry) => entry.key)
+      .map((entry) => [entry.key, entry.value]),
+  );
+}
+
+function syncBackendRuntimeEnv() {
+  const frontendEnv = readEnvMap(frontendEnvPath);
+  const backendEntries = parseEnvFile(backendEnvPath);
+  const backendLines = [];
+  const seenKeys = new Set();
+  const managedEntries = new Map([
+    ['SUPABASE_URL', frontendEnv.get('SUPABASE_URL') ?? frontendEnv.get('VITE_SUPABASE_URL') ?? ''],
+    ['SUPABASE_SERVICE_ROLE_KEY', frontendEnv.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''],
+  ]);
+
+  backendEntries.forEach((entry) => {
+    if (!entry.key) {
+      backendLines.push(entry.raw);
+      return;
+    }
+
+    if (managedEntries.has(entry.key)) {
+      backendLines.push(`${entry.key}=${managedEntries.get(entry.key)}`);
+      seenKeys.add(entry.key);
+      return;
+    }
+
+    backendLines.push(`${entry.key}=${entry.value}`);
+    seenKeys.add(entry.key);
+  });
+
+  managedEntries.forEach((value, key) => {
+    if (!value || seenKeys.has(key)) return;
+    backendLines.push(`${key}=${value}`);
+  });
+
+  fs.writeFileSync(backendEnvPath, `${backendLines.join('\n')}\n`, 'utf8');
+
+  return {
+    envPath: backendEnvPath,
+    syncedKeys: Array.from(managedEntries.keys()).filter((key) => Boolean(managedEntries.get(key))),
+  };
+}
+
 async function syncFirebaseWebEnv() {
   const projectId = resolveProjectId();
   const serviceAccountPath = resolveServiceAccountPath();
   const { activeApp, config } = await fetchWebAppConfig(projectId, serviceAccountPath);
 
   fs.writeFileSync(frontendEnvPath, toEnvFile(config, serviceAccountPath), 'utf8');
+  const backendSync = syncBackendRuntimeEnv();
 
   return {
     envPath: frontendEnvPath,
+    backendEnvPath: backendSync.envPath,
+    backendSyncedKeys: backendSync.syncedKeys,
     projectId,
     appId: activeApp.appId,
   };
@@ -161,6 +212,8 @@ async function main() {
         projectId: result.projectId,
         appId: result.appId,
         envPath: result.envPath,
+        backendEnvPath: result.backendEnvPath,
+        backendSyncedKeys: result.backendSyncedKeys,
       },
       null,
       2,

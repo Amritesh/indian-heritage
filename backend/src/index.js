@@ -21,6 +21,7 @@ const {
   getPublicCollectionBySlug,
   getPublicItemsByCollectionSlug,
 } = require('./archivePublicData');
+const { setHomepageApiCache } = require('./httpCache');
 
 /* ------------------------------
    Firebase Admin & DB
@@ -568,6 +569,7 @@ app.get('/api/archive-stats', async (_req, res) => {
       firestore: admin.firestore(),
       httpClient: axios,
     });
+    setHomepageApiCache(res);
     res.json(stats);
   } catch (e) {
     console.error(e);
